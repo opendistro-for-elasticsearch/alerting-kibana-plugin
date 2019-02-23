@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateMonitor renders 1`] = `
+<div
+  style={
+    Object {
+      "padding": "25px 50px",
+    }
+  }
+>
+  <Formik
+    enableReinitialize={false}
+    initialValues={
+      Object {
+        "aggregationType": "count",
+        "bucketUnitOfTime": "h",
+        "bucketValue": 1,
+        "cronExpression": "0 */1 * * *",
+        "daily": 0,
+        "disabled": false,
+        "fieldName": Array [],
+        "frequency": "interval",
+        "groupedOverFieldName": "bytes",
+        "groupedOverTop": 5,
+        "index": Array [],
+        "monthly": Object {
+          "day": 1,
+          "type": "day",
+        },
+        "name": "",
+        "overDocuments": "all documents",
+        "period": Object {
+          "interval": 1,
+          "unit": "MINUTES",
+        },
+        "query": "{
+    \\"size\\": 0,
+    \\"query\\": {
+        \\"match_all\\": {}
+    }
+}",
+        "searchType": "graph",
+        "timeField": "",
+        "timezone": Array [],
+        "weekly": Object {
+          "fri": false,
+          "mon": false,
+          "sat": false,
+          "sun": false,
+          "thur": false,
+          "tue": false,
+          "wed": false,
+        },
+      }
+    }
+    isInitialValid={false}
+    onSubmit={[Function]}
+    render={[Function]}
+    validateOnBlur={true}
+    validateOnChange={false}
+  />
+</div>
+`;

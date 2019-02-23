@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formikToDestination should able to build chime destination 1`] = `
+Object {
+  "chime": Object {
+    "url": "https://chime.webhook",
+  },
+  "name": "testing webhook",
+  "type": "chime",
+}
+`;
+
+exports[`formikToDestination should able to build custom destination 1`] = `
+Object {
+  "custom_webhook": Object {
+    "header_params": Object {
+      "Content-Type": "application/json",
+      "headerKey1": "Header Value1",
+      "headerKey2": "Header Value2",
+    },
+    "port": -1,
+    "query_params": Object {
+      "key1": "value1",
+      "key2": "value2",
+    },
+    "url": "https://custom.webhook",
+  },
+  "name": "testing webhook",
+  "type": "custom_webhook",
+}
+`;
+
+exports[`formikToDestination should able to build slack destination 1`] = `
+Object {
+  "name": "testing webhook",
+  "slack": Object {
+    "url": "https://chime.webhook",
+  },
+  "type": "slack",
+}
+`;

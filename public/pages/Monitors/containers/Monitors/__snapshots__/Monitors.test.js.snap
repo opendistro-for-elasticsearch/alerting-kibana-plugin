@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Monitors renders 1`] = `
+<ContentPanel
+  actions={
+    <MonitorActions
+      isEditDisabled={true}
+      onBulkAcknowledge={[Function]}
+      onBulkDelete={[Function]}
+      onBulkDisable={[Function]}
+      onBulkEnable={[Function]}
+      onClickEdit={[Function]}
+    />
+  }
+  bodyStyles={
+    Object {
+      "padding": "initial",
+    }
+  }
+  title="Monitors"
+>
+  <MonitorControls
+    activePage={0}
+    onPageClick={[Function]}
+    onSearchChange={[Function]}
+    onStateChange={[Function]}
+    pageCount={1}
+    search=""
+    state="all"
+  />
+  <EuiHorizontalRule
+    margin="xs"
+    size="full"
+  />
+  <EuiBasicTable
+    columns={
+      Array [
+        Object {
+          "field": "name",
+          "name": "Monitor name",
+          "render": [Function],
+          "sortable": true,
+          "textOnly": true,
+          "truncateText": true,
+          "width": "150px",
+        },
+        Object {
+          "field": "latestAlert",
+          "name": "Latest alert",
+          "sortable": false,
+          "textOnly": true,
+          "truncateText": true,
+          "width": "150px",
+        },
+        Object {
+          "field": "enabled",
+          "name": "State",
+          "render": [Function],
+          "sortable": false,
+          "truncateText": false,
+          "width": "100px",
+        },
+        Object {
+          "dataType": "date",
+          "field": "lastNotificationTime",
+          "name": "Last notification time",
+          "render": [Function],
+          "sortable": true,
+          "truncateText": false,
+          "width": "150px",
+        },
+        Object {
+          "field": "active",
+          "name": "Active",
+          "sortable": true,
+          "truncateText": false,
+          "width": "100px",
+        },
+        Object {
+          "field": "acknowledged",
+          "name": "Acknowledged",
+          "sortable": true,
+          "truncateText": false,
+          "width": "100px",
+        },
+        Object {
+          "field": "errors",
+          "name": "Errors",
+          "sortable": true,
+          "truncateText": false,
+          "width": "100px",
+        },
+        Object {
+          "field": "ignored",
+          "name": "Ignored",
+          "sortable": true,
+          "truncateText": false,
+          "width": "100px",
+        },
+        Object {
+          "actions": Array [
+            Object {
+              "description": "Acknowledge this Monitor",
+              "name": "Acknowledge",
+              "onClick": [Function],
+            },
+            Object {
+              "description": "Enable this Monitor",
+              "name": "Enable",
+              "onClick": [Function],
+            },
+            Object {
+              "description": "Disable this Monitor",
+              "name": "Disable",
+              "onClick": [Function],
+            },
+            Object {
+              "description": "Delete this Monitor",
+              "name": "Delete",
+              "onClick": [Function],
+            },
+          ],
+          "name": "Actions",
+          "width": "75px",
+        },
+      ]
+    }
+    hasActions={true}
+    isSelectable={true}
+    itemId={[Function]}
+    items={Array []}
+    noItemsMessage={
+      <MonitorEmptyPrompt
+        filterIsApplied={false}
+        loading={true}
+        resetFilters={[Function]}
+      />
+    }
+    onChange={[Function]}
+    pagination={
+      Object {
+        "pageIndex": 0,
+        "pageSize": 20,
+        "pageSizeOptions": Array [
+          5,
+          10,
+          20,
+          50,
+        ],
+        "totalItemCount": 0,
+      }
+    }
+    responsive={true}
+    selection={
+      Object {
+        "onSelectionChange": [Function],
+        "selectableMessage": [Function],
+      }
+    }
+    sorting={
+      Object {
+        "sort": Object {
+          "direction": "desc",
+          "field": "name",
+        },
+      }
+    }
+  />
+</ContentPanel>
+`;

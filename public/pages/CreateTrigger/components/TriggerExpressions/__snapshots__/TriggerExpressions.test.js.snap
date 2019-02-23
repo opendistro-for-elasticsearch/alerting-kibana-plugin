@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TriggerExpressions renders 1`] = `
+<EuiFlexGroup
+  alignItems="center"
+  component="div"
+  direction="row"
+  gutterSize="l"
+  justifyContent="flexStart"
+  responsive={true}
+  wrap={false}
+>
+  <EuiFlexItem
+    component="div"
+    grow={false}
+  >
+    <EuiPopover
+      anchorPosition="downLeft"
+      button={
+        <EuiFormRow
+          describedByIds={Array []}
+          fullWidth={false}
+          hasEmptyLabelSpace={false}
+          label="Trigger condition"
+        >
+          <EuiExpressionButton
+            buttonValue="500"
+            description="IS ABOVE"
+            isActive={false}
+            onClick={[Function]}
+          />
+        </EuiFormRow>
+      }
+      closePopover={[Function]}
+      hasArrow={true}
+      id="trigger-popover"
+      isOpen={false}
+      ownFocus={true}
+      panelPaddingSize="none"
+      withTitle={true}
+    >
+      <div
+        style={
+          Object {
+            "zIndex": "200",
+          }
+        }
+      >
+        <EuiExpression>
+          <EuiFlexGroup
+            alignItems="stretch"
+            component="div"
+            direction="row"
+            gutterSize="l"
+            justifyContent="flexStart"
+            responsive={true}
+            style={
+              Object {
+                "maxWidth": 600,
+              }
+            }
+            wrap={false}
+          >
+            <EuiFlexItem
+              component="div"
+              grow={false}
+              style={
+                Object {
+                  "width": 150,
+                }
+              }
+            >
+              <C
+                name="thresholdEnum"
+                render={[Function]}
+              />
+            </EuiFlexItem>
+            <EuiFlexItem
+              component="div"
+              grow={false}
+              style={
+                Object {
+                  "width": 100,
+                }
+              }
+            >
+              <C
+                name="thresholdValue"
+                render={[Function]}
+              />
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        </EuiExpression>
+      </div>
+    </EuiPopover>
+  </EuiFlexItem>
+</EuiFlexGroup>
+`;

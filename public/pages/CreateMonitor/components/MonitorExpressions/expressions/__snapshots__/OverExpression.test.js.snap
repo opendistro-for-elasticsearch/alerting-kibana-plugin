@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OverExpression renders 1`] = `
+<div
+  class="euiPopover euiPopover--anchorDownLeft euiPopover--withTitle"
+  id="over-popover"
+>
+  <div
+    class="euiPopover__anchor"
+  >
+    <button
+      class="euiExpressionButton"
+    >
+      <span
+        class="euiExpressionButton__description"
+      >
+        over
+      </span>
+       
+      <span
+        class="euiExpressionButton__value"
+      >
+        all documents
+      </span>
+    </button>
+  </div>
+</div>
+`;

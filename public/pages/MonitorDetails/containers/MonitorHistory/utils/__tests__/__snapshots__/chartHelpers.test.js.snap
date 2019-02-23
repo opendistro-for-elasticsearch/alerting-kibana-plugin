@@ -1,0 +1,364 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Chart Helpers Time Series dataPointsGenerator should generate correct data point for an alert has acknowledged_time 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "metaKey": "metaValue",
+    },
+    "state": "TRIGGERED",
+    "x": 1540829820000,
+    "x0": 1540829700000,
+  },
+  Object {
+    "meta": Object {
+      "metaKey": "metaValue",
+    },
+    "state": "ACKNOWLEDGED",
+    "x": 1540829880000,
+    "x0": 1540829820000,
+  },
+]
+`;
+
+exports[`Chart Helpers Time Series dataPointsGenerator should generate correct data point for an alert has an acknowledged_time outside window range 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "metaKey": "metaValue",
+    },
+    "state": "TRIGGERED",
+    "x": 1540832400000,
+    "x0": 1540829700000,
+  },
+]
+`;
+
+exports[`Chart Helpers Time Series dataPointsGenerator should generate correct data point for an alert has an end_time outside window range 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "metaKey": "metaValue",
+    },
+    "state": "TRIGGERED",
+    "x": 1540832400000,
+    "x0": 1540829700000,
+  },
+]
+`;
+
+exports[`Chart Helpers Time Series dataPointsGenerator should generate correct data point for an alert if previous end time has been provided generate no_alert state 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "endTime": 1540829700000,
+      "startTime": 1540828800000,
+    },
+    "state": "NO_ALERTS",
+    "x": 1540829700000,
+    "x0": 1540828800000,
+  },
+  Object {
+    "meta": Object {
+      "metaKey": "metaValue",
+    },
+    "state": "TRIGGERED",
+    "x": 1540829820000,
+    "x0": 1540829700000,
+  },
+  Object {
+    "meta": Object {
+      "metaKey": "metaValue",
+    },
+    "state": "ACKNOWLEDGED",
+    "x": 1540829880000,
+    "x0": 1540829820000,
+  },
+]
+`;
+
+exports[`Chart Helpers Time Series dataPointsGenerator should generate correct data point for an alert inside window range 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "metaKey": "metaValue",
+    },
+    "state": "TRIGGERED",
+    "x": 1540829880000,
+    "x0": 1540829700000,
+  },
+]
+`;
+
+exports[`Chart Helpers Time Series generateFirstDataPoints should generate correct data point for an alert started inside window range 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "endTime": 1540829700000,
+      "startTime": 1540828800000,
+    },
+    "state": "NO_ALERTS",
+    "x": 1540829700000,
+    "x0": 1540828800000,
+  },
+  Object {
+    "meta": Object {
+      "acknowledgedTime": 1540829820000,
+      "endTime": 1540829880000,
+      "errorsCount": 0,
+      "startTime": 1540829700000,
+      "state": "COMPLETED",
+    },
+    "state": "TRIGGERED",
+    "x": 1540829820000,
+    "x0": 1540829700000,
+  },
+  Object {
+    "meta": Object {
+      "acknowledgedTime": 1540829820000,
+      "endTime": 1540829880000,
+      "errorsCount": 0,
+      "startTime": 1540829700000,
+      "state": "COMPLETED",
+    },
+    "state": "ACKNOWLEDGED",
+    "x": 1540829880000,
+    "x0": 1540829820000,
+  },
+]
+`;
+
+exports[`Chart Helpers Time Series generateFirstDataPoints should generate correct data point for an alert started outside window range 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "acknowledgedTime": 1540829820000,
+      "endTime": 1540829880000,
+      "errorsCount": 5,
+      "startTime": 1540828500000,
+      "state": "COMPLETED",
+    },
+    "state": "TRIGGERED",
+    "x": 1540829820000,
+    "x0": 1540828800000,
+  },
+  Object {
+    "meta": Object {
+      "acknowledgedTime": 1540829820000,
+      "endTime": 1540829880000,
+      "errorsCount": 5,
+      "startTime": 1540828500000,
+      "state": "COMPLETED",
+    },
+    "state": "ACKNOWLEDGED",
+    "x": 1540829880000,
+    "x0": 1540829820000,
+  },
+]
+`;
+
+exports[`Chart Helpers getPOISearchQuery Generates SearchQuery for the POI Graph 1`] = `
+Object {
+  "aggs": Object {
+    "alerts_over_time": Object {
+      "date_histogram": Object {
+        "extended_bounds": Object {
+          "max": 1540832400000,
+          "min": 1540828800000,
+        },
+        "interval": "10m",
+        "script": Object {
+          "lang": "painless",
+          "params": Object {
+            "endTime": 1540832400000,
+            "interval": 600000,
+            "startTime": 1540828800000,
+          },
+          "source": "def alertsWindow = new ArrayList();
+                      def startTime = doc.start_time.value.millis < params.startTime ? params.startTime : doc.start_time.value.millis;
+                      def endTime;
+                      /*
+                        Painless script returns default dateTime epoch for null date fields instead of returning null.
+                        In case of alert is in one of the state (ACTIVE / ERROR / ACKNOWLEDGE) end_time can be null.
+                        We are setting default end time to window end time.
+                        More details can be found here https://github.com/elastic/elasticsearch/pull/30975
+                      */
+
+                      if(doc.end_time.size() == 0) {
+                        endTime = params.endTime
+                      } else {
+                        endTime = doc.end_time.value.millis;
+                      }
+                      while(startTime <= endTime) {
+                           alertsWindow.add(startTime);
+                           startTime = startTime + params.interval;
+                       }
+                       return alertsWindow;",
+        },
+      },
+    },
+    "max_alerts": Object {
+      "max_bucket": Object {
+        "buckets_path": "alerts_over_time._count",
+      },
+    },
+  },
+  "query": Object {
+    "bool": Object {
+      "filter": Array [
+        Object {
+          "term": Object {
+            "monitor_id": "monitorId",
+          },
+        },
+        Object {
+          "bool": Object {
+            "minimum_should_match": 1,
+            "should": Array [
+              Object {
+                "range": Object {
+                  "start_time": Object {
+                    "gte": 1540828800000,
+                    "lte": 1540832400000,
+                  },
+                },
+              },
+              Object {
+                "range": Object {
+                  "end_time": Object {
+                    "gte": 1540828800000,
+                    "lte": 1540832400000,
+                  },
+                },
+              },
+              Object {
+                "bool": Object {
+                  "minimum_should_match": 2,
+                  "should": Array [
+                    Object {
+                      "range": Object {
+                        "start_time": Object {
+                          "lte": 1540828800000,
+                        },
+                      },
+                    },
+                    Object {
+                      "range": Object {
+                        "end_time": Object {
+                          "gte": 1540832400000,
+                        },
+                      },
+                    },
+                    Object {
+                      "bool": Object {
+                        "must_not": Object {
+                          "exists": Object {
+                            "field": "monitor.schedule.period",
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`Chart Helpers getPOISearchQuery Generates getTimeSeriesSearchRequest for Alerts 1`] = `
+Object {
+  "_source": Array [
+    "*_time",
+    "state",
+    "alert_history",
+  ],
+  "query": Object {
+    "bool": Object {
+      "filter": Array [
+        Object {
+          "term": Object {
+            "trigger_id": "triggerId",
+          },
+        },
+        Object {
+          "bool": Object {
+            "minimum_should_match": 1,
+            "should": Array [
+              Object {
+                "bool": Object {
+                  "filter": Array [
+                    Object {
+                      "terms": Object {
+                        "state": Array [
+                          "ACTIVE",
+                          "ERROR",
+                          "ACKNOWLEDGED",
+                        ],
+                      },
+                    },
+                    Object {
+                      "range": Object {
+                        "start_time": Object {
+                          "lte": 1540828800000,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              Object {
+                "range": Object {
+                  "start_time": Object {
+                    "gte": 1540828800000,
+                    "lte": 1540832400000,
+                  },
+                },
+              },
+              Object {
+                "range": Object {
+                  "end_time": Object {
+                    "gte": 1540828800000,
+                    "lte": 1540832400000,
+                  },
+                },
+              },
+              Object {
+                "bool": Object {
+                  "filter": Array [
+                    Object {
+                      "range": Object {
+                        "end_time": Object {
+                          "gte": 1540832400000,
+                        },
+                      },
+                    },
+                    Object {
+                      "range": Object {
+                        "start_time": Object {
+                          "lte": 1540828800000,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  "sort": Array [
+    Object {
+      "start_time": Object {
+        "order": "asc",
+      },
+    },
+  ],
+}
+`;

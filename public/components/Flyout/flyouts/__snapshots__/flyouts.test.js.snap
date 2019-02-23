@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Flyouts.message generates message JSON 1`] = `
+Object {
+  "body": <EuiText
+    grow={true}
+    size="m"
+    style={
+      Object {
+        "fontSize": "14px",
+      }
+    }
+  >
+    <p>
+      You have access to a "ctx" variable in your painless scripts and action mustache templates.
+    </p>
+    <h3>
+      Learn More
+    </h3>
+    <ul>
+      <li>
+        <EuiLink
+          color="primary"
+          href="https://mustache.github.io/mustache.5.html"
+          target="_blank"
+          type="button"
+        >
+          HTML Templates with Mustache.js
+        </EuiLink>
+      </li>
+    </ul>
+  </EuiText>,
+  "flyoutProps": Object {
+    "aria-labelledby": "messageFlyout",
+    "maxWidth": 500,
+    "size": "m",
+  },
+  "header": <EuiTitle
+    size="m"
+    style={
+      Object {
+        "fontSize": "25px",
+      }
+    }
+    textTransform="none"
+  >
+    <h2>
+      <strong>
+        Message
+      </strong>
+    </h2>
+  </EuiTitle>,
+  "headerProps": Object {
+    "hasBorder": true,
+  },
+}
+`;
+
+exports[`Flyouts.messageFrequency generates message JSON 1`] = `
+Object {
+  "body": <EuiText
+    grow={true}
+    size="m"
+    style={
+      Object {
+        "fontSize": "14px",
+      }
+    }
+  >
+    <p>
+      Specify message frequency to limit the number of notifications you receive within a given span of time. This setting is especially useful for low severity trigger conditions.
+    </p>
+    <p>
+      Consider the following example:
+    </p>
+    <ul>
+      <li>
+        A trigger condition is met.
+      </li>
+      <li>
+        The monitor sends a message
+      </li>
+      <li>
+        Message frequency is set to 10 minutes.
+      </li>
+    </ul>
+    <p>
+      For the next 10 minutes, even if a trigger condition is met dozens of times, the monitor sends no additional messages. If the trigger condition is met 11 minutes later, the monitor sends another message.
+    </p>
+  </EuiText>,
+  "flyoutProps": Object {
+    "aria-labelledby": "messageFrequencyFlyout",
+    "maxWidth": 500,
+    "size": "m",
+  },
+  "header": <EuiTitle
+    size="m"
+    style={
+      Object {
+        "fontSize": "25px",
+      }
+    }
+    textTransform="none"
+  >
+    <h2>
+      <strong>
+        Message frequency
+      </strong>
+    </h2>
+  </EuiTitle>,
+  "headerProps": Object {
+    "hasBorder": true,
+  },
+}
+`;
+
+exports[`Flyouts.triggerCondition generates message JSON 1`] = `
+Object {
+  "body": <div>
+    <EuiText
+      grow={true}
+      size="m"
+      style={
+        Object {
+          "fontSize": "14px",
+        }
+      }
+    >
+      <p>
+        You have access to a "ctx" variable in your painless scripts
+      </p>
+      <p>
+        Below shows a quick JSON example of what's available under the "ctx" variable along with the actual results (where possible) for you to reference.
+      </p>
+    </EuiText>
+    <EuiSpacer
+      size="m"
+    />
+    <EuiCodeBlock
+      language="json"
+    >
+      {
+    "monitor": "...",
+    "trigger": "...",
+    "results": "...",
+    "periodStart": "...",
+    "periodEnd": "...",
+    "alert": "...",
+    "error": "..."
+}
+    </EuiCodeBlock>
+    <EuiSpacer
+      size="m"
+    />
+    <EuiCodeEditor
+      height="700px"
+      mode="json"
+      readOnly={true}
+      setOptions={
+        Object {
+          "fontSize": "12px",
+        }
+      }
+      theme="github"
+      value="{}"
+      width="100%"
+    />
+  </div>,
+  "flyoutProps": Object {
+    "aria-labelledby": "triggerConditionFlyout",
+    "maxWidth": 500,
+    "size": "m",
+  },
+  "header": <EuiTitle
+    size="m"
+    style={
+      Object {
+        "fontSize": "25px",
+      }
+    }
+    textTransform="none"
+  >
+    <h2>
+      <strong>
+        Trigger condition
+      </strong>
+    </h2>
+  </EuiTitle>,
+  "headerProps": Object {
+    "hasBorder": true,
+  },
+}
+`;

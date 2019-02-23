@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Helpers formatToolTip should generate tool tip for NO_ALERTS state 1`] = `
+Array [
+  Object {
+    "title": "No Alerts",
+    "value": "Between Oct 29th 2018, 9:15 AM and Oct 29th 2018, 9:18 AM",
+  },
+]
+`;
+
+exports[`Helpers formatToolTip should generate tool tip with Acknowledge Time 1`] = `
+Array [
+  Object {
+    "title": "Alert Started at",
+    "value": "Oct 29th 2018, 9:15 AM",
+  },
+  Object {
+    "title": "Alert Acknowledged at",
+    "value": "Oct 29th 2018, 9:17 AM",
+  },
+  Object {
+    "title": "Alert Ended at",
+    "value": "Oct 29th 2018, 9:18 AM",
+  },
+  Object {
+    "title": "State",
+    "value": "COMPLETED",
+  },
+]
+`;
+
+exports[`Helpers formatToolTip should generate tool tip with TRIGGERED state 1`] = `
+Array [
+  Object {
+    "title": "Alert Started at",
+    "value": "Oct 29th 2018, 9:15 AM",
+  },
+  Object {
+    "title": "Alert Ended at",
+    "value": "Oct 29th 2018, 9:18 AM",
+  },
+  Object {
+    "title": "State",
+    "value": "COMPLETED",
+  },
+]
+`;
+
+exports[`Helpers formatToolTip should generate tool tip with an Active Alert  1`] = `
+Array [
+  Object {
+    "title": "Alert Started at",
+    "value": "Oct 29th 2018, 9:15 AM",
+  },
+  Object {
+    "title": "Alert Acknowledged at",
+    "value": "Oct 29th 2018, 9:17 AM",
+  },
+  Object {
+    "title": "State",
+    "value": "ACTIVE",
+  },
+]
+`;

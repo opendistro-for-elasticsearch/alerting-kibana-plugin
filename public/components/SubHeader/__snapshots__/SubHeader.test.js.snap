@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubHeader renders 1`] = `
+Array [
+  <div
+    class="euiTitle euiTitle--xsmall"
+    style="padding-left:10px"
+  >
+    title
+  </div>,
+  <hr
+    class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginXSmall"
+  />,
+  <div
+    class="euiText euiText--extraSmall"
+    style="padding-left:10px"
+  >
+    <div>
+      description
+    </div>
+  </div>,
+]
+`;

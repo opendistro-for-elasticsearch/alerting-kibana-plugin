@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Main renders 1`] = `
+<div
+  style="padding:15px 0px"
+>
+  <nav
+    aria-label="breadcrumb"
+    class="euiBreadcrumbs euiBreadcrumbs--truncate"
+    style="padding:0px 15px"
+  />
+  <div>
+    <div
+      class="euiTabs"
+      role="tablist"
+    >
+      <button
+        aria-selected="true"
+        class="euiTab euiTab-isSelected"
+        role="tab"
+        type="button"
+      >
+        <span
+          class="euiTab__content"
+        >
+          Dashboard
+        </span>
+      </button>
+      <button
+        aria-selected="false"
+        class="euiTab"
+        role="tab"
+        type="button"
+      >
+        <span
+          class="euiTab__content"
+        >
+          Monitors
+        </span>
+      </button>
+      <button
+        aria-selected="false"
+        class="euiTab"
+        role="tab"
+        type="button"
+      >
+        <span
+          class="euiTab__content"
+        >
+          Destinations
+        </span>
+      </button>
+    </div>
+    <div
+      style="padding:25px 25px"
+    />
+  </div>
+</div>
+`;

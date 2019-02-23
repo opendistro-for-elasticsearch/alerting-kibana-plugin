@@ -1,0 +1,495 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Frequencies renders CustomCron 1`] = `
+<div
+  class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionColumn euiFlexGroup--responsive"
+  style="padding-left:10px;margin-top:5px"
+>
+  <div
+    class="euiFlexItem"
+    style="margin-top:0px"
+  >
+    <div
+      class="euiFormRow"
+      id="cronExpression-row"
+      style="margin-top:0px"
+    >
+      <label
+        aria-invalid="false"
+        class="euiFormLabel"
+        for="cronExpression"
+      >
+        Every
+      </label>
+      <textarea
+        class="euiTextArea euiTextArea--resizeVertical"
+        name="cronExpression"
+        rows="6"
+      >
+        0 */1 * * *
+      </textarea>
+      <div
+        class="euiFormHelpText euiFormRow__text"
+        id="cronExpression-help"
+      >
+        <div
+          class="euiText euiText--small"
+        >
+          Use 
+          <a
+            class="euiLink euiLink--primary"
+            href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            cron expressions
+          </a>
+           for complex schedules
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="euiFlexItem"
+    style="margin-top:0px"
+  >
+    <div
+      class="euiFormRow"
+      id="timezone-row"
+      style="margin-top:0px"
+    >
+      <div
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        class="euiComboBox"
+        data-test-subj="timezoneComboBox"
+        name="timezone"
+        role="combobox"
+      >
+        <div
+          class="euiFormControlLayout"
+        >
+          <div
+            class="euiFormControlLayout__childrenWrapper"
+          >
+            <div
+              class="euiComboBox__inputWrap euiComboBox__inputWrap--noWrap euiComboBox__inputWrap-isClearable"
+              data-test-subj="comboBoxInput"
+              tabindex="-1"
+            >
+              <p
+                class="euiComboBoxPlaceholder"
+              >
+                Select a timezone
+              </p>
+              <div
+                class="euiComboBox__input"
+                style="font-size:14px;display:inline-block"
+              >
+                <input
+                  data-test-subj="comboBoxSearchInput"
+                  id="timezone"
+                  role="textbox"
+                  style="box-sizing:content-box;width:1px"
+                  value=""
+                />
+                <div
+                  style="position:absolute;top:0;left:0;visibility:hidden;height:0;overflow:scroll;white-space:pre"
+                />
+              </div>
+            </div>
+            <div
+              class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+            >
+              <button
+                aria-label="Open list of options"
+                class="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
+                data-test-subj="comboBoxToggleListButton"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="euiIcon euiIcon--medium euiFormControlLayoutCustomIcon__icon"
+                  focusable="false"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xlink="http://www.w3.org/1999/xlink"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <path
+                      d="M13.069 5.157L8.384 9.768a.546.546 0 0 1-.768 0L2.93 5.158a.552.552 0 0 0-.771 0 .53.53 0 0 0 0 .759l4.684 4.61c.641.631 1.672.63 2.312 0l4.684-4.61a.53.53 0 0 0 0-.76.552.552 0 0 0-.771 0z"
+                      id="arrow_down-a"
+                    />
+                  </defs>
+                  <use
+                    fill-rule="nonzero"
+                    href="#arrow_down-a"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Frequencies renders Frequency 1`] = `
+<div
+  class="euiFormRow"
+  id="frequency-row"
+  style="padding-left:10px"
+>
+  <label
+    aria-invalid="false"
+    class="euiFormLabel"
+    for="frequency"
+  >
+    Frequency
+  </label>
+  <div
+    class="euiFormControlLayout"
+  >
+    <div
+      class="euiFormControlLayout__childrenWrapper"
+    >
+      <select
+        class="euiSelect"
+        id="frequency"
+        name="frequency"
+      >
+        <option
+          selected=""
+          value="interval"
+        >
+          By interval
+        </option>
+        <option
+          value="daily"
+        >
+          Daily
+        </option>
+        <option
+          value="weekly"
+        >
+          Weekly
+        </option>
+        <option
+          value="monthly"
+        >
+          Monthly
+        </option>
+        <option
+          value="cronExpression"
+        >
+          Custom cron expression
+        </option>
+      </select>
+      <div
+        class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+      >
+        <span
+          class="euiFormControlLayoutCustomIcon"
+        >
+          <svg
+            aria-hidden="true"
+            class="euiIcon euiIcon--medium euiFormControlLayoutCustomIcon__icon"
+            focusable="false"
+            height="16"
+            viewBox="0 0 16 16"
+            width="16"
+            xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <path
+                d="M13.069 5.157L8.384 9.768a.546.546 0 0 1-.768 0L2.93 5.158a.552.552 0 0 0-.771 0 .53.53 0 0 0 0 .759l4.684 4.61c.641.631 1.672.63 2.312 0l4.684-4.61a.53.53 0 0 0 0-.76.552.552 0 0 0-.771 0z"
+                id="arrow_down-a"
+              />
+            </defs>
+            <use
+              fill-rule="nonzero"
+              href="#arrow_down-a"
+            />
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Frequencies renders FrequencyPicker 1`] = `
+<div
+  class="euiFlexGroup euiFlexGroup--alignItemsFlexStart euiFlexGroup--directionRow euiFlexGroup--responsive"
+  style="padding-left:10px;margin-top:5px"
+>
+  <div
+    class="euiFlexItem"
+    style="margin:0px 10px 0px 0px"
+  >
+    <div
+      class="euiFormRow"
+      id="period.interval-row"
+    >
+      <label
+        aria-invalid="false"
+        class="euiFormLabel"
+        for="period.interval"
+      >
+        Every
+      </label>
+      <div
+        class="euiFormControlLayout"
+      >
+        <div
+          class="euiFormControlLayout__childrenWrapper"
+        >
+          <input
+            class="euiFieldNumber euiFieldNumber--withIcon"
+            name="period.interval"
+            type="number"
+            value="1"
+          />
+          <div
+            class="euiFormControlLayoutIcons"
+          >
+            <span
+              class="euiFormControlLayoutCustomIcon"
+            >
+              <svg
+                aria-hidden="true"
+                class="euiIcon euiIcon--medium euiFormControlLayoutCustomIcon__icon"
+                focusable="false"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                xlink="http://www.w3.org/1999/xlink"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <path
+                    d="M7.5 13A5.506 5.506 0 0 1 2 7.5C2 4.467 4.467 2 7.5 2S13 4.467 13 7.5 10.533 13 7.5 13m0-12a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13m3 6H8V3.5a.5.5 0 0 0-1 0v4a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1"
+                    id="clock-a"
+                  />
+                </defs>
+                <use
+                  href="#clock-a"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="euiFlexItem"
+    style="margin:0px"
+  >
+    <div
+      class="euiFormRow euiFormRow--hasEmptyLabelSpace"
+      id="period.unit-row"
+    >
+      <div
+        class="euiFormControlLayout"
+      >
+        <div
+          class="euiFormControlLayout__childrenWrapper"
+        >
+          <select
+            class="euiSelect"
+            id="period.unit"
+            name="period.unit"
+          >
+            <option
+              selected=""
+              value="MINUTES"
+            >
+              Minutes
+            </option>
+            <option
+              value="HOURS"
+            >
+              Hours
+            </option>
+            <option
+              value="DAYS"
+            >
+              Days
+            </option>
+          </select>
+          <div
+            class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+          >
+            <span
+              class="euiFormControlLayoutCustomIcon"
+            >
+              <svg
+                aria-hidden="true"
+                class="euiIcon euiIcon--medium euiFormControlLayoutCustomIcon__icon"
+                focusable="false"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                xlink="http://www.w3.org/1999/xlink"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <path
+                    d="M13.069 5.157L8.384 9.768a.546.546 0 0 1-.768 0L2.93 5.158a.552.552 0 0 0-.771 0 .53.53 0 0 0 0 .759l4.684 4.61c.641.631 1.672.63 2.312 0l4.684-4.61a.53.53 0 0 0 0-.76.552.552 0 0 0-.771 0z"
+                    id="arrow_down-a"
+                  />
+                </defs>
+                <use
+                  fill-rule="nonzero"
+                  href="#arrow_down-a"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Frequencies renders Interval 1`] = `
+<div
+  class="euiFlexGroup euiFlexGroup--alignItemsFlexStart euiFlexGroup--directionRow euiFlexGroup--responsive"
+  style="padding-left:10px;margin-top:5px"
+>
+  <div
+    class="euiFlexItem"
+    style="margin:0px 10px 0px 0px"
+  >
+    <div
+      class="euiFormRow"
+      id="period.interval-row"
+    >
+      <label
+        aria-invalid="false"
+        class="euiFormLabel"
+        for="period.interval"
+      >
+        Every
+      </label>
+      <div
+        class="euiFormControlLayout"
+      >
+        <div
+          class="euiFormControlLayout__childrenWrapper"
+        >
+          <input
+            class="euiFieldNumber euiFieldNumber--withIcon"
+            name="period.interval"
+            type="number"
+            value="1"
+          />
+          <div
+            class="euiFormControlLayoutIcons"
+          >
+            <span
+              class="euiFormControlLayoutCustomIcon"
+            >
+              <svg
+                aria-hidden="true"
+                class="euiIcon euiIcon--medium euiFormControlLayoutCustomIcon__icon"
+                focusable="false"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                xlink="http://www.w3.org/1999/xlink"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <path
+                    d="M7.5 13A5.506 5.506 0 0 1 2 7.5C2 4.467 4.467 2 7.5 2S13 4.467 13 7.5 10.533 13 7.5 13m0-12a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13m3 6H8V3.5a.5.5 0 0 0-1 0v4a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1"
+                    id="clock-a"
+                  />
+                </defs>
+                <use
+                  href="#clock-a"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="euiFlexItem"
+    style="margin:0px"
+  >
+    <div
+      class="euiFormRow euiFormRow--hasEmptyLabelSpace"
+      id="period.unit-row"
+    >
+      <div
+        class="euiFormControlLayout"
+      >
+        <div
+          class="euiFormControlLayout__childrenWrapper"
+        >
+          <select
+            class="euiSelect"
+            id="period.unit"
+            name="period.unit"
+          >
+            <option
+              selected=""
+              value="MINUTES"
+            >
+              Minutes
+            </option>
+            <option
+              value="HOURS"
+            >
+              Hours
+            </option>
+            <option
+              value="DAYS"
+            >
+              Days
+            </option>
+          </select>
+          <div
+            class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+          >
+            <span
+              class="euiFormControlLayoutCustomIcon"
+            >
+              <svg
+                aria-hidden="true"
+                class="euiIcon euiIcon--medium euiFormControlLayoutCustomIcon__icon"
+                focusable="false"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                xlink="http://www.w3.org/1999/xlink"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <path
+                    d="M13.069 5.157L8.384 9.768a.546.546 0 0 1-.768 0L2.93 5.158a.552.552 0 0 0-.771 0 .53.53 0 0 0 0 .759l4.684 4.61c.641.631 1.672.63 2.312 0l4.684-4.61a.53.53 0 0 0 0-.76.552.552 0 0 0-.771 0z"
+                    id="arrow_down-a"
+                  />
+                </defs>
+                <use
+                  fill-rule="nonzero"
+                  href="#arrow_down-a"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

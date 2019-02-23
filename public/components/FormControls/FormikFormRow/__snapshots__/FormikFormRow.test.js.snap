@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormikFormRow renders 1`] = `
+<div
+  class="euiFormRow"
+  id="testing-row"
+>
+  <div
+    id="testing"
+  >
+    child
+  </div>
+</div>
+`;

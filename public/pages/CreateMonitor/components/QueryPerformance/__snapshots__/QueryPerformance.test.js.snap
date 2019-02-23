@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QueryPerformance renders 1`] = `
+Array [
+  <h4
+    class="euiTitle euiTitle--xsmall"
+    style="padding-left:10px"
+  >
+    Query performance
+  </h4>,
+  <hr
+    class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginXSmall"
+  />,
+  <div
+    class="euiText euiText--extraSmall"
+    style="padding-left:10px"
+  >
+    <span>
+      Check the performance of your query and make sure to follow best practices. 
+      <a
+        href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html"
+      >
+        Learn more
+      </a>
+    </span>
+  </div>,
+  <div
+    class="euiSpacer euiSpacer--s"
+  />,
+  <div
+    class="euiFlexGroup euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
+    style="padding:0px 10px"
+  >
+    <div
+      class="euiFlexItem"
+    >
+      <div
+        class="euiText euiText--extraSmall"
+      >
+        <strong>
+          Query duration
+        </strong>
+        <span
+          style="display:block"
+        >
+          5 ms
+        </span>
+      </div>
+    </div>
+    <div
+      class="euiFlexItem"
+    >
+      <div
+        class="euiText euiText--extraSmall"
+      >
+        <strong>
+          Request duration
+        </strong>
+        <span
+          style="display:block"
+        >
+          -
+        </span>
+      </div>
+    </div>
+    <div
+      class="euiFlexItem"
+    >
+      <div
+        class="euiText euiText--extraSmall"
+      >
+        <strong>
+          Hits
+        </strong>
+        <span
+          style="display:block"
+        >
+          15
+        </span>
+      </div>
+    </div>
+  </div>,
+]
+`;

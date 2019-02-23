@@ -1,0 +1,39 @@
+{
+  "name": "opendistro-alerting",
+  "version": "0.7.0.0",
+  "description": "Kibana Alerting Plugin",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting-kibana",
+  "kibana": {
+    "version": "6.5.4",
+    "templateVersion": "6.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting-kibana"
+  },
+  "scripts": {
+    "kbn": "node ../../kibana/scripts/kbn",
+    "lint": "../../kibana/node_modules/.bin/eslint '**/*.js' -c .eslintrc",
+    "start": "plugin-helpers start",
+    "test:server": "plugin-helpers test:server",
+    "test:browser": "plugin-helpers test:browser",
+    "test:jest": "../../kibana/node_modules/.bin/jest --config ./test/jest.config.js",
+    "build": "plugin-helpers build"
+  },
+  "devDependencies": {
+    "@elastic/eslint-config-kibana": "link:../../kibana/packages/eslint-config-kibana",
+    "@kbn/eslint-import-resolver-kibana": "link:../../kibana/packages/kbn-eslint-import-resolver-kibana",
+    "@kbn/plugin-helpers": "link:../../kibana/packages/kbn-plugin-helpers",
+    "enzyme": "3.7.0",
+    "enzyme-adapter-react-16": "1.7.0",
+    "enzyme-to-json": "3.3.4"
+  },
+  "dependencies": {
+    "@elastic/eui": "5.1.0",
+    "formik": "1.1.1",
+    "query-string": "5.1.1",
+    "react-router-dom": "4.3.1"
+  }
+}

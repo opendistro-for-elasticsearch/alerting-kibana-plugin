@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EmptyDestinations /> should render empty destinations message 1`] = `
+<div
+  class="euiEmptyPrompt"
+  style="max-width:45em"
+>
+  <span
+    class="euiTextColor euiTextColor--subdued"
+  >
+    <div
+      class="euiText euiText--medium"
+    >
+      <div
+        class="euiText euiText--medium"
+      >
+        <p>
+          There are no existing destinations. Add a destination.
+        </p>
+      </div>
+    </div>
+  </span>
+  <div
+    class="euiSpacer euiSpacer--l"
+  />
+  <div
+    class="euiSpacer euiSpacer--s"
+  />
+  <a
+    class="euiButton euiButton--primary euiButton--fill"
+    href="opendistro-alerting#/create-destination"
+  >
+    <span
+      class="euiButton__content"
+    >
+      <span
+        class="euiButton__text"
+      >
+        Add destination
+      </span>
+    </span>
+  </a>
+</div>
+`;
+
+exports[`<EmptyDestinations /> should render no results for filter criteria 1`] = `
+<div
+  class="euiEmptyPrompt"
+  style="max-width:45em"
+>
+  <span
+    class="euiTextColor euiTextColor--subdued"
+  >
+    <div
+      class="euiText euiText--medium"
+    >
+      <div
+        class="euiText euiText--medium"
+      >
+        <p>
+          There are no destinations matching your applied filters. Reset your filters to view all destinations.
+        </p>
+      </div>
+    </div>
+  </span>
+  <div
+    class="euiSpacer euiSpacer--l"
+  />
+  <div
+    class="euiSpacer euiSpacer--s"
+  />
+  <button
+    class="euiButton euiButton--primary euiButton--fill"
+    type="button"
+  >
+    <span
+      class="euiButton__content"
+    >
+      <span
+        class="euiButton__text"
+      >
+        Reset filters
+      </span>
+    </span>
+  </button>
+</div>
+`;

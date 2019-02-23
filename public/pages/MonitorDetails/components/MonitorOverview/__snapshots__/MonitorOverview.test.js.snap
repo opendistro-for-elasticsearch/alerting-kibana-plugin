@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MonitorOverview renders 1`] = `
+<div
+  class="euiPanel euiPanel--paddingMedium"
+  style="padding-left:0px;padding-right:0px"
+>
+  <div
+    class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
+    style="padding:0px 10px"
+  >
+    <div
+      class="euiFlexItem"
+    >
+      <h3
+        class="euiTitle euiTitle--small"
+      >
+        Overview
+      </h3>
+    </div>
+    <div
+      class="euiFlexItem euiFlexItem--flexGrowZero"
+    >
+      <div
+        class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
+      >
+        <div
+          class="euiFlexItem"
+        />
+      </div>
+    </div>
+  </div>
+  <hr
+    class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginXSmall"
+  />
+  <div
+    style="padding:0px 10px"
+  >
+    <div
+      class="euiFlexGrid euiFlexGrid--gutterLarge euiFlexGrid--fourths euiFlexGrid--responsive"
+    >
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            State
+          </strong>
+          <div>
+            Enabled
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            Monitor definition type
+          </strong>
+          <div>
+            Extraction Query
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            Total active alerts
+          </strong>
+          <div>
+            17
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            Schedule
+          </strong>
+          <div>
+            -
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            Last updated
+          </strong>
+          <div>
+            -
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            Monitor ID
+          </strong>
+          <div />
+        </div>
+      </div>
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            Monitor version number
+          </strong>
+          <div>
+            3
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

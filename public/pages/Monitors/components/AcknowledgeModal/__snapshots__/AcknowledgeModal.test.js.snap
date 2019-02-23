@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AcknowledgeModal renders 1`] = `
+<EuiOverlayMask>
+  <EuiConfirmModal
+    buttonColor="primary"
+    cancelButtonText="cancel"
+    confirmButtonText="Acknowledge"
+    maxWidth={650}
+    onCancel={[MockFunction]}
+    onConfirm={[Function]}
+    title="Acknowledge Alerts"
+  >
+    <p>
+      Select which alerts to acknowledge.
+    </p>
+    <EuiInMemoryTable
+      columns={
+        Array [
+          Object {
+            "field": "monitor_name",
+            "name": "Monitor",
+            "truncateText": true,
+          },
+          Object {
+            "field": "trigger_name",
+            "name": "Trigger",
+            "truncateText": true,
+          },
+          Object {
+            "field": "start_time",
+            "name": "Start Time",
+            "render": [Function],
+            "truncateText": false,
+          },
+          Object {
+            "align": "right",
+            "field": "severity",
+            "name": "Severity",
+            "truncateText": false,
+          },
+        ]
+      }
+      isSelectable={true}
+      itemId="id"
+      items={Array []}
+      pagination={false}
+      responsive={true}
+      selection={
+        Object {
+          "onSelectionChange": [Function],
+        }
+      }
+      sorting={false}
+      style={
+        Object {
+          "borderLeft": "1px solid #D9D9D9",
+          "borderRight": "1px solid #D9D9D9",
+          "borderTop": "1px solid #D9D9D9",
+        }
+      }
+    />
+  </EuiConfirmModal>
+</EuiOverlayMask>
+`;

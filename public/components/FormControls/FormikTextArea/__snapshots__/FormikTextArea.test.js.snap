@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormikTextArea renders 1`] = `
+<textarea
+  class="euiTextArea euiTextArea--resizeVertical"
+  name="testing"
+  rows="6"
+/>
+`;

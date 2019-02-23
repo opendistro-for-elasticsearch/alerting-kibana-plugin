@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TriggerQuery renders 1`] = `
+<div
+  style={
+    Object {
+      "marginTop": "0px",
+      "padding": "0px 10px",
+    }
+  }
+>
+  <EuiFlexGroup
+    alignItems="stretch"
+    component="div"
+    direction="column"
+    gutterSize="l"
+    justifyContent="flexStart"
+    responsive={true}
+    wrap={false}
+  >
+    <EuiFlexItem
+      component="div"
+      grow={true}
+    >
+      <EuiFormRow
+        describedByIds={Array []}
+        fullWidth={true}
+        hasEmptyLabelSpace={false}
+        label="Extraction query response"
+      >
+        <EuiCodeEditor
+          mode="json"
+          readOnly={true}
+          setOptions={Object {}}
+          theme="github"
+          value="null"
+          width="100%"
+        />
+      </EuiFormRow>
+    </EuiFlexItem>
+    <EuiFlexItem
+      component="div"
+      grow={true}
+    >
+      <C
+        name="script.source"
+        render={[Function]}
+      />
+    </EuiFlexItem>
+  </EuiFlexGroup>
+  <EuiSpacer
+    size="s"
+  />
+  <EuiFlexGroup
+    alignItems="center"
+    component="div"
+    direction="row"
+    gutterSize="l"
+    justifyContent="spaceBetween"
+    responsive={true}
+    wrap={false}
+  >
+    <EuiFlexItem
+      component="div"
+      grow={false}
+    >
+      <EuiText
+        grow={true}
+        size="s"
+      >
+        <strong>
+          Trigger condition response: 
+        </strong>
+        <span>
+          No response
+        </span>
+      </EuiText>
+    </EuiFlexItem>
+    <EuiFlexItem
+      component="div"
+      grow={false}
+    >
+      <EuiButton
+        color="primary"
+        fill={false}
+        iconSide="left"
+        onClick={[Function]}
+        type="button"
+      >
+        Run
+      </EuiButton>
+    </EuiFlexItem>
+  </EuiFlexGroup>
+</div>
+`;

@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DelayedLoader/> renders 1`] = `
+<div
+  style="opacity:1"
+/>
+`;
+
+exports[`<DelayedLoader/> should not show loader if data fetching is finished before threshold 1`] = `
+<DelayedLoader
+  isLoading={false}
+>
+  <div
+    style={
+      Object {
+        "opacity": "1",
+      }
+    }
+  />
+</DelayedLoader>
+`;
+
+exports[`<DelayedLoader/> should set Timer for 1 seconds if initial loading is true 1`] = `
+<DelayedLoader
+  isLoading={true}
+>
+  <div
+    style={
+      Object {
+        "opacity": "1",
+      }
+    }
+  />
+</DelayedLoader>
+`;
+
+exports[`<DelayedLoader/> should show loader if data fetching takes more than threshold 1`] = `
+<DelayedLoader
+  isLoading={true}
+>
+  <div
+    style={
+      Object {
+        "opacity": "0.2",
+      }
+    }
+  />
+</DelayedLoader>
+`;

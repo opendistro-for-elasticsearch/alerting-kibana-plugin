@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Helpers getURLQueryParams should return query string value if provided else default value 1`] = `
+Object {
+  "from": 20,
+  "search": "",
+  "size": 15,
+  "sortDirection": "desc",
+  "sortField": "name",
+  "type": "ALL",
+}
+`;
+
+exports[`Helpers getURLQueryParams should return valid default query params 1`] = `
+Object {
+  "from": 0,
+  "search": "",
+  "size": 20,
+  "sortDirection": "desc",
+  "sortField": "name",
+  "type": "ALL",
+}
+`;

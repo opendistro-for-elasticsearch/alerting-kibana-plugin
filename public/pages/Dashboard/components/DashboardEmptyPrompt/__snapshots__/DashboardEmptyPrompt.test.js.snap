@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardEmptyPrompt renders 1`] = `
+<div
+  class="euiEmptyPrompt"
+  style="max-width:45em"
+>
+  <span
+    class="euiTextColor euiTextColor--subdued"
+  >
+    <div
+      class="euiText euiText--medium"
+    >
+      <div
+        class="euiText euiText--medium"
+      >
+        <p>
+          There are no existing alerts. Create a monitor to add triggers and actions. Once an alarm is triggered, the state will show in this table.
+        </p>
+      </div>
+    </div>
+  </span>
+  <div
+    class="euiSpacer euiSpacer--l"
+  />
+  <div
+    class="euiSpacer euiSpacer--s"
+  />
+  <a
+    class="euiButton euiButton--primary euiButton--fill"
+    href="opendistro-alerting#/create-monitor"
+  >
+    <span
+      class="euiButton__content"
+    >
+      <span
+        class="euiButton__text"
+      >
+        Create monitor
+      </span>
+    </span>
+  </a>
+</div>
+`;

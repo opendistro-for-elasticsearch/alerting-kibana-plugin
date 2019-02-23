@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`destinationToFormik should able to convert chime destination to Formik object 1`] = `
+Object {
+  "chime": Object {
+    "url": "https://chime.webhook",
+  },
+  "name": "testing webhook",
+  "type": "chime",
+}
+`;
+
+exports[`destinationToFormik should able to convert custom destination (with custom attributes) to Formik object 1`] = `
+Object {
+  "custom_webhook": Object {
+    "headerParams": Array [
+      Object {
+        "key": "Content-Type",
+        "value": "application/json",
+      },
+      Object {
+        "key": "headerKey1",
+        "value": "headerValue",
+      },
+      Object {
+        "key": "headerKey2",
+        "value": "headerValue2",
+      },
+    ],
+    "host": "https://custom.webhook",
+    "path": "/my_custom_path",
+    "port": 80,
+    "queryParams": Array [
+      Object {
+        "key": "key1",
+        "value": "value1",
+      },
+      Object {
+        "key": "key2",
+        "value": "Value2",
+      },
+    ],
+    "url": undefined,
+    "urlType": "custom_url",
+  },
+  "name": "testing webhook",
+  "type": "custom_webhook",
+}
+`;
+
+exports[`destinationToFormik should able to convert custom destination (with port) to Formik object 1`] = `
+Object {
+  "custom_webhook": Object {
+    "headerParams": Array [
+      Object {
+        "key": "Content-Type",
+        "value": "application/json",
+      },
+      Object {
+        "key": "headerKey1",
+        "value": "headerValue",
+      },
+      Object {
+        "key": "headerKey2",
+        "value": "headerValue2",
+      },
+    ],
+    "port": 8888,
+    "queryParams": Array [
+      Object {
+        "key": "key1",
+        "value": "value1",
+      },
+      Object {
+        "key": "key2",
+        "value": "Value2",
+      },
+    ],
+    "url": "https://custom.webhook",
+    "urlType": "url",
+  },
+  "name": "testing webhook",
+  "type": "custom_webhook",
+}
+`;
+
+exports[`destinationToFormik should able to convert custom destination to Formik object 1`] = `
+Object {
+  "custom_webhook": Object {
+    "headerParams": Array [
+      Object {
+        "key": "Content-Type",
+        "value": "application/json",
+      },
+      Object {
+        "key": "headerKey1",
+        "value": "headerValue",
+      },
+      Object {
+        "key": "headerKey2",
+        "value": "headerValue2",
+      },
+    ],
+    "port": null,
+    "queryParams": Array [
+      Object {
+        "key": "key1",
+        "value": "value1",
+      },
+      Object {
+        "key": "key2",
+        "value": "Value2",
+      },
+    ],
+    "url": "https://custom.webhook",
+    "urlType": "url",
+  },
+  "name": "testing webhook",
+  "type": "custom_webhook",
+}
+`;
+
+exports[`destinationToFormik should able to convert slack destination to Formik object 1`] = `
+Object {
+  "name": "testing webhook",
+  "slack": Object {
+    "url": "https://chime.webhook",
+  },
+  "type": "slack",
+}
+`;

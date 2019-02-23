@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MonitorExpressions renders 1`] = `
+<div
+  class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow euiFlexGroup--responsive"
+>
+  <div
+    class="euiFlexItem euiFlexItem--flexGrowZero"
+  >
+    <div
+      class="euiPopover euiPopover--anchorDownLeft euiPopover--withTitle"
+      id="when-popover"
+    >
+      <div
+        class="euiPopover__anchor"
+      >
+        <button
+          class="euiExpressionButton"
+        >
+          <span
+            class="euiExpressionButton__description"
+          >
+            when
+          </span>
+           
+          <span
+            class="euiExpressionButton__value"
+          >
+            count()
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="euiFlexItem euiFlexItem--flexGrowZero"
+  >
+    <div
+      class="euiPopover euiPopover--anchorDownLeft euiPopover--withTitle"
+      id="over-popover"
+    >
+      <div
+        class="euiPopover__anchor"
+      >
+        <button
+          class="euiExpressionButton"
+        >
+          <span
+            class="euiExpressionButton__description"
+          >
+            over
+          </span>
+           
+          <span
+            class="euiExpressionButton__value"
+          >
+            all documents
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="euiFlexItem euiFlexItem--flexGrowZero"
+  >
+    <div
+      class="euiPopover euiPopover--anchorDownLeft euiPopover--withTitle"
+      id="for-popover"
+    >
+      <div
+        class="euiPopover__anchor"
+      >
+        <button
+          class="euiExpressionButton"
+        >
+          <span
+            class="euiExpressionButton__description"
+          >
+            for the last
+          </span>
+           
+          <span
+            class="euiExpressionButton__value"
+          >
+            1 hour(s)
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

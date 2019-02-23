@@ -1,0 +1,214 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildSchedule can build cron schedule 1`] = `
+Object {
+  "cron": Object {
+    "expression": "0 */1 * * *",
+    "timezone": "America/Los_Angeles",
+  },
+}
+`;
+
+exports[`buildSchedule can build daily schedule 1`] = `
+Object {
+  "cron": Object {
+    "expression": "0 0 * * *",
+    "timezone": "America/Los_Angeles",
+  },
+}
+`;
+
+exports[`buildSchedule can build interval schedule 1`] = `
+Object {
+  "period": Object {
+    "interval": 1,
+    "unit": "MINUTES",
+  },
+}
+`;
+
+exports[`buildSchedule can build monthly (day) schedule 1`] = `
+Object {
+  "cron": Object {
+    "expression": "0 0 1 */1 *",
+    "timezone": "America/Los_Angeles",
+  },
+}
+`;
+
+exports[`buildSchedule can build weekly schedule 1`] = `
+Object {
+  "cron": Object {
+    "expression": "0 0 * * TUE,THUR",
+    "timezone": "America/Los_Angeles",
+  },
+}
+`;
+
+exports[`formikToExtractionQuery can extract query 1`] = `
+Object {
+  "query": Object {
+    "match_all": Object {},
+  },
+  "size": 0,
+}
+`;
+
+exports[`formikToGraphQuery can build graph query 1`] = `
+Object {
+  "aggregations": Object {},
+  "query": Object {
+    "bool": Object {
+      "filter": Object {
+        "range": Object {
+          "@timestamp": Object {
+            "format": "epoch_millis",
+            "gte": "{{period_end}}||-1h",
+            "lte": "{{period_end}}",
+          },
+        },
+      },
+    },
+  },
+  "size": 0,
+}
+`;
+
+exports[`formikToIndices can build index 1`] = `
+Array [
+  "index1",
+  "index2",
+]
+`;
+
+exports[`formikToQuery can build extraction query 1`] = `
+Object {
+  "query": Object {
+    "match_all": Object {},
+  },
+  "size": 0,
+}
+`;
+
+exports[`formikToQuery can build graph query 1`] = `
+Object {
+  "aggregations": Object {},
+  "query": Object {
+    "bool": Object {
+      "filter": Object {
+        "range": Object {
+          "@timestamp": Object {
+            "format": "epoch_millis",
+            "gte": "{{period_end}}||-1h",
+            "lte": "{{period_end}}",
+          },
+        },
+      },
+    },
+  },
+  "size": 0,
+}
+`;
+
+exports[`formikToUiGraphQuery can build ui graph query 1`] = `
+Object {
+  "aggregations": Object {
+    "over": Object {
+      "aggregations": Object {},
+      "date_histogram": Object {
+        "extended_bounds": Object {
+          "max": "now",
+          "min": "now-5h",
+        },
+        "field": "@timestamp",
+        "interval": "1h",
+        "min_doc_count": 0,
+        "time_zone": "America/Los_Angeles",
+      },
+    },
+  },
+  "query": Object {
+    "bool": Object {
+      "filter": Object {
+        "range": Object {
+          "@timestamp": Object {
+            "gte": "now-5h",
+            "lte": "now",
+          },
+        },
+      },
+    },
+  },
+  "size": 0,
+}
+`;
+
+exports[`formikToUiOverAggregation can build over aggregation 1`] = `
+Object {
+  "over": Object {
+    "aggregations": Object {},
+    "date_histogram": Object {
+      "extended_bounds": Object {
+        "max": "now",
+        "min": "now-5h",
+      },
+      "field": "@timestamp",
+      "interval": "1h",
+      "min_doc_count": 0,
+      "time_zone": "America/Los_Angeles",
+    },
+  },
+}
+`;
+
+exports[`formikToUiSchedule can build uiSchedule 1`] = `
+Object {
+  "cronExpression": "0 */1 * * *",
+  "daily": 0,
+  "frequency": "interval",
+  "monthly": Object {
+    "day": 1,
+    "type": "day",
+  },
+  "period": Object {
+    "interval": 1,
+    "unit": "MINUTES",
+  },
+  "timezone": "America/Los_Angeles",
+  "weekly": Object {
+    "fri": false,
+    "mon": false,
+    "sat": false,
+    "sun": false,
+    "thur": false,
+    "tue": false,
+    "wed": false,
+  },
+}
+`;
+
+exports[`formikToUiSearch can build ui search 1`] = `
+Object {
+  "aggregationType": "count",
+  "bucketUnitOfTime": "h",
+  "bucketValue": 1,
+  "fieldName": "bytes",
+  "groupedOverFieldName": "bytes",
+  "groupedOverTop": 5,
+  "overDocuments": "all documents",
+  "searchType": "graph",
+  "timeField": "@timestamp",
+}
+`;
+
+exports[`formikToWhenAggregation can build when (count) aggregation 1`] = `Object {}`;
+
+exports[`formikToWhenAggregation can build when aggregation 1`] = `
+Object {
+  "when": Object {
+    "avg": Object {
+      "field": "bytes",
+    },
+  },
+}
+`;

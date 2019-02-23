@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VisualGraph renders 1`] = `
+<div
+  style="padding:20px;border:1px solid #D9D9D9;border-radius:5px"
+>
+  <div
+    style="display:flex;align-items:center;justify-content:center;height:450px"
+  >
+    <div>
+      There is no data for the current selections.
+    </div>
+  </div>
+</div>
+`;

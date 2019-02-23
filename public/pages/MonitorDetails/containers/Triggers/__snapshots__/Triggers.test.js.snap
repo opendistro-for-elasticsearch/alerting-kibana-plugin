@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Triggers renders 1`] = `
+<ContentPanel
+  actions={
+    Array [
+      <EuiButton
+        color="primary"
+        disabled={true}
+        fill={false}
+        iconSide="left"
+        onClick={[Function]}
+        type="button"
+      >
+        Edit
+      </EuiButton>,
+      <EuiButton
+        color="primary"
+        disabled={true}
+        fill={false}
+        iconSide="left"
+        onClick={[Function]}
+        type="button"
+      >
+        Delete
+      </EuiButton>,
+      <EuiButton
+        color="primary"
+        disabled={false}
+        fill={true}
+        iconSide="left"
+        onClick={[MockFunction]}
+        type="button"
+      >
+        Create
+      </EuiButton>,
+    ]
+  }
+  bodyStyles={
+    Object {
+      "padding": "initial",
+    }
+  }
+  title="Triggers"
+  titleSize="s"
+>
+  <EuiInMemoryTable
+    columns={
+      Array [
+        Object {
+          "field": "name",
+          "name": "Name",
+          "sortable": true,
+          "truncateText": true,
+        },
+        Object {
+          "field": "actions",
+          "name": "Number of actions",
+          "render": [Function],
+          "sortable": true,
+          "truncateText": false,
+        },
+        Object {
+          "field": "severity",
+          "name": "Severity",
+          "sortable": true,
+          "truncateText": false,
+        },
+      ]
+    }
+    isSelectable={true}
+    itemId="id"
+    items={
+      Array [
+        Object {
+          "actions": Array [
+            Object {
+              "name": "Random Action",
+            },
+          ],
+          "name": "Random Trigger",
+          "severity": 1,
+        },
+      ]
+    }
+    key="0"
+    onTableChange={[Function]}
+    pagination={false}
+    responsive={true}
+    selection={
+      Object {
+        "onSelectionChange": [Function],
+      }
+    }
+    sorting={
+      Object {
+        "sort": Object {
+          "direction": "asc",
+          "field": "name",
+        },
+      }
+    }
+  />
+</ContentPanel>
+`;

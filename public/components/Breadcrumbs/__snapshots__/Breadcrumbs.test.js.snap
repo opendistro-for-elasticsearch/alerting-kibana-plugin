@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Breadcrumbs renders 1`] = `
+<EuiBreadcrumbs
+  breadcrumbs={Array []}
+  max={5}
+  responsive={false}
+  style={
+    Object {
+      "padding": "0px 15px",
+    }
+  }
+  truncate={true}
+/>
+`;
+
+exports[`createEuiBreadcrumbs creates breadcrumbs for EuiBreadcrumbs 1`] = `
+Object {
+  "href": "#/this-is-the-href",
+  "onClick": [Function],
+  "text": "This is a breadcrumb",
+}
+`;
+
+exports[`getBreadcrumb returns correct constant breadcrumbs 1`] = `
+Object {
+  "href": "/",
+  "text": "Alerting",
+}
+`;
+
+exports[`getBreadcrumb returns correct constant breadcrumbs 2`] = `
+Object {
+  "href": "/monitors",
+  "text": "Monitors",
+}
+`;
+
+exports[`getBreadcrumb returns correct constant breadcrumbs 3`] = `
+Object {
+  "href": "/dashboard",
+  "text": "Dashboard",
+}
+`;
+
+exports[`getBreadcrumb returns correct constant breadcrumbs 4`] = `
+Object {
+  "href": "/destinations",
+  "text": "Destinations",
+}
+`;
+
+exports[`getBreadcrumb returns correct constant breadcrumbs 5`] = `
+Array [
+  Object {
+    "href": "/monitors",
+    "text": "Monitors",
+  },
+  Object {
+    "href": "/create-monitor",
+    "text": "Create monitor",
+  },
+]
+`;
+
+exports[`getBreadcrumb returns correct constant breadcrumbs 6`] = `
+Array [
+  Object {
+    "href": "/destinations",
+    "text": "Destinations",
+  },
+  Object {
+    "href": "/create-destination",
+    "text": "Create destination",
+  },
+]
+`;
+
+exports[`getBreadcrumb when matching document IDs adds appropriate action breadcrumb 1`] = `
+Array [
+  Object {
+    "href": "/monitors/soDk30SjdsekoaSoMcj1",
+    "text": "random_name",
+  },
+  Object {
+    "href": "/",
+    "text": "Update monitor",
+  },
+]
+`;
+
+exports[`getBreadcrumb when matching document IDs adds appropriate action breadcrumb 2`] = `
+Array [
+  Object {
+    "href": "/monitors/soDk30SjdsekoaSoMcj1",
+    "text": "random_name",
+  },
+  Object {
+    "href": "/",
+    "text": "Create trigger",
+  },
+]
+`;
+
+exports[`getBreadcrumb when matching document IDs adds appropriate action breadcrumb 3`] = `
+Array [
+  Object {
+    "href": "/monitors/soDk30SjdsekoaSoMcj1",
+    "text": "random_name",
+  },
+  Object {
+    "href": "/",
+    "text": "Update trigger",
+  },
+]
+`;
+
+exports[`getBreadcrumb when matching document IDs returns monitor name 1`] = `
+Array [
+  Object {
+    "href": "/monitors/soDk30SjdsekoaSoMcj1",
+    "text": "random_name",
+  },
+]
+`;
+
+exports[`getBreadcrumb when matching document IDs uses monitor id as name if ok=false 1`] = `
+Array [
+  Object {
+    "href": "/monitors/soDk30SjdsekoaSoMcj1",
+    "text": "soDk30SjdsekoaSoMcj1",
+  },
+]
+`;
+
+exports[`getBreadcrumb when matching document IDs uses monitor id as name if request fails 1`] = `
+Array [
+  Object {
+    "href": "/monitors/soDk30SjdsekoaSoMcj1",
+    "text": "soDk30SjdsekoaSoMcj1",
+  },
+]
+`;
+
+exports[`parseLocationHash correctly parses location hash 1`] = `
+Array [
+  "#",
+  "monitors",
+  "soDk30SjdsekoaSoMcj1?action=create-trigger",
+]
+`;
+
+exports[`parseLocationHash filters out falsy string values 1`] = `
+Array [
+  "#",
+  "monitors",
+]
+`;

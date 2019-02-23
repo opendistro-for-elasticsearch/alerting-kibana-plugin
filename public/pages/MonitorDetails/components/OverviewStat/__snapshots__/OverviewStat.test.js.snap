@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OverviewStat renders 1`] = `
+<div
+  class="euiFlexItem"
+>
+  <div
+    class="euiText euiText--extraSmall"
+  >
+    <strong>
+      Test Header
+    </strong>
+    <div>
+      Test Value
+    </div>
+  </div>
+</div>
+`;

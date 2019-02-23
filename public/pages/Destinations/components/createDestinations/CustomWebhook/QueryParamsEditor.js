@@ -1,0 +1,82 @@
+/*
+ *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License").
+ *   You may not use this file except in compliance with the License.
+ *   A copy of the License is located at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   or in the "license" file accompanying this file. This file is distributed
+ *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ *   express or implied. See the License for the specific language governing
+ *   permissions and limitations under the License.
+ */
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import { FieldArray } from 'formik';
+import AttributeEditor from '../../../../../components/AttributeEditor';
+import { FormikFieldText } from '../../../../../components/FormControls';
+import { isInvalid, required } from '../../../../../utils/validate';
+
+const handleRenderKeyField = (fieldName, index) => (
+  <FormikFieldText
+    formRow={index === 0}
+    fieldProps={{
+      validate: required,
+    }}
+    rowProps={{
+      label: index === 0 ? 'Key' : null,
+    }}
+    inputProps={{
+      isInvalid,
+    }}
+    name={fieldName}
+  />
+);
+
+const handleRenderValueField = (fieldName, index) => (
+  <FormikFieldText
+    formRow={index === 0}
+    fieldProps={{
+      validate: required,
+    }}
+    rowProps={{
+      label: index === 0 ? 'Value' : null,
+    }}
+    inputProps={{
+      isInvalid,
+    }}
+    name={fieldName}
+  />
+);
+
+const propTypes = {
+  type: PropTypes.string.isRequired,
+  queryParams: PropTypes.array.isRequired,
+};
+
+const QueryParamsEditor = ({ type, queryParams }) => (
+  <FieldArray
+    name={`${type}.queryParams`}
+    validateOnChange={true}
+    render={arrayHelpers => (
+      <AttributeEditor
+        titleText="Query parameters"
+        onAdd={() => arrayHelpers.push({})}
+        onRemove={index => arrayHelpers.remove(index)}
+        items={queryParams}
+        name={`${type}.queryParams`}
+        addButtonText="Add parameter"
+        removeButtonText="Remove parameter"
+        onRenderKeyField={handleRenderKeyField}
+        onRenderValueField={handleRenderValueField}
+      />
+    )}
+  />
+);
+
+QueryParamsEditor.propTypes = propTypes;
+
+export default QueryParamsEditor;

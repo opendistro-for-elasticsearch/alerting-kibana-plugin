@@ -1,0 +1,12 @@
+npm-debug.log*
+node_modules
+/build/
+build
+*.iml
+*.ipr
+*.iws
+.idea/
+.DS_Store
+*.sublime*
+.kibana-plugin-helpers.dev.json
+coverage
