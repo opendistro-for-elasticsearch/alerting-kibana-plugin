@@ -62,6 +62,12 @@ Example output: `./build/opendistro-alerting-0.7.0.0.zip`
 - Since this is a Kibana plugin, it can be useful to review the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) alongside the documentation around [Kibana plugins](https://www.elastic.co/guide/en/kibana/master/kibana-plugins.html) and [plugin development](https://www.elastic.co/guide/en/kibana/master/plugin-development.html).
 
 
+
 ## License
 
-This code is licensed under the [Apache License, Version 2.0](https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting/blob/master/LICENSE.txt).
+This code is licensed under the Apache 2.0 License. 
+
+## Copyright
+
+Open Distro For Elasticsearch Security Copyright 2019- Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
