@@ -1,6 +1,6 @@
 # Open Distro for Elasticsearch Alerting Kibana
 
-The Open Distro for Elasticsearch alerting Kibana plugin lets you manage your [Open Distro for Elasticsearch alerting plugin](https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting) to monitor your data and send notifications when certain criteria are met---all from Kibana.
+The Open Distro for Elasticsearch Alerting Kibana plugin lets you manage your [Open Distro for Elasticsearch alerting plugin](https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting) to monitor your data and send notifications when certain criteria are met---all from Kibana.
 
 
 # Highlights
@@ -10,9 +10,9 @@ The Open Distro for Elasticsearch alerting Kibana plugin lets you manage your [O
 - If trigger criteria are met, generate *alerts* and perform *actions* (e.g. post a message in a Slack channel).
 
 
-# Technical Documentation
+# Documentation
 
-Please see our [technical documentation](https://opendistro.github.io/for-elasticsearch-docs/).
+Please see our [documentation](https://opendistro.github.io/for-elasticsearch-docs/).
 
 
 # Developer setup, build, and run
