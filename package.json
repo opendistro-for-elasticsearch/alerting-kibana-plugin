@@ -4,14 +4,14 @@
   "description": "Kibana Alerting Plugin",
   "main": "index.js",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting-kibana",
+  "homepage": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin",
   "kibana": {
     "version": "6.5.4",
     "templateVersion": "6.3.3"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting-kibana"
+    "url": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin"
   },
   "scripts": {
     "kbn": "node ../../kibana/scripts/kbn",
