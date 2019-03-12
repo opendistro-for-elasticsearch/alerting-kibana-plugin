@@ -14,5 +14,5 @@ Alerts can be acknowledged to mute notifications.
 
 ### Commits
 
-* [[`475a70e`](https://github.com/mauve-hedgehog/opendistro-elasticsearch-alerting-kibana/commit/475a70eedece077ff6c5c1133b143f69d49eb105)] Initial release for OpenDistro Kibana Alerting
+* [[`475a70e`](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/commit/475a70eedece077ff6c5c1133b143f69d49eb105)] Initial release for OpenDistro Kibana Alerting
 
