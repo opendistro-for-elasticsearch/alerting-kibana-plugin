@@ -40,6 +40,12 @@ Ultimately, your directory structure should look like this:
 
 ## Build
 
+- Install node v8.14.10
+- `cd alerting-kibana-plugin`
+- `yarn add --dev link:../../kibana/packages/kbn-plugin-helpers`
+- `yarn kbn bootstrap`
+- PATH="../../kibana/x-pack/node_modules/.bin:${PATH}"
+
 To build the plugin's distributable zip simply run `yarn build`.
 
 Example output: `./build/opendistro-alerting-0.7.0.0.zip`
