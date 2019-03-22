@@ -28,10 +28,10 @@ export default class MonitorService {
       const params = { body: JSON.stringify(req.payload) };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const createResponse = await callWithRequest(req, 'alerting.createMonitor', params);
-      reply({ ok: true, resp: createResponse });
+      return { ok: true, resp: createResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - createMonitor:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -41,10 +41,10 @@ export default class MonitorService {
       const params = { monitorId: id };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const response = await callWithRequest(req, 'alerting.deleteMonitor', params);
-      reply({ ok: response.result === 'deleted' });
+      return { ok: response.result === 'deleted' };
     } catch (err) {
       console.error('Alerting - MonitorService - deleteMonitor:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -92,13 +92,13 @@ export default class MonitorService {
           (accu, curr) => (curr.key === 'ACTIVE' ? curr.doc_count : accu),
           0
         );
-        reply({ ok: true, resp: monitor, activeCount, dayCount, version });
+        return { ok: true, resp: monitor, activeCount, dayCount, version };
       } else {
-        reply({ ok: false });
+        return { ok: false };
       }
     } catch (err) {
       console.error('Alerting - MonitorService - getMonitor:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -110,11 +110,14 @@ export default class MonitorService {
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const updateResponse = await callWithRequest(req, 'alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
-      if (_version === parseInt(version, 10) + 1) reply({ ok: true, version: _version, id: _id });
-      else reply({ ok: false });
+      if (_version === parseInt(version, 10) + 1) {
+        return { ok: true, version: _version, id: _id };
+      } else {
+        return { ok: false };
+      }
     } catch (err) {
       console.error('Alerting - MonitorService - updateMonitor:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -285,14 +288,14 @@ export default class MonitorService {
         results = results.slice(from, from + size);
       }
 
-      reply({
+      return {
         ok: true,
         monitors: results,
         totalMonitors,
-      });
+      };
     } catch (err) {
       console.error('Alerting - MonitorService - getMonitors', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -305,10 +308,10 @@ export default class MonitorService {
       };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const acknowledgeResponse = await callWithRequest(req, 'alerting.acknowledgeAlerts', params);
-      reply({ ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse });
+      return { ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - acknowledgeAlerts:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -321,10 +324,10 @@ export default class MonitorService {
       };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const executeResponse = await callWithRequest(req, 'alerting.executeMonitor', params);
-      reply({ ok: true, resp: executeResponse });
+      return { ok: true, resp: executeResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - executeMonitor:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 }

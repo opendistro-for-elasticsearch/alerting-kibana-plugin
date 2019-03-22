@@ -25,10 +25,10 @@ export default class ElasticsearchService {
       const params = { index, size, body: query };
       const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
       const results = await callWithRequest(req, 'search', params);
-      reply({ ok: true, resp: results });
+      return { ok: true, resp: results };
     } catch (err) {
       console.error('Alerting - ElasticsearchService - search', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -41,14 +41,14 @@ export default class ElasticsearchService {
         format: 'json',
         h: 'health,index,status',
       });
-      reply({ ok: true, resp: indices });
+      return { ok: true, resp: indices };
     } catch (err) {
       // Elasticsearch throws an index_not_found_exception which we'll treat as a success
       if (err.statusCode === 404) {
-        reply({ ok: true, resp: [] });
+        return { ok: true, resp: [] };
       } else {
         console.error('Alerting - ElasticsearchService - getIndices:', err);
-        reply({ ok: false, resp: err.message });
+        return { ok: false, resp: err.message };
       }
     }
   };
@@ -62,10 +62,10 @@ export default class ElasticsearchService {
         format: 'json',
         h: 'alias,index',
       });
-      reply({ ok: true, resp: aliases });
+      return { ok: true, resp: aliases };
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getAliases:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
@@ -74,10 +74,10 @@ export default class ElasticsearchService {
       const { index } = req.payload;
       const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
       const mappings = await callWithRequest(req, 'indices.getMapping', { index });
-      reply({ ok: true, resp: mappings });
+      return { ok: true, resp: mappings };
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getMappings:', err);
-      reply({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 }
