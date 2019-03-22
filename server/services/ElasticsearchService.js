@@ -19,7 +19,7 @@ export default class ElasticsearchService {
     this.esDriver = esDriver;
   }
 
-  search = async (req, reply) => {
+  search = async (req, h) => {
     try {
       const { query, index, size } = req.payload;
       const params = { index, size, body: query };
@@ -32,7 +32,7 @@ export default class ElasticsearchService {
     }
   };
 
-  getIndices = async (req, reply) => {
+  getIndices = async (req, h) => {
     try {
       const { index } = req.payload;
       const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
@@ -53,7 +53,7 @@ export default class ElasticsearchService {
     }
   };
 
-  getAliases = async (req, reply) => {
+  getAliases = async (req, h) => {
     try {
       const { alias } = req.payload;
       const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
@@ -69,7 +69,7 @@ export default class ElasticsearchService {
     }
   };
 
-  getMappings = async (req, reply) => {
+  getMappings = async (req, h) => {
     try {
       const { index } = req.payload;
       const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);

@@ -23,7 +23,7 @@ export default class MonitorService {
     this.esDriver = esDriver;
   }
 
-  createMonitor = async (req, reply) => {
+  createMonitor = async (req, h) => {
     try {
       const params = { body: JSON.stringify(req.payload) };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
@@ -35,7 +35,7 @@ export default class MonitorService {
     }
   };
 
-  deleteMonitor = async (req, reply) => {
+  deleteMonitor = async (req, h) => {
     try {
       const { id } = req.params;
       const params = { monitorId: id };
@@ -48,7 +48,7 @@ export default class MonitorService {
     }
   };
 
-  getMonitor = async (req, reply) => {
+  getMonitor = async (req, h) => {
     try {
       const { id } = req.params;
       const params = { monitorId: id };
@@ -102,7 +102,7 @@ export default class MonitorService {
     }
   };
 
-  updateMonitor = async (req, reply) => {
+  updateMonitor = async (req, h) => {
     try {
       const { id } = req.params;
       const { version } = req.query;
@@ -121,7 +121,7 @@ export default class MonitorService {
     }
   };
 
-  getMonitors = async (req, reply) => {
+  getMonitors = async (req, h) => {
     try {
       const { from, size, search, sortDirection, sortField, state } = req.query;
 
@@ -299,7 +299,7 @@ export default class MonitorService {
     }
   };
 
-  acknowledgeAlerts = async (req, reply) => {
+  acknowledgeAlerts = async (req, h) => {
     try {
       const { id } = req.params;
       const params = {
@@ -315,7 +315,7 @@ export default class MonitorService {
     }
   };
 
-  executeMonitor = async (req, reply) => {
+  executeMonitor = async (req, h) => {
     try {
       const { dryrun = 'true' } = req.query;
       const params = {

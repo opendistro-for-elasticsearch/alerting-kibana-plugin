@@ -118,7 +118,6 @@ class DateRangePicker extends React.PureComponent {
                 aria-label="Start date"
                 showTimeSelect
                 popperClassName="euiRangePicker--popper"
-                readOnly
                 shouldCloseOnSelect
                 {...rangeStartDateTime}
               />
@@ -133,7 +132,6 @@ class DateRangePicker extends React.PureComponent {
                 aria-label="End date"
                 showTimeSelect
                 popperClassName="euiRangePicker--popper"
-                readOnly
                 shouldCloseOnSelect
                 {...rangeEndDateTime}
               />

@@ -21,7 +21,7 @@ export default class AlertService {
     this.esDriver = esDriver;
   }
 
-  getAlerts = (req, reply) => {
+  getAlerts = async (req, h) => {
     const {
       from = 0,
       size = 20,

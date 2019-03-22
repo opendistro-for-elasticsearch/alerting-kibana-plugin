@@ -21,7 +21,7 @@ export default class DestinationsService {
     this.esDriver = esDriver;
   }
 
-  createDestination = async (req, res) => {
+  createDestination = async (req, h) => {
     try {
       const params = { body: JSON.stringify(req.payload) };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
@@ -33,7 +33,7 @@ export default class DestinationsService {
     }
   };
 
-  updateDestination = async (req, res) => {
+  updateDestination = async (req, h) => {
     try {
       const { destinationId } = req.params;
       const { version } = req.query;
@@ -56,7 +56,7 @@ export default class DestinationsService {
     }
   };
 
-  deleteDestination = async (req, res) => {
+  deleteDestination = async (req, h) => {
     try {
       const { destinationId } = req.params;
       const params = { destinationId };
@@ -69,7 +69,7 @@ export default class DestinationsService {
     }
   };
 
-  getDestination = async (req, res) => {
+  getDestination = async (req, h) => {
     const { destinationId } = req.params;
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
     try {
@@ -85,7 +85,7 @@ export default class DestinationsService {
     }
   };
 
-  getDestinations = async (req, res) => {
+  getDestinations = async (req, h) => {
     const {
       from = 0,
       size = 20,
@@ -124,7 +124,7 @@ export default class DestinationsService {
 
     const sortQueryMap = {
       name: { 'destination.name.keyword': sortDirection },
-      type: { 'destination.type.keyword': sortDirection },
+      type: { 'destination.type': sortDirection },
     };
 
     let sort = [];
