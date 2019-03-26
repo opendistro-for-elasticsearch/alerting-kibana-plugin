@@ -21,19 +21,19 @@ export default class DestinationsService {
     this.esDriver = esDriver;
   }
 
-  createDestination = async (req, res) => {
+  createDestination = async (req, h) => {
     try {
       const params = { body: JSON.stringify(req.payload) };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const createResponse = await callWithRequest(req, 'alerting.createDestination', params);
-      res({ ok: true, resp: createResponse });
+      return { ok: true, resp: createResponse };
     } catch (err) {
       console.error('Alerting - DestinationService - createDestination:', err);
-      res({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
-  updateDestination = async (req, res) => {
+  updateDestination = async (req, h) => {
     try {
       const { destinationId } = req.params;
       const { version } = req.query;
@@ -46,30 +46,30 @@ export default class DestinationsService {
       const updateResponse = await callWithRequest(req, 'alerting.updateDestination', params);
       const { _version, _id } = updateResponse;
       if (_version === parseInt(version, 10) + 1) {
-        res({ ok: true, version: _version, id: _id });
+        return { ok: true, version: _version, id: _id };
       } else {
-        res({ ok: false, resp: updateResponse });
+        return { ok: false, resp: updateResponse };
       }
     } catch (err) {
       console.error('Alerting - DestinationService - updateDestination:', err);
-      res({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
-  deleteDestination = async (req, res) => {
+  deleteDestination = async (req, h) => {
     try {
       const { destinationId } = req.params;
       const params = { destinationId };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const response = await callWithRequest(req, 'alerting.deleteDestination', params);
-      res({ ok: response.result === 'deleted' });
+      return { ok: response.result === 'deleted' };
     } catch (err) {
       console.error('Alerting - DestinationService - deleteDestination:', err);
-      res({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
-  getDestination = async (req, res) => {
+  getDestination = async (req, h) => {
     const { destinationId } = req.params;
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
     try {
@@ -78,14 +78,14 @@ export default class DestinationsService {
         type: '_doc',
         id: destinationId,
       });
-      res({ ok: true, destination: resp._source.destination, version: resp._version });
+      return { ok: true, destination: resp._source.destination, version: resp._version };
     } catch (err) {
       console.error('Alerting - DestinationService - getDestination:', err);
-      res({ ok: false, resp: err.message });
+      return { ok: false, resp: err.message };
     }
   };
 
-  getDestinations = async (req, res) => {
+  getDestinations = async (req, h) => {
     const {
       from = 0,
       size = 20,
@@ -124,7 +124,7 @@ export default class DestinationsService {
 
     const sortQueryMap = {
       name: { 'destination.name.keyword': sortDirection },
-      type: { 'destination.type.keyword': sortDirection },
+      type: { 'destination.type': sortDirection },
     };
 
     let sort = [];
@@ -155,9 +155,9 @@ export default class DestinationsService {
         const { _source: destination, _id: id, _version: version } = hit;
         return { id, ...destination.destination, version };
       });
-      res({ ok: true, destinations, totalDestinations });
+      return { ok: true, destinations, totalDestinations };
     } catch (err) {
-      res({ ok: false, err: err.message });
+      return { ok: false, err: err.message };
     }
   };
 }

@@ -32,7 +32,7 @@ describe('getScheduleFromMonitor', () => {
       },
       monthly: { type: 'day', day: 1, ordinal: 'day' },
       cronExpression: '0 0 0/1 * * ?',
-      timezone: 'America/Los_Angeles',
+      timezone: 'Asia/Kolkata',
     },
   };
   const periodMonitor = {
@@ -68,7 +68,7 @@ describe('getScheduleFromMonitor', () => {
       getScheduleFromMonitor({
         ui_metadata: { schedule: { ...uiMetadata.schedule, frequency: 'daily' } },
       })
-    ).toBe(`Every day around 12:00 am PST`);
+    ).toBe(`Every day around 12:00 am IST`);
   });
 
   test('can get weekly from ui_metadata', () => {
@@ -76,7 +76,7 @@ describe('getScheduleFromMonitor', () => {
       getScheduleFromMonitor({
         ui_metadata: { schedule: { ...uiMetadata.schedule, frequency: 'weekly' } },
       })
-    ).toBe(`Every Tuesday around 12:00 am PST`);
+    ).toBe(`Every Tuesday around 12:00 am IST`);
   });
 
   test('can get monthly (type = day) from ui_metadata', () => {
@@ -84,7 +84,7 @@ describe('getScheduleFromMonitor', () => {
       getScheduleFromMonitor({
         ui_metadata: { schedule: { ...uiMetadata.schedule, frequency: 'monthly' } },
       })
-    ).toBe(`Every month on the 1st around 12:00 am PST`);
+    ).toBe(`Every month on the 1st around 12:00 am IST`);
   });
 
   test('can get cron from ui_metadata', () => {

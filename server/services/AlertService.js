@@ -21,7 +21,7 @@ export default class AlertService {
     this.esDriver = esDriver;
   }
 
-  getAlerts = (req, reply) => {
+  getAlerts = async (req, h) => {
     const {
       from = 0,
       size = 20,
@@ -112,17 +112,16 @@ export default class AlertService {
     };
 
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-    callWithRequest(req, 'search', params)
-      .then(function(resp) {
-        const totalAlerts = resp.hits.total;
-        const alerts = resp.hits.hits.map(hit => {
-          const { _source: alert, _id: id, _version: version } = hit;
-          return { id, ...alert, version };
-        });
-        reply({ ok: true, alerts, totalAlerts });
-      })
-      .catch(function(resp) {
-        reply({ ok: false, resp });
+    try {
+      const resp = await callWithRequest(req, 'search', params);
+      const totalAlerts = resp.hits.total;
+      const alerts = resp.hits.hits.map(hit => {
+        const { _source: alert, _id: id, _version: version } = hit;
+        return { id, ...alert, version };
       });
+      return { ok: true, alerts, totalAlerts };
+    } catch(err) {
+      return { ok: false, resp };
+    }
   };
 }

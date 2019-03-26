@@ -35,8 +35,6 @@ export default function(kibana) {
         main: `plugins/${PLUGIN_NAME}/app`,
       },
 
-      translations: [resolve(__dirname, './translations/es.json')],
-
       hacks: [`plugins/${PLUGIN_NAME}/hack`],
     },
 
