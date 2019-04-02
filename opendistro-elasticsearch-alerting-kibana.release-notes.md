@@ -1,5 +1,12 @@
-## 2019-01-31, Version 0.7.0 (Current)
+## Version 0.8.0 (Current)
 
+### New Features
+  * Adds support for Kibana 6.6.2 - [PR #7](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/7)
+
+### Bug fixes
+  * Fixes sorting on Destination Type on destinations list page.
+
+## 2019-01-31, Version 0.7.0
 
 ### New Features
 
