@@ -604,6 +604,7 @@ exports[`MonitorIndex renders 1`] = `
                           inputRef={[Function]}
                           isListOpen={false}
                           noIcon={false}
+                          onBlur={[Function]}
                           onChange={[Function]}
                           onClear={[Function]}
                           onClick={[Function]}

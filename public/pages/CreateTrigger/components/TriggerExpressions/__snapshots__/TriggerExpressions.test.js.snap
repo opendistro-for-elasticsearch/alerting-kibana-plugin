@@ -23,11 +23,13 @@ exports[`TriggerExpressions renders 1`] = `
           hasEmptyLabelSpace={false}
           label="Trigger condition"
         >
-          <EuiExpressionButton
-            buttonValue="500"
+          <EuiExpression
+            color="secondary"
             description="IS ABOVE"
             isActive={false}
             onClick={[Function]}
+            uppercase={true}
+            value="500"
           />
         </EuiFormRow>
       }
@@ -46,51 +48,51 @@ exports[`TriggerExpressions renders 1`] = `
           }
         }
       >
-        <EuiExpression>
-          <EuiFlexGroup
-            alignItems="stretch"
+        <EuiFlexGroup
+          alignItems="stretch"
+          component="div"
+          direction="row"
+          gutterSize="l"
+          justifyContent="flexStart"
+          responsive={true}
+          style={
+            Object {
+              "maxWidth": 600,
+              "padding": "20px",
+              "whiteSpace": "nowrap",
+            }
+          }
+          wrap={false}
+        >
+          <EuiFlexItem
             component="div"
-            direction="row"
-            gutterSize="l"
-            justifyContent="flexStart"
-            responsive={true}
+            grow={false}
             style={
               Object {
-                "maxWidth": 600,
+                "width": 150,
               }
             }
-            wrap={false}
           >
-            <EuiFlexItem
-              component="div"
-              grow={false}
-              style={
-                Object {
-                  "width": 150,
-                }
+            <C
+              name="thresholdEnum"
+              render={[Function]}
+            />
+          </EuiFlexItem>
+          <EuiFlexItem
+            component="div"
+            grow={false}
+            style={
+              Object {
+                "width": 100,
               }
-            >
-              <C
-                name="thresholdEnum"
-                render={[Function]}
-              />
-            </EuiFlexItem>
-            <EuiFlexItem
-              component="div"
-              grow={false}
-              style={
-                Object {
-                  "width": 100,
-                }
-              }
-            >
-              <C
-                name="thresholdValue"
-                render={[Function]}
-              />
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </EuiExpression>
+            }
+          >
+            <C
+              name="thresholdValue"
+              render={[Function]}
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>
       </div>
     </EuiPopover>
   </EuiFlexItem>

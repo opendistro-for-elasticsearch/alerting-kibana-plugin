@@ -21,10 +21,8 @@ import {
   EuiFlexItem,
   EuiPopover,
   EuiExpression,
-  EuiExpressionButton,
 } from '@elastic/eui';
-
-import { Expressions, POPOVER_STYLE, UNITS_OF_TIME } from './utils/constants';
+import { Expressions, POPOVER_STYLE, UNITS_OF_TIME, EXPRESSION_STYLE } from './utils/constants';
 import { selectOptionValueToText } from './utils/helpers';
 import { FormikFieldNumber, FormikSelect } from '../../../../../components/FormControls';
 
@@ -36,23 +34,20 @@ class ForExpression extends Component {
 
   renderPopover = () => (
     <div style={POPOVER_STYLE}>
-      <EuiExpression>
-        <EuiFlexGroup style={{ maxWidth: 600 }}>
-          <EuiFlexItem grow={false} style={{ width: 100 }}>
-            <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false} style={{ width: 150 }}>
-            <FormikSelect
-              name="bucketUnitOfTime"
-              inputProps={{
-                onChange: this.onChangeWrapper,
-                options: UNITS_OF_TIME,
-              }}
-            />
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiExpression>
+      <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
+        <EuiFlexItem grow={false} style={{ width: 100 }}>
+          <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
+        </EuiFlexItem>
+        <EuiFlexItem grow={false} style={{ width: 150 }}>
+          <FormikSelect
+            name="bucketUnitOfTime"
+            inputProps={{
+              onChange: this.onChangeWrapper,
+              options: UNITS_OF_TIME,
+            }}
+          />
+        </EuiFlexItem>
+      </EuiFlexGroup>
     </div>
   );
 
@@ -67,9 +62,9 @@ class ForExpression extends Component {
       <EuiPopover
         id="for-popover"
         button={
-          <EuiExpressionButton
+          <EuiExpression
             description="for the last"
-            buttonValue={`${values.bucketValue.toLocaleString()} ${selectOptionValueToText(
+            value={`${values.bucketValue.toLocaleString()} ${selectOptionValueToText(
               values.bucketUnitOfTime,
               UNITS_OF_TIME
             )}`}

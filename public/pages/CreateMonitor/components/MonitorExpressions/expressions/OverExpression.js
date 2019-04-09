@@ -18,12 +18,11 @@ import { connect } from 'formik';
 import {
   EuiPopover,
   EuiExpression,
-  EuiExpressionButton,
   EuiFlexGroup,
   EuiFlexItem,
 } from '@elastic/eui';
 
-import { POPOVER_STYLE, Expressions, OVER_TYPES } from './utils/constants';
+import { POPOVER_STYLE, Expressions, OVER_TYPES, EXPRESSION_STYLE } from './utils/constants';
 import { FormikSelect, FormikFieldNumber } from '../../../../../components/FormControls';
 
 class OverExpression extends Component {
@@ -51,28 +50,32 @@ class OverExpression extends Component {
   );
 
   renderOverPopover = () => (
-    <div style={POPOVER_STYLE}>
-      <EuiExpression style={{ width: 200 }}>{this.renderTypeSelect()}</EuiExpression>
+    <div style={{...POPOVER_STYLE, ...EXPRESSION_STYLE }}>
+      {this.renderTypeSelect()}
     </div>
   );
 
   renderGroupedPopover = () => (
     <div style={POPOVER_STYLE}>
-      <EuiExpression>
-        <EuiFlexGroup style={{ maxWidth: 600 }}>
-          <EuiFlexItem grow={false} style={{ width: 100 }}>
-            {this.renderTypeSelect()}
-          </EuiFlexItem>
+      <EuiFlexGroup
+        style={{
+          maxWidth: 600,
+          width: Math.max(expressionWidth, 180),
+          ...EXPRESSION_STYLE
+        }}
+      >
+        <EuiFlexItem grow={false} style={{ width: 100 }}>
+          {this.renderTypeSelect()}
+        </EuiFlexItem>
 
-          <EuiFlexItem grow={false} style={{ width: 100 }}>
-            {this.renderTopFieldNumber()}
-          </EuiFlexItem>
+        <EuiFlexItem grow={false} style={{ width: 100 }}>
+          {this.renderTopFieldNumber()}
+        </EuiFlexItem>
 
-          <EuiFlexItem grow={false} style={{ width: 180 }}>
-            {this.renderTermField()}
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiExpression>
+        <EuiFlexItem grow={false} style={{ width: 180 }}>
+          {this.renderTermField()}
+        </EuiFlexItem>
+      </EuiFlexGroup>
     </div>
   );
 
@@ -91,9 +94,9 @@ class OverExpression extends Component {
       <EuiPopover
         id="over-popover"
         button={
-          <EuiExpressionButton
+          <EuiExpression
             description={isGroupedOver ? 'grouped over' : 'over'}
-            buttonValue={buttonValue}
+            value={buttonValue}
             isActive={openedStates.OVER}
             onClick={() => openExpression(Expressions.OVER)}
           />

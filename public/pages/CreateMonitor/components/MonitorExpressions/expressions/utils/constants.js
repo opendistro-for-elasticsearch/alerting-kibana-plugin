@@ -14,6 +14,7 @@
  */
 
 export const POPOVER_STYLE = { zIndex: '200' };
+export const EXPRESSION_STYLE = { padding: '20px', whiteSpace: 'nowrap' };
 export const Expressions = {
   THRESHOLD: 'THRESHOLD',
   WHEN: 'WHEN',
