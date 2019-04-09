@@ -15,16 +15,16 @@ exports[`MonitorExpressions renders 1`] = `
         class="euiPopover__anchor"
       >
         <button
-          class="euiExpressionButton"
+          class="euiExpression euiExpression-isClickable euiExpression-isUppercase euiExpression--secondary"
         >
           <span
-            class="euiExpressionButton__description"
+            class="euiExpression__description"
           >
             when
           </span>
            
           <span
-            class="euiExpressionButton__value"
+            class="euiExpression__value"
           >
             count()
           </span>
@@ -43,16 +43,16 @@ exports[`MonitorExpressions renders 1`] = `
         class="euiPopover__anchor"
       >
         <button
-          class="euiExpressionButton"
+          class="euiExpression euiExpression-isClickable euiExpression-isUppercase euiExpression--secondary"
         >
           <span
-            class="euiExpressionButton__description"
+            class="euiExpression__description"
           >
             over
           </span>
            
           <span
-            class="euiExpressionButton__value"
+            class="euiExpression__value"
           >
             all documents
           </span>
@@ -71,16 +71,16 @@ exports[`MonitorExpressions renders 1`] = `
         class="euiPopover__anchor"
       >
         <button
-          class="euiExpressionButton"
+          class="euiExpression euiExpression-isClickable euiExpression-isUppercase euiExpression--secondary"
         >
           <span
-            class="euiExpressionButton__description"
+            class="euiExpression__description"
           >
             for the last
           </span>
            
           <span
-            class="euiExpressionButton__value"
+            class="euiExpression__value"
           >
             1 hour(s)
           </span>

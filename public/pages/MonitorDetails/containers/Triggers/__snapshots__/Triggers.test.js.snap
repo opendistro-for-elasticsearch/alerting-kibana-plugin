@@ -68,6 +68,7 @@ exports[`Triggers renders 1`] = `
         },
       ]
     }
+    executeQueryOptions={Object {}}
     isSelectable={true}
     itemId="id"
     items={

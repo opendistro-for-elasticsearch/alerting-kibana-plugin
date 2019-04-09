@@ -15,7 +15,7 @@
 
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import { EuiExpressionButton } from '@elastic/eui';
+import { EuiExpression } from '@elastic/eui';
 import { Formik } from 'formik';
 
 import TriggerExpressions, { Expressions } from './TriggerExpressions';
@@ -34,7 +34,7 @@ describe('TriggerExpressions', () => {
   test('calls openExpression when clicking expression', () => {
     const wrapper = mount(<Formik render={() => <TriggerExpressions {...props} />} />);
     const openExpression = jest.spyOn(wrapper.find(TriggerExpressions).instance(), 'openExpression');
-    const button = wrapper.find(EuiExpressionButton);
+    const button = wrapper.find(EuiExpression);
     expect(wrapper.find(TriggerExpressions).state().openedStates[Expressions.THRESHOLD]).toBe(false);
     button.simulate('click');
     wrapper.update();
@@ -46,7 +46,7 @@ describe('TriggerExpressions', () => {
     const wrapper = mount(<Formik render={() => <TriggerExpressions {...props} />} />);
     const openExpression = jest.spyOn(wrapper.find(TriggerExpressions).instance(), 'openExpression');
     const closeExpression = jest.spyOn(wrapper.find(TriggerExpressions).instance(), 'closeExpression');
-    const button = wrapper.find(EuiExpressionButton);
+    const button = wrapper.find(EuiExpression);
     button.simulate('click');
     wrapper.update();
     expect(openExpression).toHaveBeenCalled();

@@ -16,10 +16,10 @@
 import React, { Component } from 'react';
 import { connect } from 'formik';
 import _ from 'lodash';
-import { EuiPopover, EuiExpression, EuiExpressionButton } from '@elastic/eui';
+import { EuiPopover, EuiExpression } from '@elastic/eui';
 
 import { FormikComboBox } from '../../../../../components/FormControls';
-import { POPOVER_STYLE, Expressions } from './utils/constants';
+import { POPOVER_STYLE, EXPRESSION_STYLE, Expressions } from './utils/constants';
 import { getOptions } from './utils/dataTypes';
 
 // TODO: EuiComboBox has an internal setState issue, waiting for EUI to fix it, remove this TODO when it is fixed
@@ -31,20 +31,24 @@ class OfExpression extends Component {
   };
 
   renderPopover = (options, expressionWidth) => (
-    <div style={POPOVER_STYLE}>
-      <EuiExpression style={{ width: Math.max(expressionWidth, 180) }}>
-        <FormikComboBox
-          name="fieldName"
-          inputProps={{
-            placeholder: 'Select a field',
-            options,
-            onChange: this.onChangeWrapper,
-            isClearable: false,
-            singleSelection: { asPlainText: true },
-            'data-test-subj': 'ofFieldComboBox',
-          }}
-        />
-      </EuiExpression>
+    <div
+      style={{
+        width: Math.max(expressionWidth, 180),
+        ...POPOVER_STYLE,
+        ...EXPRESSION_STYLE,
+      }}
+    >
+      <FormikComboBox
+        name="fieldName"
+        inputProps={{
+          placeholder: 'Select a field',
+          options,
+          onChange: this.onChangeWrapper,
+          isClearable: false,
+          singleSelection: { asPlainText: true },
+          'data-test-subj': 'ofFieldComboBox',
+        }}
+      />
     </div>
   );
 
@@ -70,9 +74,9 @@ class OfExpression extends Component {
       <EuiPopover
         id="of-popover"
         button={
-          <EuiExpressionButton
+          <EuiExpression
             description="of"
-            buttonValue={fieldName}
+            value={fieldName}
             isActive={openedStates.OF_FIELD}
             onClick={() => openExpression(Expressions.OF_FIELD)}
           />

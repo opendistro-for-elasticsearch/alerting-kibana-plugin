@@ -17,7 +17,6 @@ import React, { Component } from 'react';
 import { Field } from 'formik';
 import {
   EuiExpression,
-  EuiExpressionButton,
   EuiFieldNumber,
   EuiFlexGroup,
   EuiFlexItem,
@@ -59,38 +58,42 @@ class TriggerExpressions extends Component {
   renderPopover() {
     return (
       <div style={POPOVER_STYLE}>
-        <EuiExpression>
-          <EuiFlexGroup style={{ maxWidth: 600 }}>
-            <EuiFlexItem grow={false} style={{ width: 150 }}>
-              <Field
-                name="thresholdEnum"
-                render={({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
-                  <EuiFormRow
-                    isInvalid={touched.thresholdEnum && !!errors.thresholdEnum}
-                    error={errors.thresholdEnum}
-                  >
-                    <EuiSelect options={THRESHOLD_ENUM_OPTIONS} {...rest} />
-                  </EuiFormRow>
-                )}
-              />
-            </EuiFlexItem>
+        <EuiFlexGroup
+          style={{
+            maxWidth: 600,
+            padding: '20px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <EuiFlexItem grow={false} style={{ width: 150 }}>
+            <Field
+              name="thresholdEnum"
+              render={({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
+                <EuiFormRow
+                  isInvalid={touched.thresholdEnum && !!errors.thresholdEnum}
+                  error={errors.thresholdEnum}
+                >
+                  <EuiSelect options={THRESHOLD_ENUM_OPTIONS} {...rest} />
+                </EuiFormRow>
+              )}
+            />
+          </EuiFlexItem>
 
-            <EuiFlexItem grow={false} style={{ width: 100 }}>
-              <Field
-                name="thresholdValue"
-                render={({ field, form: { touched, errors } }) => (
-                  <EuiFormRow
-                    style={{ paddingLeft: '10px' }}
-                    isInvalid={touched.thresholdValue && !!errors.thresholdValue}
-                    error={errors.thresholdValue}
-                  >
-                    <EuiFieldNumber {...field} />
-                  </EuiFormRow>
-                )}
-              />
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </EuiExpression>
+          <EuiFlexItem grow={false} style={{ width: 100 }}>
+            <Field
+              name="thresholdValue"
+              render={({ field, form: { touched, errors } }) => (
+                <EuiFormRow
+                  style={{ paddingLeft: '10px' }}
+                  isInvalid={touched.thresholdValue && !!errors.thresholdValue}
+                  error={errors.thresholdValue}
+                >
+                  <EuiFieldNumber {...field} />
+                </EuiFormRow>
+              )}
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>
       </div>
     );
   }
@@ -105,9 +108,9 @@ class TriggerExpressions extends Component {
             id="trigger-popover"
             button={
               <EuiFormRow label="Trigger condition">
-                <EuiExpressionButton
+                <EuiExpression
                   description={`IS ${thresholdEnum}`}
-                  buttonValue={`${thresholdValue.toLocaleString()}`}
+                  value={`${thresholdValue.toLocaleString()}`}
                   isActive={openedStates.THRESHOLD}
                   onClick={() => this.openExpression(Expressions.THRESHOLD)}
                 />
