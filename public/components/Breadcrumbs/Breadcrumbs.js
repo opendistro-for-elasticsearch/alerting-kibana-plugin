@@ -18,7 +18,12 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import queryString from 'query-string';
 import { EuiBreadcrumbs } from '@elastic/eui';
-import { APP_PATH, DESTINATION_ACTIONS, MONITOR_ACTIONS, TRIGGER_ACTIONS } from '../../utils/constants';
+import {
+  APP_PATH,
+  DESTINATION_ACTIONS,
+  MONITOR_ACTIONS,
+  TRIGGER_ACTIONS,
+} from '../../utils/constants';
 
 const propTypes = {
   history: PropTypes.object.isRequired,
@@ -130,9 +135,12 @@ export async function getBreadcrumb(route, routeState, httpClient) {
           console.error(err);
         }
         const breadcrumbs = [{ text: monitorName, href: `/monitors/${base}` }];
-        if (action === MONITOR_ACTIONS.UPDATE_MONITOR) breadcrumbs.push({ text: 'Update monitor', href: '/' });
-        if (action === TRIGGER_ACTIONS.CREATE_TRIGGER) breadcrumbs.push({ text: 'Create trigger', href: '/' });
-        if (action === TRIGGER_ACTIONS.UPDATE_TRIGGER) breadcrumbs.push({ text: 'Update trigger', href: '/' });
+        if (action === MONITOR_ACTIONS.UPDATE_MONITOR)
+          breadcrumbs.push({ text: 'Update monitor', href: '/' });
+        if (action === TRIGGER_ACTIONS.CREATE_TRIGGER)
+          breadcrumbs.push({ text: 'Create trigger', href: '/' });
+        if (action === TRIGGER_ACTIONS.UPDATE_TRIGGER)
+          breadcrumbs.push({ text: 'Update trigger', href: '/' });
         return breadcrumbs;
     }
   }

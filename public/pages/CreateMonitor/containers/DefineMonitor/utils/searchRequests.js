@@ -13,7 +13,11 @@
  *   permissions and limitations under the License.
  */
 
-import { formikToGraphQuery, formikToUiGraphQuery, formikToIndices } from '../../CreateMonitor/utils/formikToMonitor';
+import {
+  formikToGraphQuery,
+  formikToUiGraphQuery,
+  formikToIndices,
+} from '../../CreateMonitor/utils/formikToMonitor';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 export const buildSearchRequest = (values, uiGraphQuery = true) =>

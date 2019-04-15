@@ -19,7 +19,9 @@ import EmptyDestinations from './EmptyDestinations';
 
 describe('<EmptyDestinations />', () => {
   test('should render empty destinations message', () => {
-    const wrapper = render(<EmptyDestinations isFilterApplied={false} onResetFilters={jest.fn()}/>);
+    const wrapper = render(
+      <EmptyDestinations isFilterApplied={false} onResetFilters={jest.fn()} />
+    );
     expect(wrapper).toMatchSnapshot();
   });
 

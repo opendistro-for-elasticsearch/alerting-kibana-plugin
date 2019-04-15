@@ -195,7 +195,9 @@ class MonitorIndex extends React.Component {
   }
 
   renderOption(option, searchValue, contentClassName) {
-    return <CustomOption option={option} searchValue={searchValue} contentClassName={contentClassName}/>;
+    return (
+      <CustomOption option={option} searchValue={searchValue} contentClassName={contentClassName} />
+    );
   }
 
   render() {
