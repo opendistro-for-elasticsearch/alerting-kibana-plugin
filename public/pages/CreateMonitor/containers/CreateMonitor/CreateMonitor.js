@@ -73,7 +73,9 @@ export default class CreateMonitor extends Component {
         },
       } = resp;
       if (ok) {
-        this.props.history.push(`/monitors/${_id}?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}&success=true`);
+        this.props.history.push(
+          `/monitors/${_id}?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}&success=true`
+        );
       } else {
         console.log('Failed to create:', resp.data);
       }

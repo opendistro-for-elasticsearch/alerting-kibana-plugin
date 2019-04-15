@@ -44,8 +44,8 @@ const Action = ({
       className="accordion-action"
       buttonContent={
         !_.get(selectedDestination, '0.type', undefined)
-         ? 'Notification'
-         : `${actionLabel}: ${name}`
+          ? 'Notification'
+          : `${actionLabel}: ${name}`
       }
       extraAction={
         <div style={{ paddingRight: '10px' }}>

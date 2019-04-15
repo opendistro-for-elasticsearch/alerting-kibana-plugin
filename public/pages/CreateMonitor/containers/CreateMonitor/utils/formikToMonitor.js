@@ -143,11 +143,11 @@ export function formikToUiOverAggregation(values) {
         min_doc_count: 0,
         extended_bounds: {
           min: `now-${bucketValue * BUCKET_COUNT}${bucketUnitOfTime}`,
-          max: 'now'
-        }
+          max: 'now',
+        },
       },
-      aggregations: whenAggregation
-    }
+      aggregations: whenAggregation,
+    },
   };
 }
 

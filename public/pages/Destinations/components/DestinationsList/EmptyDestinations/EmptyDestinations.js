@@ -40,7 +40,6 @@ const propTypes = {
   onResetFilters: PropTypes.func.isRequired,
 };
 
-
 const EmptyDestinations = ({ isFilterApplied, onResetFilters }) => (
   <EuiEmptyPrompt
     style={{ maxWidth: '45em' }}

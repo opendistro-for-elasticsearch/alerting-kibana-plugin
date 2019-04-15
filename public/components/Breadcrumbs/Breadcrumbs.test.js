@@ -17,7 +17,12 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { EuiBreadcrumbs } from '@elastic/eui';
 
-import Breadcrumbs, { createEuiBreadcrumb, getBreadcrumbs, parseLocationHash, getBreadcrumb } from './Breadcrumbs';
+import Breadcrumbs, {
+  createEuiBreadcrumb,
+  getBreadcrumbs,
+  parseLocationHash,
+  getBreadcrumb,
+} from './Breadcrumbs';
 import { historyMock, httpClientMock } from '../../../test/mocks';
 import { MONITOR_ACTIONS, TRIGGER_ACTIONS } from '../../utils/constants';
 
@@ -26,7 +31,7 @@ const location = {
   hash: '',
   pathname: '/monitors/random_id_20_chars__',
   search: '',
-  state: undefined
+  state: undefined,
 };
 
 beforeEach(() => {
@@ -35,7 +40,9 @@ beforeEach(() => {
 
 describe('Breadcrumbs', () => {
   const title = 'Alerting';
-  httpClientMock.get = jest.fn().mockResolvedValue({ data: { ok: true, resp: { name: 'random monitor' } } });
+  httpClientMock.get = jest
+    .fn()
+    .mockResolvedValue({ data: { ok: true, resp: { name: 'random monitor' } } });
   delete global.window.location;
   global.window.location = { hash: '' };
 
@@ -92,7 +99,9 @@ describe('getBreadcrumb', () => {
   const routeState = { destinationToEdit: { name: 'unique_name' } };
   test('returns null if falsy base value', async () => {
     expect(await getBreadcrumb('', {}, httpClientMock)).toBe(null);
-    expect(await getBreadcrumb(`?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}`, {}, httpClientMock)).toBe(null);
+    expect(
+      await getBreadcrumb(`?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}`, {}, httpClientMock)
+    ).toBe(null);
   });
 
   test('returns correct constant breadcrumbs', async () => {
@@ -114,30 +123,42 @@ describe('getBreadcrumb', () => {
 
     test('returns monitor name', async () => {
       httpClientMock.get.mockResolvedValue({ data: { ok: true, resp: { name: 'random_name' } } });
-      expect(await getBreadcrumb(monitorId, {}, httpClientMock))
-        .toMatchSnapshot();
+      expect(await getBreadcrumb(monitorId, {}, httpClientMock)).toMatchSnapshot();
     });
 
     test('uses monitor id as name if request fails', async () => {
       httpClientMock.get.mockRejectedValue({ data: { ok: true, resp: { name: 'random_name' } } });
-      expect(await getBreadcrumb(monitorId, {}, httpClientMock))
-        .toMatchSnapshot();
+      expect(await getBreadcrumb(monitorId, {}, httpClientMock)).toMatchSnapshot();
     });
 
     test('uses monitor id as name if ok=false', async () => {
       httpClientMock.get.mockResolvedValue({ data: { ok: false, resp: { name: 'random_name' } } });
-      expect(await getBreadcrumb(monitorId, {}, httpClientMock))
-        .toMatchSnapshot();
+      expect(await getBreadcrumb(monitorId, {}, httpClientMock)).toMatchSnapshot();
     });
 
     test('adds appropriate action breadcrumb', async () => {
       httpClientMock.get.mockResolvedValue({ data: { ok: true, resp: { name: 'random_name' } } });
-      expect(await getBreadcrumb(`${monitorId}?action=${MONITOR_ACTIONS.UPDATE_MONITOR}`, {}, httpClientMock))
-        .toMatchSnapshot();
-      expect(await getBreadcrumb(`${monitorId}?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}`, {}, httpClientMock))
-        .toMatchSnapshot();
-      expect(await getBreadcrumb(`${monitorId}?action=${TRIGGER_ACTIONS.UPDATE_TRIGGER}`, {}, httpClientMock))
-        .toMatchSnapshot();
+      expect(
+        await getBreadcrumb(
+          `${monitorId}?action=${MONITOR_ACTIONS.UPDATE_MONITOR}`,
+          {},
+          httpClientMock
+        )
+      ).toMatchSnapshot();
+      expect(
+        await getBreadcrumb(
+          `${monitorId}?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}`,
+          {},
+          httpClientMock
+        )
+      ).toMatchSnapshot();
+      expect(
+        await getBreadcrumb(
+          `${monitorId}?action=${TRIGGER_ACTIONS.UPDATE_TRIGGER}`,
+          {},
+          httpClientMock
+        )
+      ).toMatchSnapshot();
     });
   });
 });

@@ -67,7 +67,7 @@ describe('MonitorIndex', () => {
       .simulate('change', { target: { value: 'r' } });
 
     expect(wrapper.find(MonitorIndex).instance().state.appendedWildcard).toBe(true);
-    expect(wrapper.find(MonitorIndex).instance().lastQuery = 'r*');
+    expect((wrapper.find(MonitorIndex).instance().lastQuery = 'r*'));
   });
 
   test('searches space normalizes value', () => {
@@ -91,7 +91,7 @@ describe('MonitorIndex', () => {
       .simulate('change', { target: { value: 'r' } });
 
     expect(wrapper.find(MonitorIndex).instance().state.appendedWildcard).toBe(true);
-    expect(wrapper.find(MonitorIndex).instance().lastQuery = 'r*');
+    expect((wrapper.find(MonitorIndex).instance().lastQuery = 'r*'));
 
     wrapper
       .find('[data-test-subj="comboBoxSearchInput"]')
@@ -99,38 +99,73 @@ describe('MonitorIndex', () => {
       .simulate('change', { target: { value: '*' } });
 
     expect(wrapper.find(MonitorIndex).instance().state.appendedWildcard).toBe(false);
-    expect(wrapper.find(MonitorIndex).instance().lastQuery = '');
+    expect((wrapper.find(MonitorIndex).instance().lastQuery = ''));
   });
 
   test('returns empty alias/index array for *:', async () => {
     const wrapper = getMountWrapper();
 
-    expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('*:')).toEqual([]);
-    expect(await wrapper.find(MonitorIndex).instance().handleQueryIndices('*:')).toEqual([]);
+    expect(
+      await wrapper
+        .find(MonitorIndex)
+        .instance()
+        .handleQueryAliases('*:')
+    ).toEqual([]);
+    expect(
+      await wrapper
+        .find(MonitorIndex)
+        .instance()
+        .handleQueryIndices('*:')
+    ).toEqual([]);
   });
 
   test('returns empty array for data.ok = false', async () => {
     httpClientMock.post.mockResolvedValue({ data: { ok: false } });
     const wrapper = getMountWrapper();
 
-    expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('random')).toEqual([]);
-    expect(await wrapper.find(MonitorIndex).instance().handleQueryIndices('random')).toEqual([]);
+    expect(
+      await wrapper
+        .find(MonitorIndex)
+        .instance()
+        .handleQueryAliases('random')
+    ).toEqual([]);
+    expect(
+      await wrapper
+        .find(MonitorIndex)
+        .instance()
+        .handleQueryIndices('random')
+    ).toEqual([]);
   });
   //
   test('returns indices/aliases', async () => {
-    httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }] } });
+    httpClientMock.post.mockResolvedValue({
+      data: {
+        ok: true,
+        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
+      },
+    });
     const wrapper = getMountWrapper();
 
-    expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('l')).toEqual([{ label: 'logstash', index: 'logstash-0' }]);
-    expect(await wrapper.find(MonitorIndex).instance().handleQueryIndices('l')).toEqual([{ health: 'green', status: 'open', label: 'logstash-0' }]);
+    expect(
+      await wrapper
+        .find(MonitorIndex)
+        .instance()
+        .handleQueryAliases('l')
+    ).toEqual([{ label: 'logstash', index: 'logstash-0' }]);
+    expect(
+      await wrapper
+        .find(MonitorIndex)
+        .instance()
+        .handleQueryIndices('l')
+    ).toEqual([{ health: 'green', status: 'open', label: 'logstash-0' }]);
   });
 
   test('onBlur sets index to touched', () => {
     httpClientMock.post.mockResolvedValue({
       data: {
         ok: true,
-        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }]
-      }
+        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
+      },
     });
     const wrapper = getMountWrapper();
 
@@ -146,8 +181,9 @@ describe('MonitorIndex', () => {
   test('sets option when calling onCreateOption', () => {
     httpClientMock.post.mockResolvedValue({
       data: {
-        ok: true, resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }]
-      }
+        ok: true,
+        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
+      },
     });
     const wrapper = getMountWrapper();
 

@@ -169,7 +169,9 @@ export default class MonitorService {
         }),
       };
 
-      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
+        CLUSTER.ALERTING
+      );
       const getResponse = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
 
       const totalMonitors = _.get(getResponse, 'hits.total', 0);

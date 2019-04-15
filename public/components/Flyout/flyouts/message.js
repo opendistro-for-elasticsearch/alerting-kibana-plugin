@@ -39,10 +39,7 @@ const message = () => ({
       <h3>Learn More</h3>
       <ul>
         <li>
-          <EuiLink
-            target="_blank"
-            href={URL.MUSTACHE}
-          >
+          <EuiLink target="_blank" href={URL.MUSTACHE}>
             HTML Templates with Mustache.js
           </EuiLink>
         </li>

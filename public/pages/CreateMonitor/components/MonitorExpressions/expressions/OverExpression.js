@@ -15,12 +15,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'formik';
-import {
-  EuiPopover,
-  EuiExpression,
-  EuiFlexGroup,
-  EuiFlexItem,
-} from '@elastic/eui';
+import { EuiPopover, EuiExpression, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
 
 import { POPOVER_STYLE, Expressions, OVER_TYPES, EXPRESSION_STYLE } from './utils/constants';
 import { FormikSelect, FormikFieldNumber } from '../../../../../components/FormControls';
@@ -50,9 +45,7 @@ class OverExpression extends Component {
   );
 
   renderOverPopover = () => (
-    <div style={{...POPOVER_STYLE, ...EXPRESSION_STYLE }}>
-      {this.renderTypeSelect()}
-    </div>
+    <div style={{ ...POPOVER_STYLE, ...EXPRESSION_STYLE }}>{this.renderTypeSelect()}</div>
   );
 
   renderGroupedPopover = () => (
@@ -61,7 +54,7 @@ class OverExpression extends Component {
         style={{
           maxWidth: 600,
           width: Math.max(expressionWidth, 180),
-          ...EXPRESSION_STYLE
+          ...EXPRESSION_STYLE,
         }}
       >
         <EuiFlexItem grow={false} style={{ width: 100 }}>

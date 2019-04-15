@@ -58,7 +58,10 @@ describe('getLeftPadding', () => {
 
 describe('getXDomain', () => {
   test('gets x domains', () => {
-    const data = [{ y: 440, x: '2019-01-30T07:00:00.000-08:00' }, { y: 440, x: '2019-01-30T08:00:00.000-08:00' }];
+    const data = [
+      { y: 440, x: '2019-01-30T07:00:00.000-08:00' },
+      { y: 440, x: '2019-01-30T08:00:00.000-08:00' },
+    ];
     const xDomain = getXDomain(data);
     const expectedXDomain = [data[0].x, data[data.length - 1].x];
     expect(xDomain).toEqual(expectedXDomain);

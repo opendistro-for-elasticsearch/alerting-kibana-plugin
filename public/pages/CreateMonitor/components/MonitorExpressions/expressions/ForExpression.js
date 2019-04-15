@@ -16,12 +16,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
-import {
-  EuiFlexGroup,
-  EuiFlexItem,
-  EuiPopover,
-  EuiExpression,
-} from '@elastic/eui';
+import { EuiFlexGroup, EuiFlexItem, EuiPopover, EuiExpression } from '@elastic/eui';
 import { Expressions, POPOVER_STYLE, UNITS_OF_TIME, EXPRESSION_STYLE } from './utils/constants';
 import { selectOptionValueToText } from './utils/helpers';
 import { FormikFieldNumber, FormikSelect } from '../../../../../components/FormControls';

@@ -33,7 +33,7 @@ const match = {
   isExact: true,
   params: {},
   path: '/create-monitor',
-  url: '/create-monitor'
+  url: '/create-monitor',
 };
 const location = {
   hash: '',

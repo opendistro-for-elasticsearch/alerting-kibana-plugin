@@ -88,8 +88,8 @@ export default function alertingPlugin(Client, config, components) {
         monitorId: {
           type: 'string',
           required: true,
-        }
-      }
+        },
+      },
     },
     needBody: true,
     method: 'POST',
@@ -102,7 +102,7 @@ export default function alertingPlugin(Client, config, components) {
         dryrun: {
           type: 'string',
           required: true,
-        }
+        },
       },
     },
     needBody: true,
@@ -142,7 +142,7 @@ export default function alertingPlugin(Client, config, components) {
         destinationId: {
           type: 'string',
           required: true,
-        }
+        },
       },
     },
     method: 'DELETE',

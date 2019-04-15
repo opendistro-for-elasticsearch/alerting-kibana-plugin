@@ -56,11 +56,13 @@ class ConfigureActions extends React.Component {
       const response = await httpClient.get(
         `../api/alerting/destinations?search${searchText}size=200`
       );
-      const destinations = response.data.destinations.map(destination => ({
-        label: `${destination.name} - (${getDestinationLabel(destination)})`,
-        value: destination.id,
-        type: destination.type,
-      })).filter(({ type }) => Object.values(DESTINATION_TYPE).includes(type));
+      const destinations = response.data.destinations
+        .map(destination => ({
+          label: `${destination.name} - (${getDestinationLabel(destination)})`,
+          value: destination.id,
+          type: destination.type,
+        }))
+        .filter(({ type }) => Object.values(DESTINATION_TYPE).includes(type));
       this.setState({ destinations, loadingDestinations: false });
       // If actions is not defined  If user choose to delete actions, it will not override customer's preferences.
       if (destinations.length > 0 && !values.actions && !actionDeleted) {

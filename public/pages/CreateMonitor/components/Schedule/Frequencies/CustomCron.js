@@ -22,10 +22,7 @@ import { isInvalid, hasError } from '../../../../../utils/validate';
 import { URL } from '../../../../../../utils/constants';
 
 const cronHelpLink = (
-  <EuiLink
-    target="_blank"
-    href={URL.DOCUMENTATION}
-  >
+  <EuiLink target="_blank" href={URL.DOCUMENTATION}>
     cron expressions
   </EuiLink>
 );
