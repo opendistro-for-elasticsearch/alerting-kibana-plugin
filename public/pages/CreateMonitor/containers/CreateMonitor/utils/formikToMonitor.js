@@ -17,6 +17,7 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 import { BUCKET_COUNT } from './constants';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
+import { OPERATORS_QUERY_MAP } from './whereFilters';
 
 export function formikToMonitor(values) {
   const query = formikToQuery(values);
@@ -56,6 +57,7 @@ export function formikToUiSearch(values) {
     groupedOverFieldName,
     bucketValue,
     bucketUnitOfTime,
+    where,
   } = values;
   return {
     searchType,
@@ -67,6 +69,7 @@ export function formikToUiSearch(values) {
     groupedOverFieldName,
     bucketValue,
     bucketUnitOfTime,
+    where,
   };
 }
 
@@ -87,20 +90,27 @@ export function formikToGraphQuery(values) {
   const { bucketValue, bucketUnitOfTime } = values;
   const whenAggregation = formikToWhenAggregation(values);
   const timeField = values.timeField;
+  const filters = [
+    {
+      range: {
+        [timeField]: {
+          gte: `{{period_end}}||-${Math.round(bucketValue)}${bucketUnitOfTime}`,
+          lte: '{{period_end}}',
+          format: 'epoch_millis',
+        },
+      },
+    },
+  ];
+  const whereClause = formikToWhereClause(values);
+  if (whereClause) {
+    filters.push({ ...whereClause });
+  }
   return {
     size: 0,
     aggregations: whenAggregation,
     query: {
       bool: {
-        filter: {
-          range: {
-            [timeField]: {
-              gte: `{{period_end}}||-${Math.round(bucketValue)}${bucketUnitOfTime}`,
-              lte: '{{period_end}}',
-              format: 'epoch_millis',
-            },
-          },
-        },
+        filter: filters,
       },
     },
   };
@@ -110,20 +120,27 @@ export function formikToUiGraphQuery(values) {
   const { bucketValue, bucketUnitOfTime } = values;
   const overAggregation = formikToUiOverAggregation(values);
   const timeField = values.timeField;
+  const filters = [
+    {
+      range: {
+        [timeField]: {
+          // default range window to [BUCKET_COUNT] * the date histogram interval
+          gte: `now-${bucketValue * BUCKET_COUNT}${bucketUnitOfTime}`,
+          lte: 'now',
+        },
+      },
+    },
+  ];
+  const whereClause = formikToWhereClause(values);
+  if (whereClause) {
+    filters.push({ ...whereClause });
+  }
   return {
     size: 0,
     aggregations: overAggregation,
     query: {
       bool: {
-        filter: {
-          range: {
-            [timeField]: {
-              // default range window to [BUCKET_COUNT] * the date histogram interval
-              gte: `now-${bucketValue * BUCKET_COUNT}${bucketUnitOfTime}`,
-              lte: 'now',
-            },
-          },
-        },
+        filter: filters,
       },
     },
   };
@@ -149,6 +166,12 @@ export function formikToUiOverAggregation(values) {
       aggregations: whenAggregation,
     },
   };
+}
+
+export function formikToWhereClause({ where }) {
+  if (where.fieldName.length > 0) {
+    return OPERATORS_QUERY_MAP[where.operator].query(where);
+  }
 }
 
 export function formikToWhenAggregation(values) {

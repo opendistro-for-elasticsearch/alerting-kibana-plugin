@@ -59,15 +59,17 @@ Object {
   "aggregations": Object {},
   "query": Object {
     "bool": Object {
-      "filter": Object {
-        "range": Object {
-          "@timestamp": Object {
-            "format": "epoch_millis",
-            "gte": "{{period_end}}||-1h",
-            "lte": "{{period_end}}",
+      "filter": Array [
+        Object {
+          "range": Object {
+            "@timestamp": Object {
+              "format": "epoch_millis",
+              "gte": "{{period_end}}||-1h",
+              "lte": "{{period_end}}",
+            },
           },
         },
-      },
+      ],
     },
   },
   "size": 0,
@@ -95,15 +97,17 @@ Object {
   "aggregations": Object {},
   "query": Object {
     "bool": Object {
-      "filter": Object {
-        "range": Object {
-          "@timestamp": Object {
-            "format": "epoch_millis",
-            "gte": "{{period_end}}||-1h",
-            "lte": "{{period_end}}",
+      "filter": Array [
+        Object {
+          "range": Object {
+            "@timestamp": Object {
+              "format": "epoch_millis",
+              "gte": "{{period_end}}||-1h",
+              "lte": "{{period_end}}",
+            },
           },
         },
-      },
+      ],
     },
   },
   "size": 0,
@@ -129,14 +133,16 @@ Object {
   },
   "query": Object {
     "bool": Object {
-      "filter": Object {
-        "range": Object {
-          "@timestamp": Object {
-            "gte": "now-5h",
-            "lte": "now",
+      "filter": Array [
+        Object {
+          "range": Object {
+            "@timestamp": Object {
+              "gte": "now-5h",
+              "lte": "now",
+            },
           },
         },
-      },
+      ],
     },
   },
   "size": 0,
@@ -198,6 +204,62 @@ Object {
   "overDocuments": "all documents",
   "searchType": "graph",
   "timeField": "@timestamp",
+  "where": Object {
+    "fieldName": Array [],
+    "fieldRangeEnd": 0,
+    "fieldRangeStart": 0,
+    "fieldValue": 0,
+    "operator": "is",
+  },
+}
+`;
+
+exports[`formikToUiSearch can build ui search with range where field 1`] = `
+Object {
+  "aggregationType": "count",
+  "bucketUnitOfTime": "h",
+  "bucketValue": 1,
+  "fieldName": "bytes",
+  "groupedOverFieldName": "bytes",
+  "groupedOverTop": 5,
+  "overDocuments": "all documents",
+  "searchType": "graph",
+  "timeField": "@timestamp",
+  "where": Object {
+    "fieldName": Array [
+      Object {
+        "label": "age",
+        "type": "number",
+      },
+    ],
+    "fieldRangeEnd": 40,
+    "fieldRangeStart": 20,
+    "operator": "in_range",
+  },
+}
+`;
+
+exports[`formikToUiSearch can build ui search with term where field 1`] = `
+Object {
+  "aggregationType": "count",
+  "bucketUnitOfTime": "h",
+  "bucketValue": 1,
+  "fieldName": "bytes",
+  "groupedOverFieldName": "bytes",
+  "groupedOverTop": 5,
+  "overDocuments": "all documents",
+  "searchType": "graph",
+  "timeField": "@timestamp",
+  "where": Object {
+    "fieldName": Array [
+      Object {
+        "label": "age",
+        "type": "number",
+      },
+    ],
+    "fieldValue": 20,
+    "operator": "is_greater_equal",
+  },
 }
 `;
 

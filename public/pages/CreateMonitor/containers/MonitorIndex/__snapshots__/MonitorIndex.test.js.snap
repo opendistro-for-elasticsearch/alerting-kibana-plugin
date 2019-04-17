@@ -44,6 +44,13 @@ exports[`MonitorIndex renders 1`] = `
         "tue": false,
         "wed": false,
       },
+      "where": Object {
+        "fieldName": Array [],
+        "fieldRangeEnd": 0,
+        "fieldRangeStart": 0,
+        "fieldValue": 0,
+        "operator": "is",
+      },
     }
   }
   isInitialValid={false}
@@ -161,6 +168,13 @@ exports[`MonitorIndex renders 1`] = `
                     "tue": false,
                     "wed": false,
                   },
+                  "where": Object {
+                    "fieldName": Array [],
+                    "fieldRangeEnd": 0,
+                    "fieldRangeStart": 0,
+                    "fieldValue": 0,
+                    "operator": "is",
+                  },
                 },
                 "isSubmitting": false,
                 "isValid": false,
@@ -227,6 +241,13 @@ exports[`MonitorIndex renders 1`] = `
                     "tue": false,
                     "wed": false,
                   },
+                  "where": Object {
+                    "fieldName": Array [],
+                    "fieldRangeEnd": 0,
+                    "fieldRangeStart": 0,
+                    "fieldValue": 0,
+                    "operator": "is",
+                  },
                 },
               }
             }
@@ -282,6 +303,13 @@ exports[`MonitorIndex renders 1`] = `
                       "thur": false,
                       "tue": false,
                       "wed": false,
+                    },
+                    "where": Object {
+                      "fieldName": Array [],
+                      "fieldRangeEnd": 0,
+                      "fieldRangeStart": 0,
+                      "fieldValue": 0,
+                      "operator": "is",
                     },
                   },
                   "isSubmitting": false,
@@ -346,6 +374,13 @@ exports[`MonitorIndex renders 1`] = `
                       "thur": false,
                       "tue": false,
                       "wed": false,
+                    },
+                    "where": Object {
+                      "fieldName": Array [],
+                      "fieldRangeEnd": 0,
+                      "fieldRangeStart": 0,
+                      "fieldValue": 0,
+                      "operator": "is",
                     },
                   },
                 }
@@ -458,6 +493,13 @@ exports[`MonitorIndex renders 1`] = `
                             "tue": false,
                             "wed": false,
                           },
+                          "where": Object {
+                            "fieldName": Array [],
+                            "fieldRangeEnd": 0,
+                            "fieldRangeStart": 0,
+                            "fieldValue": 0,
+                            "operator": "is",
+                          },
                         },
                         "isSubmitting": false,
                         "isValid": false,
@@ -521,6 +563,13 @@ exports[`MonitorIndex renders 1`] = `
                             "thur": false,
                             "tue": false,
                             "wed": false,
+                          },
+                          "where": Object {
+                            "fieldName": Array [],
+                            "fieldRangeEnd": 0,
+                            "fieldRangeStart": 0,
+                            "fieldValue": 0,
+                            "operator": "is",
                           },
                         },
                       }
