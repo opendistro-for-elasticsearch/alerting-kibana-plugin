@@ -40,19 +40,24 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
   const aggregationType = _.get(monitorUiMetadata, 'search.aggregationType', 'count');
 
   if (searchType === SEARCH_TYPE.QUERY) return { script: values.script };
-
-  const resultsPath = getResultsPath(aggregationType);
+  const isCount = aggregationType === 'count';
+  const resultsPath = getResultsPath(isCount);
   const operator = getOperator(thresholdEnum);
-  return getCondition(resultsPath, operator, thresholdValue);
+  return getCondition(resultsPath, operator, thresholdValue, isCount);
 }
 
-export function getCondition(resultsPath, operator, value) {
-  return { script: { lang: 'painless', source: `${resultsPath} ${operator} ${value}` } };
+export function getCondition(resultsPath, operator, value, isCount) {
+  const baseSource = `${resultsPath} ${operator} ${value}`;
+  return {
+    script: {
+      lang: 'painless',
+      source: isCount ? baseSource : `return ${resultsPath} == null ? false : ${baseSource}`,
+    }
+  };
 }
 
-export function getResultsPath(aggregationType) {
-  if (aggregationType === 'count') return HITS_TOTAL_RESULTS_PATH;
-  return AGGREGATION_RESULTS_PATH;
+export function getResultsPath(isCount) {
+  return isCount ? HITS_TOTAL_RESULTS_PATH : AGGREGATION_RESULTS_PATH;
 }
 
 export function getOperator(thresholdEnum) {
