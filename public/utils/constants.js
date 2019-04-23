@@ -18,6 +18,7 @@ export const ALERT_STATE = Object.freeze({
   ACKNOWLEDGED: 'ACKNOWLEDGED',
   COMPLETED: 'COMPLETED',
   ERROR: 'ERROR',
+  DELETED: 'DELETED',
 });
 
 export const DEFAULT_EMPTY_DATA = '-';
