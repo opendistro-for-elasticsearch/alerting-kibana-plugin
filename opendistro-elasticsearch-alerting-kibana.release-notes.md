@@ -1,4 +1,9 @@
-## Version 0.8.0 (Current)
+## Version 0.9.0.0 (Current)
+
+### New Features
+  * Adds support for Kibana 6.7.1 - [PR #32]
+
+##  2019-04-02, Version 0.8.0
 
 ### New Features
   * Adds support for Kibana 6.6.2 - [PR #7](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/7)
