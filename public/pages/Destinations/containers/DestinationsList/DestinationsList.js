@@ -95,7 +95,7 @@ class DestinationsList extends React.Component {
       query: isDeleteAllowedQuery(type, id),
       index: INDEX.SCHEDULED_JOBS,
     });
-    const total = _.get(resp, 'data.resp.hits.total');
+    const total = _.get(resp, 'data.resp.hits.total.value');
     return total === 0;
   };
 

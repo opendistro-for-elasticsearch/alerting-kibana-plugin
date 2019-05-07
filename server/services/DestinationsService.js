@@ -75,7 +75,6 @@ export default class DestinationsService {
     try {
       const resp = await callWithRequest(req, 'get', {
         index: INDEX.SCHEDULED_JOBS,
-        type: '_doc',
         id: destinationId,
       });
       return { ok: true, destination: resp._source.destination, version: resp._version };
@@ -150,7 +149,7 @@ export default class DestinationsService {
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
     try {
       const resp = await callWithRequest(req, 'search', params);
-      const totalDestinations = resp.hits.total;
+      const totalDestinations = resp.hits.total.value;
       const destinations = resp.hits.hits.map(hit => {
         const { _source: destination, _id: id, _version: version } = hit;
         return { id, ...destination.destination, version };

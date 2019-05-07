@@ -58,7 +58,7 @@ describe('formikToCondition', () => {
     const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
     expect(
       formikToCondition(formikValues, { search: { searchType: 'graph', aggregationType: 'count' } })
-    ).toEqual({ script: { lang: 'painless', source: `ctx.results[0].hits.total > 10000` } });
+    ).toEqual({ script: { lang: 'painless', source: `ctx.results[0].hits.total.value > 10000` } });
   });
 
   test('can return condition for other aggregations', () => {

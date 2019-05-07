@@ -172,7 +172,7 @@ export default class MonitorService {
       const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const getResponse = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
 
-      const totalMonitors = _.get(getResponse, 'hits.total', 0);
+      const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
       const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map(result => {
         const { _id: id, _version: version, _source: monitor } = result;
         const { name, enabled } = monitor;

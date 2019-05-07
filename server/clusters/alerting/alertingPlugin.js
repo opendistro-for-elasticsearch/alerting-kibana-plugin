@@ -57,7 +57,7 @@ export default function alertingPlugin(Client, config, components) {
 
   alerting.updateMonitor = ca({
     url: {
-      fmt: `${MONITOR_BASE_API}/<%=monitorId%>?version=<%=version%>&refresh=wait_for`,
+      fmt: `${MONITOR_BASE_API}/<%=monitorId%>?if_seq_no=<%=if_seq_no%>&if_primary_term=<%=if_primary_term%>&refresh=wait_for`,
       req: {
         monitorId: {
           type: 'string',

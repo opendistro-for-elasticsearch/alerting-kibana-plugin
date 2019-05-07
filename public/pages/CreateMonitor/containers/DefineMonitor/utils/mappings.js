@@ -13,11 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-export function getDocMappings([index, { mappings }]) {
-  const [docType, docMappings] = Object.entries(mappings).pop();
-  return docMappings;
-}
-
 export function shouldSkip(mapping) {
   const isDisabled = mapping.enabled === false;
   const hasIndexDisabled = mapping.index === false;
@@ -38,7 +33,6 @@ export function getFieldsFromProperties(properties, dataTypes, path) {
 
 export function getTypeFromMappings(mappings, dataTypes, path = '') {
   if (shouldSkip(mappings)) return dataTypes;
-
   // if there are properties then type is inherently an object
   if (mappings.properties) {
     getFieldsFromProperties(mappings.properties, dataTypes, path);
@@ -55,7 +49,6 @@ export function getTypeFromMappings(mappings, dataTypes, path = '') {
 export function getPathsPerDataType(mappings) {
   const dataTypes = {};
   Object.entries(mappings)
-    .map(getDocMappings)
-    .forEach(docMappings => getTypeFromMappings(docMappings, dataTypes));
+    .forEach(([index, { mappings: docMappings }]) => getTypeFromMappings(docMappings, dataTypes));
   return dataTypes;
 }

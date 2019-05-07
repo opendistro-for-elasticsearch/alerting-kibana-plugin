@@ -20,7 +20,7 @@ export const FORMIK_INITIAL_VALUES = {
   rollingWindowSize: null,
   script: {
     lang: 'painless',
-    source: `ctx.results[0].hits.total > 0`,
+    source: `ctx.results[0].hits.total.value > 0`,
   },
   thresholdValue: 10000,
   thresholdEnum: 'ABOVE',
