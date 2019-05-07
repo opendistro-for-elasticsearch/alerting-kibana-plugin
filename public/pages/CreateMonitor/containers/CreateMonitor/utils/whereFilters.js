@@ -77,12 +77,14 @@ export const OPERATORS_QUERY_MAP = {
   },
 
   [OPERATORS_MAP.STARTS_WITH]: {
-    query: ({ fieldName, fieldValue }) => ({ prefix: { [fieldName[0].label]: fieldValue } }),
+    query: ({ fieldName: [{ label: fieldKey }], fieldValue }) => ({
+      prefix: { [fieldKey]: fieldValue },
+    }),
   },
 
   [OPERATORS_MAP.ENDS_WITH]: {
-    query: ({ fieldName, fieldValue }) => ({
-      wildcard: { [fieldName[0].label]: `*${fieldValue}` },
+    query: ({ fieldName: [{ label: fieldKey }], fieldValue }) => ({
+      wildcard: { [fieldKey]: `*${fieldValue}` },
     }),
   },
   [OPERATORS_MAP.CONTAINS]: {

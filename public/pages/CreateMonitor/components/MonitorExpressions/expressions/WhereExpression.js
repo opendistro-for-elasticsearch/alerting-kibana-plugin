@@ -13,7 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
 import { EuiFlexGroup, EuiFlexItem, EuiPopover, EuiExpression, EuiText } from '@elastic/eui';
@@ -50,7 +50,7 @@ const propTypes = {
   openExpression: PropTypes.func.isRequired,
 };
 
-class WhereExpression extends PureComponent {
+class WhereExpression extends Component {
   constructor(props) {
     super(props);
   }

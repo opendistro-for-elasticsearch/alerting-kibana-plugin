@@ -44,7 +44,7 @@ function renderEmptyMessage(message) {
 
 const propTypes = {
   values: PropTypes.object.isRequired,
-  httpClient: PropTypes.object.isRequired,
+  httpClient: PropTypes.func.isRequired,
   errors: PropTypes.object,
 };
 const defaultProps = {
