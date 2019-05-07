@@ -52,11 +52,11 @@ describe('whereHelpers', () => {
         },
         {
           text: 'is less than',
-          value: 'is_lesser',
+          value: 'is_less',
         },
         {
           text: 'is less than equal',
-          value: 'is_lesser_equal',
+          value: 'is_less_equal',
         },
         {
           text: 'is in range',
