@@ -20,7 +20,9 @@ import QueryPerformance from './QueryPerformance';
 
 describe('QueryPerformance', () => {
   test('renders', () => {
-    const component = <QueryPerformance response={{ took: 5, hits: { total: 15 } }} />;
+    const component = (
+      <QueryPerformance response={{ took: 5, hits: { total: { value: 15, relation: 'eq' } } }} />
+    );
 
     expect(render(component)).toMatchSnapshot();
   });

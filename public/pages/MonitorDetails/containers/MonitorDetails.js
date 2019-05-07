@@ -110,7 +110,10 @@ export default class MonitorDetails extends Component {
   };
 
   onCreateTrigger = () => {
-    this.props.history.push({ ...this.props.location, search: `?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}` });
+    this.props.history.push({
+      ...this.props.location,
+      search: `?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}`,
+    });
   };
 
   onCloseTrigger = () => {
@@ -120,7 +123,10 @@ export default class MonitorDetails extends Component {
 
   onEditTrigger = trigger => {
     this.setState({ triggerToEdit: trigger });
-    this.props.history.push({ ...this.props.location, search: `?action=${TRIGGER_ACTIONS.UPDATE_TRIGGER}` });
+    this.props.history.push({
+      ...this.props.location,
+      search: `?action=${TRIGGER_ACTIONS.UPDATE_TRIGGER}`,
+    });
   };
 
   renderNoTriggersCallOut = () => {

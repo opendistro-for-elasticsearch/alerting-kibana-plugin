@@ -24,7 +24,7 @@ import AlertingFakes from '../../../../../test/utils/helpers';
 const alertingFakes = new AlertingFakes('random seed');
 
 jest.unmock('lodash');
-_.debounce = jest.fn((fn) => fn);
+_.debounce = jest.fn(fn => fn);
 
 const match = {
   isExact: true,
@@ -89,7 +89,12 @@ describe('Monitors', () => {
     expect(mountWrapper.instance().state.size).not.toBe(17);
     expect(mountWrapper.instance().state.sortField).not.toBe('testing_sort_field');
     expect(mountWrapper.instance().state.sortDirection).not.toBe('asc');
-    mountWrapper.instance().onTableChange({ page: { index: 17, size: 17 }, sort: { field: 'testing_sort_field', direction: 'desc' } });
+    mountWrapper
+      .instance()
+      .onTableChange({
+        page: { index: 17, size: 17 },
+        sort: { field: 'testing_sort_field', direction: 'desc' },
+      });
     mountWrapper.update();
 
     expect(onTableChange).toHaveBeenCalled();
@@ -141,26 +146,35 @@ describe('Monitors', () => {
 
   test('updateMonitor calls put with update', async () => {
     const updateMonitor = jest.spyOn(Monitors.prototype, 'updateMonitor');
-    httpClientMock.put = jest.fn()
+    httpClientMock.put = jest
+      .fn()
       .mockResolvedValueOnce({ data: { ok: true } })
       .mockRejectedValueOnce(new Error('random error'));
     const mountWrapper = getMountWrapper();
     const monitor = alertingFakes.randomMonitor();
-    const response = await mountWrapper.instance().updateMonitor({ id: 'random_id', version: 17, monitor }, { name: 'UNIQUE_NAME' });
+    const response = await mountWrapper
+      .instance()
+      .updateMonitor({ id: 'random_id', version: 17, monitor }, { name: 'UNIQUE_NAME' });
     mountWrapper.update();
 
     expect(updateMonitor).toHaveBeenCalled();
     expect(httpClientMock.put).toHaveBeenCalled();
-    expect(httpClientMock.put).toHaveBeenCalledWith(`../api/alerting/monitors/random_id?version=17`, { ...monitor, name: 'UNIQUE_NAME' });
+    expect(httpClientMock.put).toHaveBeenCalledWith(
+      `../api/alerting/monitors/random_id?version=17`,
+      { ...monitor, name: 'UNIQUE_NAME' }
+    );
     expect(response).toEqual({ data: { ok: true } });
-    const error = await mountWrapper.instance().updateMonitor({ id: 'random_id', version: 17, monitor }, { name: 'UNIQUE_NAME' });
+    const error = await mountWrapper
+      .instance()
+      .updateMonitor({ id: 'random_id', version: 17, monitor }, { name: 'UNIQUE_NAME' });
     expect(httpClientMock.put).toHaveBeenCalledTimes(2);
     expect(error.message).toBe('random error');
   });
 
   test('deleteMonitor calls delete', async () => {
     const deleteMonitor = jest.spyOn(Monitors.prototype, 'deleteMonitor');
-    httpClientMock.delete = jest.fn()
+    httpClientMock.delete = jest
+      .fn()
       .mockResolvedValueOnce({ data: { ok: true } })
       .mockRejectedValueOnce(new Error('random delete error'));
     const mountWrapper = getMountWrapper();
@@ -169,7 +183,9 @@ describe('Monitors', () => {
 
     expect(deleteMonitor).toHaveBeenCalled();
     expect(httpClientMock.delete).toHaveBeenCalled();
-    expect(httpClientMock.delete).toHaveBeenCalledWith(`../api/alerting/monitors/delete_id?version=15`);
+    expect(httpClientMock.delete).toHaveBeenCalledWith(
+      `../api/alerting/monitors/delete_id?version=15`
+    );
     expect(response).toEqual({ data: { ok: true } });
     const error = await mountWrapper.instance().deleteMonitor({ id: 'delete_id', version: 15 });
     expect(httpClientMock.delete).toHaveBeenCalledTimes(2);
@@ -194,7 +210,7 @@ describe('Monitors', () => {
     const alerts = [
       { id: 'alert_1', monitor_id: 'monitor_1' },
       { id: 'alert_2', monitor_id: 'monitor_1' },
-      { id: 'alert_1', monitor_id: 'monitor_2' }
+      { id: 'alert_1', monitor_id: 'monitor_2' },
     ];
     await mountWrapper.instance().onClickAcknowledgeModal(alerts);
 
@@ -381,7 +397,9 @@ describe('Monitors', () => {
   test('getItemId returns formatted id for table', () => {
     const getItemId = jest.spyOn(Monitors.prototype, 'getItemId');
     const mountWrapper = getMountWrapper();
-    const response = mountWrapper.instance().getItemId({ id: 'item_id', currentTime: 143534534345 });
+    const response = mountWrapper
+      .instance()
+      .getItemId({ id: 'item_id', currentTime: 143534534345 });
 
     expect(getItemId).toHaveBeenCalled();
     expect(response).toBe('item_id-143534534345');

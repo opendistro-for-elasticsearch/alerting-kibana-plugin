@@ -19,21 +19,21 @@ import { shallow } from 'enzyme';
 import Triggers from './Triggers';
 
 const props = {
-  monitor: { triggers: [{ name: 'Random Trigger', severity: 1, actions: [{ name: 'Random Action' }] }] },
+  monitor: {
+    triggers: [{ name: 'Random Trigger', severity: 1, actions: [{ name: 'Random Action' }] }],
+  },
   updateMonitor: jest.fn(),
   onEditTrigger: jest.fn(),
   onCreateTrigger: jest.fn(),
 };
 
-jest.mock("uuid/v4", () => { let value = 0; return () => value++; });
+jest.mock('uuid/v4', () => {
+  let value = 0;
+  return () => value++;
+});
 
 function getShallowWrapper(customProps = {}) {
-  return shallow(
-    <Triggers
-      {...props}
-      {...customProps}
-    />
-  );
+  return shallow(<Triggers {...props} {...customProps} />);
 }
 
 describe('Triggers', () => {
@@ -70,8 +70,8 @@ describe('Triggers', () => {
     const monitor = {
       triggers: [
         { name: 'one', severity: 1, actions: [{ name: 'one action' }] },
-        { name: 'two', severity: 2, actions: [{ name: 'two action' }] }
-      ]
+        { name: 'two', severity: 2, actions: [{ name: 'two action' }] },
+      ],
     };
     const wrapper = getShallowWrapper({ monitor });
     wrapper.setState({ selectedItems: [monitor.triggers[0]] });

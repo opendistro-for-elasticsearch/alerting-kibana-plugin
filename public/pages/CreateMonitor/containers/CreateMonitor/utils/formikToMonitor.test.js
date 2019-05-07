@@ -86,13 +86,17 @@ describe('formikToExtractionQuery', () => {
 
 describe('formikToGraphQuery', () => {
   test('can build graph query', () => {
-    expect(formikToGraphQuery({ ...FORMIK_INITIAL_VALUES, timeField: '@timestamp' })).toMatchSnapshot();
+    expect(
+      formikToGraphQuery({ ...FORMIK_INITIAL_VALUES, timeField: '@timestamp' })
+    ).toMatchSnapshot();
   });
 });
 
 describe('formikToUiGraphQuery', () => {
   test('can build ui graph query', () => {
-    expect(formikToUiGraphQuery({ ...FORMIK_INITIAL_VALUES, timeField: '@timestamp' })).toMatchSnapshot();
+    expect(
+      formikToUiGraphQuery({ ...FORMIK_INITIAL_VALUES, timeField: '@timestamp' })
+    ).toMatchSnapshot();
   });
 });
 

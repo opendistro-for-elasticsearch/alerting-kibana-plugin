@@ -41,7 +41,9 @@ describe('TriggerQuery', () => {
     const button = wrapper.find(EuiButton);
     button.simulate('click');
     expect(props.onRun).toHaveBeenCalled();
-    expect(props.onRun).toHaveBeenCalledWith([{ ...formikToTrigger(props.triggerValues), actions: [] }]);
+    expect(props.onRun).toHaveBeenCalledWith([
+      { ...formikToTrigger(props.triggerValues), actions: [] },
+    ]);
   });
 });
 
@@ -65,15 +67,23 @@ describe('getExecuteMessage', () => {
 
   test('returns No execute results for fasly trigger value on trigger_results', () => {
     const noTriggerResults = 'No execute results';
-    expect(getExecuteMessage({ trigger_results: { 'trig_id': null } })).toBe(noTriggerResults);
+    expect(getExecuteMessage({ trigger_results: { trig_id: null } })).toBe(noTriggerResults);
   });
 
   test('returns triggered value', () => {
-    expect(getExecuteMessage({ trigger_results: { 'trig_id': { triggered: true, error: null } } })).toBe('true');
-    expect(getExecuteMessage({ trigger_results: { 'trig_id': { triggered: false, error: null } } })).toBe('false');
+    expect(
+      getExecuteMessage({ trigger_results: { trig_id: { triggered: true, error: null } } })
+    ).toBe('true');
+    expect(
+      getExecuteMessage({ trigger_results: { trig_id: { triggered: false, error: null } } })
+    ).toBe('false');
   });
 
   test('returns error message', () => {
-    expect(getExecuteMessage({ trigger_results: { 'trig_id': { triggered: true, error: 'RANDOM ERROR' } } })).toBe('ERROR: RANDOM ERROR');
+    expect(
+      getExecuteMessage({
+        trigger_results: { trig_id: { triggered: true, error: 'RANDOM ERROR' } },
+      })
+    ).toBe('ERROR: RANDOM ERROR');
   });
 });

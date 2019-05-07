@@ -178,9 +178,7 @@ class DestinationsList extends React.Component {
         ...this.props.location,
         search: queryParms,
       });
-      const resp = await httpClient.get(
-        `../api/alerting/destinations?${queryParms}`
-      );
+      const resp = await httpClient.get(`../api/alerting/destinations?${queryParms}`);
       if (resp.data.ok) {
         this.setState({
           isDestinationLoading: false,
@@ -189,7 +187,7 @@ class DestinationsList extends React.Component {
         });
       } else {
         this.setState({
-          isDestinationLoading: false
+          isDestinationLoading: false,
         });
       }
     },

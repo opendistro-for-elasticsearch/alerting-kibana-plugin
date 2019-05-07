@@ -27,5 +27,5 @@ export const FORMIK_INITIAL_VALUES = {
   actions: undefined,
 };
 
-export const HITS_TOTAL_RESULTS_PATH = 'ctx.results[0].hits.total';
+export const HITS_TOTAL_RESULTS_PATH = 'ctx.results[0].hits.total.value';
 export const AGGREGATION_RESULTS_PATH = 'ctx.results[0].aggregations.when.value';
