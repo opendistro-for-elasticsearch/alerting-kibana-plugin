@@ -45,3 +45,10 @@ export const TRIGGER_ACTIONS = {
   UPDATE_TRIGGER: 'update-trigger',
   CREATE_TRIGGER: 'create-trigger',
 };
+
+export const DATA_TYPES = {
+  NUMBER: 'number',
+  TEXT: 'text',
+  BOOLEAN: 'boolean',
+  KEYWORD: 'keyword',
+};

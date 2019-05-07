@@ -28,16 +28,8 @@ export function getFieldsForType(dataTypes, type) {
   return [];
 }
 
-export function getOptions(dataTypes, formikValues) {
-  const types = formikToAllowedTypes(formikValues);
-  return types.map(type => ({
+export const getIndexFields = (dataTypes, allowedTypes) =>
+  allowedTypes.map(type => ({
     label: type,
-    options: getFieldsForType(dataTypes, type).map(field => ({ label: field })),
+    options: getFieldsForType(dataTypes, type).map(field => ({ label: field, type })),
   }));
-}
-
-export function formikToAllowedTypes(values) {
-  const types = ['number'];
-  if (['min', 'max'].includes(values.aggregationType)) types.push('date');
-  return types;
-}

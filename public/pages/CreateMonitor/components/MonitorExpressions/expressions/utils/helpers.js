@@ -16,3 +16,9 @@
 export function selectOptionValueToText(optionValue, options) {
   return options.find(opt => opt.value === optionValue).text;
 }
+
+export function getOfExpressionAllowedTypes(values) {
+  const types = ['number'];
+  if (['min', 'max'].includes(values.aggregationType)) types.push('date');
+  return types;
+}

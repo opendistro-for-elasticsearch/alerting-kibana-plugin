@@ -20,7 +20,8 @@ import { EuiPopover, EuiExpression } from '@elastic/eui';
 
 import { FormikComboBox } from '../../../../../components/FormControls';
 import { POPOVER_STYLE, EXPRESSION_STYLE, Expressions } from './utils/constants';
-import { getOptions } from './utils/dataTypes';
+import { getOfExpressionAllowedTypes } from './utils/helpers';
+import { getIndexFields } from './utils/dataTypes';
 
 // TODO: EuiComboBox has an internal setState issue, waiting for EUI to fix it, remove this TODO when it is fixed
 
@@ -60,7 +61,7 @@ class OfExpression extends Component {
       openExpression,
       dataTypes,
     } = this.props;
-    const options = getOptions(dataTypes, values);
+    const options = getIndexFields(dataTypes, getOfExpressionAllowedTypes(values));
     const expressionWidth =
       Math.max(
         ...options.map(({ options }) =>

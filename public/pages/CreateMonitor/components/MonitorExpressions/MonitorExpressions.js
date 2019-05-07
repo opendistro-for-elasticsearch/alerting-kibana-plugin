@@ -16,7 +16,13 @@
 import React, { Component } from 'react';
 import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
 
-import { ForExpression, OfExpression, OverExpression, WhenExpression } from './expressions';
+import {
+  ForExpression,
+  OfExpression,
+  OverExpression,
+  WhenExpression,
+  WhereExpression,
+} from './expressions';
 
 export const DEFAULT_CLOSED_STATES = {
   WHEN: false,
@@ -24,6 +30,7 @@ export const DEFAULT_CLOSED_STATES = {
   THRESHOLD: false,
   OVER: false,
   FOR_THE_LAST: false,
+  WHERE: false,
 };
 
 export default class MonitorExpressions extends Component {
@@ -82,6 +89,10 @@ export default class MonitorExpressions extends Component {
 
         <EuiFlexItem grow={false}>
           <ForExpression {...this.getExpressionProps()} />
+        </EuiFlexItem>
+
+        <EuiFlexItem grow={false}>
+          <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
         </EuiFlexItem>
       </EuiFlexGroup>
     );

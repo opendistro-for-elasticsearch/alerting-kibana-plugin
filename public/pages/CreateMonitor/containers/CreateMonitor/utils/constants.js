@@ -1,3 +1,5 @@
+import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
+
 /*
  *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -41,4 +43,11 @@ export const FORMIK_INITIAL_VALUES = {
   groupedOverFieldName: 'bytes',
   bucketValue: 1,
   bucketUnitOfTime: 'h', // m = minute, h = hour, d = day
+  where: {
+    fieldName: [],
+    operator: OPERATORS_MAP.IS,
+    fieldValue: 0,
+    fieldRangeStart: 0,
+    fieldRangeEnd: 0,
+  },
 };

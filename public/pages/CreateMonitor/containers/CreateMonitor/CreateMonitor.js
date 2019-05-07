@@ -126,7 +126,7 @@ export default class CreateMonitor extends Component {
           initialValues={initialValues}
           onSubmit={this.onSubmit}
           validateOnChange={false}
-          render={({ values, handleSubmit, isSubmitting }) => (
+          render={({ values, errors, handleSubmit, isSubmitting }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} Monitor</h1>
@@ -134,7 +134,7 @@ export default class CreateMonitor extends Component {
               <EuiSpacer />
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
-              <DefineMonitor values={values} httpClient={httpClient} />
+              <DefineMonitor values={values} errors={errors} httpClient={httpClient} />
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>
