@@ -21,7 +21,6 @@ import { validateTimeField } from './utils/validation';
 
 const MonitorTimeField = ({ dataTypes }) => {
   // Default empty option + options from index mappings mapped to ui select form
-  console.log('dataTypes', dataTypes);
   const dateFields = Array.from(dataTypes.date || []);
   const options = [''].concat(dateFields).map(option => ({ value: option, text: option }));
   return (

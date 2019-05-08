@@ -89,12 +89,10 @@ describe('Monitors', () => {
     expect(mountWrapper.instance().state.size).not.toBe(17);
     expect(mountWrapper.instance().state.sortField).not.toBe('testing_sort_field');
     expect(mountWrapper.instance().state.sortDirection).not.toBe('asc');
-    mountWrapper
-      .instance()
-      .onTableChange({
-        page: { index: 17, size: 17 },
-        sort: { field: 'testing_sort_field', direction: 'desc' },
-      });
+    mountWrapper.instance().onTableChange({
+      page: { index: 17, size: 17 },
+      sort: { field: 'testing_sort_field', direction: 'desc' },
+    });
     mountWrapper.update();
 
     expect(onTableChange).toHaveBeenCalled();

@@ -49,6 +49,7 @@ class CreateDestination extends React.Component {
 
     const { location, edit, history } = this.props;
     let destinationVersion;
+    let ifSeqNo, ifPrimaryTerm;
     if (edit) {
       // In case user is refreshing in edit mode , redirect them to the destination page.
       // TODO:: Ideally this should fetch the destination from ElasticSearch and fill in value
@@ -56,6 +57,8 @@ class CreateDestination extends React.Component {
       if (destinationToEdit) {
         initialValues = { ...destinationToFormik(destinationToEdit) };
         destinationVersion = destinationToEdit.version;
+        ifSeqNo = destinationToEdit.ifSeqNo;
+        ifPrimaryTerm = destinationToEdit.ifPrimaryTerm;
       } else {
         history.push('/destinations');
       }
@@ -63,6 +66,8 @@ class CreateDestination extends React.Component {
     this.state = {
       initialValues,
       destinationVersion,
+      ifSeqNo,
+      ifPrimaryTerm,
     };
   }
 
@@ -92,14 +97,14 @@ class CreateDestination extends React.Component {
       },
       history,
     } = this.props;
-    const { destinationVersion } = this.state;
+    const { destinationVersion, ifSeqNo, ifPrimaryTerm } = this.state;
     try {
       const resp = await httpClient.put(
-        `../api/alerting/destinations/${destinationId}?version=${destinationVersion}`,
+        `../api/alerting/destinations/${destinationId}?version=${destinationVersion}&ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         requestData
       );
       const {
-        data: { ok, version },
+        data: { ok },
       } = resp;
       if (ok) {
         history.push(`/destinations`);

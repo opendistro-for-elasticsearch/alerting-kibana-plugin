@@ -54,8 +54,11 @@ export default class MonitorService {
       const params = { monitorId: id };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const getResponse = await callWithRequest(req, 'alerting.getMonitor', params);
+      console.log('getResponse', JSON.stringify(getResponse));
       const monitor = _.get(getResponse, 'monitor', null);
       const version = _.get(getResponse, '_version', null);
+      const ifSeqNo = _.get(getResponse, '_seq_no', null);
+      const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (monitor) {
         const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
         const searchResponse = await callWithRequest(req, 'search', {
@@ -89,10 +92,10 @@ export default class MonitorService {
         const dayCount = _.get(searchResponse, 'aggregations.24_hour_count.buckets.0.doc_count', 0);
         const activeBuckets = _.get(searchResponse, 'aggregations.active_count.buckets', []);
         const activeCount = activeBuckets.reduce(
-          (accu, curr) => (curr.key === 'ACTIVE' ? curr.doc_count : accu),
+          (acc, curr) => (curr.key === 'ACTIVE' ? curr.doc_count : acc),
           0
         );
-        return { ok: true, resp: monitor, activeCount, dayCount, version };
+        return { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm };
       } else {
         return { ok: false };
       }
@@ -105,8 +108,8 @@ export default class MonitorService {
   updateMonitor = async (req, h) => {
     try {
       const { id } = req.params;
-      const { version } = req.query;
-      const params = { monitorId: id, version, body: JSON.stringify(req.payload) };
+      const { version, ifSeqNo, ifPrimaryTerm } = req.query;
+      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.payload) };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const updateResponse = await callWithRequest(req, 'alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
@@ -169,7 +172,9 @@ export default class MonitorService {
         }),
       };
 
-      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
+        CLUSTER.ALERTING
+      );
       const getResponse = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
