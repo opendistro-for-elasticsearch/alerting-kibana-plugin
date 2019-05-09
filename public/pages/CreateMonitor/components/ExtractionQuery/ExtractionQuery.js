@@ -15,7 +15,6 @@
 
 import React from 'react';
 import { EuiCodeEditor, EuiFlexGroup, EuiFlexItem, EuiFormRow } from '@elastic/eui';
-import 'brace/theme/github';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
 import 'brace/snippets/javascript';
@@ -24,7 +23,7 @@ import 'brace/ext/language_tools';
 import { FormikCodeEditor } from '../../../../components/FormControls';
 import { isInvalid, hasError, validateExtractionQuery } from '../../../../utils/validate';
 
-const ExtractionQuery = ({ response }) => (
+const ExtractionQuery = ({ isDarkMode, response }) => (
   <EuiFlexGroup>
     <EuiFlexItem>
       <FormikCodeEditor
@@ -41,7 +40,7 @@ const ExtractionQuery = ({ response }) => (
           mode: 'json',
           width: '100%',
           height: '500px',
-          theme: 'github',
+          theme: isDarkMode ? 'sense-dark' : 'github',
           onChange: (query, field, form) => {
             form.setFieldValue('query', query);
           },
@@ -55,7 +54,7 @@ const ExtractionQuery = ({ response }) => (
       <EuiFormRow label="Extraction query response" fullWidth>
         <EuiCodeEditor
           mode="json"
-          theme="github"
+          theme={isDarkMode ? 'sense-dark' : 'github'}
           width="100%"
           height="500px"
           value={response}

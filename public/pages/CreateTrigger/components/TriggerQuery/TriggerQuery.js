@@ -26,7 +26,6 @@ import {
   EuiSpacer,
   EuiText,
 } from '@elastic/eui';
-import 'brace/theme/github';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
 import 'brace/snippets/javascript';
@@ -54,6 +53,7 @@ const TriggerQuery = ({
   response,
   triggerValues,
   setFlyout,
+  isDarkMode,
 }) => {
   const trigger = { ...formikToTrigger(triggerValues), actions: [] };
   const formattedResponse = JSON.stringify(response, null, 4);
@@ -64,7 +64,7 @@ const TriggerQuery = ({
           <EuiFormRow label="Extraction query response" fullWidth>
             <EuiCodeEditor
               mode="json"
-              theme="github"
+              theme={isDarkMode ? 'sense-dark' : 'github'}
               width="100%"
               value={error || formattedResponse}
               readOnly
@@ -100,7 +100,7 @@ const TriggerQuery = ({
               >
                 <EuiCodeEditor
                   mode="plain_text"
-                  theme="github"
+                  theme={isDarkMode ? 'sense-dark' : 'github'}
                   height="300px"
                   width="100%"
                   onChange={source => {
