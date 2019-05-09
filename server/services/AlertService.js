@@ -120,7 +120,7 @@ export default class AlertService {
         return { id, ...alert, version };
       });
       return { ok: true, alerts, totalAlerts };
-    } catch(err) {
+    } catch (err) {
       return { ok: false, resp };
     }
   };

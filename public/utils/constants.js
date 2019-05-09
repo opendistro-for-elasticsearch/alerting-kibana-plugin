@@ -18,6 +18,7 @@ export const ALERT_STATE = Object.freeze({
   ACKNOWLEDGED: 'ACKNOWLEDGED',
   COMPLETED: 'COMPLETED',
   ERROR: 'ERROR',
+  DELETED: 'DELETED',
 });
 
 export const DEFAULT_EMPTY_DATA = '-';
@@ -43,4 +44,11 @@ export const MONITOR_ACTIONS = {
 export const TRIGGER_ACTIONS = {
   UPDATE_TRIGGER: 'update-trigger',
   CREATE_TRIGGER: 'create-trigger',
+};
+
+export const DATA_TYPES = {
+  NUMBER: 'number',
+  TEXT: 'text',
+  BOOLEAN: 'boolean',
+  KEYWORD: 'keyword',
 };

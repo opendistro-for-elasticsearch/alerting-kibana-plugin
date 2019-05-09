@@ -16,6 +16,7 @@
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
 import chrome from 'ui/chrome';
+import PropTypes from 'prop-types';
 import { EuiSpacer, EuiButton, EuiText } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
@@ -42,7 +43,16 @@ function renderEmptyMessage(message) {
   );
 }
 
-export default class DefineMonitor extends Component {
+const propTypes = {
+  values: PropTypes.object.isRequired,
+  httpClient: PropTypes.func.isRequired,
+  errors: PropTypes.object,
+};
+const defaultProps = {
+  errors: {},
+};
+
+class DefineMonitor extends Component {
   constructor(props) {
     super(props);
 
@@ -105,6 +115,7 @@ export default class DefineMonitor extends Component {
   }
 
   renderGraph() {
+    const { errors } = this.props;
     return (
       <Fragment>
         <EuiText size="xs">
@@ -117,11 +128,15 @@ export default class DefineMonitor extends Component {
           ofEnabled={this.props.values.aggregationType !== 'count'}
         />
         <EuiSpacer size="s" />
-        <VisualGraph
-          values={this.state.formikSnapshot}
-          fieldName={_.get(this.props.values, 'fieldName[0].label', 'Select a field')}
-          response={this.state.response}
-        />
+        {errors.where ? (
+          renderEmptyMessage('Invalid input in WHERE filter. Remove WHERE filter or adjust filter ')
+        ) : (
+          <VisualGraph
+            values={this.state.formikSnapshot}
+            fieldName={_.get(this.props.values, 'fieldName[0].label', 'Select a field')}
+            response={this.state.response}
+          />
+        )}
       </Fragment>
     );
   }
@@ -254,3 +269,8 @@ export default class DefineMonitor extends Component {
     );
   }
 }
+
+DefineMonitor.propTypes = propTypes;
+DefineMonitor.defaultProps = defaultProps;
+
+export default DefineMonitor;

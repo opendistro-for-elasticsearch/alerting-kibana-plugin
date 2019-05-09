@@ -41,7 +41,7 @@ const Interval = () => (
           isInvalid,
           error: hasError,
         }}
-        inputProps={{ icon: 'clock' }}
+        inputProps={{ icon: 'clock', min: 1 }}
       />
     </EuiFlexItem>
     <EuiFlexItem style={{ margin: '0px' }}>

@@ -88,5 +88,33 @@ exports[`MonitorExpressions renders 1`] = `
       </div>
     </div>
   </div>
+  <div
+    class="euiFlexItem euiFlexItem--flexGrowZero"
+  >
+    <div
+      class="euiPopover euiPopover--anchorDownLeft euiPopover--withTitle"
+      id="where-popover"
+    >
+      <div
+        class="euiPopover__anchor"
+      >
+        <button
+          class="euiExpression euiExpression-isClickable euiExpression-isUppercase euiExpression--secondary"
+        >
+          <span
+            class="euiExpression__description"
+          >
+            where
+          </span>
+           
+          <span
+            class="euiExpression__value"
+          >
+            Select a field
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 `;

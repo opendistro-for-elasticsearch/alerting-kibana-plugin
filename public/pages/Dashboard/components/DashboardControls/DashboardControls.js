@@ -15,6 +15,7 @@
 
 import React from 'react';
 import { EuiFieldSearch, EuiFlexGroup, EuiSelect, EuiFlexItem, EuiPagination } from '@elastic/eui';
+import { ALERT_STATE } from '../../../../utils/constants';
 
 const severityOptions = [
   { value: 'ALL', text: 'All severity levels' },
@@ -27,10 +28,11 @@ const severityOptions = [
 
 const stateOptions = [
   { value: 'ALL', text: 'All alerts' },
-  { value: 'ACTIVE', text: 'Active' },
-  { value: 'ACKNOWLEDGED', text: 'Acknowledged' },
-  { value: 'COMPLETED', text: 'Completed' },
-  { value: 'ERROR', text: 'Error' },
+  { value: ALERT_STATE.ACTIVE, text: 'Active' },
+  { value: ALERT_STATE.ACKNOWLEDGED, text: 'Acknowledged' },
+  { value: ALERT_STATE.COMPLETED, text: 'Completed' },
+  { value: ALERT_STATE.ERROR, text: 'Error' },
+  { value: ALERT_STATE.DELETED, text: 'Deleted' },
 ];
 
 const DashboardControls = ({

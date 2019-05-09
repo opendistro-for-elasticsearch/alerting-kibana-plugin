@@ -51,6 +51,13 @@ exports[`CreateMonitor renders 1`] = `
           "tue": false,
           "wed": false,
         },
+        "where": Object {
+          "fieldName": Array [],
+          "fieldRangeEnd": 0,
+          "fieldRangeStart": 0,
+          "fieldValue": 0,
+          "operator": "is",
+        },
       }
     }
     isInitialValid={false}

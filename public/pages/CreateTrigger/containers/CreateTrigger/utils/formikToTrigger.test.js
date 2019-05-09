@@ -66,7 +66,7 @@ describe('formikToCondition', () => {
     expect(
       formikToCondition(formikValues, { search: { searchType: 'graph', aggregationType: 'max' } })
     ).toEqual({
-      script: { lang: 'painless', source: `ctx.results[0].aggregations.when.value > 10000` },
+      script: { lang: 'painless', source: `return ctx.results[0].aggregations.when.value == null ? false : ctx.results[0].aggregations.when.value > 10000` },
     });
   });
 });

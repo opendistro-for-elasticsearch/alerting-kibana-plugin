@@ -250,6 +250,7 @@ exports[`Frequencies renders FrequencyPicker 1`] = `
         >
           <input
             class="euiFieldNumber euiFieldNumber--withIcon"
+            min="1"
             name="period.interval"
             type="number"
             value="1"
@@ -380,6 +381,7 @@ exports[`Frequencies renders Interval 1`] = `
         >
           <input
             class="euiFieldNumber euiFieldNumber--withIcon"
+            min="1"
             name="period.interval"
             type="number"
             value="1"

@@ -17,5 +17,6 @@ import ForExpression from './ForExpression';
 import OfExpression from './OfExpression';
 import OverExpression from './OverExpression';
 import WhenExpression from './WhenExpression';
+import WhereExpression from './WhereExpression';
 
-export { ForExpression, OfExpression, OverExpression, WhenExpression };
+export { ForExpression, OfExpression, OverExpression, WhenExpression, WhereExpression };

@@ -18,15 +18,12 @@ import { CLUSTER, DEFAULT_HEADERS } from '../../services/utils/constants';
 
 export default function createAlertingCluster(server) {
   const { customHeaders, ...rest } = server.config().get('elasticsearch');
-  server.plugins.elasticsearch.createCluster(
-    CLUSTER.ALERTING,
-    {
-      plugins: [ alertingPlugin ],
-      // Currently we are overriding any headers with our own since we explicitly required User-Agent to be Kibana
-      // for integration with our backend plugin.
-      // TODO: Change our required header to x-<Header> to avoid overriding
-      customHeaders: { ...customHeaders, ...DEFAULT_HEADERS },
-      ...rest,
-    }
-  );
+  server.plugins.elasticsearch.createCluster(CLUSTER.ALERTING, {
+    plugins: [alertingPlugin],
+    // Currently we are overriding any headers with our own since we explicitly required User-Agent to be Kibana
+    // for integration with our backend plugin.
+    // TODO: Change our required header to x-<Header> to avoid overriding
+    customHeaders: { ...customHeaders, ...DEFAULT_HEADERS },
+    ...rest,
+  });
 }

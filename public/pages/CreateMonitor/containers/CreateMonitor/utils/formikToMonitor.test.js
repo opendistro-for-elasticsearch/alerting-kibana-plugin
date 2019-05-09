@@ -26,9 +26,11 @@ import {
   formikToWhenAggregation,
   formikToUiSchedule,
   buildSchedule,
+  formikToWhereClause,
 } from './formikToMonitor';
 
 import { FORMIK_INITIAL_VALUES } from './constants';
+import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
 
 jest.mock('moment-timezone', () => {
   const moment = require.requireActual('moment-timezone');
@@ -53,6 +55,24 @@ describe('formikToUiSearch', () => {
   formikValues.fieldName = [{ label: 'bytes' }];
   formikValues.timeField = '@timestamp';
   test('can build ui search', () => {
+    expect(formikToUiSearch(formikValues)).toMatchSnapshot();
+  });
+  test('can build ui search with term where field', () => {
+    formikValues.where = {
+      fieldName: [{ label: 'age', type: 'number' }],
+      operator: OPERATORS_MAP.IS_GREATER_EQUAL,
+      fieldValue: 20,
+    };
+    expect(formikToUiSearch(formikValues)).toMatchSnapshot();
+  });
+
+  test('can build ui search with range where field', () => {
+    formikValues.where = {
+      fieldName: [{ label: 'age', type: 'number' }],
+      operator: OPERATORS_MAP.IN_RANGE,
+      fieldRangeStart: 20,
+      fieldRangeEnd: 40,
+    };
     expect(formikToUiSearch(formikValues)).toMatchSnapshot();
   });
 });
@@ -160,5 +180,51 @@ describe('buildSchedule', () => {
 
   test('can build cron schedule', () => {
     expect(buildSchedule('cronExpression', uiSchedule)).toMatchSnapshot();
+  });
+});
+
+describe('formikToWhereClause', () => {
+  const numericFieldName = [{ label: 'age', type: 'number' }];
+  const textField = [{ label: 'city', type: 'text' }];
+  const keywordField = [{ label: 'city.keyword', type: 'keyword' }];
+
+  test.each([
+    [numericFieldName, OPERATORS_MAP.IS, 20, { term: { age: 20 } }],
+    [textField, OPERATORS_MAP.IS, 'Seattle', { match_phrase: { city: 'Seattle' } }],
+    [numericFieldName, OPERATORS_MAP.IS_NOT, 20, { bool: { must_not: { term: { age: 20 } } } }],
+    [
+      textField,
+      OPERATORS_MAP.IS_NOT,
+      'Seattle',
+      { bool: { must_not: { match_phrase: { city: 'Seattle' } } } },
+    ],
+    [
+      numericFieldName,
+      OPERATORS_MAP.IS_NULL,
+      undefined,
+      { bool: { must_not: { exists: { field: 'age' } } } },
+    ],
+    [numericFieldName, OPERATORS_MAP.IS_NOT_NULL, undefined, { exists: { field: 'age' } }],
+    [numericFieldName, OPERATORS_MAP.IS_GREATER, 20, { range: { age: { gt: 20 } } }],
+    [numericFieldName, OPERATORS_MAP.IS_GREATER_EQUAL, 20, { range: { age: { gte: 20 } } }],
+    [numericFieldName, OPERATORS_MAP.IS_LESS, 20, { range: { age: { lt: 20 } } }],
+    [numericFieldName, OPERATORS_MAP.IS_LESS_EQUAL, 20, { range: { age: { lte: 20 } } }],
+    [textField, OPERATORS_MAP.STARTS_WITH, 'Se', { prefix: { city: 'Se' } }],
+    [textField, OPERATORS_MAP.ENDS_WITH, 'Se', { wildcard: { city: '*Se' } }],
+    [
+      textField,
+      OPERATORS_MAP.CONTAINS,
+      'Se',
+      { query_string: { query: `*Se*`, default_field: 'city' } },
+    ],
+    [keywordField, OPERATORS_MAP.CONTAINS, 'Se', { wildcard: { 'city.keyword': '*Se*' } }],
+    [
+      textField,
+      OPERATORS_MAP.NOT_CONTAINS,
+      'Se',
+      { bool: { must_not: { query_string: { query: `*Se*`, default_field: 'city' } } } },
+    ],
+  ])('.formikToWhereClause (%j,  %S)', (fieldName, operator, fieldValue, expected) => {
+    expect(formikToWhereClause({ where: { fieldName, operator, fieldValue } })).toEqual(expected);
   });
 });
