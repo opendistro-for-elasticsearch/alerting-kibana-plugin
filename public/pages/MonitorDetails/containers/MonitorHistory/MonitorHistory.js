@@ -16,14 +16,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get, isEqual } from 'lodash';
-import {
-  EuiDatePicker,
-  EuiDatePickerRange,
-  EuiHorizontalRule,
-  EuiFlexGroup,
-  EuiFlexItem,
-  EuiLoadingChart,
-} from '@elastic/eui';
+import chrome from 'ui/chrome';
+import { EuiHorizontalRule } from '@elastic/eui';
 import moment from 'moment';
 
 import ContentPanel from '../../../../components/ContentPanel';
@@ -66,6 +60,7 @@ class MonitorHistory extends PureComponent {
         endTime: this.initialEndTime,
       },
     };
+    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
   }
   async componentDidMount() {
     const { triggers } = this.props;
@@ -333,6 +328,7 @@ class MonitorHistory extends PureComponent {
                   ? HistoryConstants.MIN_POI_Y_SCALE
                   : maxAlerts,
               ]}
+              isDarkMode={this.isDarkMode}
             />
             <EuiHorizontalRule margin="xs" />
             <Legend />

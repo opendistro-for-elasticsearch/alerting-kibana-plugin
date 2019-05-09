@@ -18,9 +18,8 @@ import chrome from 'ui/chrome';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { uiModules } from 'ui/modules';
 import { HashRouter as Router, Route } from 'react-router-dom';
-import '@elastic/eui/dist/eui_theme_light.css';
-import 'react-vis/dist/style.css';
 
+import 'react-vis/dist/style.css';
 import 'ui/autoload/styles';
 import './less/main.less';
 

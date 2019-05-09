@@ -131,7 +131,7 @@ class ConfigureActions extends React.Component {
         title="Configure Actions"
         titleSize="s"
         panelStyles={{ paddingBottom: '0px' }}
-        bodyStyles={{ backgroundColor: '#F6F6F6', padding: '10px' }}
+        bodyStyles={{ padding: '10px' }}
         horizontalRuleClassName="accordion-horizontal-rule"
         actions={<AddActionButton arrayHelpers={arrayHelpers} />}
       >

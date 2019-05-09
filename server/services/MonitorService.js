@@ -54,7 +54,6 @@ export default class MonitorService {
       const params = { monitorId: id };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const getResponse = await callWithRequest(req, 'alerting.getMonitor', params);
-      console.log('getResponse', JSON.stringify(getResponse));
       const monitor = _.get(getResponse, 'monitor', null);
       const version = _.get(getResponse, '_version', null);
       const ifSeqNo = _.get(getResponse, '_seq_no', null);

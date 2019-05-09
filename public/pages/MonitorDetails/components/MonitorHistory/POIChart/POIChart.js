@@ -27,6 +27,7 @@ const POIChart = ({
   yDomain,
   highlightedArea,
   isLoading,
+  isDarkMode,
 }) => (
   <EuiFlexGroup
     style={{ paddingLeft: '10%' }}
@@ -47,10 +48,11 @@ const POIChart = ({
       <YAxis tickValues={yDomain} />
       <Highlight
         drag={!isLoading}
-        color="white"
+        color={isDarkMode ? 'black' : 'white'}
         opacity={0.3}
         enableY={false}
         highlightHeight={50}
+        isDarkMode={isDarkMode}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         highlightedArea={{ left: highlightedArea.startTime, right: highlightedArea.endTime }}
@@ -67,6 +69,7 @@ POIChart.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   xDomain: PropTypes.array.isRequired,
   yDomain: PropTypes.array.isRequired,
+  isDarkMode: PropTypes.bool.isRequired,
 };
 
 export default POIChart;

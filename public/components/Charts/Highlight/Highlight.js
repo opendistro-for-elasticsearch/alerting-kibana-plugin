@@ -287,6 +287,19 @@ class Highlight extends AbstractSeries {
     }
   }
 
+  getHighlighterStyles() {
+    const { isDarkMode } = this.props;
+    if (isDarkMode) {
+      return {
+        fill: 'black',
+        opacity: 0.1,
+      };
+    }
+    return {
+      fill: 'white',
+      opacity: 0.8,
+    };
+  }
   render() {
     const {
       color,
@@ -360,13 +373,12 @@ class Highlight extends AbstractSeries {
         <rect
           pointerEvents="none"
           className="rv-mouse-target"
-          fill="white"
-          opacity="0.8"
           x={marginLeft}
           y="0"
           width={Math.max(left - marginLeft, 0)}
           height={Math.max(touchHeight, 0)}
           onMouseLeave={e => e.preventDefault()}
+          {...this.getHighlighterStyles()}
         />
         {/* A Center Highlighter */}
         <rect
@@ -383,13 +395,12 @@ class Highlight extends AbstractSeries {
         <rect
           pointerEvents="none"
           className="rv-mouse-target"
-          fill="white"
-          opacity="0.8"
           x={right}
           y="0"
           width={Math.max(touchWidth - right, 0)}
           height={Math.max(touchHeight, 0)}
           onMouseLeave={e => e.preventDefault()}
+          {...this.getHighlighterStyles()}
         />
 
         {/* Draws border lines on Highlighted area */}
