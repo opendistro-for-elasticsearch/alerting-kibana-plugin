@@ -148,7 +148,7 @@ exports[`Message renders 1`] = `
     >
       <div>
         <span>
-          Action Throttling
+          Action throttling
         </span>
         <button
           class="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--small"
@@ -239,6 +239,7 @@ exports[`Message renders 1`] = `
           >
             <input
               class="euiFieldNumber euiFieldNumber--compressed"
+              min="1"
               name="actions.0.throttle.value"
               style="width:100px"
               type="number"

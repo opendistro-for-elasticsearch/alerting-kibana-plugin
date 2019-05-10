@@ -35,7 +35,7 @@ export const FORMIK_INITIAL_ACTION_VALUES = {
   throttle_enabled: true,
   throttle: {
     value: 10,
-    unit: 'MINUTES'
+    unit: 'MINUTES' // throttle unit only supports MINUTES currently, no UI element mapped
   }
 };
 

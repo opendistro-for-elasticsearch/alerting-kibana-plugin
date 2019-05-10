@@ -127,7 +127,7 @@ const Message = ({
       <EuiFormRow
           label={
             <div>
-              <span>Action Throttling</span>
+              <span>Action throttling</span>
               <EuiButtonEmpty
                 size="s"
                 onClick={() => { setFlyout({ type: 'messageFrequency' }); }}
@@ -149,15 +149,13 @@ const Message = ({
               <FormikFieldNumber
                 name={`actions.${index}.throttle.value`}
                 fieldProps={{ validate: value => {
-                  if (value <= 0) return 'Needs to be a positive number';
+                  if (value && value <= 0) return 'Needs to be a positive number';
                 } }}
                 inputProps={{
                   style: { width: '100px' },
+                  min: 1,
                   compressed: true,
-                  isInvalid: (name, form) => (
-                    _.get(form.values, `actions.${index}.throttle_enabled`)
-                    && !!_.get(form.touched, name) && !!_.get(form.errors, name)
-                  )
+                  isInvalid: isInvalid
                 }}
               />
             </EuiFlexItem>
