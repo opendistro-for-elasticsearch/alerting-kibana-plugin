@@ -14,6 +14,7 @@
  */
 
 import React from 'react';
+import _ from 'lodash';
 import Mustache from 'mustache';
 import {
   EuiFlexGroup,
@@ -25,7 +26,7 @@ import {
   EuiTextArea,
 } from '@elastic/eui';
 
-import { FormikTextArea, FormikFieldText } from '../../../../../components/FormControls';
+import { FormikTextArea, FormikFieldText, FormikSwitch, FormikFieldNumber } from '../../../../../components/FormControls';
 import { isInvalid, hasError, required } from '../../../../../utils/validate';
 import { URL } from '../../../../../../utils/constants';
 
@@ -122,6 +123,49 @@ const Message = ({
       </EuiFormRow>
 
       <EuiSpacer size="s" />
+
+      <EuiFormRow
+          label={
+            <div>
+              <span>Action Throttling</span>
+              <EuiButtonEmpty
+                size="s"
+                onClick={() => { setFlyout({ type: 'messageFrequency' }); }}
+              >
+                Info
+              </EuiButtonEmpty>
+            </div>
+          }
+          style={{ maxWidth: '100%' }}
+        >
+          <EuiFlexGroup alignItems="center">
+            <EuiFlexItem grow={false} style={{ marginRight: '0px' }}>
+              <FormikSwitch
+                name={`actions.${index}.throttle_enabled`}
+                inputProps={{ label: 'Maximum Frequency' }}
+              />
+            </EuiFlexItem>
+            <EuiFlexItem grow={false} style={{ marginLeft: '4px', marginRight: '4px' }}>
+              <FormikFieldNumber
+                name={`actions.${index}.throttle.value`}
+                fieldProps={{ validate: value => {
+                  if (value <= 0) return 'Needs to be a positive number';
+                } }}
+                inputProps={{
+                  style: { width: '100px' },
+                  compressed: true,
+                  isInvalid: (name, form) => (
+                    _.get(form.values, `actions.${index}.throttle_enabled`)
+                    && !!_.get(form.touched, name) && !!_.get(form.errors, name)
+                  )
+                }}
+              />
+            </EuiFlexItem>
+            <EuiFlexItem grow={false} style={{ marginLeft: '0px' }}>
+              <EuiText size="s">minutes.</EuiText>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        </EuiFormRow>
     </div>
   );
 };

@@ -32,6 +32,11 @@ export const FORMIK_INITIAL_ACTION_VALUES = {
     lang: 'mustache',
     source: DEFAULT_MESSAGE_SOURCE,
   },
+  throttle_enabled: true,
+  throttle: {
+    value: 10,
+    unit: 'MINUTES'
+  }
 };
 
 export const DEFAULT_ACTION_TYPE = 'slack';
