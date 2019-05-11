@@ -107,16 +107,12 @@ export default class MonitorService {
   updateMonitor = async (req, h) => {
     try {
       const { id } = req.params;
-      const { version, ifSeqNo, ifPrimaryTerm } = req.query;
+      const { ifSeqNo, ifPrimaryTerm } = req.query;
       const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.payload) };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const updateResponse = await callWithRequest(req, 'alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
-      if (_version === parseInt(version, 10) + 1) {
-        return { ok: true, version: _version, id: _id };
-      } else {
-        return { ok: false };
-      }
+      return { ok: true, version: _version, id: _id };
     } catch (err) {
       console.error('Alerting - MonitorService - updateMonitor:', err);
       return { ok: false, resp: err.message };

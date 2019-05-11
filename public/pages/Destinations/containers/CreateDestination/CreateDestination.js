@@ -48,7 +48,6 @@ class CreateDestination extends React.Component {
     let initialValues = formikInitialValues;
 
     const { location, edit, history } = this.props;
-    let destinationVersion;
     let ifSeqNo, ifPrimaryTerm;
     if (edit) {
       // In case user is refreshing in edit mode , redirect them to the destination page.
@@ -56,7 +55,6 @@ class CreateDestination extends React.Component {
       const destinationToEdit = _.get(location, 'state.destinationToEdit', null);
       if (destinationToEdit) {
         initialValues = { ...destinationToFormik(destinationToEdit) };
-        destinationVersion = destinationToEdit.version;
         ifSeqNo = destinationToEdit.ifSeqNo;
         ifPrimaryTerm = destinationToEdit.ifPrimaryTerm;
       } else {
@@ -65,7 +63,6 @@ class CreateDestination extends React.Component {
     }
     this.state = {
       initialValues,
-      destinationVersion,
       ifSeqNo,
       ifPrimaryTerm,
     };
@@ -76,9 +73,11 @@ class CreateDestination extends React.Component {
     try {
       const resp = await httpClient.get(`../api/alerting/destinations/${destinationId}`);
       if (resp.data.ok) {
-        const destinationVersion = _.get(resp, 'data.version');
+        const ifSeqNo = _.get(resp, 'data.ifSeqNo');
+        const ifPrimaryTerm = _.get(resp, 'data.ifPrimaryTerm');
         this.setState({
-          destinationVersion,
+          ifSeqNo,
+          ifPrimaryTerm,
         });
       } else {
         // Handle error, show message in case of 404
@@ -97,10 +96,10 @@ class CreateDestination extends React.Component {
       },
       history,
     } = this.props;
-    const { destinationVersion, ifSeqNo, ifPrimaryTerm } = this.state;
+    const { ifSeqNo, ifPrimaryTerm } = this.state;
     try {
       const resp = await httpClient.put(
-        `../api/alerting/destinations/${destinationId}?version=${destinationVersion}&ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
+        `../api/alerting/destinations/${destinationId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         requestData
       );
       const {

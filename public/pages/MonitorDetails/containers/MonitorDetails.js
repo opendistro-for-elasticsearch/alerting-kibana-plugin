@@ -110,11 +110,11 @@ export default class MonitorDetails extends Component {
       },
       httpClient,
     } = this.props;
-    const { monitor, monitorVersion, ifSeqNo, ifPrimaryTerm } = this.state;
+    const { monitor, ifSeqNo, ifPrimaryTerm } = this.state;
     this.setState({ updating: true });
     return httpClient
       .put(
-        `../api/alerting/monitors/${monitorId}?version=${monitorVersion}&ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
+        `../api/alerting/monitors/${monitorId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         { ...monitor, ...update }
       )
       .then(resp => {
