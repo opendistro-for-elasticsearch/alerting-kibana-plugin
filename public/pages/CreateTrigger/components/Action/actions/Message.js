@@ -29,7 +29,6 @@ import {
 import { FormikTextArea, FormikFieldText, FormikSwitch, FormikFieldNumber } from '../../../../../components/FormControls';
 import { isInvalid, validateActionThrottle, validateInterval, hasError, required } from '../../../../../utils/validate';
 import { URL } from '../../../../../../utils/constants';
-import { withFormik } from 'formik';
 
 const messageHelpText = (index, sendTestMessage) => (
   <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
