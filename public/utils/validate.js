@@ -30,6 +30,11 @@ export const validateActionName = trigger => value => {
   if (matches.length > 1) return 'Action name is already used';
 };
 
+export const validateActionThrottle = action => value => {
+  if (action.throttle_enabled && (!action.throttle || !action.throttle.value)) return "Need to set throttle value";
+  if (action.throttle && action.throttle.value) return validateInterval(action.throttle.value);
+};
+
 export const required = value => {
   if (!value) return 'Required';
 };

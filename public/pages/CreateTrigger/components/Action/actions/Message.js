@@ -27,8 +27,9 @@ import {
 } from '@elastic/eui';
 
 import { FormikTextArea, FormikFieldText, FormikSwitch, FormikFieldNumber } from '../../../../../components/FormControls';
-import { isInvalid, hasError, required } from '../../../../../utils/validate';
+import { isInvalid, validateActionThrottle, validateInterval, hasError, required } from '../../../../../utils/validate';
 import { URL } from '../../../../../../utils/constants';
+import { withFormik } from 'formik';
 
 const messageHelpText = (index, sendTestMessage) => (
   <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
@@ -148,14 +149,15 @@ const Message = ({
             <EuiFlexItem grow={false} style={{ marginLeft: '4px', marginRight: '4px' }}>
               <FormikFieldNumber
                 name={`actions.${index}.throttle.value`}
-                fieldProps={{ validate: value => {
-                  if (value && value <= 0) return 'Needs to be a positive number';
-                } }}
+                fieldProps={{ validate: validateActionThrottle(action) }}
                 inputProps={{
                   style: { width: '100px' },
                   min: 1,
                   compressed: true,
-                  isInvalid: isInvalid
+                  isInvalid: (name, form) => {
+                    return (_.get(form.values, `actions.${index}.throttle_enabled`) && !_.get(form.values, name))
+                    || (_.get(form.values, name) && _.get(form.values, name)<=0)
+                  }
                 }}
               />
             </EuiFlexItem>
