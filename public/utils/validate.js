@@ -31,8 +31,10 @@ export const validateActionName = trigger => value => {
 };
 
 export const validateActionThrottle = action => value => {
-  if (action.throttle_enabled && (!action.throttle || !action.throttle.value)) return "Need to set throttle value";
-  if (action.throttle && action.throttle.value) return validateInterval(action.throttle.value);
+  // If throttle enabled, must set throttle value
+  if (_.get(action, 'throttle_enabled') && !_.get(action,'throttle.value')) return "Need to set throttle value";
+  // No matter throttle enabled or not, the throttle value should be valid
+  if (_.get(action,'throttle.value')) return validateInterval(_.get(action,'throttle.value'));
 };
 
 export const required = value => {
