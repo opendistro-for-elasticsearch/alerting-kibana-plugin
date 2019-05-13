@@ -40,6 +40,8 @@ export default class MonitorDetails extends Component {
     this.state = {
       monitor: null,
       monitorVersion: 0,
+      ifSeqNo: 0,
+      ifPrimaryTerm: 0,
       dayCount: 0,
       activeCount: 0,
       loading: true,
@@ -71,9 +73,19 @@ export default class MonitorDetails extends Component {
     httpClient
       .get(`../api/alerting/monitors/${id}`)
       .then(resp => {
-        const { ok, resp: monitor, version: monitorVersion, dayCount, activeCount } = resp.data;
+        const {
+          ok,
+          resp: monitor,
+          version: monitorVersion,
+          dayCount,
+          activeCount,
+          ifSeqNo,
+          ifPrimaryTerm,
+        } = resp.data;
         if (ok) {
           this.setState({
+            ifSeqNo,
+            ifPrimaryTerm,
             monitor,
             monitorVersion,
             dayCount,
@@ -91,12 +103,20 @@ export default class MonitorDetails extends Component {
       });
   };
 
-  updateMonitor = (id, version, update) => {
-    const { httpClient } = this.props;
-    const { monitor } = this.state;
+  updateMonitor = update => {
+    const {
+      match: {
+        params: { monitorId },
+      },
+      httpClient,
+    } = this.props;
+    const { monitor, ifSeqNo, ifPrimaryTerm } = this.state;
     this.setState({ updating: true });
     return httpClient
-      .put(`../api/alerting/monitors/${id}?version=${version}`, { ...monitor, ...update })
+      .put(
+        `../api/alerting/monitors/${monitorId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
+        { ...monitor, ...update }
+      )
       .then(resp => {
         const { version: monitorVersion } = resp.data;
         this.setState({ monitorVersion, updating: false });
@@ -184,7 +204,7 @@ export default class MonitorDetails extends Component {
       return (
         <CreateMonitor
           edit={true}
-          updateMonitor={update => this.updateMonitor(monitorId, monitorVersion, update)}
+          updateMonitor={this.updateMonitor}
           monitorToEdit={monitor}
           {...this.props}
         />
@@ -202,7 +222,7 @@ export default class MonitorDetails extends Component {
           setFlyout={this.props.setFlyout}
           onCloseTrigger={this.onCloseTrigger}
           onMonitorFieldChange={() => {}}
-          updateMonitor={update => this.updateMonitor(monitorId, monitorVersion, update)}
+          updateMonitor={this.updateMonitor}
         />
       );
     }
@@ -241,9 +261,7 @@ export default class MonitorDetails extends Component {
           <EuiFlexItem grow={false}>
             <EuiButton
               isLoading={updating}
-              onClick={() =>
-                this.updateMonitor(monitorId, monitorVersion, { enabled: !monitor.enabled })
-              }
+              onClick={() => this.updateMonitor({ enabled: !monitor.enabled })}
             >
               {monitor.enabled ? 'Disable' : 'Enable'}
             </EuiButton>
@@ -259,7 +277,7 @@ export default class MonitorDetails extends Component {
         <EuiSpacer />
         <Triggers
           monitor={monitor}
-          updateMonitor={update => this.updateMonitor(monitorId, monitorVersion, update)}
+          updateMonitor={this.updateMonitor}
           onEditTrigger={this.onEditTrigger}
           onCreateTrigger={this.onCreateTrigger}
         />

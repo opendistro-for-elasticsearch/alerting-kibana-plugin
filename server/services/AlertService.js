@@ -114,7 +114,7 @@ export default class AlertService {
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
     try {
       const resp = await callWithRequest(req, 'search', params);
-      const totalAlerts = resp.hits.total;
+      const totalAlerts = resp.hits.total.value;
       const alerts = resp.hits.hits.map(hit => {
         const { _source: alert, _id: id, _version: version } = hit;
         return { id, ...alert, version };

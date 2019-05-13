@@ -48,21 +48,23 @@ class CreateDestination extends React.Component {
     let initialValues = formikInitialValues;
 
     const { location, edit, history } = this.props;
-    let destinationVersion;
+    let ifSeqNo, ifPrimaryTerm;
     if (edit) {
       // In case user is refreshing in edit mode , redirect them to the destination page.
       // TODO:: Ideally this should fetch the destination from ElasticSearch and fill in value
       const destinationToEdit = _.get(location, 'state.destinationToEdit', null);
       if (destinationToEdit) {
         initialValues = { ...destinationToFormik(destinationToEdit) };
-        destinationVersion = destinationToEdit.version;
+        ifSeqNo = destinationToEdit.ifSeqNo;
+        ifPrimaryTerm = destinationToEdit.ifPrimaryTerm;
       } else {
         history.push('/destinations');
       }
     }
     this.state = {
       initialValues,
-      destinationVersion,
+      ifSeqNo,
+      ifPrimaryTerm,
     };
   }
 
@@ -71,9 +73,11 @@ class CreateDestination extends React.Component {
     try {
       const resp = await httpClient.get(`../api/alerting/destinations/${destinationId}`);
       if (resp.data.ok) {
-        const destinationVersion = _.get(resp, 'data.version');
+        const ifSeqNo = _.get(resp, 'data.ifSeqNo');
+        const ifPrimaryTerm = _.get(resp, 'data.ifPrimaryTerm');
         this.setState({
-          destinationVersion,
+          ifSeqNo,
+          ifPrimaryTerm,
         });
       } else {
         // Handle error, show message in case of 404
@@ -92,14 +96,14 @@ class CreateDestination extends React.Component {
       },
       history,
     } = this.props;
-    const { destinationVersion } = this.state;
+    const { ifSeqNo, ifPrimaryTerm } = this.state;
     try {
       const resp = await httpClient.put(
-        `../api/alerting/destinations/${destinationId}?version=${destinationVersion}`,
+        `../api/alerting/destinations/${destinationId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         requestData
       );
       const {
-        data: { ok, version },
+        data: { ok },
       } = resp;
       if (ok) {
         history.push(`/destinations`);

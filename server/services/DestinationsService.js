@@ -36,20 +36,17 @@ export default class DestinationsService {
   updateDestination = async (req, h) => {
     try {
       const { destinationId } = req.params;
-      const { version } = req.query;
+      const { ifSeqNo, ifPrimaryTerm } = req.query;
       const params = {
         body: JSON.stringify(req.payload),
         destinationId,
-        version,
+        ifSeqNo,
+        ifPrimaryTerm,
       };
       const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const updateResponse = await callWithRequest(req, 'alerting.updateDestination', params);
       const { _version, _id } = updateResponse;
-      if (_version === parseInt(version, 10) + 1) {
-        return { ok: true, version: _version, id: _id };
-      } else {
-        return { ok: false, resp: updateResponse };
-      }
+      return { ok: true, version: _version, id: _id };
     } catch (err) {
       console.error('Alerting - DestinationService - updateDestination:', err);
       return { ok: false, resp: err.message };
@@ -75,10 +72,10 @@ export default class DestinationsService {
     try {
       const resp = await callWithRequest(req, 'get', {
         index: INDEX.SCHEDULED_JOBS,
-        type: '_doc',
         id: destinationId,
       });
-      return { ok: true, destination: resp._source.destination, version: resp._version };
+      const { _source, _seq_no: ifSeqNo, _primary_term: ifPrimaryTerm, _version: version } = resp;
+      return { ok: true, destination: _source.destination, version, ifSeqNo, ifPrimaryTerm };
     } catch (err) {
       console.error('Alerting - DestinationService - getDestination:', err);
       return { ok: false, resp: err.message };
@@ -134,6 +131,7 @@ export default class DestinationsService {
     const params = {
       index: INDEX.SCHEDULED_JOBS,
       version: true,
+      seq_no_primary_term: true,
       body: {
         sort,
         size,
@@ -150,10 +148,16 @@ export default class DestinationsService {
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
     try {
       const resp = await callWithRequest(req, 'search', params);
-      const totalDestinations = resp.hits.total;
+      const totalDestinations = resp.hits.total.value;
       const destinations = resp.hits.hits.map(hit => {
-        const { _source: destination, _id: id, _version: version } = hit;
-        return { id, ...destination.destination, version };
+        const {
+          _source: destination,
+          _id: id,
+          _version: version,
+          _seq_no: ifSeqNo,
+          _primary_term: ifPrimaryTerm,
+        } = hit;
+        return { id, ...destination.destination, version, ifSeqNo, ifPrimaryTerm };
       });
       return { ok: true, destinations, totalDestinations };
     } catch (err) {

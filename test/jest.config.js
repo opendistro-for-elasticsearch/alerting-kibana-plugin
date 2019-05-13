@@ -29,7 +29,7 @@ module.exports = {
   coverageReporters: ['lcov', 'text', 'cobertura'],
   testMatch: ['**/*.test.js'],
   collectCoverageFrom: [
-    '**/*.{js}',
+    '**/*.js',
     '!**/node_modules/**',
     '!**/index.js',
     '!<rootDir>/public/actions/**',

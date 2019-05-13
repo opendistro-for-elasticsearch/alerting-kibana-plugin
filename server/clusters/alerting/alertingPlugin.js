@@ -57,13 +57,17 @@ export default function alertingPlugin(Client, config, components) {
 
   alerting.updateMonitor = ca({
     url: {
-      fmt: `${MONITOR_BASE_API}/<%=monitorId%>?version=<%=version%>&refresh=wait_for`,
+      fmt: `${MONITOR_BASE_API}/<%=monitorId%>?if_seq_no=<%=ifSeqNo%>&if_primary_term=<%=ifPrimaryTerm%>&refresh=wait_for`,
       req: {
         monitorId: {
           type: 'string',
           required: true,
         },
-        version: {
+        ifSeqNo: {
+          type: 'string',
+          required: true,
+        },
+        ifPrimaryTerm: {
           type: 'string',
           required: true,
         },
@@ -119,13 +123,17 @@ export default function alertingPlugin(Client, config, components) {
 
   alerting.updateDestination = ca({
     url: {
-      fmt: `${DESTINATION_BASE_API}/<%=destinationId%>?version=<%=version%>&refresh=wait_for`,
+      fmt: `${DESTINATION_BASE_API}/<%=destinationId%>?if_seq_no=<%=ifSeqNo%>&if_primary_term=<%=ifPrimaryTerm%>&refresh=wait_for`,
       req: {
         destinationId: {
           type: 'string',
           required: true,
         },
-        version: {
+        ifSeqNo: {
+          type: 'string',
+          required: true,
+        },
+        ifPrimaryTerm: {
           type: 'string',
           required: true,
         },

@@ -22,8 +22,6 @@
 }
 
 .accordion-action {
-  background-color: white;
-  border: 1px solid #d9d9d9;
   padding: 10px 0px;
   margin-bottom: 10px;
   .euiAccordion__button {
@@ -36,7 +34,6 @@
 }
 
 .euiTextArea.read-only-text-area {
-  background-color: #fbfbfb;
   padding-left: 12px;
   border-color: initial;
   box-shadow: 0 1px 1px -1px rgba(153, 153, 153, 0.2), 0 3px 2px -2px rgba(153, 153, 153, 0.2),
@@ -49,55 +46,6 @@
 *  included in the local dependency aren't overwritten, so some extra styles are sometimes applied such as this case:
 *  .euiSwitch .euiSwitch__thumb has a width/height set at 24px in older version which breaks the styling of the newer version.
 * */
-
-.euiSwitch .euiSwitch__thumb {
-  width: 20px;
-  height: 20px;
-}
-
-.euiRadio .euiRadio__circle {
-  width: 16px;
-  height: 16px;
-}
-
-.euiCheckbox {
-  min-height: initial;
-
-  .euiCheckbox__input {
-    opacity: initial;
-    z-index: initial;
-    margin: initial;
-    cursor: initial;
-  }
-
-  .euiCheckbox__square {
-    height: initial;
-    width: initial;
-    z-index: initial;
-  }
-
-  .euiCheckbox__label {
-    font-weight: initial;
-  }
-}
-
-.euiRadio .euiRadio__input:checked ~ .euiRadio__circle {
-  background-repeat-x: no-repeat;
-  background-repeat-y: no-repeat;
-  background-position-x: center;
-  background-position-y: center;
-}
-
-.euiCheckbox .euiCheckbox__input:checked ~ .euiCheckbox__square {
-  background-position-x: center;
-  background-position-y: center;
-  background-repeat-x: no-repeat;
-  background-repeat-y: no-repeat;
-}
-
-.euiAccordion__button:focus {
-  background-color: initial;
-}
 
 .euiFormRow.euiFormRow--hasEmptyLabelSpace {
   padding-top: initial;
@@ -122,9 +70,4 @@
 
 .euiPaginationButton-isActive:focus {
   color: #0079a5 !important;
-}
-
-.euiComboBox .euiComboBox__input > input {
-  // Fixes blue rectangle border around cursor text
-  box-shadow: initial;
 }

@@ -15,6 +15,7 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
+import chrome from 'ui/chrome';
 import PropTypes from 'prop-types';
 import { EuiSpacer, EuiButton, EuiText } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
@@ -67,6 +68,7 @@ class DefineMonitor extends Component {
     this.resetResponse = this.resetResponse.bind(this);
     this.onQueryMappings = this.onQueryMappings.bind(this);
     this.queryMappings = this.queryMappings.bind(this);
+    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -241,7 +243,12 @@ class DefineMonitor extends Component {
           ? this.renderGraph()
           : renderEmptyMessage('You must specify a time field.');
       } else {
-        content = <ExtractionQuery response={JSON.stringify(response || '', null, 4)} />;
+        content = (
+          <ExtractionQuery
+            response={JSON.stringify(response || '', null, 4)}
+            isDarkMode={this.isDarkMode}
+          />
+        );
       }
     }
 

@@ -15,6 +15,7 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
+import chrome from 'ui/chrome';
 import moment from 'moment';
 import { Formik, FieldArray } from 'formik';
 import {
@@ -54,6 +55,7 @@ export default class CreateTrigger extends Component {
       executeResponse: null,
       initialValues,
     };
+    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -206,6 +208,7 @@ export default class CreateTrigger extends Component {
                 setFlyout={setFlyout}
                 triggers={monitor.triggers}
                 triggerValues={values}
+                isDarkMode={this.isDarkMode}
               />
               <EuiSpacer />
               <FieldArray

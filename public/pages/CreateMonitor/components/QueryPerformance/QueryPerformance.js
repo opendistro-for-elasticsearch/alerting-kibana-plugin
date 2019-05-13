@@ -59,7 +59,7 @@ const QueryPerformance = ({ response }) => (
         <EuiText size="xs">
           <strong>Hits</strong>
           <span style={{ display: 'block' }}>
-            {_.get(response, 'hits.total', DEFAULT_EMPTY_DATA)}
+            {_.get(response, 'hits.total.value', DEFAULT_EMPTY_DATA)}
           </span>
         </EuiText>
       </EuiFlexItem>

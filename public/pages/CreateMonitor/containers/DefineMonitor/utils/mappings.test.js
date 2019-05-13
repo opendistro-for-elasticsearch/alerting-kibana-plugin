@@ -20,18 +20,16 @@ describe('getPathsPerDataType', () => {
     const mappings = {
       random_index: {
         mappings: {
-          _doc: {
-            properties: {
-              '@message': { type: 'text' },
-              '@timestamp': { type: 'date' },
-              username: { type: 'keyword' },
-              memory: { type: 'double' },
-              phpmemory: { type: 'long' },
-              bytes: { type: 'long' },
-              clientip: { type: 'ip' },
-              id: { type: 'integer' },
-              ip: { type: 'ip' },
-            },
+          properties: {
+            '@message': { type: 'text' },
+            '@timestamp': { type: 'date' },
+            username: { type: 'keyword' },
+            memory: { type: 'double' },
+            phpmemory: { type: 'long' },
+            bytes: { type: 'long' },
+            clientip: { type: 'ip' },
+            id: { type: 'integer' },
+            ip: { type: 'ip' },
           },
         },
       },

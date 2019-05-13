@@ -61,6 +61,7 @@ const propTypes = {
   setFlyout: PropTypes.func.isRequired,
   triggers: PropTypes.arrayOf(PropTypes.object).isRequired,
   triggerValues: PropTypes.object.isRequired,
+  isDarkMode: PropTypes.bool.isRequired,
 };
 
 const DefineTrigger = ({
@@ -71,6 +72,7 @@ const DefineTrigger = ({
   setFlyout,
   triggers,
   triggerValues,
+  isDarkMode,
 }) => {
   const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
   const response = _.get(executeResponse, 'input_results.results[0]');
@@ -109,6 +111,7 @@ const DefineTrigger = ({
           response={response}
           setFlyout={setFlyout}
           triggerValues={triggerValues}
+          isDarkMode={isDarkMode}
         />
       )}
     </ContentPanel>
