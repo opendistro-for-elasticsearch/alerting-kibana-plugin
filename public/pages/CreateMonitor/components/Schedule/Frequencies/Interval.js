@@ -17,7 +17,12 @@ import React from 'react';
 import { EuiFlexItem, EuiFlexGroup } from '@elastic/eui';
 
 import { FormikFieldNumber, FormikSelect } from '../../../../../components/FormControls';
-import { isInvalid, hasError, validateInterval, validateUnit } from '../../../../../utils/validate';
+import {
+  isInvalid,
+  hasError,
+  validatePositiveInteger,
+  validateUnit,
+} from '../../../../../utils/validate';
 
 const unitOptions = [
   { value: 'MINUTES', text: 'Minutes' },
@@ -35,7 +40,7 @@ const Interval = () => (
       <FormikFieldNumber
         name="period.interval"
         formRow
-        fieldProps={{ validate: validateInterval }}
+        fieldProps={{ validate: validatePositiveInteger }}
         rowProps={{
           label: 'Every',
           isInvalid,

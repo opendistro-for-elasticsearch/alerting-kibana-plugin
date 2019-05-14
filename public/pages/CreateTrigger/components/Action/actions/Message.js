@@ -35,7 +35,6 @@ import {
 import {
   isInvalid,
   validateActionThrottle,
-  validateInterval,
   hasError,
   required,
 } from '../../../../../utils/validate';

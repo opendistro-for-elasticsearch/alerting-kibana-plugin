@@ -31,7 +31,7 @@ export const validateActionName = trigger => value => {
 };
 
 export const validateActionThrottle = action => value => {
-  if (_.get(action, 'throttle_enabled')) return validateInterval(value)
+  if (_.get(action, 'throttle_enabled')) return validatePositiveInteger(value);
 };
 
 export const required = value => {
@@ -63,7 +63,7 @@ export const validateTimezone = value => {
   if (!value.length) return 'Required';
 };
 
-export const validateInterval = value => {
+export const validatePositiveInteger = value => {
   if (!Number.isInteger(value) || value < 1) return 'Must be a positive integer';
 };
 
