@@ -153,7 +153,7 @@ const Message = ({
                   style: { width: '100px' },
                   min: 1,
                   compressed: true,
-                  disabled: !_.get(action, `throttle_enabled`),
+                  disabled: !_.get(action, `throttle_enabled`)? "disabled":"",
                   isInvalid: (name, form) => _.get(form.values, `actions.${index}.throttle_enabled`) && (!_.get(form.values, name))
                 }}
               />

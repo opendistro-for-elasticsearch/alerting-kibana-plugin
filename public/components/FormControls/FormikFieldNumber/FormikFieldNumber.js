@@ -42,13 +42,12 @@ const FormikFieldNumber = ({
   />
 );
 
-const FieldNumber = ({ name, form, field, inputProps: { onChange, isInvalid, disabled, ...rest } }) => (
+const FieldNumber = ({ name, form, field, inputProps: { onChange, isInvalid, ...rest } }) => (
   <EuiFieldNumber
     {...field}
     {...rest}
     onChange={e => (typeof onChange === 'function' ? onChange(e, field, form) : field.onChange(e))}
     isInvalid={typeof isInvalid === 'function' ? isInvalid(name, form) : isInvalid}
-    disabled={ disabled? "disabled":"" }
   />
 );
 
