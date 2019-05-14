@@ -32,7 +32,7 @@ export const validateActionName = trigger => value => {
 
 export const validateActionThrottle = action => value => {
   if (_.get(action, 'throttle_enabled')) {
-    if (!value) return 'Need to set throttle value';
+    if (!value) return 'Throttle should be positive number';
     else return validateInterval(value);
   }
 };
