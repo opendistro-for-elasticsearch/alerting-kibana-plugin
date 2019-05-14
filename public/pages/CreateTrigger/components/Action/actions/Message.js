@@ -153,10 +153,8 @@ const Message = ({
                   style: { width: '100px' },
                   min: 1,
                   compressed: true,
-                  isInvalid: (name, form) => {
-                    return (_.get(form.values, `actions.${index}.throttle_enabled`) && !_.get(form.values, name))
-                    || (_.get(form.values, name) && _.get(form.values, name)<=0)
-                  }
+                  disabled: !_.get(action, `throttle_enabled`),
+                  isInvalid: (name, form) => _.get(form.values, `actions.${index}.throttle_enabled`) && (!_.get(form.values, name))
                 }}
               />
             </EuiFlexItem>

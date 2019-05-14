@@ -32,7 +32,7 @@ export const FORMIK_INITIAL_ACTION_VALUES = {
     lang: 'mustache',
     source: DEFAULT_MESSAGE_SOURCE,
   },
-  throttle_enabled: true,
+  throttle_enabled: false,
   throttle: {
     value: 10,
     unit: 'MINUTES' // throttle unit only supports MINUTES currently, no UI element mapped
