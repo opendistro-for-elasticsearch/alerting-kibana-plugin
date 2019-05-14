@@ -239,6 +239,7 @@ exports[`Message renders 1`] = `
           >
             <input
               class="euiFieldNumber euiFieldNumber--compressed"
+              disabled=""
               min="1"
               name="actions.0.throttle.value"
               style="width:100px"

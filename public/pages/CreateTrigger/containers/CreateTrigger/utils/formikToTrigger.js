@@ -19,7 +19,7 @@ import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 export function formikToTrigger(values, monitorUiMetadata = {}) {
   const condition = formikToCondition(values, monitorUiMetadata);
-  const actions = formikToAction(values)
+  const actions = formikToAction(values);
   return {
     id: values.id,
     name: values.name,
@@ -32,7 +32,7 @@ export function formikToTrigger(values, monitorUiMetadata = {}) {
 }
 
 export function formikToAction(values) {
-  const actions = values.actions
+  const actions = values.actions;
   if (actions && actions.length > 0) {
     return actions.map(action => {
       if (!action.throttle_enabled) return _.omit(action, ['throttle']);
