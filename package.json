@@ -20,14 +20,19 @@
     "test:server": "plugin-helpers test:server",
     "test:browser": "plugin-helpers test:browser",
     "test:jest": "../../kibana/node_modules/.bin/jest --config ./test/jest.config.js",
-    "build": "plugin-helpers build",
-    "precommit": "lint-staged"
+    "build": "plugin-helpers build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "devDependencies": {
     "@elastic/eslint-config-kibana": "link:../../kibana/packages/eslint-config-kibana",
     "@kbn/eslint-import-resolver-kibana": "link:../../kibana/packages/kbn-eslint-import-resolver-kibana",
     "@kbn/plugin-helpers": "link:../../kibana/packages/kbn-plugin-helpers",
-    "lint-staged": "^8.1.5"
+    "husky": "^2.3.0",
+    "lint-staged": "^8.1.6"
   },
   "dependencies": {
     "brace": "^0.11.1",
