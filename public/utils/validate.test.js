@@ -18,7 +18,7 @@ import {
   hasError,
   validateActionName,
   validateMonitorName,
-  validateInterval,
+  validatePositiveInteger,
   validateUnit,
   validateMonthlyDay,
   ILLEGAL_CHARACTERS,
@@ -106,20 +106,20 @@ describe('validateMonitorName', () => {
   });
 });
 
-describe('validateInterval', () => {
+describe('validatePositiveInteger', () => {
   test('returns undefined if no error', () => {
-    expect(validateInterval(1)).toBeUndefined();
-    expect(validateInterval(100)).toBeUndefined();
+    expect(validatePositiveInteger(1)).toBeUndefined();
+    expect(validatePositiveInteger(100)).toBeUndefined();
   });
 
   test('returns error string if invalid value', () => {
     const invalidText = 'Must be a positive integer';
-    expect(validateInterval(-5)).toBe(invalidText);
-    expect(validateInterval(0)).toBe(invalidText);
-    expect(validateInterval(1.5)).toBe(invalidText);
-    expect(validateInterval(true)).toBe(invalidText);
-    expect(validateInterval(false)).toBe(invalidText);
-    expect(validateInterval('5')).toBe(invalidText);
+    expect(validatePositiveInteger(-5)).toBe(invalidText);
+    expect(validatePositiveInteger(0)).toBe(invalidText);
+    expect(validatePositiveInteger(1.5)).toBe(invalidText);
+    expect(validatePositiveInteger(true)).toBe(invalidText);
+    expect(validatePositiveInteger(false)).toBe(invalidText);
+    expect(validatePositiveInteger('5')).toBe(invalidText);
   });
 });
 

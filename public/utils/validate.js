@@ -30,6 +30,10 @@ export const validateActionName = trigger => value => {
   if (matches.length > 1) return 'Action name is already used';
 };
 
+export const validateActionThrottle = action => value => {
+  if (_.get(action, 'throttle_enabled')) return validatePositiveInteger(value);
+};
+
 export const required = value => {
   if (!value) return 'Required';
 };
@@ -59,7 +63,7 @@ export const validateTimezone = value => {
   if (!value.length) return 'Required';
 };
 
-export const validateInterval = value => {
+export const validatePositiveInteger = value => {
   if (!Number.isInteger(value) || value < 1) return 'Must be a positive integer';
 };
 

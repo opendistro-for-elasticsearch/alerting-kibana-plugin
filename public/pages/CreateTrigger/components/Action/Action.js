@@ -76,7 +76,6 @@ const Action = ({
             helpText: 'Choose destination for an action.',
             isInvalid,
             error: hasError,
-            style: { marginTop: '0px' },
           }}
           inputProps={{
             placeholder: 'Select a destination',

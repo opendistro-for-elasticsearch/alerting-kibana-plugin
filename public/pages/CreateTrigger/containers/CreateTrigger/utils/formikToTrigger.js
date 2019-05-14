@@ -19,15 +19,27 @@ import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 export function formikToTrigger(values, monitorUiMetadata = {}) {
   const condition = formikToCondition(values, monitorUiMetadata);
+  const actions = formikToAction(values);
   return {
     id: values.id,
     name: values.name,
     severity: values.severity,
     condition,
-    actions: values.actions,
+    actions: actions,
     min_time_between_executions: values.minTimeBetweenExecutions,
     rolling_window_size: values.rollingWindowSize,
   };
+}
+
+export function formikToAction(values) {
+  const actions = values.actions;
+  if (actions && actions.length > 0) {
+    return actions.map(action => {
+      if (!action.throttle_enabled) return _.omit(action, ['throttle']);
+      return action;
+    });
+  }
+  return actions;
 }
 
 export function formikToThresholds(values) {
