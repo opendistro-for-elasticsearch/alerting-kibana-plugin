@@ -119,7 +119,7 @@ class DefineMonitor extends Component {
     return (
       <Fragment>
         <EuiText size="xs">
-          <strong>Match the following condition</strong>
+          <strong>Create a monitor for</strong>
         </EuiText>
         <EuiSpacer size="s" />
         <MonitorExpressions
