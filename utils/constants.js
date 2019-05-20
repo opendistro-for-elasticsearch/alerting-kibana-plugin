@@ -11,5 +11,5 @@ export const INDEX = {
 
 export const URL = {
   MUSTACHE: 'https://mustache.github.io/mustache.5.html',
-  DOCUMENTATION: 'https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html',
+  DOCUMENTATION: 'https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/',
 };
