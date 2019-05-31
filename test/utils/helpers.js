@@ -1,10 +1,10 @@
 const Chance = require('chance');
 
-
 class AlertingFakes {
   constructor(seed = 'seed') {
     this.chance = new Chance(seed);
 
+    this.randomMailDestination = this.randomMailDestination.bind(this);
     this.randomCustomWebhookDestination = this.randomCustomWebhookDestination.bind(this);
     this.randomChimeDestination = this.randomChimeDestination.bind(this);
     this.randomSlackDestination = this.randomSlackDestination.bind(this);
@@ -22,6 +22,22 @@ class AlertingFakes {
     this.randomMonitor = this.randomMonitor.bind(this);
   }
 
+  randomMailDestination() {
+    return {
+      type: 'mail',
+      mail: {
+        host: `${this.chance.word}`,
+        port: '25',
+        auth: false,
+        starttls: false,
+        username: this.chance.word(),
+        password: this.chance.word(),
+        from: `${this.chance.word()}@${this.chance.word()}.test`,
+        recipients: `${this.chance.word()}@${this.chance.word()}.test`,
+      },
+    };
+  }
+
   randomCustomWebhookDestination() {
     return {
       type: 'custom_webhook',
@@ -35,7 +51,7 @@ class AlertingFakes {
         header_params: {},
         username: this.chance.word(),
         password: this.chance.word(),
-      }
+      },
     };
   }
 
@@ -43,8 +59,8 @@ class AlertingFakes {
     return {
       type: 'chime',
       chime: {
-        url: `https://www.${this.chance.word}.com/${this.chance.guid}`
-      }
+        url: `https://www.${this.chance.word}.com/${this.chance.guid}`,
+      },
     };
   }
 
@@ -52,7 +68,7 @@ class AlertingFakes {
     return {
       type: 'slack',
       slack: {
-        url: `https://www.${this.chance.word}.com/${this.chance.guid}`
+        url: `https://www.${this.chance.word}.com/${this.chance.guid}`,
       },
     };
   }
@@ -62,6 +78,7 @@ class AlertingFakes {
       this.randomSlackDestination,
       this.randomChimeDestination,
       this.randomCustomWebhookDestination,
+      this.randomMailDestination,
     ])();
     return {
       name: this.chance.word(),
@@ -96,18 +113,27 @@ class AlertingFakes {
           source: `return ${this.chance.bool()}`,
         },
       },
-      actions: new Array(this.chance.natural({ max: 10 })).fill(null).map(() => this.randomAction()),
+      actions: new Array(this.chance.natural({ max: 10 }))
+        .fill(null)
+        .map(() => this.randomAction()),
     };
   }
 
   randomCronSchedule() {
     const timezones = ['America/Los_Angeles', 'America/New_York'];
-    return { period: { expression: `0 ${this.chance.natural({ max: 12 })} * * *`, timezone: this.chance.pickone(timezones) } };
+    return {
+      period: {
+        expression: `0 ${this.chance.natural({ max: 12 })} * * *`,
+        timezone: this.chance.pickone(timezones),
+      },
+    };
   }
 
   randomPeriodSchedule() {
     const units = ['MINUTES', 'HOURS', 'DAYS'];
-    return { period: { interval: this.chance.natural({ max: 50 }), unit: this.chance.pickone(units) } };
+    return {
+      period: { interval: this.chance.natural({ max: 50 }), unit: this.chance.pickone(units) },
+    };
   }
 
   randomSchedule() {
@@ -149,7 +175,9 @@ class AlertingFakes {
       last_update_time: this.chance.timestamp(),
       schedule: this.randomSchedule(),
       inputs: this.randomInputs(),
-      triggers: new Array(this.chance.natural({ max: 10 })).fill(null).map(() => this.randomTrigger()),
+      triggers: new Array(this.chance.natural({ max: 10 }))
+        .fill(null)
+        .map(() => this.randomTrigger()),
     };
   }
 }
