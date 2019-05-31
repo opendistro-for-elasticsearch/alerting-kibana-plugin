@@ -13,16 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-export const DESTINATION_TYPE = {
-  CHIME: 'chime',
-  SLACK: 'slack',
-  CUSTOM_HOOK: 'custom_webhook',
-  MAIL: 'mail',
-};
+import Mail from './Mail';
 
-export const DESTINATION_OPTIONS = [
-  { value: DESTINATION_TYPE.CHIME, text: 'Amazon Chime' },
-  { value: DESTINATION_TYPE.SLACK, text: 'Slack' },
-  { value: DESTINATION_TYPE.CUSTOM_HOOK, text: 'Custom webhook' },
-  { value: DESTINATION_TYPE.MAIL, text: 'Mail' },
-];
+export default Mail;

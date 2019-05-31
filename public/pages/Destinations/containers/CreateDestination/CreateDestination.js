@@ -34,12 +34,13 @@ import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../utils/constants';
 import { validateDestinationName } from './utils/validations';
 import { formikToDestination } from './utils/formikToDestination';
 import { destinationToFormik } from './utils/destinationToFormik';
-import { Webhook, CustomWebhook } from '../../components/createDestinations';
+import { Webhook, CustomWebhook, Mail } from '../../components/createDestinations';
 
 const destinationType = {
   [DESTINATION_TYPE.SLACK]: props => <Webhook {...props} />,
   [DESTINATION_TYPE.CHIME]: props => <Webhook {...props} />,
   [DESTINATION_TYPE.CUSTOM_HOOK]: props => <CustomWebhook {...props} />,
+  [DESTINATION_TYPE.MAIL]: props => <Mail {...props} />,
 };
 
 class CreateDestination extends React.Component {
