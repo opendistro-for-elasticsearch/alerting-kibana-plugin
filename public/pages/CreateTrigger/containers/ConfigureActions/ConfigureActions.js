@@ -128,7 +128,7 @@ class ConfigureActions extends React.Component {
     //TODO:: Handle loading Destinations inside the Action which will be more intuitive for customers.
     return (
       <ContentPanel
-        title="Configure Actions"
+        title="Configure actions"
         titleSize="s"
         panelStyles={{ paddingBottom: '0px' }}
         bodyStyles={{ padding: '10px' }}

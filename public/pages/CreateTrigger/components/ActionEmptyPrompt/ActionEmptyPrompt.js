@@ -23,7 +23,7 @@ const destinationEmptyText =
   'There are no existing destinations. Add a destinations to create an action';
 const createDestinationButton = (
   <EuiButton fill href={`${PLUGIN_NAME}#/create-destination`}>
-    Add Destination
+    Add destination
   </EuiButton>
 );
 const addActionButton = arrayHelpers => <AddActionButton arrayHelpers={arrayHelpers} />;

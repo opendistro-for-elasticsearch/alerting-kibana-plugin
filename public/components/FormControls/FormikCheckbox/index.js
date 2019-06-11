@@ -13,21 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import { EuiButton, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
-import { APP_PATH } from '../../../../../utils/constants';
-import { PLUGIN_NAME } from '../../../../../../utils/constants';
+import FormikCheckbox from './FormikCheckbox';
 
-const DestinationsActions = () => {
-  return (
-    <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
-      <EuiFlexItem grow={false}>
-        <EuiButton fill href={`${PLUGIN_NAME}#${APP_PATH.CREATE_DESTINATION}`}>
-          Add destination
-        </EuiButton>
-      </EuiFlexItem>
-    </EuiFlexGroup>
-  );
-};
-
-export default DestinationsActions;
+export default FormikCheckbox;

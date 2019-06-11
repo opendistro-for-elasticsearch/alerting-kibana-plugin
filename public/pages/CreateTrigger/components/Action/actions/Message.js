@@ -29,23 +29,24 @@ import {
 import {
   FormikTextArea,
   FormikFieldText,
-  FormikSwitch,
+  FormikCheckbox,
   FormikFieldNumber,
 } from '../../../../../components/FormControls';
 import {
   isInvalid,
+  isInvalidActionThrottle,
   validateActionThrottle,
   hasError,
   required,
 } from '../../../../../utils/validate';
-import { URL } from '../../../../../../utils/constants';
+import { URL, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../../../../../utils/constants';
 
 const messageHelpText = (index, sendTestMessage) => (
   <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
     <EuiFlexItem>
       <EuiText size="xs">
         Embed variables in your message using Mustache templates.{' '}
-        <a href={URL.MUSTACHE}>Learn more about Mustache.</a>
+        <a href={URL.MUSTACHE}>Learn more about Mustache</a>
       </EuiText>
     </EuiFlexItem>
     <EuiFlexItem grow={false}>
@@ -134,47 +135,68 @@ const Message = ({
 
       <EuiSpacer size="s" />
 
-      <EuiFormRow
-        label={
-          <div>
-            <span>Action throttling</span>
-            <EuiButtonEmpty
-              size="s"
-              onClick={() => {
-                setFlyout({ type: 'messageFrequency' });
-              }}
-            >
-              Info
-            </EuiButtonEmpty>
-          </div>
-        }
-        style={{ maxWidth: '100%' }}
-      >
-        <EuiFlexGroup alignItems="center">
-          <EuiFlexItem grow={false} style={{ marginRight: '0px' }}>
-            <FormikSwitch
+      <label className="euiFormLabel">
+        <div>
+          <span>Action throttling</span>
+          <EuiButtonEmpty
+            size="s"
+            onClick={() => {
+              setFlyout({ type: 'messageFrequency' });
+            }}
+          >
+            Info
+          </EuiButtonEmpty>
+        </div>
+      </label>
+      <EuiFormRow style={{ maxWidth: '100%' }}>
+        <EuiFlexGroup direction="column">
+          <EuiFlexItem
+            grow={false}
+            style={{ marginBottom: _.get(action, `throttle_enabled`) ? '0px' : '12px' }}
+          >
+            <FormikCheckbox
               name={`actions.${index}.throttle_enabled`}
-              inputProps={{ label: 'Maximum Frequency' }}
+              inputProps={{ label: 'Enable action throttling' }}
             />
           </EuiFlexItem>
-          <EuiFlexItem grow={false} style={{ marginLeft: '4px', marginRight: '4px' }}>
-            <FormikFieldNumber
-              name={`actions.${index}.throttle.value`}
-              fieldProps={{ validate: validateActionThrottle(action) }}
-              inputProps={{
-                style: { width: '100px' },
-                min: 1,
-                compressed: true,
-                disabled: !_.get(action, `throttle_enabled`) ? 'disabled' : '',
-                isInvalid: (name, form) =>
-                  _.get(form.values, `actions.${index}.throttle_enabled`) &&
-                  !_.get(form.values, name),
-              }}
-            />
-          </EuiFlexItem>
-          <EuiFlexItem grow={false} style={{ marginLeft: '0px' }}>
-            <EuiText size="s">minutes.</EuiText>
-          </EuiFlexItem>
+          <EuiFlexGroup
+            alignItems="center"
+            style={{ margin: '0px', display: _.get(action, `throttle_enabled`) ? '' : 'none' }}
+          >
+            <EuiFlexItem grow={false} style={{ marginRight: '0px' }}>
+              <EuiFormRow label="Throttle actions to only trigger every">
+                <FormikFieldNumber
+                  name={`actions.${index}.throttle.value`}
+                  fieldProps={{ validate: validateActionThrottle(action) }}
+                  formRow={true}
+                  rowProps={{
+                    isInvalid: isInvalidActionThrottle(action),
+                    error: [WRONG_THROTTLE_WARNING],
+                  }}
+                  inputProps={{
+                    style: { width: '400px', height: '40px' },
+                    min: 1,
+                    max: MAX_THROTTLE_VALUE,
+                    compressed: true,
+                    append: (
+                      <EuiText
+                        style={{
+                          height: '40px',
+                          lineHeight: '24px',
+                          backgroundColor: 'transparent',
+                          paddingLeft: '2px',
+                        }}
+                      >
+                        minutes
+                      </EuiText>
+                    ),
+                    class: 'euiFieldText',
+                    disabled: !_.get(action, `throttle_enabled`) ? 'disabled' : '',
+                  }}
+                />
+              </EuiFormRow>
+            </EuiFlexItem>
+          </EuiFlexGroup>
         </EuiFlexGroup>
       </EuiFormRow>
     </div>

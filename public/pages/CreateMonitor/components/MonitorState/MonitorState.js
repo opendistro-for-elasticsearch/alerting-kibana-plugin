@@ -17,7 +17,7 @@ import React, { Fragment } from 'react';
 import { EuiSpacer } from '@elastic/eui';
 
 import SubHeader from '../../../../components/SubHeader';
-import { FormikSwitch } from '../../../../components/FormControls';
+import { FormikCheckbox } from '../../../../components/FormControls';
 
 const MonitorState = () => (
   <Fragment>
@@ -26,7 +26,7 @@ const MonitorState = () => (
       description={<span>Disabled monitors do not run.</span>}
     />
     <EuiSpacer size="s" />
-    <FormikSwitch
+    <FormikCheckbox
       name="disabled"
       formRow
       rowProps={{ style: { paddingLeft: '10px' } }}

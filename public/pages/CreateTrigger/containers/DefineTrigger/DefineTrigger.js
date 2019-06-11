@@ -80,7 +80,7 @@ const DefineTrigger = ({
   const thresholdEnum = triggerValues.thresholdEnum;
   const thresholdValue = triggerValues.thresholdValue;
   return (
-    <ContentPanel title="Define Trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+    <ContentPanel title="Define trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
       <FormikFieldText
         name="name"
         fieldProps={{ validate: validateTriggerName(triggers, triggerValues) }}

@@ -15,7 +15,7 @@
 
 import _ from 'lodash';
 import { ACTIONS_TEMPLATE } from '../pages/CreateTrigger/utils/constants';
-import { INDEX } from '../../utils/constants';
+import { INDEX, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../utils/constants';
 
 // TODO: Use a validation framework to clean all of this up or create own.
 
@@ -30,8 +30,20 @@ export const validateActionName = trigger => value => {
   if (matches.length > 1) return 'Action name is already used';
 };
 
+export const isInvalidActionThrottle = action => {
+  if (_.get(action, 'throttle_enabled')) {
+    var value = _.get(action, 'throttle.value');
+    if (!value || value < 1 || value > MAX_THROTTLE_VALUE) {
+      return true;
+    }
+  }
+  return false;
+};
+
 export const validateActionThrottle = action => value => {
-  if (_.get(action, 'throttle_enabled')) return validatePositiveInteger(value);
+  if (isInvalidActionThrottle(action)) {
+    return WRONG_THROTTLE_WARNING;
+  }
 };
 
 export const required = value => {

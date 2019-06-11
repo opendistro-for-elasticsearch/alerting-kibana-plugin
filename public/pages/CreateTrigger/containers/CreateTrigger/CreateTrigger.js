@@ -197,7 +197,7 @@ export default class CreateTrigger extends Component {
           render={({ values, handleSubmit, isSubmitting }) => (
             <Fragment>
               <EuiTitle size="l">
-                <h1>{edit ? 'Edit' : 'Create'} Trigger</h1>
+                <h1>{edit ? 'Edit' : 'Create'} trigger</h1>
               </EuiTitle>
               <EuiSpacer />
               <DefineTrigger

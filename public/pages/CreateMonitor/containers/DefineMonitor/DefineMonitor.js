@@ -254,7 +254,7 @@ class DefineMonitor extends Component {
 
     return (
       <ContentPanel
-        title="Define Monitor"
+        title="Define monitor"
         titleSize="s"
         bodyStyles={{ padding: 'initial' }}
         actions={actions}

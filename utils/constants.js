@@ -13,3 +13,7 @@ export const URL = {
   MUSTACHE: 'https://mustache.github.io/mustache.5.html',
   DOCUMENTATION: 'https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/',
 };
+
+export const MAX_THROTTLE_VALUE = 1440;
+export const WRONG_THROTTLE_WARNING =
+  'Throttle value must be greater than 0 and less than ' + MAX_THROTTLE_VALUE;
