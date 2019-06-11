@@ -20,7 +20,17 @@ import { Formik } from 'formik';
 import FormikCheckbox from './FormikCheckbox';
 
 describe('FormikCheckbox', () => {
-  test('renders', () => {
+  test('render formRow', () => {
+    const component = (
+      <Formik>
+        <FormikCheckbox name="testing" formRow />
+      </Formik>
+    );
+
+    expect(render(component)).toMatchSnapshot();
+  });
+
+  test('render', () => {
     const component = (
       <Formik>
         <FormikCheckbox name="testing" />

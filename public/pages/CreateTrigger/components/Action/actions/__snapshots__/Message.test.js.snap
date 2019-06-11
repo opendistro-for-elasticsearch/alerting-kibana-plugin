@@ -147,7 +147,9 @@ exports[`Message renders 1`] = `
       for="testing-id"
     >
       <div>
-        <span>
+        <span
+          style="color:#343741"
+        >
           Action throttling
         </span>
         <button

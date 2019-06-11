@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FormikCheckbox renders 1`] = `
+exports[`FormikCheckbox render 1`] = `
 <div
   class="euiCheckbox euiCheckbox--noLabel"
 >
@@ -13,5 +13,26 @@ exports[`FormikCheckbox renders 1`] = `
   <div
     class="euiCheckbox__square"
   />
+</div>
+`;
+
+exports[`FormikCheckbox render formRow 1`] = `
+<div
+  class="euiFormRow"
+  id="testing-row"
+>
+  <div
+    class="euiCheckbox euiCheckbox--noLabel"
+  >
+    <input
+      class="euiCheckbox__input"
+      id="testing"
+      name="testing"
+      type="checkbox"
+    />
+    <div
+      class="euiCheckbox__square"
+    />
+  </div>
 </div>
 `;

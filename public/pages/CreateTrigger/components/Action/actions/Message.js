@@ -138,7 +138,7 @@ const Message = ({
       <EuiFormRow
         label={
           <div>
-            <span>Action throttling</span>
+            <span style={{ color: '#343741' }}>Action throttling</span>
             <EuiButtonEmpty
               size="s"
               onClick={() => {
