@@ -135,20 +135,22 @@ const Message = ({
 
       <EuiSpacer size="s" />
 
-      <label className="euiFormLabel">
-        <div>
-          <span>Action throttling</span>
-          <EuiButtonEmpty
-            size="s"
-            onClick={() => {
-              setFlyout({ type: 'messageFrequency' });
-            }}
-          >
-            Info
-          </EuiButtonEmpty>
-        </div>
-      </label>
-      <EuiFormRow style={{ maxWidth: '100%' }}>
+      <EuiFormRow
+        label={
+          <div>
+            <span>Action throttling</span>
+            <EuiButtonEmpty
+              size="s"
+              onClick={() => {
+                setFlyout({ type: 'messageFrequency' });
+              }}
+            >
+              Info
+            </EuiButtonEmpty>
+          </div>
+        }
+        style={{ maxWidth: '100%' }}
+      >
         <EuiFlexGroup direction="column">
           <EuiFlexItem
             grow={false}

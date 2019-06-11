@@ -20,7 +20,7 @@ exports[`WhereExpression renders 1`] = `
       <span
         class="euiExpression__value"
       >
-        all fields are included
+        Select a field
       </span>
     </button>
   </div>

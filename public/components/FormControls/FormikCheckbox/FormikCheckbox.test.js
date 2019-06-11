@@ -19,7 +19,7 @@ import { Formik } from 'formik';
 
 import FormikCheckbox from './FormikCheckbox';
 
-describe.skip('FormikCheckbox', () => {
+describe('FormikCheckbox', () => {
   test('renders', () => {
     const component = (
       <Formik>
