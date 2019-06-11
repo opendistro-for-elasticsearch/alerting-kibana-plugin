@@ -38,7 +38,7 @@ exports[`Frequencies renders CustomCron 1`] = `
           Use 
           <a
             class="euiLink euiLink--primary"
-            href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html"
+            href="https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/"
             rel="noopener noreferrer"
             target="_blank"
           >

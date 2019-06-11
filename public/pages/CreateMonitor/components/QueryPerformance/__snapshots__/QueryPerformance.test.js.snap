@@ -18,7 +18,7 @@ Array [
     <span>
       Check the performance of your query and make sure to follow best practices. 
       <a
-        href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html"
+        href="https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/"
       >
         Learn more
       </a>
