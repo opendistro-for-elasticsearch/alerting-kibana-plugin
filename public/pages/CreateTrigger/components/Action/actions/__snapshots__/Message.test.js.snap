@@ -80,7 +80,7 @@ exports[`Message renders 1`] = `
             <a
               href="https://mustache.github.io/mustache.5.html"
             >
-              Learn more about Mustache.
+              Learn more about Mustache
             </a>
           </div>
         </div>
@@ -147,7 +147,9 @@ exports[`Message renders 1`] = `
       for="testing-id"
     >
       <div>
-        <span>
+        <span
+          style="color:#343741"
+        >
           Action throttling
         </span>
         <button
@@ -167,95 +169,80 @@ exports[`Message renders 1`] = `
       </div>
     </label>
     <div
-      class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow euiFlexGroup--responsive"
+      class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionColumn euiFlexGroup--responsive"
       id="testing-id"
     >
       <div
         class="euiFlexItem euiFlexItem--flexGrowZero"
-        style="margin-right:0px"
+        style="margin-bottom:12px"
       >
         <div
-          class="euiSwitch"
+          class="euiCheckbox"
         >
           <input
-            class="euiSwitch__input"
+            class="euiCheckbox__input"
             id="actions.0.throttle_enabled"
             name="actions.0.throttle_enabled"
             type="checkbox"
           />
-          <span
-            class="euiSwitch__body"
-          >
-            <span
-              class="euiSwitch__thumb"
-            />
-            <span
-              class="euiSwitch__track"
-            >
-              <svg
-                class="euiIcon euiIcon--medium euiSwitch__icon"
-                focusable="false"
-                height="16"
-                viewBox="0 0 16 16"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.293 8L3.146 3.854a.5.5 0 1 1 .708-.708L8 7.293l4.146-4.147a.5.5 0 0 1 .708.708L8.707 8l4.147 4.146a.5.5 0 0 1-.708.708L8 8.707l-4.146 4.147a.5.5 0 0 1-.708-.708L7.293 8z"
-                />
-              </svg>
-              <svg
-                class="euiIcon euiIcon--medium euiSwitch__icon euiSwitch__icon--checked"
-                focusable="false"
-                height="16"
-                viewBox="0 0 16 16"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6.5 12a.502.502 0 0 1-.354-.146l-4-4a.502.502 0 0 1 .708-.708L6.5 10.793l6.646-6.647a.502.502 0 0 1 .708.708l-7 7A.502.502 0 0 1 6.5 12"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
-          </span>
+          <div
+            class="euiCheckbox__square"
+          />
           <label
-            class="euiSwitch__label"
+            class="euiCheckbox__label"
             for="actions.0.throttle_enabled"
           >
-            Maximum Frequency
+            Enable action throttling
           </label>
         </div>
       </div>
       <div
-        class="euiFlexItem euiFlexItem--flexGrowZero"
-        style="margin-left:4px;margin-right:4px"
+        class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow euiFlexGroup--responsive"
+        style="margin:0px;display:none"
       >
         <div
-          class="euiFormControlLayout euiFormControlLayout--compressed"
+          class="euiFlexItem euiFlexItem--flexGrowZero"
+          style="margin-right:0px"
         >
           <div
-            class="euiFormControlLayout__childrenWrapper"
+            class="euiFormRow"
+            id="testing-id-row"
           >
-            <input
-              class="euiFieldNumber euiFieldNumber--compressed"
-              disabled=""
-              min="1"
-              name="actions.0.throttle.value"
-              style="width:100px"
-              type="number"
-            />
+            <label
+              class="euiFormLabel"
+              for="testing-id"
+            >
+              Throttle actions to only trigger every
+            </label>
+            <div
+              class="euiFormRow"
+              id="actions.0.throttle.value-row"
+            >
+              <div
+                class="euiFormControlLayout euiFormControlLayout--compressed euiFormControlLayout--group"
+              >
+                <div
+                  class="euiFormControlLayout__childrenWrapper"
+                >
+                  <input
+                    class="euiFieldNumber euiFieldNumber--compressed euiFieldNumber--inGroup"
+                    disabled=""
+                    max="1440"
+                    min="1"
+                    name="actions.0.throttle.value"
+                    style="width:400px;height:40px"
+                    type="number"
+                  />
+                </div>
+                <div
+                  class="euiText euiText--medium euiFormControlLayout__append"
+                  style="height:40px;line-height:24px;background-color:transparent;padding-left:2px"
+                >
+                  minutes
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div
-        class="euiFlexItem euiFlexItem--flexGrowZero"
-        style="margin-left:0px"
-      >
-        <div
-          class="euiText euiText--small"
-        >
-          minutes.
         </div>
       </div>
     </div>

@@ -14,20 +14,29 @@
  */
 
 import React from 'react';
-import { EuiButton, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
-import { APP_PATH } from '../../../../../utils/constants';
-import { PLUGIN_NAME } from '../../../../../../utils/constants';
+import { render } from 'enzyme';
+import { Formik } from 'formik';
 
-const DestinationsActions = () => {
-  return (
-    <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
-      <EuiFlexItem grow={false}>
-        <EuiButton fill href={`${PLUGIN_NAME}#${APP_PATH.CREATE_DESTINATION}`}>
-          Add destination
-        </EuiButton>
-      </EuiFlexItem>
-    </EuiFlexGroup>
-  );
-};
+import FormikCheckbox from './FormikCheckbox';
 
-export default DestinationsActions;
+describe('FormikCheckbox', () => {
+  test('render formRow', () => {
+    const component = (
+      <Formik>
+        <FormikCheckbox name="testing" formRow />
+      </Formik>
+    );
+
+    expect(render(component)).toMatchSnapshot();
+  });
+
+  test('render', () => {
+    const component = (
+      <Formik>
+        <FormikCheckbox name="testing" />
+      </Formik>
+    );
+
+    expect(render(component)).toMatchSnapshot();
+  });
+});

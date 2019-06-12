@@ -33,7 +33,7 @@ export const isNullOperator = selectedOperator =>
 export const displayText = whereValues => {
   const whereFieldName = _.get(whereValues, 'fieldName[0].label', undefined);
   if (!whereFieldName) {
-    return 'Select a field';
+    return 'all fields are included';
   }
   const selectedOperator = _.get(whereValues, 'operator', 'is');
   const operatorObj =

@@ -129,7 +129,7 @@ export default class CreateMonitor extends Component {
           render={({ values, errors, handleSubmit, isSubmitting }) => (
             <Fragment>
               <EuiTitle size="l">
-                <h1>{edit ? 'Edit' : 'Create'} Monitor</h1>
+                <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
               </EuiTitle>
               <EuiSpacer />
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />

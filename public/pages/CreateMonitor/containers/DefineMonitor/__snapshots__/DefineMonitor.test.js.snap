@@ -8,7 +8,7 @@ exports[`DefineMonitor renders 1`] = `
       "padding": "initial",
     }
   }
-  title="Define Monitor"
+  title="Define monitor"
   titleSize="s"
 >
   <MonitorDefinition

@@ -22,7 +22,7 @@ import { hasError, isInvalid, validateMonitorName } from '../../../../utils/vali
 import FormikFieldText from '../../../../components/FormControls/FormikFieldText';
 
 const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
-  <ContentPanel title="Configure Monitor" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+  <ContentPanel title="Configure monitor" titleSize="s" bodyStyles={{ padding: 'initial' }}>
     <FormikFieldText
       name="name"
       formRow

@@ -196,7 +196,7 @@ class WhereExpression extends Component {
               <FormikComboBox
                 name="where.fieldName"
                 inputProps={{
-                  placeholder: 'all fields are included',
+                  placeholder: 'Select a field',
                   options: indexFields,
                   onChange: this.handleFieldChange,
                   isClearable: false,

@@ -17,7 +17,7 @@ exports[`<DestinationsActions /> should render DestinationsActions 1`] = `
         <span
           class="euiButton__text"
         >
-          Add Destination
+          Add destination
         </span>
       </span>
     </a>
