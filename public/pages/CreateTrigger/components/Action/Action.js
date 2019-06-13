@@ -72,8 +72,7 @@ const Action = ({
           formRow
           fieldProps={{ validate: validateDestination(destinations) }}
           rowProps={{
-            label: 'Destination name',
-            helpText: 'Choose destination for an action.',
+            label: 'Destination',
             isInvalid,
             error: hasError,
           }}
