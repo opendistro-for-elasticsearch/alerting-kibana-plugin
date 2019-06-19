@@ -236,10 +236,16 @@ exports[`Message renders 1`] = `
                 </div>
                 <div
                   class="euiText euiText--medium euiFormControlLayout__append"
-                  style="height:40px;line-height:24px;background-color:transparent;padding-left:2px"
+                  style="height:40px;line-height:24px;background-color:transparent;padding-left:4px"
                 >
                   minutes
                 </div>
+              </div>
+              <div
+                class="euiFormHelpText euiFormRow__text"
+                id="actions.0.throttle.value-help"
+              >
+                Throttle value must be greater than 0 and less than 1440
               </div>
             </div>
           </div>

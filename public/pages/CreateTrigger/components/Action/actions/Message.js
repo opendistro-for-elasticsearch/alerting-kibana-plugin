@@ -173,6 +173,7 @@ const Message = ({
                   formRow={true}
                   rowProps={{
                     isInvalid: isInvalidActionThrottle(action),
+                    helpText: !isInvalidActionThrottle(action) && WRONG_THROTTLE_WARNING,
                     error: [WRONG_THROTTLE_WARNING],
                   }}
                   inputProps={{
@@ -186,7 +187,7 @@ const Message = ({
                           height: '40px',
                           lineHeight: '24px',
                           backgroundColor: 'transparent',
-                          paddingLeft: '2px',
+                          paddingLeft: '4px',
                         }}
                       >
                         minutes
