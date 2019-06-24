@@ -47,6 +47,26 @@ exports[`TriggerQuery renders 1`] = `
         render={[Function]}
       />
     </EuiFlexItem>
+    <EuiFlexItem
+      component="div"
+      grow={false}
+    >
+      <EuiFormRow
+        describedByIds={Array []}
+        fullWidth={true}
+        hasEmptyLabelSpace={false}
+        label="Trigger condition response:"
+      >
+        <EuiCodeEditor
+          height="200px"
+          readOnly={true}
+          setOptions={Object {}}
+          theme="github"
+          value="No response"
+          width="100%"
+        />
+      </EuiFormRow>
+    </EuiFlexItem>
   </EuiFlexGroup>
   <EuiSpacer
     size="s"
@@ -60,22 +80,6 @@ exports[`TriggerQuery renders 1`] = `
     responsive={true}
     wrap={false}
   >
-    <EuiFlexItem
-      component="div"
-      grow={false}
-    >
-      <EuiText
-        grow={true}
-        size="s"
-      >
-        <strong>
-          Trigger condition response: 
-        </strong>
-        <span>
-          No response
-        </span>
-      </EuiText>
-    </EuiFlexItem>
     <EuiFlexItem
       component="div"
       grow={false}

@@ -41,8 +41,7 @@ export const getExecuteMessage = response => {
   const executeResults = _.get(triggerResults, `${triggerId}`);
   if (!executeResults) return 'No execute results';
   const { error, triggered } = executeResults;
-  if (error) return `ERROR: ${error}`;
-  return `${triggered}`;
+  return error || `${triggered}`;
 };
 
 const TriggerQuery = ({
@@ -101,7 +100,7 @@ const TriggerQuery = ({
                 <EuiCodeEditor
                   mode="plain_text"
                   theme={isDarkMode ? 'sense-dark' : 'github'}
-                  height="300px"
+                  height="200px"
                   width="100%"
                   onChange={source => {
                     setFieldValue('script.source', source);
@@ -113,17 +112,22 @@ const TriggerQuery = ({
             )}
           />
         </EuiFlexItem>
+        <EuiFlexItem grow={false}>
+          <EuiFormRow label="Trigger condition response:" fullWidth>
+            <EuiCodeEditor
+              theme={isDarkMode ? 'sense-dark' : 'github'}
+              width="100%"
+              height="200px"
+              value={getExecuteMessage(executeResponse)}
+              readOnly
+            />
+          </EuiFormRow>
+        </EuiFlexItem>
       </EuiFlexGroup>
 
       <EuiSpacer size="s" />
 
       <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
-        <EuiFlexItem grow={false}>
-          <EuiText size="s">
-            <strong>Trigger condition response: </strong>
-            <span>{getExecuteMessage(executeResponse)}</span>
-          </EuiText>
-        </EuiFlexItem>
         <EuiFlexItem grow={false}>
           <EuiButton onClick={() => onRun([trigger])}>Run</EuiButton>
         </EuiFlexItem>

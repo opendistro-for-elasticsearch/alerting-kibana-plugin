@@ -80,10 +80,26 @@ describe('getExecuteMessage', () => {
   });
 
   test('returns error message', () => {
+    const errReponse = {
+      type: 'script_exception',
+      reason: 'compile error',
+      script_stack: [
+        '... [0].hits.total.value > 0\nctx.results[0].hits.total ...',
+        '                             ^---- HERE',
+      ],
+      script:
+        'ctx.results[0].hits.total.value > 0\nctx.results[0].hits.total.value > 0\nctx.results[0].hits.total.value > 0\n',
+      lang: 'painless',
+      caused_by: {
+        type: 'illegal_argument_exception',
+        reason: "unexpected token ['ctx'] was expecting one of [{<EOF>, ';'}].",
+      },
+    };
+
     expect(
       getExecuteMessage({
-        trigger_results: { trig_id: { triggered: true, error: 'RANDOM ERROR' } },
+        trigger_results: { trig_id: { triggered: true, error: errReponse } },
       })
-    ).toBe('ERROR: RANDOM ERROR');
+    ).toBe(errReponse);
   });
 });
