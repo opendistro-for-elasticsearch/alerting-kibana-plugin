@@ -15,12 +15,12 @@
   * Fixes doc links (PR #50)
   * Updated text for visual monitor PR #47
 
-## Version 0.9.0.0
+## 2019-04-24, Version 0.9.0.0
 
 ### New Features
  * Adds support for Kibana 6.7.1
 
-## Version 0.8.0.0
+## 2019-04-02, Version 0.8.0.0
 
 ### New Features
   * Adds support for Kibana 6.6.2 - [PR #7](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/7)
