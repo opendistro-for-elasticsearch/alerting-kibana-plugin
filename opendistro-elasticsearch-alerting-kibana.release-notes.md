@@ -1,4 +1,26 @@
-## Version 0.8.0 (Current)
+## Version 1.1.0.0 (Current)
+### New Features
+ * Add support for Kibana 7.1.1
+
+### Bug fixes
+ * Enhanced message for trigger execution [Alerting #58](https://github.com/opendistro-for-elasticsearch/alerting/issues/14)
+
+## Version 1.0.0.0
+
+### New Features
+  * Add support for ES and Kibana 7.0.1 PR #44 
+  * Visual monitors allows to specify where criteria PR #42 
+  * Enables throttling on actions PR #45 
+### Bug fixes
+  * Fixes doc links (PR #50)
+  * Updated text for visual monitor PR #47
+
+## 2019-04-24, Version 0.9.0.0
+
+### New Features
+ * Adds support for Kibana 6.7.1
+
+## 2019-04-02, Version 0.8.0.0
 
 ### New Features
   * Adds support for Kibana 6.6.2 - [PR #7](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/7)
@@ -6,7 +28,7 @@
 ### Bug fixes
   * Fixes sorting on Destination Type on destinations list page.
 
-## 2019-01-31, Version 0.7.0
+## 2019-01-31, Version 0.7.0.0
 
 ### New Features
 
