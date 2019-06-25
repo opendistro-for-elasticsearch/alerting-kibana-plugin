@@ -1,14 +1,19 @@
-## Version 1.1.0 (Current)
-
+## Version 1.1.0.0 (Current)
 ### New Features
- * Add throttle [Alerting #14](https://github.com/opendistro-for-elasticsearch/alerting/issues/14)
  * Add support for Kibana 7.1.1
 
- ## Bug fixes
- * Set min property on interval input[#19](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/issues/19)
- * No documents for aggregations count as false [#22](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/issues/22)
- * Add DELETED alert state to Dashboard filter[#30](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/issues/30)
+### Bug fixes
  * Enhanced message for trigger execution [Alerting #58](https://github.com/opendistro-for-elasticsearch/alerting/issues/14)
+
+## Version 1.0.0.0
+
+### New Features
+  * Add support for ES and Kibana 7.0.1 PR #44 
+  * Visual monitors allows to specify where criteria PR #42 
+  * Enables throttling on actions PR #45 
+### Bug fixes
+  * Fixes doc links (PR #50)
+  * Updated text for visual monitor PR #47
 
 ## Version 0.8.0
 
