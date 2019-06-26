@@ -152,19 +152,25 @@ describe('Monitors', () => {
     const monitor = alertingFakes.randomMonitor();
     const response = await mountWrapper
       .instance()
-      .updateMonitor({ id: 'random_id', version: 17, monitor }, { name: 'UNIQUE_NAME' });
+      .updateMonitor(
+        { id: 'random_id', ifSeqNo: 17, ifPrimaryTerm: 20, monitor },
+        { name: 'UNIQUE_NAME' }
+      );
     mountWrapper.update();
 
     expect(updateMonitor).toHaveBeenCalled();
     expect(httpClientMock.put).toHaveBeenCalled();
     expect(httpClientMock.put).toHaveBeenCalledWith(
-      `../api/alerting/monitors/random_id?version=17`,
+      `../api/alerting/monitors/random_id?ifSeqNo=17&ifPrimaryTerm=20`,
       { ...monitor, name: 'UNIQUE_NAME' }
     );
     expect(response).toEqual({ data: { ok: true } });
     const error = await mountWrapper
       .instance()
-      .updateMonitor({ id: 'random_id', version: 17, monitor }, { name: 'UNIQUE_NAME' });
+      .updateMonitor(
+        { id: 'random_id', ifSeqNo: 17, ifPrimaryTerm: 20, monitor },
+        { name: 'UNIQUE_NAME' }
+      );
     expect(httpClientMock.put).toHaveBeenCalledTimes(2);
     expect(error.message).toBe('random error');
   });
