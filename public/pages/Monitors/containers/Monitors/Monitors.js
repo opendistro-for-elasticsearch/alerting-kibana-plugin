@@ -180,9 +180,12 @@ export default class Monitors extends Component {
 
   updateMonitor(item, update) {
     const { httpClient } = this.props;
-    const { id, version, monitor } = item;
+    const { id, ifSeqNo, ifPrimaryTerm, monitor } = item;
     return httpClient
-      .put(`../api/alerting/monitors/${id}?version=${version}`, { ...monitor, ...update })
+      .put(`../api/alerting/monitors/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`, {
+        ...monitor,
+        ...update,
+      })
       .then(resp => resp)
       .catch(err => err);
   }

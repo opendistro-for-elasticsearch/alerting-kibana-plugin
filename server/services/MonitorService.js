@@ -156,6 +156,7 @@ export default class MonitorService {
 
       const params = {
         body: JSON.stringify({
+          seq_no_primary_term: true,
           version: true,
           ...monitorSortPageData,
           query: {
@@ -174,9 +175,9 @@ export default class MonitorService {
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
       const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map(result => {
-        const { _id: id, _version: version, _source: monitor } = result;
+        const { _id: id, _version: version, _seq_no: ifSeqNo, _primary_term: ifPrimaryTerm, _source: monitor } = result;
         const { name, enabled } = monitor;
-        return [id, { id, version, name, enabled, monitor }];
+        return [id, { id, version, ifSeqNo, ifPrimaryTerm, name, enabled, monitor }];
       }, {});
       const monitorMap = new Map(monitorKeyValueTuples);
       const monitorIds = [...monitorMap.keys()];
