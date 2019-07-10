@@ -20,6 +20,7 @@ import { ES_AD_PLUGIN } from '../../../../utils/constants';
 const defaultSelectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
+  { value: 'HTTP', text: 'Define using HTTP endpoint'},
 ];
 
 const onChangeDefinition = (e, form, resetResponse) => {
