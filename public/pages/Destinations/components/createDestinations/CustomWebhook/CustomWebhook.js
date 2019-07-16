@@ -19,18 +19,22 @@ import { EuiSpacer } from '@elastic/eui';
 import QueryParamsEditor from './QueryParamsEditor';
 import HeaderParamsEditor from './HeaderParamsEditor';
 import URLInfo from './URLInfo';
+import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants';
 
 const propTypes = {
   type: PropTypes.string.isRequired,
 };
-const CustomWebhook = ({ type, values }) => (
-  <div>
-    <URLInfo type={type} values={values} />
-    <QueryParamsEditor type={type} queryParams={values[type].queryParams} />
-    <EuiSpacer size="m" />
-    <HeaderParamsEditor type={type} headerParams={values[type].headerParams} />
-  </div>
-);
+const CustomWebhook = ({ type, values }) => {
+  const isQueryParamsEnabled = values[type].urlType === URL_TYPE.ATTRIBUTE_URL;
+  return (
+    <div>
+      <URLInfo type={type} values={values} />
+      <QueryParamsEditor type={type} queryParams={values[type].queryParams} isEnabled={isQueryParamsEnabled} />
+      <EuiSpacer size="m" />
+      <HeaderParamsEditor type={type} headerParams={values[type].headerParams} />
+    </div>
+  );
+};
 
 CustomWebhook.propTypes = propTypes;
 
