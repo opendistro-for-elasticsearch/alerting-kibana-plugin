@@ -54,7 +54,7 @@ class ConfigureActions extends React.Component {
     };
     try {
       const response = await httpClient.get(
-        `../api/alerting/destinations?search${searchText}size=200`
+        `../api/alerting/destinations?search=${searchText}&size=200`
       );
       const destinations = response.data.destinations
         .map(destination => ({
