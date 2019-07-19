@@ -68,7 +68,7 @@ const HeaderParamsEditor = ({ type, headerParams }) => (
       validateOnChange={true}
       render={arrayHelpers => (
         <AttributeEditor
-          onAdd={() => arrayHelpers.push({})}
+          onAdd={() => arrayHelpers.push({ key: '', value: '' })}
           onRemove={index => index !== 0 && arrayHelpers.remove(index)}
           items={headerParams}
           name={`${type}.headerParams`}

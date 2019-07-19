@@ -64,7 +64,7 @@ const QueryParamsEditor = ({ type, queryParams }) => (
     render={arrayHelpers => (
       <AttributeEditor
         titleText="Query parameters"
-        onAdd={() => arrayHelpers.push({})}
+        onAdd={() => arrayHelpers.push({ key: '', value: '' })}
         onRemove={index => arrayHelpers.remove(index)}
         items={queryParams}
         name={`${type}.queryParams`}
