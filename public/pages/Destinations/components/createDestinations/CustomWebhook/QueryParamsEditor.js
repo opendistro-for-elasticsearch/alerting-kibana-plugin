@@ -20,7 +20,7 @@ import AttributeEditor from '../../../../../components/AttributeEditor';
 import { FormikFieldText } from '../../../../../components/FormControls';
 import { isInvalid, required } from '../../../../../utils/validate';
 
-const handleRenderKeyField = (fieldName, index, isEnabled) => (
+const handleRenderKeyField = (fieldName, index, isEnabled = true) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
@@ -37,7 +37,7 @@ const handleRenderKeyField = (fieldName, index, isEnabled) => (
   />
 );
 
-const handleRenderValueField = (fieldName, index, isEnabled) => (
+const handleRenderValueField = (fieldName, index, isEnabled = true) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
@@ -61,6 +61,8 @@ const propTypes = {
 };
 
 const QueryParamsEditor = ({ type, queryParams, isEnabled = true }) => {
+  const handleKeyField = (fieldName, index) => (handleRenderKeyField(fieldName, index, isEnabled));
+  const handleValueField = (fieldName, index) => (handleRenderValueField(fieldName, index, isEnabled));
   return (
     <FieldArray
       name={`${type}.queryParams`}
@@ -74,9 +76,8 @@ const QueryParamsEditor = ({ type, queryParams, isEnabled = true }) => {
           name={`${type}.queryParams`}
           addButtonText="Add parameter"
           removeButtonText="Remove parameter"
-          onRenderKeyField={handleRenderKeyField}
-          onRenderValueField={handleRenderValueField}
-          isEnabled={isEnabled}
+          onRenderKeyField={handleKeyField}
+          onRenderValueField={handleValueField}
         />
       )}
     />
