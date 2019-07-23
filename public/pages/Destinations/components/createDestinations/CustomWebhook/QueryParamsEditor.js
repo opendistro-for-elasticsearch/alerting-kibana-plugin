@@ -20,11 +20,11 @@ import AttributeEditor from '../../../../../components/AttributeEditor';
 import { FormikFieldText } from '../../../../../components/FormControls';
 import { isInvalid, required } from '../../../../../utils/validate';
 
-const handleRenderKeyField = (fieldName, index, isEnabled = true) => (
+const handleRenderKeyField = (fieldName, index, isEnabled) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      validate: (isEnabled) ? required : null,
+      validate: isEnabled ? required : null,
     }}
     rowProps={{
       label: index === 0 ? 'Key' : null,
@@ -37,11 +37,11 @@ const handleRenderKeyField = (fieldName, index, isEnabled = true) => (
   />
 );
 
-const handleRenderValueField = (fieldName, index, isEnabled = true) => (
+const handleRenderValueField = (fieldName, index, isEnabled) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      validate: (isEnabled) ? required : null,
+      validate: isEnabled ? required : null,
     }}
     rowProps={{
       label: index === 0 ? 'Value' : null,
@@ -60,29 +60,26 @@ const propTypes = {
   isEnabled: PropTypes.bool,
 };
 
-const QueryParamsEditor = ({ type, queryParams, isEnabled = true }) => {
-  const handleKeyField = (fieldName, index) => (handleRenderKeyField(fieldName, index, isEnabled));
-  const handleValueField = (fieldName, index) => (handleRenderValueField(fieldName, index, isEnabled));
-  return (
-    <FieldArray
-      name={`${type}.queryParams`}
-      validateOnChange={true}
-      render={arrayHelpers => (
-        <AttributeEditor
-          titleText="Query parameters"
-          onAdd={() => arrayHelpers.push({})}
-          onRemove={index => arrayHelpers.remove(index)}
-          items={queryParams}
-          name={`${type}.queryParams`}
-          addButtonText="Add parameter"
-          removeButtonText="Remove parameter"
-          onRenderKeyField={handleKeyField}
-          onRenderValueField={handleValueField}
-        />
-      )}
-    />
-  );
-};
+const QueryParamsEditor = ({ type, queryParams, isEnabled = true }) => (
+  <FieldArray
+    name={`${type}.queryParams`}
+    validateOnChange={true}
+    render={arrayHelpers => (
+      <AttributeEditor
+        titleText="Query parameters"
+        onAdd={() => arrayHelpers.push({})}
+        onRemove={index => arrayHelpers.remove(index)}
+        items={queryParams}
+        name={`${type}.queryParams`}
+        addButtonText="Add parameter"
+        removeButtonText="Remove parameter"
+        onRenderKeyField={handleRenderKeyField}
+        onRenderValueField={handleRenderValueField}
+        isEnabled={isEnabled}
+      />
+    )}
+  />
+);
 
 QueryParamsEditor.propTypes = propTypes;
 
