@@ -70,6 +70,7 @@ class DefineMonitor extends Component {
 
     this.renderGraph = this.renderGraph.bind(this);
     this.onRunQuery = this.onRunQuery.bind(this);
+    this.onRunHttp = this.onRunHttp.bind(this);
     this.resetResponse = this.resetResponse.bind(this);
     this.onQueryMappings = this.onQueryMappings.bind(this);
     this.queryMappings = this.queryMappings.bind(this);
@@ -215,6 +216,41 @@ class DefineMonitor extends Component {
         this.setState({ response, formikSnapshot, performanceResponse });
       } else {
         console.error('There was an error running the query', queryResponse.data.resp);
+        this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
+      }
+    } catch (err) {
+      console.error('There was an error running the query', err);
+    }
+  }
+
+  async onRunHttp() {
+    const { httpClient, values } = this.props;
+    const formikSnapshot = _.cloneDeep(values);
+
+    const httpRequests = [buildHTTPRequest(values)];
+    try {
+      const promises = httpRequests.map(httpRequest => {
+        // Fill in monitor name in case it's empty (in create workflow)
+        // Set triggers to empty array so they are not executed (if in edit workflow)
+        // Set input search to query/graph query and then use execute API to fill in period_start/period_end
+        const monitor = formikToMonitor(values);
+        _.set(monitor, 'name', 'TEMP_MONITOR');
+        _.set(monitor, 'triggers', []);
+        _.set(monitor, 'inputs[0].http', httpRequest);
+        return httpClient.post('../api/alerting/monitors/_execute', monitor);
+      });
+
+      const [httpResponse, optionalResponse] = await Promise.all(promises);
+
+      if (httpResponse.data.ok) {
+        const response = _.get(httpResponse.data.resp, 'input_results.results[0]');
+        // If there is an optionalResponse use it's results, otherwise use the original response
+        const performanceResponse = optionalResponse
+          ? _.get(optionalResponse, 'data.resp.input_results.results[0]', null)
+          : response;
+        this.setState({ response, formikSnapshot, performanceResponse });
+      } else {
+        console.error('There was an error running the query', httpResponse.data.resp);
         this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
       }
     } catch (err) {
