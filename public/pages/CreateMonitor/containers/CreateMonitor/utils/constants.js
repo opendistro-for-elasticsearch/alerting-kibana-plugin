@@ -1,4 +1,5 @@
 import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
+import { URL_TYPE } from '../../../../Destinations/containers/CreateDestination/utils/constants';
 
 /*
  *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -33,6 +34,22 @@ export const FORMIK_INITIAL_VALUES = {
 
   /* DEFINE MONITOR */
   searchType: 'graph',
+  http: {
+    urlType: URL_TYPE.FULL_URL,
+    url: '',
+    scheme: 'https',
+    host: '',
+    port: '',
+    path: '',
+    queryParams: [
+      {
+        key: '',
+        value: '',
+      },
+    ],
+  },
+  connection_timeout: 5,
+  socket_timeout: 60,
   index: [],
   timeField: '',
   query: MATCH_ALL_QUERY,

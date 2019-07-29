@@ -137,6 +137,7 @@ class CreateDestination extends React.Component {
   // Handle Submit
   handleSubmit = (values, formikBag) => {
     const destinationRequest = formikToDestination(values);
+    console.log(values);
     if (this.props.edit) {
       this.handleUpdate(destinationRequest, formikBag);
     } else {
