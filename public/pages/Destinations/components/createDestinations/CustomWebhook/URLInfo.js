@@ -24,6 +24,9 @@ import {
 import { hasError, isInvalid } from '../../../../../utils/validate';
 import { validateUrl, validateHost } from './validate';
 import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants';
+import { formikInitialValues } from '../../../containers/CreateDestination/utils/constants';
+import { DESTINATION_TYPE } from '../../../utils/constants';
+import QueryParamsEditor from './QueryParamsEditor';
 
 const propTypes = {
   type: PropTypes.string.isRequired,
@@ -54,6 +57,7 @@ const URLInfo = ({ type, values }) => {
                   host: '',
                   port: '',
                   path: '',
+                  queryParams: formikInitialValues[DESTINATION_TYPE.CUSTOM_HOOK].queryParams,
                 },
               };
               form.setTouched({
@@ -166,6 +170,7 @@ const URLInfo = ({ type, values }) => {
           isInvalid,
         }}
       />
+      <QueryParamsEditor type={type} queryParams={values[type].queryParams} isEnabled={!isUrlEnabled} />
     </Fragment>
   );
 };

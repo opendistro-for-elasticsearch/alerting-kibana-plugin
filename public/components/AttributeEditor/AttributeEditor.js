@@ -29,12 +29,14 @@ const propTypes = {
   onRenderValueField: PropTypes.func.isRequired,
   addButtonText: PropTypes.string,
   removeButtonText: PropTypes.string,
+  isEnabled: PropTypes.bool,
 };
 const defaultProps = {
   titleText: '',
   emptyText: 'No attributes found.',
   addButtonText: 'Add',
   removeButtonText: 'Remove',
+  isEnabled: true,
 };
 
 const AttributeEditor = ({
@@ -48,6 +50,7 @@ const AttributeEditor = ({
   onRenderValueField,
   addButtonText,
   removeButtonText,
+  isEnabled,
 }) => {
   return (
     <EuiFlexGroup direction="column" alignItems="flexStart" style={{ paddingLeft: '10px' }}>
@@ -60,10 +63,19 @@ const AttributeEditor = ({
         items.map((item, index) => (
           <EuiFlexItem style={{ marginBottom: 0 }} key={`${name}.${index}.key`}>
             <EuiFlexGroup alignItems="center">
-              <EuiFlexItem>{onRenderKeyField(`${name}.${index}.key`, index)}</EuiFlexItem>
-              <EuiFlexItem>{onRenderValueField(`${name}.${index}.value`, index)}</EuiFlexItem>
+              <EuiFlexItem>
+                {onRenderKeyField(`${name}.${index}.key`, index, isEnabled)}
+              </EuiFlexItem>
+              <EuiFlexItem>
+                {onRenderValueField(`${name}.${index}.value`, index, isEnabled)}
+              </EuiFlexItem>
               <EuiFlexItem grow={false}>
-                <EuiButton style={{ marginTop: 10 }} size="s" onClick={e => onRemove(index)}>
+                <EuiButton
+                  style={{ marginTop: 10 }}
+                  size="s"
+                  onClick={e => onRemove(index)}
+                  disabled={!isEnabled}
+                >
                   {removeButtonText}
                 </EuiButton>
               </EuiFlexItem>
@@ -76,7 +88,7 @@ const AttributeEditor = ({
         </EuiFlexItem>
       )}
       <EuiFlexItem>
-        <EuiButton size="s" onClick={onAdd}>
+        <EuiButton size="s" onClick={onAdd} disabled={!isEnabled}>
           {addButtonText}
         </EuiButton>
       </EuiFlexItem>
@@ -84,7 +96,7 @@ const AttributeEditor = ({
   );
 };
 
-AttributeEditor.PropTypes = propTypes;
+AttributeEditor.propTypes = propTypes;
 AttributeEditor.defaultProps = defaultProps;
 
 export default AttributeEditor;

@@ -16,7 +16,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EuiSpacer } from '@elastic/eui';
-import QueryParamsEditor from './QueryParamsEditor';
 import HeaderParamsEditor from './HeaderParamsEditor';
 import URLInfo from './URLInfo';
 
@@ -26,7 +25,6 @@ const propTypes = {
 const CustomWebhook = ({ type, values }) => (
   <div>
     <URLInfo type={type} values={values} />
-    <QueryParamsEditor type={type} queryParams={values[type].queryParams} />
     <EuiSpacer size="m" />
     <HeaderParamsEditor type={type} headerParams={values[type].headerParams} />
   </div>
