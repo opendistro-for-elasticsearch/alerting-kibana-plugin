@@ -15,11 +15,11 @@
 
 import React from 'react';
 import { EuiSpacer, EuiFlexItem, EuiFlexGroup, EuiCodeEditor, EuiFormRow } from '@elastic/eui';
-import URLInfo from './URLInfo';
-import QueryParamsEditor from './QueryParamsEditor';
 import { FormikFieldNumber } from '../../../../components/FormControls';
 import { isInvalid } from '../../../../utils/validate';
 import { URL_TYPE } from '../../../Destinations/containers/CreateDestination/utils/constants';
+import URLInfo from './URLInfo';
+import QueryParamsEditor from '../../../Destinations/components/createDestinations/CustomWebhook/QueryParamsEditor';
 
 const HTTPInput = ({ isDarkMode, response, values }) => (
   <div>
@@ -28,7 +28,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
         <URLInfo isDarkMode={isDarkMode} response={response} values={values} />
         <EuiSpacer size="m" />
         {values.http.urlType === URL_TYPE.ATTRIBUTE_URL && (
-          <QueryParamsEditor queryParams={values.http.queryParams} />
+          <QueryParamsEditor type={values.searchType} queryParams={values.http.queryParams} />
         )}
         <EuiSpacer size="m" />
         <FormikFieldNumber
