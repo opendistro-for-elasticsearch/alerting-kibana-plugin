@@ -21,9 +21,6 @@ import { OPERATORS_QUERY_MAP } from './whereFilters';
 import { URL_TYPE } from '../../../../Destinations/containers/CreateDestination/utils/constants';
 
 export function formikToMonitor(values) {
-  const isHttp = values.searchType === SEARCH_TYPE.HTTP;
-  const http = formikToHttp(values);
-  const search = formikToSearch(values);
   const uiSchedule = formikToUiSchedule(values);
   const schedule = buildSchedule(values.frequency, uiSchedule);
   const uiSearch = formikToUiSearch(values);
@@ -32,13 +29,18 @@ export function formikToMonitor(values) {
     type: 'monitor',
     enabled: !values.disabled,
     schedule,
-    inputs: [isHttp ? http : search],
+    inputs: formikToInputs(values),
     triggers: [],
     ui_metadata: {
       schedule: uiSchedule,
       search: uiSearch,
     },
   };
+}
+
+export function formikToInputs(values) {
+  const isHttp = values.searchType === SEARCH_TYPE.HTTP;
+  return [isHttp ? formikToHttp(values) : formikToSearch(values)];
 }
 
 export function formikToSearch(values) {

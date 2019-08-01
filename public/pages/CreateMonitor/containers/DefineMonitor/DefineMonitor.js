@@ -259,10 +259,10 @@ class DefineMonitor extends Component {
     const { dataTypes, response, performanceResponse } = this.state;
     const { index, searchType, timeField } = values;
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
-    const isHTTP = searchType === SEARCH_TYPE.HTTP;
+    const isHttp = searchType === SEARCH_TYPE.HTTP;
     // Definition of when the "run" button should be disabled for HTTP type.
-    const disableHTTP =
-      (isHTTP && (values.http.urlType === URL_TYPE.FULL_URL && !values.http.url)) ||
+    const disableHttp =
+      (isHttp && (values.http.urlType === URL_TYPE.FULL_URL && !values.http.url)) ||
       (values.http.urlType === URL_TYPE.ATTRIBUTE_URL && !values.http.host);
     let invalidJSON = false;
     try {
@@ -271,23 +271,23 @@ class DefineMonitor extends Component {
       invalidJSON = true;
     }
 
-    const runIsDisabled = invalidJSON || (!isHTTP && !values.index.length) || disableHTTP;
+    const runIsDisabled = isHttp ? disableHttp : invalidJSON || !values.index.length;
     const actions = isGraph
       ? []
       : [
-          <EuiButton disabled={runIsDisabled} onClick={isHTTP ? this.onRunHttp : this.onRunQuery}>
+          <EuiButton disabled={runIsDisabled} onClick={isHttp ? this.onRunHttp : this.onRunQuery}>
             Run
           </EuiButton>,
         ];
 
     let content = renderEmptyMessage('You must specify an index.');
 
-    if (isHTTP) {
+    if (isHttp) {
       content = (
         <HTTPInput
           response={JSON.stringify(response || '', null, 4)}
           isDarkMode={this.isDarkMode}
-          values={this.props.values}
+          values={values}
         />
       );
     } else {
@@ -315,11 +315,11 @@ class DefineMonitor extends Component {
         actions={actions}
       >
         <MonitorDefinition resetResponse={this.resetResponse} />
-        {!isHTTP && <MonitorIndex httpClient={httpClient} />}
+        {!isHttp && <MonitorIndex httpClient={httpClient} />}
         {isGraph && <MonitorTimeField dataTypes={dataTypes} />}
         <div style={{ padding: '0px 10px' }}>{content}</div>
         <EuiSpacer size="m" />
-        {!isHTTP && <QueryPerformance response={performanceResponse} />}
+        {!isHttp && <QueryPerformance response={performanceResponse} />}
       </ContentPanel>
     );
   }
