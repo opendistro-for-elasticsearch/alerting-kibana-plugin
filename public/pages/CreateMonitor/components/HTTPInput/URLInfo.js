@@ -15,10 +15,10 @@
 
 import React, { Fragment } from 'react';
 import {
-  FormikFieldText,
-  FormikSelect,
   FormikFieldNumber,
   FormikFieldRadio,
+  FormikFieldText,
+  FormikSelect,
 } from '../../../../components/FormControls';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
@@ -35,7 +35,7 @@ const URLInfo = ({ values }) => {
   return (
     <Fragment>
       <FormikFieldRadio
-        name={`http.urlType`}
+        name="http.urlType"
         formRow
         inputProps={{
           id: 'fullUrl',
@@ -68,7 +68,7 @@ const URLInfo = ({ values }) => {
         }}
       />
       <FormikFieldText
-        name={`http.url`}
+        name="http.url"
         formRowps={{
           label: 'URL',
           style: { paddingLeft: '10px' },
@@ -82,7 +82,7 @@ const URLInfo = ({ values }) => {
       />
       <EuiSpacer size="m" />
       <FormikFieldRadio
-        name={`http.urlType`}
+        name="http.urlType"
         formRow
         inputProps={{
           id: 'customUrl',
@@ -99,7 +99,7 @@ const URLInfo = ({ values }) => {
         }}
       />
       <FormikSelect
-        name={`http.scheme`}
+        name="http.scheme"
         formRow
         rowProps={{
           label: 'Type',
@@ -111,7 +111,7 @@ const URLInfo = ({ values }) => {
         }}
       />
       <FormikFieldText
-        name={`http.host`}
+        name="http.host"
         formRow
         rowProps={{
           label: 'Host',
@@ -127,7 +127,7 @@ const URLInfo = ({ values }) => {
         }}
       />
       <FormikFieldNumber
-        name={`http.port`}
+        name="http.port"
         formRow
         rowProps={{
           label: 'Port',
@@ -140,7 +140,7 @@ const URLInfo = ({ values }) => {
         }}
       />
       <FormikFieldText
-        name={`http.path`}
+        name="http.path"
         formRow
         rowProps={{
           label: 'Path',
