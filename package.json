@@ -1,12 +1,12 @@
 {
   "name": "opendistro-alerting",
-  "version": "1.1.0.0",
+  "version": "1.2.0.0",
   "description": "Kibana Alerting Plugin",
   "main": "index.js",
   "license": "Apache-2.0",
   "homepage": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin",
   "kibana": {
-    "version": "7.1.1",
+    "version": "7.2.0",
     "templateVersion": "6.3.3"
   },
   "repository": {
@@ -14,12 +14,12 @@
     "url": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin"
   },
   "scripts": {
-    "kbn": "node ../../kibana/scripts/kbn",
-    "lint": "../../kibana/node_modules/.bin/eslint '**/*.js' -c .eslintrc",
+    "kbn": "node ../../../kibana/scripts/kbn",
+    "lint": "../../../kibana/node_modules/.bin/eslint '**/*.js' -c .eslintrc",
     "start": "plugin-helpers start",
     "test:server": "plugin-helpers test:server",
     "test:browser": "plugin-helpers test:browser",
-    "test:jest": "../../kibana/node_modules/.bin/jest --config ./test/jest.config.js",
+    "test:jest": "../../../kibana/node_modules/.bin/jest --config ./test/jest.config.js",
     "build": "plugin-helpers build"
   },
   "husky": {
@@ -28,9 +28,9 @@
     }
   },
   "devDependencies": {
-    "@elastic/eslint-config-kibana": "link:../../kibana/packages/eslint-config-kibana",
-    "@kbn/eslint-import-resolver-kibana": "link:../../kibana/packages/kbn-eslint-import-resolver-kibana",
-    "@kbn/plugin-helpers": "link:../../kibana/packages/kbn-plugin-helpers",
+    "@elastic/eslint-config-kibana": "link:../../packages/eslint-config-kibana",
+    "@kbn/eslint-import-resolver-kibana": "link:../../packages/kbn-eslint-import-resolver-kibana",
+    "@kbn/plugin-helpers": "link:../../packages/kbn-plugin-helpers",
     "husky": "^2.3.0",
     "lint-staged": "^8.1.6"
   },
