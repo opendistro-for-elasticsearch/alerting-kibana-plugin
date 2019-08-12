@@ -6,13 +6,15 @@ exports[`Message renders 1`] = `
     class="euiFormRow"
     id="actions.0.subject_template.source-row"
   >
-    <label
-      aria-invalid="false"
-      class="euiFormLabel"
-      for="actions.0.subject_template.source"
-    >
-      Message subject
-    </label>
+    <div>
+      <label
+        aria-invalid="false"
+        class="euiFormLabel"
+        for="actions.0.subject_template.source"
+      >
+        Message subject
+      </label>
+    </div>
     <div
       class="euiFormControlLayout"
     >
@@ -32,31 +34,33 @@ exports[`Message renders 1`] = `
     id="actions.0.message_template.source-row"
     style="max-width:100%"
   >
-    <label
-      aria-invalid="false"
-      class="euiFormLabel"
-      for="actions.0.message_template.source"
-    >
-      <div>
-        <span>
-          Message
-        </span>
-        <button
-          class="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--small"
-          type="button"
-        >
-          <span
-            class="euiButtonEmpty__content"
+    <div>
+      <label
+        aria-invalid="false"
+        class="euiFormLabel"
+        for="actions.0.message_template.source"
+      >
+        <div>
+          <span>
+            Message
+          </span>
+          <button
+            class="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--small"
+            type="button"
           >
             <span
-              class="euiButtonEmpty__text"
+              class="euiButtonEmpty__content"
             >
-              Info
+              <span
+                class="euiButtonEmpty__text"
+              >
+                Info
+              </span>
             </span>
-          </span>
-        </button>
-      </div>
-    </label>
+          </button>
+        </div>
+      </label>
+    </div>
     <textarea
       class="euiTextArea euiTextArea--resizeVertical euiTextArea--fullWidth"
       name="actions.0.message_template.source"
@@ -114,12 +118,14 @@ exports[`Message renders 1`] = `
     id="testing-id-row"
     style="max-width:100%"
   >
-    <label
-      class="euiFormLabel"
-      for="testing-id"
-    >
-      Message preview
-    </label>
+    <div>
+      <label
+        class="euiFormLabel"
+        for="testing-id"
+      >
+        Message preview
+      </label>
+    </div>
     <textarea
       class="euiTextArea euiTextArea--resizeVertical euiTextArea--fullWidth read-only-text-area"
       id="testing-id"
@@ -142,32 +148,34 @@ exports[`Message renders 1`] = `
     id="testing-id-row"
     style="max-width:100%"
   >
-    <label
-      class="euiFormLabel"
-      for="testing-id"
-    >
-      <div>
-        <span
-          style="color:#343741"
-        >
-          Action throttling
-        </span>
-        <button
-          class="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--small"
-          type="button"
-        >
+    <div>
+      <label
+        class="euiFormLabel"
+        for="testing-id"
+      >
+        <div>
           <span
-            class="euiButtonEmpty__content"
+            style="color:#343741"
+          >
+            Action throttling
+          </span>
+          <button
+            class="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--small"
+            type="button"
           >
             <span
-              class="euiButtonEmpty__text"
+              class="euiButtonEmpty__content"
             >
-              Info
+              <span
+                class="euiButtonEmpty__text"
+              >
+                Info
+              </span>
             </span>
-          </span>
-        </button>
-      </div>
-    </label>
+          </button>
+        </div>
+      </label>
+    </div>
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionColumn euiFlexGroup--responsive"
       id="testing-id"
@@ -208,12 +216,14 @@ exports[`Message renders 1`] = `
             class="euiFormRow"
             id="testing-id-row"
           >
-            <label
-              class="euiFormLabel"
-              for="testing-id"
-            >
-              Throttle actions to only trigger every
-            </label>
+            <div>
+              <label
+                class="euiFormLabel"
+                for="testing-id"
+              >
+                Throttle actions to only trigger every
+              </label>
+            </div>
             <div
               class="euiFormRow"
               id="actions.0.throttle.value-row"

@@ -6,12 +6,14 @@ exports[`MonitorDefinition renders 1`] = `
   id="searchType-row"
   style="padding-left:10px"
 >
-  <label
-    class="euiFormLabel"
-    for="searchType"
-  >
-    How do you want to define the monitor?
-  </label>
+  <div>
+    <label
+      class="euiFormLabel"
+      for="searchType"
+    >
+      How do you want to define the monitor?
+    </label>
+  </div>
   <div
     class="euiFormControlLayout"
   >

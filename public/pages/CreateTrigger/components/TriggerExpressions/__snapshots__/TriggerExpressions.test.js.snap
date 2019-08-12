@@ -3,15 +3,8 @@
 exports[`TriggerExpressions renders 1`] = `
 <EuiFlexGroup
   alignItems="center"
-  component="div"
-  direction="row"
-  gutterSize="l"
-  justifyContent="flexStart"
-  responsive={true}
-  wrap={false}
 >
   <EuiFlexItem
-    component="div"
     grow={false}
   >
     <EuiPopover
@@ -22,13 +15,12 @@ exports[`TriggerExpressions renders 1`] = `
           fullWidth={false}
           hasEmptyLabelSpace={false}
           label="Trigger condition"
+          labelType="label"
         >
           <EuiExpression
-            color="secondary"
             description="IS ABOVE"
             isActive={false}
             onClick={[Function]}
-            uppercase={true}
             value="500"
           />
         </EuiFormRow>
@@ -49,12 +41,6 @@ exports[`TriggerExpressions renders 1`] = `
         }
       >
         <EuiFlexGroup
-          alignItems="stretch"
-          component="div"
-          direction="row"
-          gutterSize="l"
-          justifyContent="flexStart"
-          responsive={true}
           style={
             Object {
               "maxWidth": 600,
@@ -62,10 +48,8 @@ exports[`TriggerExpressions renders 1`] = `
               "whiteSpace": "nowrap",
             }
           }
-          wrap={false}
         >
           <EuiFlexItem
-            component="div"
             grow={false}
             style={
               Object {
@@ -79,7 +63,6 @@ exports[`TriggerExpressions renders 1`] = `
             />
           </EuiFlexItem>
           <EuiFlexItem
-            component="div"
             grow={false}
             style={
               Object {
