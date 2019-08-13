@@ -31,7 +31,6 @@ exports[`Flyout renders 1`] = `
           "fontSize": "25px",
         }
       }
-      textTransform="none"
     >
       <h2>
         <strong>
@@ -42,8 +41,6 @@ exports[`Flyout renders 1`] = `
   </EuiFlyoutHeader>
   <EuiFlyoutBody>
     <EuiText
-      grow={true}
-      size="m"
       style={
         Object {
           "fontSize": "14px",

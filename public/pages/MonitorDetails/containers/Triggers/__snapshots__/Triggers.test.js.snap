@@ -10,6 +10,7 @@ exports[`Triggers renders 1`] = `
         fill={false}
         iconSide="left"
         onClick={[Function]}
+        size="m"
         type="button"
       >
         Edit
@@ -20,6 +21,7 @@ exports[`Triggers renders 1`] = `
         fill={false}
         iconSide="left"
         onClick={[Function]}
+        size="m"
         type="button"
       >
         Delete
@@ -30,6 +32,7 @@ exports[`Triggers renders 1`] = `
         fill={true}
         iconSide="left"
         onClick={[MockFunction]}
+        size="m"
         type="button"
       >
         Create

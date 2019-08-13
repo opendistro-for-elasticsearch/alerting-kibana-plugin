@@ -10,23 +10,15 @@ exports[`TriggerQuery renders 1`] = `
   }
 >
   <EuiFlexGroup
-    alignItems="stretch"
-    component="div"
     direction="column"
-    gutterSize="l"
-    justifyContent="flexStart"
-    responsive={true}
-    wrap={false}
   >
-    <EuiFlexItem
-      component="div"
-      grow={true}
-    >
+    <EuiFlexItem>
       <EuiFormRow
         describedByIds={Array []}
         fullWidth={true}
         hasEmptyLabelSpace={false}
         label="Extraction query response"
+        labelType="label"
       >
         <EuiCodeEditor
           mode="json"
@@ -38,17 +30,13 @@ exports[`TriggerQuery renders 1`] = `
         />
       </EuiFormRow>
     </EuiFlexItem>
-    <EuiFlexItem
-      component="div"
-      grow={true}
-    >
+    <EuiFlexItem>
       <C
         name="script.source"
         render={[Function]}
       />
     </EuiFlexItem>
     <EuiFlexItem
-      component="div"
       grow={false}
     >
       <EuiFormRow
@@ -56,6 +44,7 @@ exports[`TriggerQuery renders 1`] = `
         fullWidth={true}
         hasEmptyLabelSpace={false}
         label="Trigger condition response:"
+        labelType="label"
       >
         <EuiCodeEditor
           height="200px"
@@ -73,15 +62,9 @@ exports[`TriggerQuery renders 1`] = `
   />
   <EuiFlexGroup
     alignItems="center"
-    component="div"
-    direction="row"
-    gutterSize="l"
     justifyContent="spaceBetween"
-    responsive={true}
-    wrap={false}
   >
     <EuiFlexItem
-      component="div"
       grow={false}
     >
       <EuiButton
@@ -89,6 +72,7 @@ exports[`TriggerQuery renders 1`] = `
         fill={false}
         iconSide="left"
         onClick={[Function]}
+        size="m"
         type="button"
       >
         Run

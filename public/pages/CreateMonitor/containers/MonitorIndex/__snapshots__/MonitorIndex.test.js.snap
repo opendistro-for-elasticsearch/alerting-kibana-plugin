@@ -406,6 +406,7 @@ exports[`MonitorIndex renders 1`] = `
                 id="index"
                 isInvalid={false}
                 label="Index"
+                labelType="label"
                 style={
                   Object {
                     "paddingLeft": "10px",
@@ -421,20 +422,23 @@ exports[`MonitorIndex renders 1`] = `
                     }
                   }
                 >
-                  <EuiFormLabel
-                    aria-invalid={false}
-                    htmlFor="index"
-                    isFocused={false}
-                    isInvalid={false}
-                  >
-                    <label
+                  <div>
+                    <EuiFormLabel
                       aria-invalid={false}
-                      className="euiFormLabel"
                       htmlFor="index"
+                      isFocused={false}
+                      isInvalid={false}
+                      type="label"
                     >
-                      Index
-                    </label>
-                  </EuiFormLabel>
+                      <label
+                        aria-invalid={false}
+                        className="euiFormLabel"
+                        htmlFor="index"
+                      >
+                        Index
+                      </label>
+                    </EuiFormLabel>
+                  </div>
                   <ComboBox
                     aria-describedby="index-help"
                     field={
@@ -639,7 +643,6 @@ exports[`MonitorIndex renders 1`] = `
                         className="euiComboBox"
                         data-test-subj="indicesComboBox"
                         name="index"
-                        onBlur={[Function]}
                         onKeyDown={[Function]}
                         role="combobox"
                       >
@@ -653,7 +656,6 @@ exports[`MonitorIndex renders 1`] = `
                           inputRef={[Function]}
                           isListOpen={false}
                           noIcon={false}
-                          onBlur={[Function]}
                           onChange={[Function]}
                           onClear={[Function]}
                           onClick={[Function]}
@@ -794,11 +796,11 @@ exports[`MonitorIndex renders 1`] = `
                                         className="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
                                         data-test-subj="comboBoxToggleListButton"
                                         onClick={[Function]}
+                                        type="button"
                                       >
                                         <EuiIcon
                                           aria-hidden="true"
                                           className="euiFormControlLayoutCustomIcon__icon"
-                                          size="m"
                                           type="arrowDown"
                                         >
                                           <arrowDown
