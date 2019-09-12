@@ -37,6 +37,7 @@ export const formikInitialValues = {
   [DESTINATION_TYPE.CUSTOM_HOOK]: {
     urlType: URL_TYPE.FULL_URL,
     scheme: 'HTTPS',
+    method: 'POST',
     headerParams: [
       {
         key: CONTENT_TYPE_KEY,
