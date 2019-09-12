@@ -5,7 +5,7 @@ import SubHeader from '../../../../../components/SubHeader';
 import { FormikSelect } from '../../../../../components/FormControls';
 
 
-const methodOptions = [{ value: 'POST', text: 'POST' }, { value: 'PUT', text: 'PUT' }, { value: 'GET', text: 'GET' }, { value: 'DELETE', text: 'DELETE' }];
+const methodOptions = [{ value: 'POST', text: 'POST' }, { value: 'PUT', text: 'PUT' }, { value: 'PATCH', text: 'PATCH' }, { value: 'GET', text: 'GET' }, { value: 'DELETE', text: 'DELETE' }];
 
 
 
