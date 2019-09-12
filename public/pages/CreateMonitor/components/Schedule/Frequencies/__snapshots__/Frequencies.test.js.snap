@@ -14,13 +14,15 @@ exports[`Frequencies renders CustomCron 1`] = `
       id="cronExpression-row"
       style="margin-top:0px"
     >
-      <label
-        aria-invalid="false"
-        class="euiFormLabel"
-        for="cronExpression"
-      >
-        Every
-      </label>
+      <div>
+        <label
+          aria-invalid="false"
+          class="euiFormLabel"
+          for="cronExpression"
+        >
+          Every
+        </label>
+      </div>
       <textarea
         class="euiTextArea euiTextArea--resizeVertical"
         name="cronExpression"
@@ -105,6 +107,7 @@ exports[`Frequencies renders CustomCron 1`] = `
                 aria-label="Open list of options"
                 class="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
                 data-test-subj="comboBoxToggleListButton"
+                type="button"
               >
                 <svg
                   aria-hidden="true"
@@ -143,13 +146,15 @@ exports[`Frequencies renders Frequency 1`] = `
   id="frequency-row"
   style="padding-left:10px"
 >
-  <label
-    aria-invalid="false"
-    class="euiFormLabel"
-    for="frequency"
-  >
-    Frequency
-  </label>
+  <div>
+    <label
+      aria-invalid="false"
+      class="euiFormLabel"
+      for="frequency"
+    >
+      Frequency
+    </label>
+  </div>
   <div
     class="euiFormControlLayout"
   >
@@ -235,13 +240,15 @@ exports[`Frequencies renders FrequencyPicker 1`] = `
       class="euiFormRow"
       id="period.interval-row"
     >
-      <label
-        aria-invalid="false"
-        class="euiFormLabel"
-        for="period.interval"
-      >
-        Every
-      </label>
+      <div>
+        <label
+          aria-invalid="false"
+          class="euiFormLabel"
+          for="period.interval"
+        >
+          Every
+        </label>
+      </div>
       <div
         class="euiFormControlLayout"
       >
@@ -366,13 +373,15 @@ exports[`Frequencies renders Interval 1`] = `
       class="euiFormRow"
       id="period.interval-row"
     >
-      <label
-        aria-invalid="false"
-        class="euiFormLabel"
-        for="period.interval"
-      >
-        Every
-      </label>
+      <div>
+        <label
+          aria-invalid="false"
+          class="euiFormLabel"
+          for="period.interval"
+        >
+          Every
+        </label>
+      </div>
       <div
         class="euiFormControlLayout"
       >

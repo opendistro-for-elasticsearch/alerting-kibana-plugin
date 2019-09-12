@@ -30,7 +30,6 @@ exports[`Monitors renders 1`] = `
   />
   <EuiHorizontalRule
     margin="xs"
-    size="full"
   />
   <EuiBasicTable
     columns={
