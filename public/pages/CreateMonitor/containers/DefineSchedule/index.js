@@ -13,22 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-import React, { Fragment } from 'react';
-import { EuiSpacer, EuiText } from '@elastic/eui';
+import DefineSchedule from './DefineSchedule';
 
-import { Frequency, FrequencyPicker } from './Frequencies';
-
-const Schedule = () => (
-  <Fragment>
-    <EuiText size="xs" style={{ paddingLeft: '10px' }}>
-      When do you want this monitor to run?
-    </EuiText>
-    <EuiSpacer size="s" />
-    <div style={{ maxWidth: '400px' }}>
-      <Frequency />
-      <FrequencyPicker />
-    </div>
-  </Fragment>
-);
-
-export default Schedule;
+export { DefineSchedule };

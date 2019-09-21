@@ -30,6 +30,7 @@ import DefineMonitor from '../DefineMonitor';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import monitorToFormik from './utils/monitorToFormik';
 import { formikToMonitor } from './utils/formikToMonitor';
+import { DefineSchedule } from '../DefineSchedule';
 import { TRIGGER_ACTIONS } from '../../../../utils/constants';
 
 export default class CreateMonitor extends Component {
@@ -135,6 +136,8 @@ export default class CreateMonitor extends Component {
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
               <DefineMonitor values={values} errors={errors} httpClient={httpClient} />
+              <EuiSpacer />
+              <DefineSchedule />
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>
