@@ -40,7 +40,6 @@ const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
         },
       }}
     />
-    <Schedule />
     <MonitorState />
   </ContentPanel>
 );
