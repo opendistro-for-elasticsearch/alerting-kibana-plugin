@@ -35,6 +35,11 @@ exports[`MonitorDefinition renders 1`] = `
         >
           Define using extraction query
         </option>
+        <option
+          value="ad"
+        >
+          Define using Anomaly detector
+        </option>
       </select>
       <div
         class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"

@@ -90,6 +90,12 @@ export const validateMonthlyDay = value => {
 
 export const ILLEGAL_CHARACTERS = ['\\', '/', '?', '"', '<', '>', '|', ',', ' '];
 
+export const validateDetector = (detectorId, selectedDetector) => {
+  if (!detectorId) return 'Must select detector';
+  if (selectedDetector && selectedDetector.features.length === 0)
+    return 'Detector with no features.';
+};
+
 export const validateIndex = options => {
   if (!Array.isArray(options)) return 'Must specify an index';
   if (!options.length) return 'Must specify an index';

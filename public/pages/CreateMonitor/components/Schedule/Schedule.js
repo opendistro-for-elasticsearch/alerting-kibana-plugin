@@ -14,17 +14,15 @@
  */
 
 import React, { Fragment } from 'react';
-import { EuiSpacer } from '@elastic/eui';
+import { EuiSpacer, EuiText } from '@elastic/eui';
 
 import { Frequency, FrequencyPicker } from './Frequencies';
-import SubHeader from '../../../../components/SubHeader';
 
 const Schedule = () => (
   <Fragment>
-    <SubHeader
-      title={<h4>Schedule</h4>}
-      description={<strong>When do you want this monitor to run?</strong>}
-    />
+    <EuiText size="xs" style={{ paddingLeft: '10px' }}>
+      When do you want this monitor to run?
+    </EuiText>
     <EuiSpacer size="s" />
     <div style={{ maxWidth: '400px' }}>
       <Frequency />

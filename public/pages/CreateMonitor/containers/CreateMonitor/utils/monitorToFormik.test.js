@@ -118,5 +118,12 @@ describe('monitorToFormik', () => {
       const formikValues = monitorToFormik(localExampleMonitor);
       expect(formikValues.cronExpression).toBe(FORMIK_INITIAL_VALUES.cronExpression);
     });
+    test('can build AD monitor', () => {
+      const adMonitor = _.cloneDeep(exampleMonitor);
+      adMonitor.ui_metadata.search.searchType = 'ad';
+      adMonitor.inputs = [{ anomaly_detector: { detector_id: 'Hello' } }];
+      const formikValues = monitorToFormik(adMonitor);
+      expect(formikValues.detectorId).toBe('Hello');
+    });
   });
 });

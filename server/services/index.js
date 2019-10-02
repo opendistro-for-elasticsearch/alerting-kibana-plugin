@@ -17,5 +17,12 @@ import AlertService from './AlertService';
 import DestinationsService from './DestinationsService';
 import ElasticsearchService from './ElasticsearchService';
 import MonitorService from './MonitorService';
+import AnomalyDetectorService from './AnomalyDetectorService';
 
-export { AlertService, DestinationsService, ElasticsearchService, MonitorService };
+export {
+  AlertService,
+  DestinationsService,
+  ElasticsearchService,
+  MonitorService,
+  AnomalyDetectorService,
+};

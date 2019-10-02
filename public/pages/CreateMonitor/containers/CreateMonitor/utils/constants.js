@@ -50,4 +50,5 @@ export const FORMIK_INITIAL_VALUES = {
     fieldRangeStart: 0,
     fieldRangeEnd: 0,
   },
+  detectorId: '',
 };

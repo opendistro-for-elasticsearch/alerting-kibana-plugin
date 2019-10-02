@@ -31,6 +31,7 @@ export const APP_PATH = {
 export const SEARCH_TYPE = {
   GRAPH: 'graph',
   QUERY: 'query',
+  AD: 'ad',
 };
 
 export const DESTINATION_ACTIONS = {
@@ -52,3 +53,7 @@ export const DATA_TYPES = {
   BOOLEAN: 'boolean',
   KEYWORD: 'keyword',
 };
+
+export const AD_PLUGIN_ID = 'aes-ad-plugin';
+
+export const ES_AD_PLUGIN = 'opendistro-anomaly-detection';

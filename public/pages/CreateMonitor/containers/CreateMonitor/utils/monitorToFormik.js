@@ -15,6 +15,7 @@
 
 import _ from 'lodash';
 import { FORMIK_INITIAL_VALUES } from './constants';
+import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 // Convert Monitor JSON to Formik values used in UI forms
 export default function monitorToFormik(monitor) {
@@ -24,18 +25,13 @@ export default function monitorToFormik(monitor) {
     name,
     enabled,
     schedule: { cron: { expression: cronExpression = formikValues.cronExpression, timezone } = {} },
-    inputs: [
-      {
-        search: { indices, query },
-      },
-    ],
+    inputs,
     ui_metadata: { schedule = {}, search = {} } = {},
   } = monitor;
-
   // Default searchType to query, because if there is no ui_metadata or search then it was created through API or overwritten by API
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
   const { searchType = 'query', fieldName } = search;
-
+  const isAD = searchType === SEARCH_TYPE.AD;
   return {
     /* INITIALIZE WITH DEFAULTS */
     ...formikValues,
@@ -53,7 +49,8 @@ export default function monitorToFormik(monitor) {
     searchType,
     fieldName: fieldName ? [{ label: fieldName }] : [],
     timezone: timezone ? [{ label: timezone }] : [],
-    index: indices.map(index => ({ label: index })),
-    query: JSON.stringify(query, null, 4),
+    detectorId: isAD ? inputs[0].anomaly_detector.detector_id : undefined,
+    index: !isAD ? inputs[0].search.indices.map(index => ({ label: index })) : [{ label: '' }],
+    query: !isAD ? JSON.stringify(inputs[0].search.query, null, 4) : '',
   };
 }

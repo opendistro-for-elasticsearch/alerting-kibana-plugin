@@ -30,6 +30,7 @@ describe('DefineMonitor', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: [] } });
+    httpClientMock.get.mockResolvedValue({ data: { ok: true, resp: [] } });
   });
 
   test('renders', () => {
@@ -58,6 +59,19 @@ describe('DefineMonitor', () => {
     const wrapper = getShallowWrapper({ values });
     expect(onQueryMappings).not.toHaveBeenCalled();
     expect(onRunQuery).not.toHaveBeenCalled();
+  });
+
+  test('mounting should call getPlugins', () => {
+    const getPlugins = jest.spyOn(DefineMonitor.prototype, 'getPlugins');
+    const values = { ...FORMIK_INITIAL_VALUES, searchType: 'ad' };
+    const wrapper = getShallowWrapper({ values });
+    expect(getPlugins).toHaveBeenCalled();
+  });
+  test('should show warning in case of Ad monitor and plugin is not installed', () => {
+    const getPlugins = jest.spyOn(DefineMonitor.prototype, 'getPlugins');
+    const values = { ...FORMIK_INITIAL_VALUES, searchType: 'ad' };
+    const wrapper = getShallowWrapper({ values });
+    expect(wrapper).toMatchSnapshot();
   });
 
   test('mounting should only call onQueryMappings if graph type and indices are selected, but no timefield', () => {

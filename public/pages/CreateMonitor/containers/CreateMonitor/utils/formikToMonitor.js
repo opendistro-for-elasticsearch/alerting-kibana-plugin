@@ -20,8 +20,6 @@ import { SEARCH_TYPE } from '../../../../../utils/constants';
 import { OPERATORS_QUERY_MAP } from './whereFilters';
 
 export function formikToMonitor(values) {
-  const query = formikToQuery(values);
-  const indices = formikToIndices(values);
   const uiSchedule = formikToUiSchedule(values);
   const schedule = buildSchedule(values.frequency, uiSchedule);
   const uiSearch = formikToUiSearch(values);
@@ -30,14 +28,7 @@ export function formikToMonitor(values) {
     type: 'monitor',
     enabled: !values.disabled,
     schedule,
-    inputs: [
-      {
-        search: {
-          indices,
-          query,
-        },
-      },
-    ],
+    inputs: formikToInputs(values),
     triggers: [],
     ui_metadata: {
       schedule: uiSchedule,
@@ -46,6 +37,29 @@ export function formikToMonitor(values) {
   };
 }
 
+export function formikToInputs(values) {
+  const isAD = values.searchType === SEARCH_TYPE.AD;
+  return [isAD ? formikToAd(values) : formikToSearch(values)];
+}
+
+export function formikToSearch(values) {
+  const query = formikToQuery(values);
+  const indices = formikToIndices(values);
+  return {
+    search: {
+      indices,
+      query,
+    },
+  };
+}
+
+export function formikToAd(values) {
+  return {
+    anomaly_detector: {
+      detector_id: values.detectorId,
+    },
+  };
+}
 export function formikToUiSearch(values) {
   const {
     searchType,

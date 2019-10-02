@@ -14,6 +14,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
+import { get } from 'lodash';
 import queryString from 'query-string';
 import {
   EuiButton,
@@ -33,6 +34,8 @@ import MonitorHistory from './MonitorHistory';
 import Dashboard from '../../Dashboard/containers/Dashboard';
 import Triggers from './Triggers';
 import { MONITOR_ACTIONS, TRIGGER_ACTIONS } from '../../../utils/constants';
+import { migrateTriggerMetadata } from './utils/helpers';
+import { AnomalyHistory } from './AnomalyHistory/AnomalyHistory';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -86,7 +89,7 @@ export default class MonitorDetails extends Component {
           this.setState({
             ifSeqNo,
             ifPrimaryTerm,
-            monitor,
+            monitor: migrateTriggerMetadata(monitor),
             monitorVersion,
             dayCount,
             activeCount,
@@ -192,6 +195,7 @@ export default class MonitorDetails extends Component {
     const updatingMonitor = action === MONITOR_ACTIONS.UPDATE_MONITOR;
     const creatingTrigger = action === TRIGGER_ACTIONS.CREATE_TRIGGER;
     const updatingTrigger = action === TRIGGER_ACTIONS.UPDATE_TRIGGER && triggerToEdit;
+    const detectorId = get(monitor, 'inputs.0.anomaly_detector.detector_id', undefined);
     if (loading) {
       return (
         <EuiFlexGroup justifyContent="center" alignItems="center" style={{ marginTop: '100px' }}>
@@ -289,6 +293,15 @@ export default class MonitorDetails extends Component {
             onShowTrigger={this.onCreateTrigger}
             triggers={monitor.triggers}
           />
+          {detectorId
+            ? [
+                <EuiSpacer />,
+                <AnomalyHistory
+                  detectorId={detectorId}
+                  monitorLastEnabledTime={monitor.enabled_time}
+                />,
+              ]
+            : null}
         </div>
         <EuiSpacer />
         <Dashboard

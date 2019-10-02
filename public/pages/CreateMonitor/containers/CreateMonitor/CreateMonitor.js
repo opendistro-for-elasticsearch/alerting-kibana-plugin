@@ -15,6 +15,7 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
+import queryString from 'query-string';
 import { Formik } from 'formik';
 import {
   EuiSpacer,
@@ -30,7 +31,9 @@ import DefineMonitor from '../DefineMonitor';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import monitorToFormik from './utils/monitorToFormik';
 import { formikToMonitor } from './utils/formikToMonitor';
-import { TRIGGER_ACTIONS } from '../../../../utils/constants';
+import { DefineSchedule } from '../DefineSchedule';
+import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
+import { initializeFromQueryParams } from './utils/monitorQueryParams';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -42,7 +45,13 @@ export default class CreateMonitor extends Component {
   constructor(props) {
     super(props);
 
-    let initialValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    //pre-populate some of values if query params exists.
+    let initialValues = _.mergeWith(
+      {},
+      _.cloneDeep(FORMIK_INITIAL_VALUES),
+      initializeFromQueryParams(queryString.parse(this.props.location.search)),
+      (initialValue, queryValue) => (_.isEmpty(queryValue) ? initialValue : queryValue)
+    );
 
     if (this.props.edit && this.props.monitorToEdit) {
       initialValues = monitorToFormik(this.props.monitorToEdit);
@@ -135,6 +144,12 @@ export default class CreateMonitor extends Component {
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
               <DefineMonitor values={values} errors={errors} httpClient={httpClient} />
+              {values.searchType !== SEARCH_TYPE.AD ? (
+                <Fragment>
+                  <EuiSpacer />
+                  <DefineSchedule />
+                </Fragment>
+              ) : null}
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>
