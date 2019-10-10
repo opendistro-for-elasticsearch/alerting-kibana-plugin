@@ -1,7 +1,12 @@
-## Version 1.2.0.0
+## Version 1.2.1.0
 
 ## New Features
-  * Adds support for Kibana 7.2.0
+  * Adds support for Kibana 7.2.1 - [PR #99](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/99)
+
+## 2019-09-24, Version 1.2.0.0
+
+## New Features
+  * Adds support for Kibana 7.2.0 - [PR #81](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/81)
 
 ## Bug fixes
   * Fixes update monitor from monitor list - [PR #64](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/64)
