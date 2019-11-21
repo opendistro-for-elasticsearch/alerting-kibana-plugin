@@ -1,9 +1,14 @@
-## Version 1.2.0.0
+## Version 1.3.0.0
 
-## New Features
-  * Adds support for Kibana 7.2.0
+### New Features
+  * Adds support for Kibana 7.3.2 - [PR #109](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/109)
 
-## Bug fixes
+## 2019-09-20, Version 1.2.0.0
+
+### New Features
+  * Adds support for Kibana 7.2.0 - [PR #81](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/81)
+
+### Bug fixes
   * Fixes update monitor from monitor list - [PR #64](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/64)
   * Added support for IPv4 and IPv6 on URL validation - [PR #67](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/67)
   * Disables the query parameter box in Custom webhook - [PR #72](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/72)
