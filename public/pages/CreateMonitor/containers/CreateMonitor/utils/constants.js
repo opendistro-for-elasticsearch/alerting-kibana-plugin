@@ -46,7 +46,7 @@ export const FORMIK_INITIAL_VALUES = {
   where: {
     fieldName: [],
     operator: OPERATORS_MAP.IS,
-    fieldValue: 0,
+    fieldValue: "",
     fieldRangeStart: 0,
     fieldRangeEnd: 0,
   },
