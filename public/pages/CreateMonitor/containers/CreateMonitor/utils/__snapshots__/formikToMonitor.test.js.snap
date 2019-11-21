@@ -208,7 +208,7 @@ Object {
     "fieldName": Array [],
     "fieldRangeEnd": 0,
     "fieldRangeStart": 0,
-    "fieldValue": 0,
+    "fieldValue": "",
     "operator": "is",
   },
 }

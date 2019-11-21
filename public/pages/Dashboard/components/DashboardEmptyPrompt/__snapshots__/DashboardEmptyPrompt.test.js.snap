@@ -29,6 +29,7 @@ exports[`DashboardEmptyPrompt renders 1`] = `
   <a
     class="euiButton euiButton--primary euiButton--fill"
     href="opendistro-alerting#/create-monitor"
+    rel="noreferrer"
   >
     <span
       class="euiButton__content"

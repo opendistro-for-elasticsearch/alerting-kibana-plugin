@@ -69,7 +69,7 @@ describe('WhereExpression', () => {
     button.simulate('keyDown', { keyCode: 27 });
     expect(closeExpression).toHaveBeenCalled();
   });
-  test('should render text input for the text data types', done => {
+  test('should render text input for the text data types', () => {
     const wrapper = mount(getMountWrapper(true));
     wrapper
       .find('[data-test-subj="comboBoxSearchInput"]')
@@ -78,14 +78,12 @@ describe('WhereExpression', () => {
       .simulate('keyDown', { keyCode: 40 })
       .simulate('keyDown', { keyCode: 13 })
       .simulate('blur');
-    setTimeout(() => {
-      wrapper.update();
-      const values = wrapper.find(WhereExpression).props().formik.values;
-      expect(values.where.fieldName).toEqual([{ label: 'cityName', type: 'text' }]);
-      expect(values.where.operator).toEqual(OPERATORS_MAP.IS);
-      expect(wrapper.find(FormikFieldText).length).toBe(1);
-      expect(wrapper.find(FormikFieldNumber).length).toBe(0);
-      done();
-    });
+
+    wrapper.update();
+    const values = wrapper.find(WhereExpression).props().formik.values;
+    expect(values.where.fieldName).toEqual([{ label: 'cityName', type: 'text' }]);
+    expect(values.where.operator).toEqual(OPERATORS_MAP.IS);
+    expect(wrapper.find(FormikFieldText).length).toBe(1);
+    expect(wrapper.find(FormikFieldNumber).length).toBe(0);
   });
 });
