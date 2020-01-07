@@ -4,6 +4,6 @@ extends: ["@elastic/kibana", "@elastic/eslint-config-kibana/jest"]
 settings:
   import/resolver:
     'node':
-      paths: ["public", "node_modules", "../../kibana/node_modules"]
+      paths: ["public", "node_modules", "../../node_modules"]
     '@kbn/eslint-import-resolver-kibana':
       rootPackageName: 'alerting

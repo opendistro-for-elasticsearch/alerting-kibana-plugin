@@ -26,15 +26,9 @@ exports[`<DestinationsControls /> should render DestinationsControls 1`] = `
           <span
             class="euiFormControlLayoutCustomIcon"
           >
-            <svg
-              aria-hidden="true"
-              class="euiIcon euiIcon--medium euiIcon-isLoading euiFormControlLayoutCustomIcon__icon"
-              focusable="false"
-              height="16"
-              viewBox="0 0 16 16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            />
+            <div>
+              EuiIconMock
+            </div>
           </span>
         </div>
       </div>
@@ -80,15 +74,9 @@ exports[`<DestinationsControls /> should render DestinationsControls 1`] = `
           <span
             class="euiFormControlLayoutCustomIcon"
           >
-            <svg
-              aria-hidden="true"
-              class="euiIcon euiIcon--medium euiIcon-isLoading euiFormControlLayoutCustomIcon__icon"
-              focusable="false"
-              height="16"
-              viewBox="0 0 16 16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            />
+            <div>
+              EuiIconMock
+            </div>
           </span>
         </div>
       </div>
@@ -109,15 +97,9 @@ exports[`<DestinationsControls /> should render DestinationsControls 1`] = `
         disabled=""
         type="button"
       >
-        <svg
-          aria-hidden="true"
-          class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonIcon__icon"
-          focusable="false"
-          height="16"
-          viewBox="0 0 16 16"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
-        />
+        <div>
+          EuiIconMock
+        </div>
       </button>
       <button
         aria-label="Page 1 of 5"
@@ -238,15 +220,9 @@ exports[`<DestinationsControls /> should render DestinationsControls 1`] = `
         data-test-subj="pagination-button-next"
         type="button"
       >
-        <svg
-          aria-hidden="true"
-          class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonIcon__icon"
-          focusable="false"
-          height="16"
-          viewBox="0 0 16 16"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
-        />
+        <div>
+          EuiIconMock
+        </div>
       </button>
     </div>
   </div>

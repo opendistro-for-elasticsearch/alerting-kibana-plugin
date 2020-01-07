@@ -19,22 +19,12 @@ exports[`FormikSwitch renders 1`] = `
     <span
       class="euiSwitch__track"
     >
-      <svg
-        class="euiIcon euiIcon--medium euiIcon-isLoading euiSwitch__icon"
-        focusable="false"
-        height="16"
-        viewBox="0 0 16 16"
-        width="16"
-        xmlns="http://www.w3.org/2000/svg"
-      />
-      <svg
-        class="euiIcon euiIcon--medium euiIcon-isLoading euiSwitch__icon euiSwitch__icon--checked"
-        focusable="false"
-        height="16"
-        viewBox="0 0 16 16"
-        width="16"
-        xmlns="http://www.w3.org/2000/svg"
-      />
+      <div>
+        EuiIconMock
+      </div>
+      <div>
+        EuiIconMock
+      </div>
     </span>
   </span>
 </div>

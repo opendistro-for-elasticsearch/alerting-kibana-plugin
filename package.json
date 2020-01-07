@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin",
   "kibana": {
-    "version": "7.3.2",
+    "version": "7.4.2",
     "templateVersion": "6.3.3"
   },
   "repository": {
@@ -14,12 +14,12 @@
     "url": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin"
   },
   "scripts": {
-    "kbn": "node ../../kibana/scripts/kbn",
-    "lint": "../../kibana/node_modules/.bin/eslint '**/*.js' -c .eslintrc",
+    "kbn": "node ../../scripts/kbn",
+    "lint": "../../node_modules/.bin/eslint '**/*.js' -c .eslintrc",
     "start": "plugin-helpers start",
     "test:server": "plugin-helpers test:server",
     "test:browser": "plugin-helpers test:browser",
-    "test:jest": "../../kibana/node_modules/.bin/jest --config ./test/jest.config.js",
+    "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js",
     "build": "plugin-helpers build"
   },
   "husky": {
@@ -28,9 +28,9 @@
     }
   },
   "devDependencies": {
-    "@elastic/eslint-config-kibana": "link:../../kibana/packages/eslint-config-kibana",
-    "@kbn/eslint-import-resolver-kibana": "link:../../kibana/packages/kbn-eslint-import-resolver-kibana",
-    "@kbn/plugin-helpers": "link:../../kibana/packages/kbn-plugin-helpers",
+    "@elastic/eslint-config-kibana": "link:../../packages/eslint-config-kibana",
+    "@kbn/eslint-import-resolver-kibana": "link:../../packages/kbn-eslint-import-resolver-kibana",
+    "@kbn/plugin-helpers": "link:../../packages/kbn-plugin-helpers",
     "husky": "^2.3.0",
     "lint-staged": "^8.1.6"
   },
@@ -39,7 +39,8 @@
     "formik": "1.1.1",
     "lodash": "^4.17.13",
     "query-string": "5.1.1",
-    "react-router-dom": "4.3.1"
+    "react-router-dom": "4.3.1",
+    "react-vis": "^1.11.7"
   },
   "resolutions": {
     "fstream": "1.0.12"
