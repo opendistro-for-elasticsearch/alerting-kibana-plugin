@@ -15,38 +15,15 @@
 
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { EuiSpacer } from '@elastic/eui';
 import { FormikFieldText } from '../../../../../components/FormControls';
-import SMTPInfo from './SMTPInfo';
-import AuthInfo from './AuthInfo';
 import { hasError, isInvalid } from '../../../../../utils/validate';
-import SubHeader from '../../../../../components/SubHeader';
 
 const propTypes = {
   type: PropTypes.string.isRequired,
 };
 const Mail = ({ type, values }) => (
   <div>
-    <SMTPInfo type={type} values={values} />
-    <AuthInfo type={type} values={values} />
-    <EuiSpacer size="m" />
     <Fragment>
-      <SubHeader title={<h6>Mail envelope settings</h6>} description={''} />
-      <FormikFieldText
-        name={`${type}.from`}
-        formRow
-        rowProps={{
-          label: 'From',
-          style: { paddingLeft: '10px' },
-          isInvalid,
-          error: hasError,
-        }}
-        inputProps={{
-          onFocus: (e, field, form) => {
-            form.setFieldError(`${type}.from`, undefined);
-          },
-        }}
-      />
       <FormikFieldText
         name={`${type}.recipients`}
         formRow
