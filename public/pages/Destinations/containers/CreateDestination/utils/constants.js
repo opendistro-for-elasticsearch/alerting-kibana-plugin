@@ -51,13 +51,6 @@ export const formikInitialValues = {
     ],
   },
   [DESTINATION_TYPE.MAIL]: {
-    host: '',
-    port: '25',
-    auth: false,
-    method: 'plain',
-    from: '',
     recipients: '',
-    username: '',
-    password: '',
   },
 };
