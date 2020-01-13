@@ -26,6 +26,7 @@ exports[`TriggerExpressions renders 1`] = `
         </EuiFormRow>
       }
       closePopover={[Function]}
+      display="inlineBlock"
       hasArrow={true}
       id="trigger-popover"
       isOpen={false}

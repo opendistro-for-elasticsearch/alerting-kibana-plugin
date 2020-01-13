@@ -24,17 +24,17 @@ Please see our [documentation](https://opendistro.github.io/for-elasticsearch-do
    See the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md#setting-up-your-development-environment) for more instructions on setting up your development environment.
    
 1. Change your node version to the version specified in `.node-version` inside the Kibana root directory.
-1. Create a `kibana-extra` directory as a sibling directory to the Kibana source code directory.
-1. Check out this package from version control into the `kibana-extra` directory.
-1. Run `yarn kbn bootstrap` inside `kibana-extra/opendistro-elasticsearch-alerting-kibana`.
+1. cd into the `plugins` directory of the Kibana source code directory.
+1. Check out this package from version control into the `plugins` directory.
+1. Run `yarn kbn bootstrap` inside `kibana/plugins/alerting-kibana-plugin`.
 
 Ultimately, your directory structure should look like this:
 
 ```md
 .
 ├── kibana
-├── kibana-extra
-│   └── opendistro-elasticsearch-alerting-kibana
+│   └── plugins
+│       └── alerting-kibana-plugin
 ```
 
 
@@ -51,7 +51,7 @@ Example output: `./build/opendistro-alerting-0.7.0.0.zip`
 
   Starts Kibana and includes this plugin. Kibana will be available on `localhost:5601`.
 
-- `NODE_PATH=../../kibana/node_modules yarn test:jest`
+- `NODE_PATH=../../node_modules yarn test:jest`
 
   Runs the plugin tests.
 

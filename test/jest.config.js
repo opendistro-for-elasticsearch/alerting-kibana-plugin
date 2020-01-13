@@ -20,12 +20,13 @@ module.exports = {
     '<rootDir>/test/setupTests.js',
     '<rootDir>/test/enzyme.js',
   ],
-  modulePaths: ['node_modules', `../../kibana/node_modules`],
+  setupFilesAfterEnv: ['<rootDir>/test/setup.jest.js'],
+  modulePaths: ['node_modules', `../../node_modules`],
   coverageDirectory: './coverage',
   moduleNameMapper: {
     '\\.(css|less|scss)$': '<rootDir>/test/mocks/styleMock.js',
   },
-  snapshotSerializers: ['../../kibana/node_modules/enzyme-to-json/serializer'],
+  snapshotSerializers: ['../../node_modules/enzyme-to-json/serializer'],
   coverageReporters: ['lcov', 'text', 'cobertura'],
   testMatch: ['**/*.test.js'],
   collectCoverageFrom: [

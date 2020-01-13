@@ -16,7 +16,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { render, mount } from 'enzyme';
-import { EuiExpression, EuiSelect } from '@elastic/eui';
+import { EuiExpression } from '@elastic/eui';
 
 import { FORMIK_INITIAL_VALUES } from '../../../containers/CreateMonitor/utils/constants';
 import WhereExpression from './WhereExpression';
@@ -62,10 +62,8 @@ describe('WhereExpression', () => {
   });
 
   test('calls closeExpression when closing popover', () => {
-    const wrapper = mount(getMountWrapper());
+    const wrapper = mount(getMountWrapper(true));
     const button = wrapper.find(EuiExpression);
-    button.simulate('click');
-    expect(openExpression).toHaveBeenCalled();
     button.simulate('keyDown', { keyCode: 27 });
     expect(closeExpression).toHaveBeenCalled();
   });

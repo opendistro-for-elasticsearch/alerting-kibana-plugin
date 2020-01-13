@@ -1,5 +1,5 @@
 const templatePkg = require('./package.json');
-const kibanaPkg = require('../kibana/package.json');
+const kibanaPkg = require('../../package.json');
 
 const debugInfo = {
   kibana: {
