@@ -19,7 +19,7 @@ export const validateUrl = (value, allValues) => {
   const type = allValues.type;
   if (allValues[type].urlType !== URL_TYPE.FULL_URL) return;
   if (!value) return 'Required';
-  const regname = '((www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4})';
+  const regname = '((www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,63})';
   const ipv4 = '(((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))';
   const h16 = '([0-9a-fA-F]{1,4})';
   const ls32 = `((${h16}:${h16})|${ipv4})`;
