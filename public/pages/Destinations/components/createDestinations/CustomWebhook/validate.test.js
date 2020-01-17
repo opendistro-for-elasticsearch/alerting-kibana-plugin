@@ -54,5 +54,6 @@ describe('validateUrl', () => {
     expect(validateUrl("2001:0db8:85a3:0000:0000:0000:0000:7344", typeFullUrl)).toBe(invalidText);
     expect(validateUrl("http://2001:0db8:85a3:0000:0000:0000:0000:7344", typeFullUrl)).toBe(invalidText);
     expect(validateUrl("http://[2001:0db8:85a3:0000:0r00:0000:0000:7344]", typeFullUrl)).toBe(invalidText);
+    expect(validateUrl("http://org.exampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexample", typeFullUrl)).toBe(invalidText);
   });
 });
