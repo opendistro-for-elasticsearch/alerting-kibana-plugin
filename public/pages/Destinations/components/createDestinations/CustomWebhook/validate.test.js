@@ -40,6 +40,7 @@ describe('validateUrl', () => {
     expect(validateUrl("https://[::ff]", typeFullUrl)).toBeUndefined();
     expect(validateUrl("https://[2001:db8::ff00:42:8329]:443/?foo=bar", typeFullUrl)).toBeUndefined();
     expect(validateUrl("http://[64:ff9b::192.0.2.128]:80/", typeFullUrl)).toBeUndefined();
+    expect(validateUrl("https://org.example/", typeFullUrl)).toBeUndefined();
   });
 
   test('returns error string if invalid', () => {
@@ -53,5 +54,6 @@ describe('validateUrl', () => {
     expect(validateUrl("2001:0db8:85a3:0000:0000:0000:0000:7344", typeFullUrl)).toBe(invalidText);
     expect(validateUrl("http://2001:0db8:85a3:0000:0000:0000:0000:7344", typeFullUrl)).toBe(invalidText);
     expect(validateUrl("http://[2001:0db8:85a3:0000:0r00:0000:0000:7344]", typeFullUrl)).toBe(invalidText);
+    expect(validateUrl("http://org.exampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexample", typeFullUrl)).toBe(invalidText);
   });
 });
