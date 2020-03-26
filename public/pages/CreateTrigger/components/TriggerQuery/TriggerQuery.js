@@ -24,7 +24,6 @@ import {
   EuiFlexItem,
   EuiFormRow,
   EuiSpacer,
-  EuiText,
 } from '@elastic/eui';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
@@ -115,6 +114,7 @@ const TriggerQuery = ({
         <EuiFlexItem grow={false}>
           <EuiFormRow label="Trigger condition response:" fullWidth>
             <EuiCodeEditor
+              mode="plain_text"
               theme={isDarkMode ? 'sense-dark' : 'github'}
               width="100%"
               height="200px"

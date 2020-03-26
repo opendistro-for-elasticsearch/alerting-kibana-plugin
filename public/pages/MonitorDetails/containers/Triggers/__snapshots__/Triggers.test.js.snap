@@ -5,35 +5,21 @@ exports[`Triggers renders 1`] = `
   actions={
     Array [
       <EuiButton
-        color="primary"
         disabled={true}
-        fill={false}
-        iconSide="left"
         onClick={[Function]}
-        size="m"
-        type="button"
       >
         Edit
       </EuiButton>,
       <EuiButton
-        color="primary"
         disabled={true}
-        fill={false}
-        iconSide="left"
         onClick={[Function]}
-        size="m"
-        type="button"
       >
         Delete
       </EuiButton>,
       <EuiButton
-        color="primary"
         disabled={false}
         fill={true}
-        iconSide="left"
         onClick={[MockFunction]}
-        size="m"
-        type="button"
       >
         Create
       </EuiButton>,

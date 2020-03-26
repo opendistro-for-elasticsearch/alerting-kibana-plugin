@@ -15,7 +15,9 @@ exports[`TriggerQuery renders 1`] = `
     <EuiFlexItem>
       <EuiFormRow
         describedByIds={Array []}
+        display="row"
         fullWidth={true}
+        hasChildLabel={true}
         hasEmptyLabelSpace={false}
         label="Extraction query response"
         labelType="label"
@@ -41,7 +43,9 @@ exports[`TriggerQuery renders 1`] = `
     >
       <EuiFormRow
         describedByIds={Array []}
+        display="row"
         fullWidth={true}
+        hasChildLabel={true}
         hasEmptyLabelSpace={false}
         label="Trigger condition response:"
         labelType="label"
@@ -68,12 +72,7 @@ exports[`TriggerQuery renders 1`] = `
       grow={false}
     >
       <EuiButton
-        color="primary"
-        fill={false}
-        iconSide="left"
         onClick={[Function]}
-        size="m"
-        type="button"
       >
         Run
       </EuiButton>

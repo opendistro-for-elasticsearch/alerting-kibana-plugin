@@ -15,7 +15,7 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { EuiAccordion, EuiButton, EuiHorizontalRule } from '@elastic/eui';
+import { EuiAccordion, EuiButton, EuiHorizontalRule, EuiSpacer } from '@elastic/eui';
 import { FormikFieldText, FormikComboBox } from '../../../../components/FormControls';
 import { isInvalid, hasError, validateActionName } from '../../../../utils/validate';
 import { ActionsMap } from './utils/constants';
@@ -94,6 +94,7 @@ const Action = ({
             isClearable: false,
           }}
         />
+        <EuiSpacer size="m" />
         <ActionComponent
           action={action}
           context={context}
@@ -102,6 +103,7 @@ const Action = ({
           setFlyout={setFlyout}
         />
       </div>
+      <EuiSpacer />
     </EuiAccordion>
   );
 };

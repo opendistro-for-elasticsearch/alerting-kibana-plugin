@@ -3,7 +3,6 @@
 exports[`Breadcrumbs renders 1`] = `
 <EuiBreadcrumbs
   breadcrumbs={Array []}
-  max={5}
   responsive={false}
   style={
     Object {

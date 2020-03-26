@@ -14,10 +14,10 @@
  */
 
 import React from 'react';
+import { EuiSpacer } from '@elastic/eui';
 
 import ContentPanel from '../../../../components/ContentPanel';
 import MonitorState from '../../components/MonitorState';
-import Schedule from '../../components/Schedule';
 import { hasError, isInvalid, validateMonitorName } from '../../../../utils/validate';
 import FormikFieldText from '../../../../components/FormControls/FormikFieldText';
 
@@ -40,6 +40,7 @@ const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
         },
       }}
     />
+    <EuiSpacer size="s" />
     <MonitorState />
   </ContentPanel>
 );

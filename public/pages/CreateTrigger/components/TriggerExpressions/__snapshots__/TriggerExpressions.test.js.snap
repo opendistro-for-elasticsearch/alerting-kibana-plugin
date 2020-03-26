@@ -12,7 +12,9 @@ exports[`TriggerExpressions renders 1`] = `
       button={
         <EuiFormRow
           describedByIds={Array []}
+          display="row"
           fullWidth={false}
+          hasChildLabel={true}
           hasEmptyLabelSpace={false}
           label="Trigger condition"
           labelType="label"

@@ -19,7 +19,7 @@ import { EuiFormRow } from '@elastic/eui';
 
 const FormikFormRow = ({ children, form, name, rowProps: { isInvalid, error, ...rest } }) => (
   <EuiFormRow
-    id={name}
+    id={`${name}-form-row`}
     isInvalid={typeof isInvalid === 'function' ? isInvalid(name, form) : isInvalid}
     error={typeof error === 'function' ? error(name, form) : error}
     {...rest}

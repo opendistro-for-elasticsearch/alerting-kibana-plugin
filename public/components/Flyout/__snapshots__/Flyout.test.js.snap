@@ -56,10 +56,8 @@ exports[`Flyout renders 1`] = `
       <ul>
         <li>
           <EuiLink
-            color="primary"
             href="https://mustache.github.io/mustache.5.html"
             target="_blank"
-            type="button"
           >
             HTML Templates with Mustache.js
           </EuiLink>
