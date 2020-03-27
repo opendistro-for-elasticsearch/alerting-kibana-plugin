@@ -11,7 +11,7 @@ exports[`Frequencies renders CustomCron 1`] = `
   >
     <div
       class="euiFormRow"
-      id="cronExpression-form-row"
+      id="cronExpression-form-row-row"
       style="margin-top:0px"
     >
       <div
@@ -63,7 +63,7 @@ exports[`Frequencies renders CustomCron 1`] = `
   >
     <div
       class="euiFormRow"
-      id="timezone-form-row"
+      id="timezone-form-row-row"
       style="margin-top:0px"
     >
       <div
@@ -135,7 +135,7 @@ exports[`Frequencies renders CustomCron 1`] = `
 exports[`Frequencies renders Frequency 1`] = `
 <div
   class="euiFormRow"
-  id="frequency-form-row"
+  id="frequency-form-row-row"
   style="padding-left:10px"
 >
   <div
@@ -218,7 +218,7 @@ exports[`Frequencies renders FrequencyPicker 1`] = `
   >
     <div
       class="euiFormRow"
-      id="period.interval-form-row"
+      id="period.interval-form-row-row"
     >
       <div
         class="euiFormRow__labelWrapper"
@@ -269,7 +269,7 @@ exports[`Frequencies renders FrequencyPicker 1`] = `
   >
     <div
       class="euiFormRow euiFormRow--hasEmptyLabelSpace"
-      id="period.unit-form-row"
+      id="period.unit-form-row-row"
     >
       <div
         class="euiFormRow__fieldWrapper"
@@ -332,7 +332,7 @@ exports[`Frequencies renders Interval 1`] = `
   >
     <div
       class="euiFormRow"
-      id="period.interval-form-row"
+      id="period.interval-form-row-row"
     >
       <div
         class="euiFormRow__labelWrapper"
@@ -383,7 +383,7 @@ exports[`Frequencies renders Interval 1`] = `
   >
     <div
       class="euiFormRow euiFormRow--hasEmptyLabelSpace"
-      id="period.unit-form-row"
+      id="period.unit-form-row-row"
     >
       <div
         class="euiFormRow__fieldWrapper"

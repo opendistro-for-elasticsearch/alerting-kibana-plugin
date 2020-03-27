@@ -3,7 +3,7 @@
 exports[`MonitorDefinition renders 1`] = `
 <div
   class="euiFormRow"
-  id="searchType-form-row"
+  id="searchType-form-row-row"
   style="padding-left:10px"
 >
   <div

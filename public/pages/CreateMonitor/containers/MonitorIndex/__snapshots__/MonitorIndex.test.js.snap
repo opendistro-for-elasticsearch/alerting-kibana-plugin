@@ -417,7 +417,7 @@ exports[`MonitorIndex renders 1`] = `
               >
                 <div
                   className="euiFormRow"
-                  id="index-form-row"
+                  id="index-form-row-row"
                   style={
                     Object {
                       "paddingLeft": "10px",

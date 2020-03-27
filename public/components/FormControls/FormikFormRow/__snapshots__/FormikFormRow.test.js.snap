@@ -3,7 +3,7 @@
 exports[`FormikFormRow renders 1`] = `
 <div
   class="euiFormRow"
-  id="testing-form-row"
+  id="testing-form-row-row"
 >
   <div
     class="euiFormRow__fieldWrapper"

@@ -24,7 +24,7 @@ Array [
   />,
   <div
     class="euiFormRow"
-    id="disabled-form-row"
+    id="disabled-form-row-row"
     style="padding-left:10px"
   >
     <div

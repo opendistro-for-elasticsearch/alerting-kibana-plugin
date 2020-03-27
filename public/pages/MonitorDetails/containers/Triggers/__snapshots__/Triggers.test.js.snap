@@ -57,7 +57,6 @@ exports[`Triggers renders 1`] = `
         },
       ]
     }
-    executeQueryOptions={Object {}}
     isSelectable={true}
     itemId="id"
     items={
@@ -75,7 +74,6 @@ exports[`Triggers renders 1`] = `
     }
     key="0"
     onTableChange={[Function]}
-    pagination={false}
     responsive={true}
     selection={
       Object {
@@ -90,6 +88,7 @@ exports[`Triggers renders 1`] = `
         },
       }
     }
+    tableLayout="fixed"
   />
 </ContentPanel>
 `;

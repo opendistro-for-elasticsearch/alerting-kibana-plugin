@@ -4,7 +4,7 @@ exports[`Message renders 1`] = `
 <div>
   <div
     class="euiFormRow"
-    id="actions.0.subject_template.source-form-row"
+    id="actions.0.subject_template.source-form-row-row"
   >
     <div
       class="euiFormRow__labelWrapper"
@@ -37,7 +37,7 @@ exports[`Message renders 1`] = `
   </div>
   <div
     class="euiFormRow"
-    id="actions.0.message_template.source-form-row"
+    id="actions.0.message_template.source-form-row-row"
     style="max-width:100%"
   >
     <div
@@ -127,6 +127,7 @@ exports[`Message renders 1`] = `
   </div>
   <div
     class="euiFormRow"
+    id="testing-id-row"
     style="max-width:100%"
   >
     <div
@@ -162,6 +163,7 @@ exports[`Message renders 1`] = `
   />
   <div
     class="euiFormRow"
+    id="testing-id-row"
     style="max-width:100%"
   >
     <div
@@ -235,6 +237,7 @@ exports[`Message renders 1`] = `
           >
             <div
               class="euiFormRow"
+              id="testing-id-row"
             >
               <div
                 class="euiFormRow__labelWrapper"
@@ -251,7 +254,7 @@ exports[`Message renders 1`] = `
               >
                 <div
                   class="euiFormRow"
-                  id="actions.0.throttle.value-form-row"
+                  id="actions.0.throttle.value-form-row-row"
                 >
                   <div
                     class="euiFormRow__fieldWrapper"
