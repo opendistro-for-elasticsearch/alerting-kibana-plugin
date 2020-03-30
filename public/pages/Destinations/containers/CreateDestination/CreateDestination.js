@@ -202,6 +202,7 @@ class CreateDestination extends React.Component {
                       options: DESTINATION_OPTIONS,
                     }}
                   />
+                  <EuiSpacer size="m" />
                   <SubHeader title={<h4>Settings</h4>} description={''} />
                   <EuiSpacer size="m" />
                   {destinationType[values.type]({ values, type: values.type })}

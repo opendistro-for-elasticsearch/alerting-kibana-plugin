@@ -19,10 +19,11 @@ import { render } from 'enzyme';
 import FormikFormRow from './FormikFormRow';
 
 describe('FormikFormRow', () => {
+  const Child = () => <div id="mine">child</div>;
   test('renders', () => {
     const component = (
       <FormikFormRow name="testing" rowProps={{}} form={{}}>
-        <div>child</div>
+        <Child />
       </FormikFormRow>
     );
 

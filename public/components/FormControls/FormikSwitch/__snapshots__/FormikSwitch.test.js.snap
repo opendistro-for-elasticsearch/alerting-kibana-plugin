@@ -4,28 +4,35 @@ exports[`FormikSwitch renders 1`] = `
 <div
   class="euiSwitch"
 >
-  <input
-    class="euiSwitch__input"
+  <button
+    aria-labelledby="some_make_id"
+    class="euiSwitch__button"
     id="testing"
     name="testing"
-    type="checkbox"
-  />
-  <span
-    class="euiSwitch__body"
+    role="switch"
+    type="button"
   >
     <span
-      class="euiSwitch__thumb"
-    />
-    <span
-      class="euiSwitch__track"
+      class="euiSwitch__body"
     >
-      <div>
-        EuiIconMock
-      </div>
-      <div>
-        EuiIconMock
-      </div>
+      <span
+        class="euiSwitch__thumb"
+      />
+      <span
+        class="euiSwitch__track"
+      >
+        <div>
+          EuiIconMock
+        </div>
+        <div>
+          EuiIconMock
+        </div>
+      </span>
     </span>
-  </span>
+  </button>
+  <span
+    class="euiSwitch__label"
+    id="some_make_id"
+  />
 </div>
 `;

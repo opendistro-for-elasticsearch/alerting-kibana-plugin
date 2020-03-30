@@ -51,7 +51,7 @@ Example output: `./build/opendistro-alerting-0.7.0.0.zip`
 
   Starts Kibana and includes this plugin. Kibana will be available on `localhost:5601`.
 
-- `NODE_PATH=../../node_modules yarn test:jest`
+- `yarn test:jest`
 
   Runs the plugin tests.
 

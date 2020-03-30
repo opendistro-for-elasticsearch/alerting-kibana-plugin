@@ -193,7 +193,7 @@ const Message = ({
                         minutes
                       </EuiText>
                     ),
-                    class: 'euiFieldText',
+                    className: 'euiFieldText',
                     disabled: !_.get(action, `throttle_enabled`) ? 'disabled' : '',
                   }}
                 />

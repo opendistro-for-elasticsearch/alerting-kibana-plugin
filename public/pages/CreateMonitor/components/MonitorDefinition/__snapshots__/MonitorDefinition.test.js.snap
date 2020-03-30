@@ -3,49 +3,55 @@
 exports[`MonitorDefinition renders 1`] = `
 <div
   class="euiFormRow"
-  id="searchType-row"
+  id="searchType-form-row-row"
   style="padding-left:10px"
 >
-  <div>
+  <div
+    class="euiFormRow__labelWrapper"
+  >
     <label
-      class="euiFormLabel"
-      for="searchType"
+      class="euiFormLabel euiFormRow__label"
+      for="searchType-form-row"
     >
       How do you want to define the monitor?
     </label>
   </div>
   <div
-    class="euiFormControlLayout"
+    class="euiFormRow__fieldWrapper"
   >
     <div
-      class="euiFormControlLayout__childrenWrapper"
+      class="euiFormControlLayout"
     >
-      <select
-        class="euiSelect"
-        id="searchType"
-        name="searchType"
-      >
-        <option
-          value="graph"
-        >
-          Define using visual graph
-        </option>
-        <option
-          value="query"
-        >
-          Define using extraction query
-        </option>
-      </select>
       <div
-        class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+        class="euiFormControlLayout__childrenWrapper"
       >
-        <span
-          class="euiFormControlLayoutCustomIcon"
+        <select
+          class="euiSelect"
+          id="searchType"
+          name="searchType"
         >
-          <div>
-            EuiIconMock
-          </div>
-        </span>
+          <option
+            value="graph"
+          >
+            Define using visual graph
+          </option>
+          <option
+            value="query"
+          >
+            Define using extraction query
+          </option>
+        </select>
+        <div
+          class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+        >
+          <span
+            class="euiFormControlLayoutCustomIcon"
+          >
+            <div>
+              EuiIconMock
+            </div>
+          </span>
+        </div>
       </div>
     </div>
   </div>

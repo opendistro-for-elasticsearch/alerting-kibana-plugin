@@ -24,27 +24,31 @@ Array [
   />,
   <div
     class="euiFormRow"
-    id="disabled-row"
+    id="disabled-form-row-row"
     style="padding-left:10px"
   >
     <div
-      class="euiCheckbox"
+      class="euiFormRow__fieldWrapper"
     >
-      <input
-        class="euiCheckbox__input"
-        id="disabled"
-        name="disabled"
-        type="checkbox"
-      />
       <div
-        class="euiCheckbox__square"
-      />
-      <label
-        class="euiCheckbox__label"
-        for="disabled"
+        class="euiCheckbox"
       >
-        Disable monitor
-      </label>
+        <input
+          class="euiCheckbox__input"
+          id="disabled"
+          name="disabled"
+          type="checkbox"
+        />
+        <div
+          class="euiCheckbox__square"
+        />
+        <label
+          class="euiCheckbox__label"
+          for="disabled"
+        >
+          Disable monitor
+        </label>
+      </div>
     </div>
   </div>,
 ]

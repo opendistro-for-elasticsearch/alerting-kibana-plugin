@@ -4,41 +4,49 @@ exports[`Message renders 1`] = `
 <div>
   <div
     class="euiFormRow"
-    id="actions.0.subject_template.source-row"
+    id="actions.0.subject_template.source-form-row-row"
   >
-    <div>
+    <div
+      class="euiFormRow__labelWrapper"
+    >
       <label
         aria-invalid="false"
-        class="euiFormLabel"
-        for="actions.0.subject_template.source"
+        class="euiFormLabel euiFormRow__label"
+        for="actions.0.subject_template.source-form-row"
       >
         Message subject
       </label>
     </div>
     <div
-      class="euiFormControlLayout"
+      class="euiFormRow__fieldWrapper"
     >
       <div
-        class="euiFormControlLayout__childrenWrapper"
+        class="euiFormControlLayout"
       >
-        <input
-          class="euiFieldText"
-          name="actions.0.subject_template.source"
-          type="text"
-        />
+        <div
+          class="euiFormControlLayout__childrenWrapper"
+        >
+          <input
+            class="euiFieldText"
+            name="actions.0.subject_template.source"
+            type="text"
+          />
+        </div>
       </div>
     </div>
   </div>
   <div
     class="euiFormRow"
-    id="actions.0.message_template.source-row"
+    id="actions.0.message_template.source-form-row-row"
     style="max-width:100%"
   >
-    <div>
+    <div
+      class="euiFormRow__labelWrapper"
+    >
       <label
         aria-invalid="false"
-        class="euiFormLabel"
-        for="actions.0.message_template.source"
+        class="euiFormLabel euiFormRow__label"
+        for="actions.0.message_template.source-form-row"
       >
         <div>
           <span>
@@ -61,53 +69,57 @@ exports[`Message renders 1`] = `
         </div>
       </label>
     </div>
-    <textarea
-      class="euiTextArea euiTextArea--resizeVertical euiTextArea--fullWidth"
-      name="actions.0.message_template.source"
-      placeholder="Can use mustache templates"
-      rows="6"
-    />
     <div
-      class="euiFormHelpText euiFormRow__text"
-      id="actions.0.message_template.source-help"
+      class="euiFormRow__fieldWrapper"
     >
+      <textarea
+        class="euiTextArea euiTextArea--resizeVertical euiTextArea--fullWidth"
+        name="actions.0.message_template.source"
+        placeholder="Can use mustache templates"
+        rows="6"
+      />
       <div
-        class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
+        class="euiFormHelpText euiFormRow__text"
+        id="actions.0.message_template.source-form-row-help"
       >
         <div
-          class="euiFlexItem"
+          class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
         >
           <div
-            class="euiText euiText--extraSmall"
+            class="euiFlexItem"
           >
-            Embed variables in your message using Mustache templates. 
-            <a
-              href="https://mustache.github.io/mustache.5.html"
+            <div
+              class="euiText euiText--extraSmall"
             >
-              Learn more about Mustache
-            </a>
+              Embed variables in your message using Mustache templates. 
+              <a
+                href="https://mustache.github.io/mustache.5.html"
+              >
+                Learn more about Mustache
+              </a>
+            </div>
           </div>
-        </div>
-        <div
-          class="euiFlexItem euiFlexItem--flexGrowZero"
-        >
           <div
-            class="euiText euiText--extraSmall"
+            class="euiFlexItem euiFlexItem--flexGrowZero"
           >
-            <button
-              class="euiButtonEmpty euiButtonEmpty--primary"
-              type="button"
+            <div
+              class="euiText euiText--extraSmall"
             >
-              <span
-                class="euiButtonEmpty__content"
+              <button
+                class="euiButtonEmpty euiButtonEmpty--primary"
+                type="button"
               >
                 <span
-                  class="euiButtonEmpty__text"
+                  class="euiButtonEmpty__content"
                 >
-                  Send test message
+                  <span
+                    class="euiButtonEmpty__text"
+                  >
+                    Send test message
+                  </span>
                 </span>
-              </span>
-            </button>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -118,27 +130,33 @@ exports[`Message renders 1`] = `
     id="testing-id-row"
     style="max-width:100%"
   >
-    <div>
+    <div
+      class="euiFormRow__labelWrapper"
+    >
       <label
-        class="euiFormLabel"
+        class="euiFormLabel euiFormRow__label"
         for="testing-id"
       >
         Message preview
       </label>
     </div>
-    <textarea
-      class="euiTextArea euiTextArea--resizeVertical euiTextArea--fullWidth read-only-text-area"
-      id="testing-id"
-      placeholder="Preview of mustache template"
-      readonly=""
-      rows="6"
+    <div
+      class="euiFormRow__fieldWrapper"
     >
-      Monitor  just entered alert status. Please investigate the issue.
+      <textarea
+        class="euiTextArea euiTextArea--resizeVertical euiTextArea--fullWidth read-only-text-area"
+        id="testing-id"
+        placeholder="Preview of mustache template"
+        readonly=""
+        rows="6"
+      >
+        Monitor  just entered alert status. Please investigate the issue.
 - Trigger: 
 - Severity: 
 - Period start: 
 - Period end: 
-    </textarea>
+      </textarea>
+    </div>
   </div>
   <div
     class="euiSpacer euiSpacer--s"
@@ -148,9 +166,11 @@ exports[`Message renders 1`] = `
     id="testing-id-row"
     style="max-width:100%"
   >
-    <div>
+    <div
+      class="euiFormRow__labelWrapper"
+    >
       <label
-        class="euiFormLabel"
+        class="euiFormLabel euiFormRow__label"
         for="testing-id"
       >
         <div>
@@ -177,85 +197,99 @@ exports[`Message renders 1`] = `
       </label>
     </div>
     <div
-      class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionColumn euiFlexGroup--responsive"
-      id="testing-id"
+      class="euiFormRow__fieldWrapper"
     >
       <div
-        class="euiFlexItem euiFlexItem--flexGrowZero"
-        style="margin-bottom:12px"
-      >
-        <div
-          class="euiCheckbox"
-        >
-          <input
-            class="euiCheckbox__input"
-            id="actions.0.throttle_enabled"
-            name="actions.0.throttle_enabled"
-            type="checkbox"
-          />
-          <div
-            class="euiCheckbox__square"
-          />
-          <label
-            class="euiCheckbox__label"
-            for="actions.0.throttle_enabled"
-          >
-            Enable action throttling
-          </label>
-        </div>
-      </div>
-      <div
-        class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow euiFlexGroup--responsive"
-        style="margin:0px;display:none"
+        class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionColumn euiFlexGroup--responsive"
+        id="testing-id"
       >
         <div
           class="euiFlexItem euiFlexItem--flexGrowZero"
-          style="margin-right:0px"
+          style="margin-bottom:12px"
         >
           <div
-            class="euiFormRow"
-            id="testing-id-row"
+            class="euiCheckbox"
           >
-            <div>
-              <label
-                class="euiFormLabel"
-                for="testing-id"
-              >
-                Throttle actions to only trigger every
-              </label>
-            </div>
+            <input
+              class="euiCheckbox__input"
+              id="actions.0.throttle_enabled"
+              name="actions.0.throttle_enabled"
+              type="checkbox"
+            />
+            <div
+              class="euiCheckbox__square"
+            />
+            <label
+              class="euiCheckbox__label"
+              for="actions.0.throttle_enabled"
+            >
+              Enable action throttling
+            </label>
+          </div>
+        </div>
+        <div
+          class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow euiFlexGroup--responsive"
+          style="margin:0px;display:none"
+        >
+          <div
+            class="euiFlexItem euiFlexItem--flexGrowZero"
+            style="margin-right:0px"
+          >
             <div
               class="euiFormRow"
-              id="actions.0.throttle.value-row"
+              id="testing-id-row"
             >
               <div
-                class="euiFormControlLayout euiFormControlLayout--compressed euiFormControlLayout--group"
+                class="euiFormRow__labelWrapper"
               >
-                <div
-                  class="euiFormControlLayout__childrenWrapper"
+                <label
+                  class="euiFormLabel euiFormRow__label"
+                  for="testing-id"
                 >
-                  <input
-                    class="euiFieldNumber euiFieldNumber--compressed euiFieldNumber--inGroup"
-                    disabled=""
-                    max="1440"
-                    min="1"
-                    name="actions.0.throttle.value"
-                    style="width:400px;height:40px"
-                    type="number"
-                  />
-                </div>
-                <div
-                  class="euiText euiText--medium euiFormControlLayout__append"
-                  style="height:40px;line-height:24px;background-color:transparent;padding-left:4px"
-                >
-                  minutes
-                </div>
+                  Throttle actions to only trigger every
+                </label>
               </div>
               <div
-                class="euiFormHelpText euiFormRow__text"
-                id="actions.0.throttle.value-help"
+                class="euiFormRow__fieldWrapper"
               >
-                Throttle value must be greater than 0 and less than 1440
+                <div
+                  class="euiFormRow"
+                  id="actions.0.throttle.value-form-row-row"
+                >
+                  <div
+                    class="euiFormRow__fieldWrapper"
+                  >
+                    <div
+                      class="euiFormControlLayout euiFormControlLayout--compressed euiFormControlLayout--group"
+                    >
+                      <div
+                        class="euiFormControlLayout__childrenWrapper"
+                      >
+                        <input
+                          class="euiFieldNumber euiFieldText euiFieldNumber--compressed euiFieldNumber--inGroup"
+                          disabled=""
+                          max="1440"
+                          min="1"
+                          name="actions.0.throttle.value"
+                          style="width:400px;height:40px"
+                          type="number"
+                        />
+                      </div>
+                      <div
+                        class="euiText euiText--medium euiFormControlLayout__append"
+                        style="height:40px;line-height:24px;background-color:transparent;padding-left:4px"
+                      >
+                        minutes
+                      </div>
+                    </div>
+                    <div
+                      class="euiFormHelpText euiFormRow__text"
+                      id="actions.0.throttle.value-form-row-help"
+                    >
+                      Throttle value must be greater than 0 and less than 1440
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

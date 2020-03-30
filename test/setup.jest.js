@@ -24,6 +24,8 @@ jest.mock('@elastic/eui/lib/components/icon', () => ({
   ICON_COLORS: require('@elastic/eui/lib/components/icon/icon').COLORS,
 }));
 
+jest.mock('@elastic/eui/lib/components/form/form_row/make_id', () => () => 'some_make_id');
+
 // https://github.com/facebook/jest/issues/5785
 // https://github.com/facebook/jest/pull/5267#issuecomment-356605468
 beforeEach(() => {

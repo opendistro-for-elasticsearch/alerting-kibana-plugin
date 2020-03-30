@@ -11,42 +11,48 @@ exports[`Frequencies renders CustomCron 1`] = `
   >
     <div
       class="euiFormRow"
-      id="cronExpression-row"
+      id="cronExpression-form-row-row"
       style="margin-top:0px"
     >
-      <div>
+      <div
+        class="euiFormRow__labelWrapper"
+      >
         <label
           aria-invalid="false"
-          class="euiFormLabel"
-          for="cronExpression"
+          class="euiFormLabel euiFormRow__label"
+          for="cronExpression-form-row"
         >
           Every
         </label>
       </div>
-      <textarea
-        class="euiTextArea euiTextArea--resizeVertical"
-        name="cronExpression"
-        rows="6"
-      >
-        0 */1 * * *
-      </textarea>
       <div
-        class="euiFormHelpText euiFormRow__text"
-        id="cronExpression-help"
+        class="euiFormRow__fieldWrapper"
       >
-        <div
-          class="euiText euiText--small"
+        <textarea
+          class="euiTextArea euiTextArea--resizeVertical"
+          name="cronExpression"
+          rows="6"
         >
-          Use 
-          <a
-            class="euiLink euiLink--primary"
-            href="https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/"
-            rel="noopener noreferrer"
-            target="_blank"
+          0 */1 * * *
+        </textarea>
+        <div
+          class="euiFormHelpText euiFormRow__text"
+          id="cronExpression-form-row-help"
+        >
+          <div
+            class="euiText euiText--small"
           >
-            cron expressions
-          </a>
-           for complex schedules
+            Use 
+            <a
+              class="euiLink euiLink--primary"
+              href="https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              cron expressions
+            </a>
+             for complex schedules
+          </div>
         </div>
       </div>
     </div>
@@ -57,62 +63,66 @@ exports[`Frequencies renders CustomCron 1`] = `
   >
     <div
       class="euiFormRow"
-      id="timezone-row"
+      id="timezone-form-row-row"
       style="margin-top:0px"
     >
       <div
-        aria-expanded="false"
-        aria-haspopup="listbox"
-        class="euiComboBox"
-        data-test-subj="timezoneComboBox"
-        name="timezone"
-        role="combobox"
+        class="euiFormRow__fieldWrapper"
       >
         <div
-          class="euiFormControlLayout"
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          class="euiComboBox"
+          data-test-subj="timezoneComboBox"
+          name="timezone"
+          role="combobox"
         >
           <div
-            class="euiFormControlLayout__childrenWrapper"
+            class="euiFormControlLayout"
           >
             <div
-              class="euiComboBox__inputWrap euiComboBox__inputWrap--noWrap euiComboBox__inputWrap-isClearable"
-              data-test-subj="comboBoxInput"
-              tabindex="-1"
+              class="euiFormControlLayout__childrenWrapper"
             >
-              <p
-                class="euiComboBoxPlaceholder"
-              >
-                Select a timezone
-              </p>
               <div
-                class="euiComboBox__input"
-                style="font-size:14px;display:inline-block"
+                class="euiComboBox__inputWrap euiComboBox__inputWrap--noWrap euiComboBox__inputWrap-isClearable"
+                data-test-subj="comboBoxInput"
+                tabindex="-1"
               >
-                <input
-                  data-test-subj="comboBoxSearchInput"
-                  id="timezone"
-                  role="textbox"
-                  style="box-sizing:content-box;width:1px"
-                  value=""
-                />
+                <p
+                  class="euiComboBoxPlaceholder"
+                >
+                  Select a timezone
+                </p>
                 <div
-                  style="position:absolute;top:0;left:0;visibility:hidden;height:0;overflow:scroll;white-space:pre"
-                />
-              </div>
-            </div>
-            <div
-              class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
-            >
-              <button
-                aria-label="Open list of options"
-                class="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
-                data-test-subj="comboBoxToggleListButton"
-                type="button"
-              >
-                <div>
-                  EuiIconMock
+                  class="euiComboBox__input"
+                  style="font-size:14px;display:inline-block"
+                >
+                  <input
+                    data-test-subj="comboBoxSearchInput"
+                    id="timezone"
+                    role="textbox"
+                    style="box-sizing:content-box;width:1px"
+                    value=""
+                  />
+                  <div
+                    style="position:absolute;top:0;left:0;visibility:hidden;height:0;overflow:scroll;white-space:pre"
+                  />
                 </div>
-              </button>
+              </div>
+              <div
+                class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+              >
+                <button
+                  aria-label="Open list of options"
+                  class="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
+                  data-test-subj="comboBoxToggleListButton"
+                  type="button"
+                >
+                  <div>
+                    EuiIconMock
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -125,66 +135,72 @@ exports[`Frequencies renders CustomCron 1`] = `
 exports[`Frequencies renders Frequency 1`] = `
 <div
   class="euiFormRow"
-  id="frequency-row"
+  id="frequency-form-row-row"
   style="padding-left:10px"
 >
-  <div>
+  <div
+    class="euiFormRow__labelWrapper"
+  >
     <label
       aria-invalid="false"
-      class="euiFormLabel"
-      for="frequency"
+      class="euiFormLabel euiFormRow__label"
+      for="frequency-form-row"
     >
       Frequency
     </label>
   </div>
   <div
-    class="euiFormControlLayout"
+    class="euiFormRow__fieldWrapper"
   >
     <div
-      class="euiFormControlLayout__childrenWrapper"
+      class="euiFormControlLayout"
     >
-      <select
-        class="euiSelect"
-        id="frequency"
-        name="frequency"
-      >
-        <option
-          selected=""
-          value="interval"
-        >
-          By interval
-        </option>
-        <option
-          value="daily"
-        >
-          Daily
-        </option>
-        <option
-          value="weekly"
-        >
-          Weekly
-        </option>
-        <option
-          value="monthly"
-        >
-          Monthly
-        </option>
-        <option
-          value="cronExpression"
-        >
-          Custom cron expression
-        </option>
-      </select>
       <div
-        class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+        class="euiFormControlLayout__childrenWrapper"
       >
-        <span
-          class="euiFormControlLayoutCustomIcon"
+        <select
+          class="euiSelect"
+          id="frequency"
+          name="frequency"
         >
-          <div>
-            EuiIconMock
-          </div>
-        </span>
+          <option
+            selected=""
+            value="interval"
+          >
+            By interval
+          </option>
+          <option
+            value="daily"
+          >
+            Daily
+          </option>
+          <option
+            value="weekly"
+          >
+            Weekly
+          </option>
+          <option
+            value="monthly"
+          >
+            Monthly
+          </option>
+          <option
+            value="cronExpression"
+          >
+            Custom cron expression
+          </option>
+        </select>
+        <div
+          class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+        >
+          <span
+            class="euiFormControlLayoutCustomIcon"
+          >
+            <div>
+              EuiIconMock
+            </div>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -202,40 +218,46 @@ exports[`Frequencies renders FrequencyPicker 1`] = `
   >
     <div
       class="euiFormRow"
-      id="period.interval-row"
+      id="period.interval-form-row-row"
     >
-      <div>
+      <div
+        class="euiFormRow__labelWrapper"
+      >
         <label
           aria-invalid="false"
-          class="euiFormLabel"
-          for="period.interval"
+          class="euiFormLabel euiFormRow__label"
+          for="period.interval-form-row"
         >
           Every
         </label>
       </div>
       <div
-        class="euiFormControlLayout"
+        class="euiFormRow__fieldWrapper"
       >
         <div
-          class="euiFormControlLayout__childrenWrapper"
+          class="euiFormControlLayout"
         >
-          <input
-            class="euiFieldNumber euiFieldNumber--withIcon"
-            min="1"
-            name="period.interval"
-            type="number"
-            value="1"
-          />
           <div
-            class="euiFormControlLayoutIcons"
+            class="euiFormControlLayout__childrenWrapper"
           >
-            <span
-              class="euiFormControlLayoutCustomIcon"
+            <input
+              class="euiFieldNumber euiFieldNumber--withIcon"
+              min="1"
+              name="period.interval"
+              type="number"
+              value="1"
+            />
+            <div
+              class="euiFormControlLayoutIcons"
             >
-              <div>
-                EuiIconMock
-              </div>
-            </span>
+              <span
+                class="euiFormControlLayoutCustomIcon"
+              >
+                <div>
+                  EuiIconMock
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -247,46 +269,50 @@ exports[`Frequencies renders FrequencyPicker 1`] = `
   >
     <div
       class="euiFormRow euiFormRow--hasEmptyLabelSpace"
-      id="period.unit-row"
+      id="period.unit-form-row-row"
     >
       <div
-        class="euiFormControlLayout"
+        class="euiFormRow__fieldWrapper"
       >
         <div
-          class="euiFormControlLayout__childrenWrapper"
+          class="euiFormControlLayout"
         >
-          <select
-            class="euiSelect"
-            id="period.unit"
-            name="period.unit"
-          >
-            <option
-              selected=""
-              value="MINUTES"
-            >
-              Minutes
-            </option>
-            <option
-              value="HOURS"
-            >
-              Hours
-            </option>
-            <option
-              value="DAYS"
-            >
-              Days
-            </option>
-          </select>
           <div
-            class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+            class="euiFormControlLayout__childrenWrapper"
           >
-            <span
-              class="euiFormControlLayoutCustomIcon"
+            <select
+              class="euiSelect"
+              id="period.unit"
+              name="period.unit"
             >
-              <div>
-                EuiIconMock
-              </div>
-            </span>
+              <option
+                selected=""
+                value="MINUTES"
+              >
+                Minutes
+              </option>
+              <option
+                value="HOURS"
+              >
+                Hours
+              </option>
+              <option
+                value="DAYS"
+              >
+                Days
+              </option>
+            </select>
+            <div
+              class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+            >
+              <span
+                class="euiFormControlLayoutCustomIcon"
+              >
+                <div>
+                  EuiIconMock
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -306,40 +332,46 @@ exports[`Frequencies renders Interval 1`] = `
   >
     <div
       class="euiFormRow"
-      id="period.interval-row"
+      id="period.interval-form-row-row"
     >
-      <div>
+      <div
+        class="euiFormRow__labelWrapper"
+      >
         <label
           aria-invalid="false"
-          class="euiFormLabel"
-          for="period.interval"
+          class="euiFormLabel euiFormRow__label"
+          for="period.interval-form-row"
         >
           Every
         </label>
       </div>
       <div
-        class="euiFormControlLayout"
+        class="euiFormRow__fieldWrapper"
       >
         <div
-          class="euiFormControlLayout__childrenWrapper"
+          class="euiFormControlLayout"
         >
-          <input
-            class="euiFieldNumber euiFieldNumber--withIcon"
-            min="1"
-            name="period.interval"
-            type="number"
-            value="1"
-          />
           <div
-            class="euiFormControlLayoutIcons"
+            class="euiFormControlLayout__childrenWrapper"
           >
-            <span
-              class="euiFormControlLayoutCustomIcon"
+            <input
+              class="euiFieldNumber euiFieldNumber--withIcon"
+              min="1"
+              name="period.interval"
+              type="number"
+              value="1"
+            />
+            <div
+              class="euiFormControlLayoutIcons"
             >
-              <div>
-                EuiIconMock
-              </div>
-            </span>
+              <span
+                class="euiFormControlLayoutCustomIcon"
+              >
+                <div>
+                  EuiIconMock
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -351,46 +383,50 @@ exports[`Frequencies renders Interval 1`] = `
   >
     <div
       class="euiFormRow euiFormRow--hasEmptyLabelSpace"
-      id="period.unit-row"
+      id="period.unit-form-row-row"
     >
       <div
-        class="euiFormControlLayout"
+        class="euiFormRow__fieldWrapper"
       >
         <div
-          class="euiFormControlLayout__childrenWrapper"
+          class="euiFormControlLayout"
         >
-          <select
-            class="euiSelect"
-            id="period.unit"
-            name="period.unit"
-          >
-            <option
-              selected=""
-              value="MINUTES"
-            >
-              Minutes
-            </option>
-            <option
-              value="HOURS"
-            >
-              Hours
-            </option>
-            <option
-              value="DAYS"
-            >
-              Days
-            </option>
-          </select>
           <div
-            class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+            class="euiFormControlLayout__childrenWrapper"
           >
-            <span
-              class="euiFormControlLayoutCustomIcon"
+            <select
+              class="euiSelect"
+              id="period.unit"
+              name="period.unit"
             >
-              <div>
-                EuiIconMock
-              </div>
-            </span>
+              <option
+                selected=""
+                value="MINUTES"
+              >
+                Minutes
+              </option>
+              <option
+                value="HOURS"
+              >
+                Hours
+              </option>
+              <option
+                value="DAYS"
+              >
+                Days
+              </option>
+            </select>
+            <div
+              class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+            >
+              <span
+                class="euiFormControlLayoutCustomIcon"
+              >
+                <div>
+                  EuiIconMock
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </div>

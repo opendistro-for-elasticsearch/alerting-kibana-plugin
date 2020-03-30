@@ -164,6 +164,7 @@ exports[`Monitors renders 1`] = `
         },
       }
     }
+    tableLayout="fixed"
   />
 </ContentPanel>
 `;
