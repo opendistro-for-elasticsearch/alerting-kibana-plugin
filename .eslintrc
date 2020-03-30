@@ -1,9 +1,9 @@
 ---
-extends: ["@elastic/kibana", "@elastic/eslint-config-kibana/jest"]
+extends: "@elastic/kibana"
 
 settings:
   import/resolver:
-    'node':
-      paths: ["public", "node_modules", "../../node_modules"]
     '@kbn/eslint-import-resolver-kibana':
-      rootPackageName: 'alerting
+      rootPackageName: 'opendistro-alerting'
+      pluginPaths:
+        - .

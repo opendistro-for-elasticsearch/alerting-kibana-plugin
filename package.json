@@ -29,10 +29,11 @@
   },
   "devDependencies": {
     "@elastic/eslint-config-kibana": "link:../../packages/eslint-config-kibana",
-    "@kbn/eslint-import-resolver-kibana": "link:../../packages/kbn-eslint-import-resolver-kibana",
+    "@elastic/eslint-import-resolver-kibana": "link:../../packages/kbn-eslint-import-resolver-kibana",
+    "@kbn/expect": "link:../../packages/kbn-expect",
     "@kbn/plugin-helpers": "link:../../packages/kbn-plugin-helpers",
-    "husky": "^2.3.0",
-    "lint-staged": "^8.1.6"
+    "husky": "^3.0.0",
+    "lint-staged": "^9.2.0"
   },
   "dependencies": {
     "brace": "^0.11.1",
@@ -44,5 +45,9 @@
   },
   "resolutions": {
     "fstream": "1.0.12"
+  },
+  "engines": {
+    "node": "10.19.0",
+    "yarn": "^1.21.1"
   }
 }
