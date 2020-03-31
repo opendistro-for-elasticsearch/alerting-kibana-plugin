@@ -1,0 +1,45 @@
+name: Unit tests workflow
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  tests:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Kibana
+        uses: actions/checkout@v2
+        with:
+          repository: opendistro-for-elasticsearch/kibana-oss
+          ref: 7.6.1
+          token: ${{ secrets.GITHUB_KIBANA_OSS }}
+          path: kibana
+      - name: Get node and yarn versions
+        id: versions_step
+        run: |
+          echo "::set-output name=node_version::$(node -p "(require('./kibana/package.json').engines.node).match(/[.0-9]+/)[0]")"
+          echo "::set-output name=yarn_version::$(node -p "(require('./kibana/package.json').engines.yarn).match(/[.0-9]+/)[0]")"
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.versions_step.outputs.node_version }}
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install correct yarn version for Kibana
+        run: |
+          npm uninstall -g yarn
+          echo "Installing yarn ${{ steps.versions_step.outputs.yarn_version }}"
+          npm i -g yarn@${{ steps.versions_step.outputs.yarn_version }}
+      - name: Checkout Alerting Kibana plugin
+        uses: actions/checkout@v2
+        with:
+          path: kibana/plugins/alerting-kibana-plugin
+      - name: Bootstrap plugin/kibana
+        run: |
+          cd kibana/plugins/alerting-kibana-plugin
+          yarn kbn bootstrap
+      - name: Run tests
+        run: |
+          cd kibana/plugins/alerting-kibana-plugin
+          yarn run test:jest

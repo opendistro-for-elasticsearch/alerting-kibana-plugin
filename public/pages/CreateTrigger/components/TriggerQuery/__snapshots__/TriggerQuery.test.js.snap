@@ -52,6 +52,7 @@ exports[`TriggerQuery renders 1`] = `
       >
         <EuiCodeEditor
           height="200px"
+          mode="plain_text"
           readOnly={true}
           setOptions={Object {}}
           theme="github"
