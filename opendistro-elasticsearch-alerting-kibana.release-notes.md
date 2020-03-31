@@ -1,7 +1,7 @@
 ## Version 1.6.0.0, 2020-03-27
 
 ### New Features
-  * Adds support for Kibana 7.6.1 - [PR #116](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/116)
+  * Adds support for Kibana 7.6.1 - [PR #118](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/118)
 
 ## Version 1.4.0.0, 2020-01-13
 
