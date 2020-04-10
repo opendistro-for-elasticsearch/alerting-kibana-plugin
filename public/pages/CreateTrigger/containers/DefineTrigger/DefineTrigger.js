@@ -24,6 +24,8 @@ import TriggerQuery from '../../components/TriggerQuery';
 import TriggerGraph from '../../components/TriggerGraph';
 import { validateTriggerName } from './utils/validation';
 import { SEARCH_TYPE } from '../../../../utils/constants';
+import { AnomalyDetectorTrigger } from './AnomalyDetectorTrigger';
+import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
 
 const defaultRowProps = {
   label: 'Trigger name',
@@ -49,6 +51,12 @@ const severityOptions = [
   { value: '4', text: '4' },
   { value: '5', text: '5' },
 ];
+
+const triggerOptions = [
+  { value: TRIGGER_TYPE.AD, text: 'Anomaly detector grade and confidence' },
+  { value: TRIGGER_TYPE.ALERT_TRIGGER, text: 'Extraction query response' },
+];
+
 const selectInputProps = {
   options: severityOptions,
 };
@@ -75,10 +83,41 @@ const DefineTrigger = ({
   isDarkMode,
 }) => {
   const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
+  const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
+  const detectorId = _.get(monitorValues, 'detectorId');
   const response = _.get(executeResponse, 'input_results.results[0]');
   const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
   const thresholdEnum = triggerValues.thresholdEnum;
   const thresholdValue = triggerValues.thresholdValue;
+  const adTriggerType = triggerValues.anomalyDetector.triggerType;
+  let triggerContent = (
+    <TriggerQuery
+      context={context}
+      error={error}
+      executeResponse={executeResponse}
+      onRun={onRun}
+      response={response}
+      setFlyout={setFlyout}
+      triggerValues={triggerValues}
+      isDarkMode={isDarkMode}
+    />
+  );
+  if (isAd && adTriggerType === TRIGGER_TYPE.AD) {
+    triggerContent = (
+      <AnomalyDetectorTrigger detectorId={detectorId} adValues={triggerValues.anomalyDetector} />
+    );
+  }
+  if (isGraph) {
+    triggerContent = (
+      <TriggerGraph
+        monitorValues={monitorValues}
+        response={response}
+        thresholdEnum={thresholdEnum}
+        thresholdValue={thresholdValue}
+      />
+    );
+  }
+
   return (
     <ContentPanel title="Define trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
       <FormikFieldText
@@ -95,25 +134,19 @@ const DefineTrigger = ({
         rowProps={selectRowProps}
         inputProps={selectInputProps}
       />
-      {isGraph ? (
-        <TriggerGraph
-          monitorValues={monitorValues}
-          response={response}
-          thresholdEnum={thresholdEnum}
-          thresholdValue={thresholdValue}
+      {isAd ? (
+        <FormikSelect
+          name="anomalyDetector.triggerType"
+          formRow
+          rowProps={{
+            label: 'Trigger type',
+            helpText: 'Define type of trigger',
+            style: { paddingLeft: '10px', marginTop: '0px' },
+          }}
+          inputProps={{ options: triggerOptions }}
         />
-      ) : (
-        <TriggerQuery
-          context={context}
-          error={error}
-          executeResponse={executeResponse}
-          onRun={onRun}
-          response={response}
-          setFlyout={setFlyout}
-          triggerValues={triggerValues}
-          isDarkMode={isDarkMode}
-        />
-      )}
+      ) : null}
+      {triggerContent}
     </ContentPanel>
   );
 };

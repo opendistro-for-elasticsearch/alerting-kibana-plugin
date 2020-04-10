@@ -16,7 +16,6 @@ exports[`TriggerExpressions renders 1`] = `
           fullWidth={false}
           hasChildLabel={true}
           hasEmptyLabelSpace={false}
-          label="Trigger condition"
           labelType="label"
         >
           <EuiExpression
@@ -61,7 +60,6 @@ exports[`TriggerExpressions renders 1`] = `
             }
           >
             <C
-              name="thresholdEnum"
               render={[Function]}
             />
           </EuiFlexItem>
@@ -74,7 +72,6 @@ exports[`TriggerExpressions renders 1`] = `
             }
           >
             <C
-              name="thresholdValue"
               render={[Function]}
             />
           </EuiFlexItem>

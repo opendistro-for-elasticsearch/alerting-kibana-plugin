@@ -27,6 +27,7 @@ import {
   formikToUiSchedule,
   buildSchedule,
   formikToWhereClause,
+  formikToAd,
 } from './formikToMonitor';
 
 import { FORMIK_INITIAL_VALUES } from './constants';
@@ -45,8 +46,16 @@ describe('formikToMonitor', () => {
   formikValues.index = [{ label: 'index1' }, { label: 'index2' }];
   formikValues.fieldName = [{ label: 'bytes' }];
   formikValues.timezone = [{ label: 'America/Los_Angeles' }];
-  test.skip('can build monitor', () => {
+  test('can build monitor', () => {
     expect(formikToMonitor(formikValues)).toMatchSnapshot();
+  });
+});
+
+describe('formikToDetector', () => {
+  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+  formikValues.detectorId = 'temp_detector';
+  test('can build detector', () => {
+    expect(formikToAd(formikValues)).toMatchSnapshot();
   });
 });
 

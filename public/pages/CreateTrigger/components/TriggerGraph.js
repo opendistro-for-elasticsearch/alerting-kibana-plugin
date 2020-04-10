@@ -20,7 +20,13 @@ import TriggerExpressions from './TriggerExpressions';
 
 const TriggerGraph = ({ monitorValues, response, thresholdValue, thresholdEnum }) => (
   <div style={{ padding: '0px 10px' }}>
-    <TriggerExpressions thresholdValue={thresholdValue} thresholdEnum={thresholdEnum} />
+    <TriggerExpressions
+      thresholdValue={thresholdValue}
+      thresholdEnum={thresholdEnum}
+      keyFieldName="thresholdEnum"
+      valueFieldName="thresholdValue"
+      label="Trigger condition"
+    />
     <EuiSpacer size="s" />
     <VisualGraph
       annotation

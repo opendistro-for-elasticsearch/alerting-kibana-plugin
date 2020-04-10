@@ -14,9 +14,10 @@
  */
 
 import _ from 'lodash';
-import { formikToTrigger, formikToThresholds, formikToCondition } from './formikToTrigger';
+import { formikToTrigger, formikToTriggerUiMetadata, formikToCondition } from './formikToTrigger';
 
 import { FORMIK_INITIAL_VALUES } from './constants';
+import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 describe('formikToTrigger', () => {
   test('can create trigger', () => {
@@ -32,11 +33,39 @@ describe('formikToTrigger', () => {
   });
 });
 
-describe('formikToThresholds', () => {
-  test('can create thresholds', () => {
+describe('formikToTriggerUiMetadata', () => {
+  test('can create trigger metadata for AD monitors', () => {
     const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
-    expect(formikToThresholds(formikValues)).toEqual({
-      [formikValues.name]: { value: formikValues.thresholdValue, enum: formikValues.thresholdEnum },
+    expect(
+      formikToTriggerUiMetadata(formikValues, { search: { searchType: SEARCH_TYPE.AD } })
+    ).toEqual({
+      [formikValues.name]: {
+        value: formikValues.thresholdValue,
+        enum: formikValues.thresholdEnum,
+        adTriggerMetadata: {
+          triggerType: 'anomaly_detector_trigger',
+          anomalyGrade: {
+            value: 0.7,
+            enum: 'ABOVE',
+          },
+          anomalyConfidence: {
+            value: 0.7,
+            enum: 'ABOVE',
+          },
+        },
+      },
+    });
+  });
+
+  test('can create metadata', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    expect(
+      formikToTriggerUiMetadata(formikValues, { search: { searchType: SEARCH_TYPE.QUERY } })
+    ).toEqual({
+      [formikValues.name]: {
+        value: formikValues.thresholdValue,
+        enum: formikValues.thresholdEnum,
+      },
     });
   });
 });
@@ -46,6 +75,17 @@ describe('formikToCondition', () => {
     const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
     expect(formikToCondition(formikValues, { search: { searchType: 'query' } })).toEqual({
       script: formikValues.script,
+    });
+  });
+
+  test('can return condition when searchType is ad', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    expect(formikToCondition(formikValues, { search: { searchType: 'ad' } })).toEqual({
+      script: {
+        lang: 'painless',
+        source:
+          'return ctx.results[0].aggregations.max_anomaly_grade.value != null && ctx.results[0].aggregations.max_anomaly_grade.value > 0.7 && ctx.results[0].hits.hits[0]._source.confidence > 0.7',
+      },
     });
   });
 
@@ -66,7 +106,10 @@ describe('formikToCondition', () => {
     expect(
       formikToCondition(formikValues, { search: { searchType: 'graph', aggregationType: 'max' } })
     ).toEqual({
-      script: { lang: 'painless', source: `return ctx.results[0].aggregations.when.value == null ? false : ctx.results[0].aggregations.when.value > 10000` },
+      script: {
+        lang: 'painless',
+        source: `return ctx.results[0].aggregations.when.value == null ? false : ctx.results[0].aggregations.when.value > 10000`,
+      },
     });
   });
 });

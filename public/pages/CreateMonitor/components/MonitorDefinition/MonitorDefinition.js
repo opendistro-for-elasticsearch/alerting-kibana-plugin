@@ -19,6 +19,7 @@ import FormikSelect from '../../../../components/FormControls/FormikSelect/Formi
 const selectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
+  { value: 'ad', text: 'Define using Anomaly detector' },
 ];
 
 const onChangeDefinition = (e, form, resetResponse) => {

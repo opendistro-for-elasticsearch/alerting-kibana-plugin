@@ -46,8 +46,9 @@ export const FORMIK_INITIAL_VALUES = {
   where: {
     fieldName: [],
     operator: OPERATORS_MAP.IS,
-    fieldValue: "",
+    fieldValue: '',
     fieldRangeStart: 0,
     fieldRangeEnd: 0,
   },
+  detectorId: '',
 };

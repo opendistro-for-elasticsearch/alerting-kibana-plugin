@@ -20,6 +20,7 @@ import CreateMonitor from './CreateMonitor';
 import { historyMock, httpClientMock } from '../../../../../test/mocks';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import AlertingFakes from '../../../../../test/utils/helpers';
+import { SEARCH_TYPE } from '../../../../utils/constants';
 
 const alertingFakes = new AlertingFakes('CreateMonitor random seed');
 
@@ -57,6 +58,21 @@ describe('CreateMonitor', () => {
       />
     );
     expect(wrapper).toMatchSnapshot();
+  });
+
+  test('uses AD query Params as initialValues when parameter exists', () => {
+    const wrapper = shallow(
+      <CreateMonitor
+        httpClient={httpClientMock}
+        history={historyMock}
+        setFlyout={setFlyout}
+        match={match}
+        location={{ ...location, search: 'searchType=ad&adId=randomId&name=Sample' }}
+      />
+    );
+    expect(wrapper.instance().state.initialValues.name).toBe('Sample-Monitor');
+    expect(wrapper.instance().state.initialValues.searchType).toBe(SEARCH_TYPE.AD);
+    expect(wrapper.instance().state.initialValues.detectorId).toBe('randomId');
   });
 
   test('uses monitorToEdit as initialValues when editing', () => {

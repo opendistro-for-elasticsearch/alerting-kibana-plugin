@@ -31,6 +31,10 @@ export default class MonitorService {
       return { ok: true, resp: createResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - createMonitor:', err);
+      //FIXME: This is temporary as backend should send error message inside message instead of body
+      if (err.statusCode === 400) {
+        return { ok: false, resp: err.body };
+      }
       return { ok: false, resp: err.message };
     }
   };
@@ -175,7 +179,13 @@ export default class MonitorService {
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
       const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map(result => {
-        const { _id: id, _version: version, _seq_no: ifSeqNo, _primary_term: ifPrimaryTerm, _source: monitor } = result;
+        const {
+          _id: id,
+          _version: version,
+          _seq_no: ifSeqNo,
+          _primary_term: ifPrimaryTerm,
+          _source: monitor,
+        } = result;
         const { name, enabled } = monitor;
         return [id, { id, version, ifSeqNo, ifPrimaryTerm, name, enabled, monitor }];
       }, {});
