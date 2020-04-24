@@ -71,3 +71,35 @@ describe('validateUrl', () => {
     ).toBe(invalidText);
   });
 });
+
+describe('validateHost', () => {
+  const typeAttributeUrl = { type: 'custom_webhook', custom_webhook: { urlType: URL_TYPE.ATTRIBUTE_URL } };
+
+  test('returns Required if is empty', () => {
+    expect(validateHost('', typeAttributeUrl)).toBe('Required');
+  });
+
+  test('returns undefined if valid', () => {
+    expect(
+      validateHost('opendistro.github.io', typeAttributeUrl)
+    ).toBeUndefined();
+    expect(validateHost('127.0.0.1', typeAttributeUrl)).toBeUndefined();
+    expect(
+      validateHost('2001:0db8:85a3:0000:0000:0000:0000:7344', typeAttributeUrl)
+    ).toBeUndefined();
+    expect(validateHost('2001:0db8:85a3:0:0:0:0:7344', typeAttributeUrl)).toBeUndefined();
+    expect(validateHost('2001:0db8:85a3::7344', typeAttributeUrl)).toBeUndefined();
+    expect(validateHost('::ff', typeAttributeUrl)).toBeUndefined();
+    expect(validateHost('org.example', typeAttributeUrl)).toBeUndefined();
+  });
+
+  test('returns error string if invalid', () => {
+    const invalidText = 'Invalid Host';
+    expect(
+      validateHost(
+        'org.exampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexample',
+        typeAttributeUrl
+      )
+    ).toBe(invalidText);
+  });
+});
