@@ -43,7 +43,6 @@ class AnomalyDetectors extends React.Component {
           label: detector.name,
           value: detector.id,
           features: detector.featureAttributes,
-          //TODO::Temp hack until backend fix
           interval: detector.detectionInterval,
         }));
         this.setState({ detectorOptions });

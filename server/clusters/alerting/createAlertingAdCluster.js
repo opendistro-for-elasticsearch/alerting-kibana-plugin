@@ -16,7 +16,7 @@
 import alertingADPlugin from './adPlugin';
 import { CLUSTER, DEFAULT_HEADERS } from '../../services/utils/constants';
 
-export default function createAlertingAdCluster(server) {
+export default function createAlertingADCluster(server) {
   const { customHeaders, ...rest } = server.config().get('elasticsearch');
   server.plugins.elasticsearch.createCluster(CLUSTER.AD_ALERTING, {
     plugins: [alertingADPlugin],

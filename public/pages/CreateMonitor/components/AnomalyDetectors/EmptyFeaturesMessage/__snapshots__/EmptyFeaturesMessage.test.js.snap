@@ -17,7 +17,7 @@ exports[`EmptyFeaturesMessage renders  1`] = `
         <div
           class="euiText euiText--medium"
         >
-          No features have been added to this anomaly detector. A feature is a metric that used for anomaly detection. A detector can discover anomalies across one or many features.
+          No features have been added to this anomaly detector. A feature is a metric that is used for anomaly detection. A detector can discover anomalies across one or more features.
         </div>
       </div>
     </span>

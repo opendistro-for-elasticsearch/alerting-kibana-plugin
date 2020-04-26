@@ -31,10 +31,6 @@ export default class MonitorService {
       return { ok: true, resp: createResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - createMonitor:', err);
-      //FIXME: This is temporary as backend should send error message inside message instead of body
-      if (err.statusCode === 400) {
-        return { ok: false, resp: err.body };
-      }
       return { ok: false, resp: err.message };
     }
   };

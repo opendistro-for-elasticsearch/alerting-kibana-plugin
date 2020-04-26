@@ -15,7 +15,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import DelayedLoader from '../../../../../components/DelayedLoader';
 import { EuiText, EuiSpacer } from '@elastic/eui';
 import {
   Chart,
@@ -30,14 +29,13 @@ import {
   LineAnnotation,
 } from '@elastic/charts';
 import { ChartContainer } from '../../../../../components/ChartContainer/ChartContainer';
+import DelayedLoader from '../../../../../components/DelayedLoader';
 
 const getAxisTitle = (displayGrade, displayConfidence) => {
   if (displayGrade && displayConfidence) {
     return 'Anomaly grade / confidence';
-  } else if (displayGrade) {
-    return 'Anomaly grade';
   }
-  return 'Anomaly confidence';
+  return displayGrade ? 'Anomaly grade' : 'Anomaly confidence';
 };
 
 const AnomaliesChart = props => {

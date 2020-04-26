@@ -93,7 +93,7 @@ export const ILLEGAL_CHARACTERS = ['\\', '/', '?', '"', '<', '>', '|', ',', ' ']
 export const validateDetector = (detectorId, selectedDetector) => {
   if (!detectorId) return 'Must select detector';
   if (selectedDetector && selectedDetector.features.length === 0)
-    return 'Detector with no features.';
+    return 'Must choose detector which has features';
 };
 
 export const validateIndex = options => {

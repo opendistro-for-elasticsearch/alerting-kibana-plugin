@@ -83,11 +83,6 @@ export function formikToAdQuery(values) {
       },
     },
     aggregations: {
-      // max_confidence: {
-      //   max: {
-      //     field: "confidence",
-      //   },
-      // },
       max_anomaly_grade: {
         max: {
           field: 'anomaly_grade',

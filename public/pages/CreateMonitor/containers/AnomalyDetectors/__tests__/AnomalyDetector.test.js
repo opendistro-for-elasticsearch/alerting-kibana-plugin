@@ -51,11 +51,6 @@ describe('AnomalyDetectors', () => {
     const wrapper = getMountWrapper();
     expect(wrapper).toMatchSnapshot();
   });
-  // test('must call renderEmptyMessage initially', () => {
-  //   httpClientMock.post.mockResolvedValue({ data: { ok: true, detectors: [] } });
-  //   getMountWrapper();
-  //   expect(renderEmptyMessage).toHaveBeenCalled();
-  // });
 
   test('should be able to select the detector', done => {
     httpClientMock.post.mockResolvedValueOnce({

@@ -15,8 +15,8 @@
 
 import React from 'react';
 import { render } from 'enzyme';
-import { AnomaliesChart } from './AnomaliesChart';
 import moment from 'moment';
+import { AnomaliesChart } from './AnomaliesChart';
 
 const startTime = moment('2018-10-25T09:30:00').valueOf();
 const endTime = moment('2018-10-29T09:30:00').valueOf();

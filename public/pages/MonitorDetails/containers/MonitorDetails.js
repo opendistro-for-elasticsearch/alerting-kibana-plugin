@@ -291,7 +291,7 @@ export default class MonitorDetails extends Component {
             {detector ? (
               <EuiFlexItem grow={false}>
                 <EuiText size="s">
-                  Created from detector{' '}
+                  Created from detector:{' '}
                   <EuiLink
                     href={`${ES_AD_PLUGIN}#/detectors/${detectorId}`}
                     external="true"

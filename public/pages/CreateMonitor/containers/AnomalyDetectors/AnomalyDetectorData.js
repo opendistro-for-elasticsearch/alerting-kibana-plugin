@@ -17,6 +17,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { AppContext } from '../../../../utils/AppContext';
+import { AD_PREVIEW_DAYS } from '../../../../utils/constants';
 
 class AnomalyDetectorData extends React.Component {
   static contextType = AppContext;
@@ -39,15 +40,6 @@ class AnomalyDetectorData extends React.Component {
   async componentDidMount() {
     await this.getPreviewData();
   }
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.detectorId != prevProps.detectorId ||
-      this.props.startTime != prevProps.startTime ||
-      this.props.endTime != prevProps.endTime
-    ) {
-      this.getPreviewData();
-    }
-  }
 
   async getPreviewData() {
     const { detectorId, startTime, endTime } = this.props;
@@ -58,7 +50,7 @@ class AnomalyDetectorData extends React.Component {
     if (!detectorId) return;
     const requestParams = {
       startTime: moment()
-        .subtract(5, 'd')
+        .subtract(AD_PREVIEW_DAYS, 'd')
         .valueOf(),
       startTime: startTime,
       endTime: endTime,

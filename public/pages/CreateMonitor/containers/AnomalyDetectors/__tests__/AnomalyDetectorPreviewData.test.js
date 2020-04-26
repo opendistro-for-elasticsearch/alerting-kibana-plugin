@@ -42,16 +42,6 @@ describe('AnomalyDetectorData', () => {
     expect(getPreviewData).toHaveBeenCalled();
     expect(getPreviewData).toHaveBeenCalledTimes(1);
   });
-  test('calls preview api if detectorId changes', () => {
-    const mockedRender = jest.fn().mockImplementation(() => null);
-    const getPreviewData = jest.spyOn(AnomalyDetectorData.prototype, 'getPreviewData');
-    const wrapper = getMountWrapper();
-    wrapper.setProps({
-      children: <AnomalyDetectorData detectorId="another" render={mockedRender} />,
-    });
-    wrapper.update();
-    expect(getPreviewData).toHaveBeenCalledTimes(2);
-  });
   test('calls render with anomalyResult', () => {
     const wrapper = getMountWrapper();
     expect(mockedRender).toHaveBeenCalled();

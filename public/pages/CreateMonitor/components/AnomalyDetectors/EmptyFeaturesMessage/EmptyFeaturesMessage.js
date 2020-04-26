@@ -36,8 +36,8 @@ const EmptyFeaturesMessage = props => (
         style={{ maxWidth: '45em' }}
         body={
           <EuiText>
-            No features have been added to this anomaly detector. A feature is a metric that used
-            for anomaly detection. A detector can discover anomalies across one or many features.
+            No features have been added to this anomaly detector. A feature is a metric that is used
+            for anomaly detection. A detector can discover anomalies across one or more features.
           </EuiText>
         }
         actions={[

@@ -314,23 +314,24 @@ export default class Dashboard extends Component {
         selectable ? undefined : 'Only Active Alerts are Acknowledgeable',
     };
 
+    const actions = () => {
+      const actions = [<EuiButton onClick={this.acknowledgeAlert}>Acknowledge</EuiButton>];
+      if (detectorIds.length) {
+        actions.unshift(
+          <EuiButton href={`${ES_AD_PLUGIN}#/detectors/${detectorIds[0]}`} target="_blank">
+            View detector <EuiIcon type="popout" />
+          </EuiButton>
+        );
+      }
+      return actions;
+    };
+
     return (
       <ContentPanel
         title="Alerts"
         titleSize={monitorIds.length ? 's' : 'l'}
         bodyStyles={{ padding: 'initial' }}
-        actions={
-          detectorIds.length ? (
-            [
-              <EuiButtonEmpty href={`${ES_AD_PLUGIN}#/detectors/${detectorIds[0]}`} target="_blank">
-                View detector <EuiIcon type="popout" />
-              </EuiButtonEmpty>,
-              <EuiButton onClick={this.acknowledgeAlert}>Acknowledge</EuiButton>,
-            ]
-          ) : (
-            <EuiButton onClick={this.acknowledgeAlert}>Acknowledge</EuiButton>
-          )
-        }
+        actions={actions()}
       >
         <DashboardControls
           activePage={page}

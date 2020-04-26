@@ -90,7 +90,6 @@ export function getADCondition(values) {
     return {
       script: {
         lang: 'painless',
-        //TODO:: Check null check is required or not confirm with backend
         source: `return ${ANOMALY_GRADE_RESULT_PATH} != null && ${ANOMALY_GRADE_RESULT_PATH} ${anomalyGradeOperator} ${anomalyDetector.anomalyGradeThresholdValue} && ${ANOMALY_CONFIDENCE_RESULT_PATH} ${anomalyConfidenceOperator} ${anomalyDetector.anomalyConfidenceThresholdValue}`,
       },
     };

@@ -22,7 +22,7 @@ import {
   MonitorService,
   AnomalyDetectorService,
 } from './server/services';
-import { createAlertingCluster, createAlertingAdCluster } from './server/clusters';
+import { createAlertingCluster, createAlertingADCluster } from './server/clusters';
 import { PLUGIN_NAME } from './utils/constants';
 
 export default function(kibana) {
@@ -49,7 +49,7 @@ export default function(kibana) {
     init(server, options) {
       // Create clusters
       createAlertingCluster(server);
-      createAlertingAdCluster(server);
+      createAlertingADCluster(server);
 
       // Initialize services
       const esDriver = server.plugins.elasticsearch;
