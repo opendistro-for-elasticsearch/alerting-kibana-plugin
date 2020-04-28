@@ -66,7 +66,7 @@ class FeatureChart extends React.Component {
                   />
                 </EuiFlexItem>
               </EuiFlexGroup>
-              <ChartContainer style={showLoader ? { opacity: showLoader ? 0.2 : 1 } : {}}>
+              <ChartContainer style={showLoader ? { opacity: 0.2 } : {}}>
                 <Chart>
                   <RectAnnotation
                     dataValues={annotations || []}
