@@ -12,6 +12,7 @@ exports[`DefineMonitor renders 1`] = `
   titleSize="s"
 >
   <MonitorDefinition
+    plugins={Array []}
     resetResponse={[Function]}
   />
   <MonitorIndex
@@ -58,5 +59,95 @@ exports[`DefineMonitor renders 1`] = `
   <QueryPerformance
     response={null}
   />
+</ContentPanel>
+`;
+
+exports[`DefineMonitor should show warning in case of Ad monitor and plugin is not installed 1`] = `
+<ContentPanel
+  actions={Array []}
+  bodyStyles={
+    Object {
+      "padding": "initial",
+    }
+  }
+  title="Define monitor"
+  titleSize="s"
+>
+  <EuiCallOut
+    color="warning"
+    iconType="help"
+    size="s"
+    title="Anomaly detector plugin is not installed on Elasticsearch, This monitor will not functional properly."
+  />
+  <EuiSpacer
+    size="s"
+  />
+  <MonitorDefinition
+    plugins={Array []}
+    resetResponse={[Function]}
+  />
+  <div
+    style={
+      Object {
+        "padding": "0px 10px",
+      }
+    }
+  >
+    <AnomalyDetectors
+      httpClient={[MockFunction]}
+      renderEmptyMessage={[Function]}
+      values={
+        Object {
+          "aggregationType": "count",
+          "bucketUnitOfTime": "h",
+          "bucketValue": 1,
+          "cronExpression": "0 */1 * * *",
+          "daily": 0,
+          "detectorId": "",
+          "disabled": false,
+          "fieldName": Array [],
+          "frequency": "interval",
+          "groupedOverFieldName": "bytes",
+          "groupedOverTop": 5,
+          "index": Array [],
+          "monthly": Object {
+            "day": 1,
+            "type": "day",
+          },
+          "name": "",
+          "overDocuments": "all documents",
+          "period": Object {
+            "interval": 1,
+            "unit": "MINUTES",
+          },
+          "query": "{
+    \\"size\\": 0,
+    \\"query\\": {
+        \\"match_all\\": {}
+    }
+}",
+          "searchType": "ad",
+          "timeField": "",
+          "timezone": Array [],
+          "weekly": Object {
+            "fri": false,
+            "mon": false,
+            "sat": false,
+            "sun": false,
+            "thur": false,
+            "tue": false,
+            "wed": false,
+          },
+          "where": Object {
+            "fieldName": Array [],
+            "fieldRangeEnd": 0,
+            "fieldRangeStart": 0,
+            "fieldValue": "",
+            "operator": "is",
+          },
+        }
+      }
+    />
+  </div>
 </ContentPanel>
 `;

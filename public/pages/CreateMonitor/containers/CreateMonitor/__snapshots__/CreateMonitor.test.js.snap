@@ -17,6 +17,7 @@ exports[`CreateMonitor renders 1`] = `
         "bucketValue": 1,
         "cronExpression": "0 */1 * * *",
         "daily": 0,
+        "detectorId": "",
         "disabled": false,
         "fieldName": Array [],
         "frequency": "interval",

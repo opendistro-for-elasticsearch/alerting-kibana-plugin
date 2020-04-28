@@ -45,6 +45,14 @@ Object {
 }
 `;
 
+exports[`formikToDetector can build detector 1`] = `
+Object {
+  "anomaly_detector": Object {
+    "detector_id": "temp_detector",
+  },
+}
+`;
+
 exports[`formikToExtractionQuery can extract query 1`] = `
 Object {
   "query": Object {
@@ -81,6 +89,93 @@ Array [
   "index1",
   "index2",
 ]
+`;
+
+exports[`formikToMonitor can build monitor 1`] = `
+Object {
+  "enabled": false,
+  "inputs": Array [
+    Object {
+      "search": Object {
+        "indices": Array [
+          "index1",
+          "index2",
+        ],
+        "query": Object {
+          "aggregations": Object {},
+          "query": Object {
+            "bool": Object {
+              "filter": Array [
+                Object {
+                  "range": Object {
+                    "": Object {
+                      "format": "epoch_millis",
+                      "gte": "{{period_end}}||-1h",
+                      "lte": "{{period_end}}",
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          "size": 0,
+        },
+      },
+    },
+  ],
+  "name": "random_name",
+  "schedule": Object {
+    "period": Object {
+      "interval": 1,
+      "unit": "MINUTES",
+    },
+  },
+  "triggers": Array [],
+  "type": "monitor",
+  "ui_metadata": Object {
+    "schedule": Object {
+      "cronExpression": "0 */1 * * *",
+      "daily": 0,
+      "frequency": "interval",
+      "monthly": Object {
+        "day": 1,
+        "type": "day",
+      },
+      "period": Object {
+        "interval": 1,
+        "unit": "MINUTES",
+      },
+      "timezone": "America/Los_Angeles",
+      "weekly": Object {
+        "fri": false,
+        "mon": false,
+        "sat": false,
+        "sun": false,
+        "thur": false,
+        "tue": false,
+        "wed": false,
+      },
+    },
+    "search": Object {
+      "aggregationType": "count",
+      "bucketUnitOfTime": "h",
+      "bucketValue": 1,
+      "fieldName": "bytes",
+      "groupedOverFieldName": "bytes",
+      "groupedOverTop": 5,
+      "overDocuments": "all documents",
+      "searchType": "graph",
+      "timeField": "",
+      "where": Object {
+        "fieldName": Array [],
+        "fieldRangeEnd": 0,
+        "fieldRangeStart": 0,
+        "fieldValue": "",
+        "operator": "is",
+      },
+    },
+  },
+}
 `;
 
 exports[`formikToQuery can build extraction query 1`] = `

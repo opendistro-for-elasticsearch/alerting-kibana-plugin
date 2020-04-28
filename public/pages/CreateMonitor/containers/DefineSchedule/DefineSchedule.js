@@ -17,9 +17,9 @@ import React from 'react';
 import ContentPanel from '../../../../components/ContentPanel';
 import Schedule from '../../components/Schedule';
 
-const MonitorSchedule = ({ httpClient, monitorToEdit }) => (
+const MonitorSchedule = ({ httpClient, monitorToEdit, isAd }) => (
   <ContentPanel title="Monitor schedule" titleSize="s" bodyStyles={{ padding: 'initial' }}>
-    <Schedule />
+    <Schedule isAd={isAd} />
   </ContentPanel>
 );
 

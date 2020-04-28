@@ -37,9 +37,10 @@ import ConfigureActions from '../ConfigureActions';
 import DefineTrigger from '../DefineTrigger';
 import monitorToFormik from '../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
 import { buildSearchRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
-import { formikToTrigger, formikToThresholds } from './utils/formikToTrigger';
+import { formikToTrigger, formikToTriggerUiMetadata } from './utils/formikToTrigger';
 import { triggerToFormik } from './utils/triggerToFormik';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
+import { SEARCH_TYPE } from '../../../../utils/constants';
 
 export default class CreateTrigger extends Component {
   constructor(props) {
@@ -66,13 +67,13 @@ export default class CreateTrigger extends Component {
     this.props.setFlyout(null);
   }
 
-  onCreate = (trigger, thresholds, { setSubmitting, setErrors }) => {
+  onCreate = (trigger, triggerMetadata, { setSubmitting, setErrors }) => {
     const { monitor, updateMonitor, onCloseTrigger } = this.props;
     const { ui_metadata: uiMetadata, triggers } = monitor;
     const updatedTriggers = [trigger].concat(triggers);
     const updatedUiMetadata = {
       ...uiMetadata,
-      thresholds: { ...uiMetadata.thresholds, ...thresholds },
+      triggers: { ...uiMetadata.triggers, ...triggerMetadata },
     };
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
       .then(res => {
@@ -88,15 +89,15 @@ export default class CreateTrigger extends Component {
       });
   };
 
-  onEdit = (trigger, thresholds, { setSubmitting, setErrors }) => {
+  onEdit = (trigger, triggerMetadata, { setSubmitting, setErrors }) => {
     const { monitor, updateMonitor, onCloseTrigger, triggerToEdit } = this.props;
     const { ui_metadata: uiMetadata = {}, triggers } = monitor;
     const { name } = triggerToEdit;
-    const updatedThresholds = _.cloneDeep(uiMetadata.thresholds || {});
-    delete updatedThresholds[name];
+    const updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
+    delete updatedTriggersMetadata[name];
     const updatedUiMetadata = {
       ...uiMetadata,
-      thresholds: { ...updatedThresholds, ...thresholds },
+      triggers: { ...updatedTriggersMetadata, ...triggerMetadata },
     };
     const indexToUpdate = _.findIndex(triggers, { name });
     const updatedTriggers = triggers.slice();
@@ -119,9 +120,11 @@ export default class CreateTrigger extends Component {
     const { httpClient, monitor } = this.props;
     const formikValues = monitorToFormik(monitor);
     const monitorToExecute = _.cloneDeep(monitor);
-    const searchRequest = buildSearchRequest(formikValues);
     _.set(monitorToExecute, 'triggers', triggers);
-    _.set(monitorToExecute, 'inputs[0].search', searchRequest);
+    if (formikValues.searchType !== SEARCH_TYPE.AD) {
+      const searchRequest = buildSearchRequest(formikValues);
+      _.set(monitorToExecute, 'inputs[0].search', searchRequest);
+    }
     httpClient
       .post('../api/alerting/monitors/_execute', monitorToExecute)
       .then(resp => {
@@ -169,9 +172,9 @@ export default class CreateTrigger extends Component {
   onSubmit = (values, formikBag) => {
     const monitorUiMetadata = _.get(this.props.monitor, 'ui_metadata', {});
     const trigger = formikToTrigger(values, monitorUiMetadata);
-    const thresholds = formikToThresholds(values);
-    if (this.props.edit) this.onEdit(trigger, thresholds, formikBag);
-    else this.onCreate(trigger, thresholds, formikBag);
+    const triggerMetadata = formikToTriggerUiMetadata(values, monitorUiMetadata);
+    if (this.props.edit) this.onEdit(trigger, triggerMetadata, formikBag);
+    else this.onCreate(trigger, triggerMetadata, formikBag);
   };
 
   getTriggerContext = (executeResponse, monitor, values) => ({

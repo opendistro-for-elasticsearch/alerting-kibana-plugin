@@ -56,6 +56,7 @@ class TriggerExpressions extends Component {
   }
 
   renderPopover() {
+    const { keyFieldName, valueFieldName } = this.props;
     return (
       <div style={POPOVER_STYLE}>
         <EuiFlexGroup
@@ -67,7 +68,7 @@ class TriggerExpressions extends Component {
         >
           <EuiFlexItem grow={false} style={{ width: 150 }}>
             <Field
-              name="thresholdEnum"
+              name={keyFieldName}
               render={({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
                 <EuiFormRow
                   isInvalid={touched.thresholdEnum && !!errors.thresholdEnum}
@@ -81,7 +82,7 @@ class TriggerExpressions extends Component {
 
           <EuiFlexItem grow={false} style={{ width: 100 }}>
             <Field
-              name="thresholdValue"
+              name={valueFieldName}
               render={({ field, form: { touched, errors } }) => (
                 <EuiFormRow
                   style={{ paddingLeft: '10px' }}
@@ -100,14 +101,14 @@ class TriggerExpressions extends Component {
 
   render() {
     const { openedStates } = this.state;
-    const { thresholdEnum, thresholdValue } = this.props;
+    const { thresholdEnum, thresholdValue, label } = this.props;
     return (
       <EuiFlexGroup alignItems="center">
         <EuiFlexItem grow={false}>
           <EuiPopover
             id="trigger-popover"
             button={
-              <EuiFormRow label="Trigger condition">
+              <EuiFormRow label={label}>
                 <EuiExpression
                   description={`IS ${thresholdEnum}`}
                   value={`${thresholdValue.toLocaleString()}`}

@@ -80,4 +80,17 @@ export default class ElasticsearchService {
       return { ok: false, resp: err.message };
     }
   };
+  getPlugins = async (req, h) => {
+    try {
+      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
+      const plugins = await callWithRequest(req, 'cat.plugins', {
+        format: 'json',
+        h: 'component',
+      });
+      return { ok: true, resp: plugins };
+    } catch (err) {
+      console.error('Alerting - ElasticsearchService - getPlugins:', err);
+      return { ok: false, resp: err.message };
+    }
+  };
 }

@@ -118,5 +118,47 @@ describe('monitorToFormik', () => {
       const formikValues = monitorToFormik(localExampleMonitor);
       expect(formikValues.cronExpression).toBe(FORMIK_INITIAL_VALUES.cronExpression);
     });
+    test('can build AD monitor', () => {
+      const adMonitor = _.cloneDeep(exampleMonitor);
+      adMonitor.ui_metadata.search.searchType = 'ad';
+      adMonitor.inputs = [
+        {
+          search: {
+            indices: ['.opendistro-anomaly-results*'],
+            query: {
+              aggregations: { max_anomaly_grade: { max: { field: 'anomaly_grade' } } },
+              query: {
+                bool: {
+                  filter: [
+                    {
+                      range: {
+                        end_time: {
+                          from: '{{period_end}}||-2m',
+                          include_lower: true,
+                          include_upper: true,
+                          to: '{{period_end}}',
+                        },
+                      },
+                    },
+                    {
+                      term: {
+                        detector_id: {
+                          value: 'zIqG0nABwoJjo1UZKHnL',
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              size: 1,
+              sort: [{ anomaly_grade: { order: 'desc' } }, { confidence: { order: 'desc' } }],
+            },
+          },
+        },
+      ];
+      const formikValues = monitorToFormik(adMonitor);
+      expect(formikValues.detectorId).toBe('zIqG0nABwoJjo1UZKHnL');
+      expect(formikValues.query).toContain('zIqG0nABwoJjo1UZKHnL');
+    });
   });
 });

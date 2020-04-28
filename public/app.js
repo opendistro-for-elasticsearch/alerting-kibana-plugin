@@ -22,10 +22,18 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import 'react-vis/dist/style.css';
 import 'ui/autoload/styles';
 import './less/main.less';
-
 import Main from './pages/Main';
+import { AppContext } from './utils/AppContext';
 
 const app = uiModules.get('apps/alerting');
+const darkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
+
+//Load Chart's dark mode CSS
+if (darkMode) {
+  require('@elastic/charts/dist/theme_only_dark.css');
+} else {
+  require('@elastic/charts/dist/theme_only_light.css');
+}
 
 app.config($locationProvider => {
   $locationProvider.html5Mode({
@@ -43,7 +51,9 @@ function RootController($scope, $element, $http) {
   // render react to DOM
   render(
     <Router>
-      <Route render={props => <Main title="Alerting" httpClient={$http} {...props} />} />
+      <AppContext.Provider value={{ httpClient: $http, darkMode }}>
+        <Route render={props => <Main title="Alerting" httpClient={$http} {...props} />} />
+      </AppContext.Provider>
     </Router>,
     domNode
   );

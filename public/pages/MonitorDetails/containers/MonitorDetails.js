@@ -14,6 +14,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
+import { get } from 'lodash';
 import queryString from 'query-string';
 import {
   EuiButton,
@@ -23,7 +24,9 @@ import {
   EuiLink,
   EuiLoadingSpinner,
   EuiSpacer,
+  EuiText,
   EuiTitle,
+  EuiIcon,
 } from '@elastic/eui';
 
 import CreateMonitor from '../../CreateMonitor';
@@ -32,7 +35,13 @@ import MonitorOverview from '../components/MonitorOverview';
 import MonitorHistory from './MonitorHistory';
 import Dashboard from '../../Dashboard/containers/Dashboard';
 import Triggers from './Triggers';
-import { MONITOR_ACTIONS, TRIGGER_ACTIONS } from '../../../utils/constants';
+import {
+  MONITOR_ACTIONS,
+  TRIGGER_ACTIONS,
+  ES_AD_PLUGIN,
+  MONITOR_INPUT_DETECTOR_ID,
+} from '../../../utils/constants';
+import { migrateTriggerMetadata } from './utils/helpers';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -68,6 +77,26 @@ export default class MonitorDetails extends Component {
     this.props.setFlyout(null);
   }
 
+  getDetector = id => {
+    const { httpClient } = this.props;
+    httpClient
+      .get(`../api/alerting/detectors/${id}`)
+      .then(resp => {
+        const { ok, detector, version: detectorVersion, seqNo, primaryTerm } = resp.data;
+        if (ok) {
+          this.setState({
+            detector: detector,
+            detectorVersion,
+          });
+        } else {
+          console.log('can not get detector', id);
+        }
+      })
+      .catch(err => {
+        console.log('error while getting detector', err);
+      });
+  };
+
   getMonitor = id => {
     const { httpClient } = this.props;
     httpClient
@@ -86,13 +115,17 @@ export default class MonitorDetails extends Component {
           this.setState({
             ifSeqNo,
             ifPrimaryTerm,
-            monitor,
+            monitor: migrateTriggerMetadata(monitor),
             monitorVersion,
             dayCount,
             activeCount,
             loading: false,
             error: null,
           });
+          const adId = get(monitor, MONITOR_INPUT_DETECTOR_ID, undefined);
+          if (adId) {
+            this.getDetector(adId);
+          }
         } else {
           // TODO: 404 handling
           this.props.history.push('/monitors');
@@ -179,7 +212,15 @@ export default class MonitorDetails extends Component {
   };
 
   render() {
-    const { monitor, monitorVersion, activeCount, updating, loading, triggerToEdit } = this.state;
+    const {
+      monitor,
+      detector,
+      monitorVersion,
+      activeCount,
+      updating,
+      loading,
+      triggerToEdit,
+    } = this.state;
     const {
       location,
       match: {
@@ -192,6 +233,7 @@ export default class MonitorDetails extends Component {
     const updatingMonitor = action === MONITOR_ACTIONS.UPDATE_MONITOR;
     const creatingTrigger = action === TRIGGER_ACTIONS.CREATE_TRIGGER;
     const updatingTrigger = action === TRIGGER_ACTIONS.UPDATE_TRIGGER && triggerToEdit;
+    const detectorId = get(monitor, MONITOR_INPUT_DETECTOR_ID, undefined);
     if (loading) {
       return (
         <EuiFlexGroup justifyContent="center" alignItems="center" style={{ marginTop: '100px' }}>
@@ -206,6 +248,7 @@ export default class MonitorDetails extends Component {
           edit={true}
           updateMonitor={this.updateMonitor}
           monitorToEdit={monitor}
+          detectorId={detectorId}
           {...this.props}
         />
       );
@@ -244,6 +287,22 @@ export default class MonitorDetails extends Component {
                 {monitor.name}
               </h1>
             </EuiTitle>
+
+            {detector ? (
+              <EuiFlexItem grow={false}>
+                <EuiText size="s">
+                  Created from detector:{' '}
+                  <EuiLink
+                    href={`${ES_AD_PLUGIN}#/detectors/${detectorId}`}
+                    external="true"
+                    target="_blank"
+                  >
+                    {detector.name}
+                    <EuiIcon size="s" type="popout" />
+                  </EuiLink>
+                </EuiText>
+              </EuiFlexItem>
+            ) : null}
           </EuiFlexItem>
 
           <EuiFlexItem grow={false}>
@@ -293,6 +352,7 @@ export default class MonitorDetails extends Component {
         <EuiSpacer />
         <Dashboard
           monitorIds={[monitorId]}
+          detectorIds={detectorId ? [detectorId] : []}
           onCreateTrigger={this.onCreateTrigger}
           httpClient={httpClient}
           location={location}
