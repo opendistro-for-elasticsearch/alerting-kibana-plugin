@@ -1,6 +1,6 @@
 name: Unit tests workflow
 on:
-  pull_request:
+  push:
     branches:
       - master
 
