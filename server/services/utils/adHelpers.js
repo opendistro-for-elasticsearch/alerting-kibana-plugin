@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ export const anomalyResultMapper = anomalyResults => {
       ...rest,
       anomalyGrade:
         rest.anomalyGrade != null && rest.anomalyGrade > 0
-          ? Number.parseFloat(rest.anomalyGrade).toFixed(3)
+          ? Number.parseFloat(rest.anomalyGrade).toFixed(2)
           : 0,
       confidence:
         rest.anomalyGrade != null && rest.anomalyGrade > 0
-          ? Number.parseFloat(rest.confidence).toFixed(3)
+          ? Number.parseFloat(rest.confidence).toFixed(2)
           : 0,
       plotTime: rest.dataStartTime + Math.floor((rest.dataEndTime - rest.dataStartTime) / 2),
     });

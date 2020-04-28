@@ -93,7 +93,7 @@ export default class MonitorDetails extends Component {
         }
       })
       .catch(err => {
-        console.log('err', err);
+        console.log('error while getting detector', err);
       });
   };
 

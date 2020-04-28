@@ -92,7 +92,7 @@ class AnomalyHistory extends Component {
                 />
               );
             }
-            return true ? (
+            return (
               <React.Fragment>
                 <AnomaliesChart
                   startDateTime={anomalyData.previewStartTime}
@@ -120,12 +120,6 @@ class AnomalyHistory extends Component {
                   title="Feature data"
                 />
               </React.Fragment>
-            ) : (
-              <EmptyFeaturesMessage
-                detectorId={detectorId}
-                isLoading={anomalyData.isLoading}
-                containerStyle={{ border: 'none' }}
-              />
             );
           }}
         />

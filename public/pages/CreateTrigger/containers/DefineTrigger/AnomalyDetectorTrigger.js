@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -69,9 +69,7 @@ class AnomalyDetectorTrigger extends React.Component {
                     anomalies={anomalyData.anomalyResult.anomalies}
                     isLoading={anomalyData.isLoading}
                     displayGrade
-                    annotationData={[
-                      { dataValue: adValues.anomalyGradeThresholdValue, details: 'detail-0' },
-                    ]}
+                    annotationData={[{ dataValue: adValues.anomalyGradeThresholdValue }]}
                   />
                   <EuiSpacer size="m" />
                   <TriggerExpressions
@@ -90,9 +88,7 @@ class AnomalyDetectorTrigger extends React.Component {
                     anomalies={anomalyData.anomalyResult.anomalies}
                     isLoading={anomalyData.isLoading}
                     displayConfidence
-                    annotationData={[
-                      { dataValue: adValues.anomalyConfidenceThresholdValue, details: 'detail-0' },
-                    ]}
+                    annotationData={[{ dataValue: adValues.anomalyConfidenceThresholdValue }]}
                   />
                   <EuiSpacer size="m" />
                   <FeatureChart
