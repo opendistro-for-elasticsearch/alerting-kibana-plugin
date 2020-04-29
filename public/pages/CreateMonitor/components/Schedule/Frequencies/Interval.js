@@ -49,7 +49,7 @@ const Interval = () => (
         inputProps={{ icon: 'clock', min: 1 }}
       />
     </EuiFlexItem>
-    <EuiFlexItem style={{ margin: '0px' }}>
+    <EuiFlexItem style={{ margin: '2px' }}>
       <FormikSelect
         name="period.unit"
         formRow

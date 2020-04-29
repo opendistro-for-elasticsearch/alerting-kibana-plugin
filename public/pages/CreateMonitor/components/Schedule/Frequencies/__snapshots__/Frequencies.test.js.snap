@@ -265,7 +265,7 @@ exports[`Frequencies renders FrequencyPicker 1`] = `
   </div>
   <div
     class="euiFlexItem"
-    style="margin:0px"
+    style="margin:2px"
   >
     <div
       class="euiFormRow euiFormRow--hasEmptyLabelSpace"
@@ -379,7 +379,7 @@ exports[`Frequencies renders Interval 1`] = `
   </div>
   <div
     class="euiFlexItem"
-    style="margin:0px"
+    style="margin:2px"
   >
     <div
       class="euiFormRow euiFormRow--hasEmptyLabelSpace"
