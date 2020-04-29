@@ -58,7 +58,7 @@ class AnomalyDetectorTrigger extends React.Component {
                     thresholdEnum={adValues.anomalyGradeThresholdEnum}
                     keyFieldName="anomalyDetector.anomalyGradeThresholdEnum"
                     valueFieldName="anomalyDetector.anomalyGradeThresholdValue"
-                    label="Anomaly grade condition"
+                    label="Anomaly grade threshold"
                   />
                   <EuiSpacer size="xs" />
                   <AnomaliesChart
@@ -77,7 +77,7 @@ class AnomalyDetectorTrigger extends React.Component {
                     thresholdEnum={adValues.anomalyConfidenceThresholdEnum}
                     keyFieldName="anomalyDetector.anomalyConfidenceThresholdEnum"
                     valueFieldName="anomalyDetector.anomalyConfidenceThresholdValue"
-                    label="Anomaly confidence condition"
+                    label="Anomaly confidence threshold"
                   />
                   <EuiSpacer size="xs" />
                   <AnomaliesChart

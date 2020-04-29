@@ -31,7 +31,7 @@ const onChangeDefinition = (e, form, resetResponse) => {
 const selectDefinitions = plugins => {
   return plugins === undefined || plugins.indexOf(ES_AD_PLUGIN) == -1
     ? defaultSelectDefinitions
-    : [...defaultSelectDefinitions, { value: 'ad', text: 'Define using Anomaly detector' }];
+    : [...defaultSelectDefinitions, { value: 'ad', text: 'Define using anomaly detector' }];
 };
 
 const MonitorDefinition = ({ resetResponse, plugins }) => (
@@ -39,7 +39,7 @@ const MonitorDefinition = ({ resetResponse, plugins }) => (
     name="searchType"
     formRow
     rowProps={{
-      label: 'How do you want to define the monitor?',
+      label: 'Define the monitor',
       style: { paddingLeft: '10px' },
     }}
     inputProps={{

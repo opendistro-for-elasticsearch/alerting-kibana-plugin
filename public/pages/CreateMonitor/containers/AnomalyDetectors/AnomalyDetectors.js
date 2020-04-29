@@ -65,7 +65,11 @@ class AnomalyDetectors extends React.Component {
       }
     }
     return (
-      <div>
+      <div
+        style={{
+          maxWidth: '390px',
+        }}
+      >
         <FormikComboBox
           name={'detectorId'}
           formRow
