@@ -13,7 +13,7 @@ exports[`MonitorDefinition renders 1`] = `
       class="euiFormLabel euiFormRow__label"
       for="searchType-form-row"
     >
-      Define the monitor
+      Method of definition
     </label>
   </div>
   <div
