@@ -39,7 +39,7 @@ const MonitorDefinition = ({ resetResponse, plugins }) => (
     name="searchType"
     formRow
     rowProps={{
-      label: 'Define the monitor',
+      label: 'Method of definition',
       style: { paddingLeft: '10px' },
     }}
     inputProps={{
