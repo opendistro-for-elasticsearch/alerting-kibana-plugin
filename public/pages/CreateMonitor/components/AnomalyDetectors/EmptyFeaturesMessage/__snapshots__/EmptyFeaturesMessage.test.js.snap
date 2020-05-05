@@ -36,7 +36,7 @@ exports[`EmptyFeaturesMessage renders  1`] = `
         <a
           class="euiButton euiButton--primary"
           data-test-subj="createButton"
-          href="opendistro-anomaly-detection#/detectors/tempId/features"
+          href="opendistro-anomaly-detection-kibana#/detectors/tempId/features"
           rel="noopener noreferrer"
           target="_blank"
         >
