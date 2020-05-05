@@ -52,7 +52,6 @@ describe('validateUrl', () => {
   test('returns error string if invalid', () => {
     const invalidText = 'Invalid URL';
     expect(validateUrl('opendistro.github.io', typeFullUrl)).toBe(invalidText);
-    expect(validateUrl('https://opendistro.github/', typeFullUrl)).toBe(invalidText);
     expect(validateUrl('127.0.0.1', typeFullUrl)).toBe(invalidText);
     expect(validateUrl('http://127.0.0.1.1', typeFullUrl)).toBe(invalidText);
     expect(validateUrl('http://127.0.0.256:8080/', typeFullUrl)).toBe(invalidText);

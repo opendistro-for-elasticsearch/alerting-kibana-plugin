@@ -20,23 +20,27 @@ Array [
         class="echChart"
       >
         <div
-          class="echChartStatus"
-          data-ech-render-complete="false"
-          data-ech-render-count="0"
-        />
-        <div
-          class="echChartResizer"
-        />
-        <div
           class="echContainer"
         >
           <div
-            class="echReactiveChart_unavailable"
+            class="echChartResizer"
+          />
+          <div
+            class="echCrosshair"
+          />
+          <div
+            class="echTooltip echTooltip--hidden"
+          />
+          <div
+            class="echAnnotation__tooltip echAnnotation__tooltip--hidden"
+          />
+          <svg
+            class="echHighlighter"
           >
-            <p>
-              No data to display
-            </p>
-          </div>
+            <g
+              transform="translate(0, 0) rotate(0)"
+            />
+          </svg>
         </div>
       </div>
     </div>
