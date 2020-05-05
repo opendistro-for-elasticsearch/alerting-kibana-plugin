@@ -16,12 +16,13 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import queryString from 'query-string';
-import { EuiBasicTable, EuiButton, EuiHorizontalRule } from '@elastic/eui';
+import { EuiBasicTable, EuiButton, EuiHorizontalRule, EuiIcon, EuiButtonEmpty } from '@elastic/eui';
 
 import ContentPanel from '../../../components/ContentPanel';
 import DashboardEmptyPrompt from '../components/DashboardEmptyPrompt';
 import DashboardControls from '../components/DashboardControls';
 import { columns } from '../utils/tableUtils';
+import { ES_AD_PLUGIN } from '../../../utils/constants';
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 const DEFAULT_QUERY_PARAMS = {
@@ -69,6 +70,7 @@ export default class Dashboard extends Component {
 
   static defaultProps = {
     monitorIds: [],
+    detectorIds: [],
   };
 
   componentDidMount() {
@@ -289,7 +291,7 @@ export default class Dashboard extends Component {
       sortField,
       totalAlerts,
     } = this.state;
-    const { monitorIds, onCreateTrigger } = this.props;
+    const { monitorIds, detectorIds, onCreateTrigger } = this.props;
 
     const pagination = {
       pageIndex: page,
@@ -312,12 +314,24 @@ export default class Dashboard extends Component {
         selectable ? undefined : 'Only Active Alerts are Acknowledgeable',
     };
 
+    const actions = () => {
+      const actions = [<EuiButton onClick={this.acknowledgeAlert}>Acknowledge</EuiButton>];
+      if (detectorIds.length) {
+        actions.unshift(
+          <EuiButton href={`${ES_AD_PLUGIN}#/detectors/${detectorIds[0]}`} target="_blank">
+            View detector <EuiIcon type="popout" />
+          </EuiButton>
+        );
+      }
+      return actions;
+    };
+
     return (
       <ContentPanel
         title="Alerts"
         titleSize={monitorIds.length ? 's' : 'l'}
         bodyStyles={{ padding: 'initial' }}
-        actions={<EuiButton onClick={this.acknowledgeAlert}>Acknowledge</EuiButton>}
+        actions={actions()}
       >
         <DashboardControls
           activePage={page}

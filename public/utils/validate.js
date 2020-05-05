@@ -84,11 +84,17 @@ export const validateUnit = value => {
 };
 
 export const validateMonthlyDay = value => {
-  if (!Number.isInteger(value) || (value < 1 || value > 31))
+  if (!Number.isInteger(value) || value < 1 || value > 31)
     return 'Must be a positive integer between 1-31';
 };
 
 export const ILLEGAL_CHARACTERS = ['\\', '/', '?', '"', '<', '>', '|', ',', ' '];
+
+export const validateDetector = (detectorId, selectedDetector) => {
+  if (!detectorId) return 'Must select detector';
+  if (selectedDetector && selectedDetector.features.length === 0)
+    return 'Must choose detector which has features';
+};
 
 export const validateIndex = options => {
   if (!Array.isArray(options)) return 'Must specify an index';

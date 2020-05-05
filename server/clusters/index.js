@@ -14,5 +14,6 @@
  */
 
 import createAlertingCluster from './alerting/createAlertingCluster';
+import createAlertingADCluster from './alerting/createAlertingADCluster';
 
-export { createAlertingCluster };
+export { createAlertingCluster, createAlertingADCluster };

@@ -175,7 +175,13 @@ export default class MonitorService {
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
       const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map(result => {
-        const { _id: id, _version: version, _seq_no: ifSeqNo, _primary_term: ifPrimaryTerm, _source: monitor } = result;
+        const {
+          _id: id,
+          _version: version,
+          _seq_no: ifSeqNo,
+          _primary_term: ifPrimaryTerm,
+          _source: monitor,
+        } = result;
         const { name, enabled } = monitor;
         return [id, { id, version, ifSeqNo, ifPrimaryTerm, name, enabled, monitor }];
       }, {});

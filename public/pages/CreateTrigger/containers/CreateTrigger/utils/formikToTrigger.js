@@ -14,7 +14,13 @@
  */
 
 import _ from 'lodash';
-import { AGGREGATION_RESULTS_PATH, HITS_TOTAL_RESULTS_PATH } from './constants';
+import {
+  AGGREGATION_RESULTS_PATH,
+  HITS_TOTAL_RESULTS_PATH,
+  TRIGGER_TYPE,
+  ANOMALY_GRADE_RESULT_PATH,
+  ANOMALY_CONFIDENCE_RESULT_PATH,
+} from './constants';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 export function formikToTrigger(values, monitorUiMetadata = {}) {
@@ -42,8 +48,25 @@ export function formikToAction(values) {
   return actions;
 }
 
-export function formikToThresholds(values) {
-  return { [values.name]: { value: values.thresholdValue, enum: values.thresholdEnum } };
+export function formikToTriggerUiMetadata(values, monitorUiMetadata) {
+  const { anomalyDetector, thresholdEnum, thresholdValue } = values;
+  const searchType = _.get(monitorUiMetadata, 'search.searchType', 'query');
+  let triggerMetadata = { value: thresholdValue, enum: thresholdEnum };
+  //Store AD values only if AD trigger.
+  if (searchType === SEARCH_TYPE.AD && anomalyDetector.triggerType === TRIGGER_TYPE.AD) {
+    triggerMetadata.adTriggerMetadata = {
+      triggerType: anomalyDetector.triggerType,
+      anomalyGrade: {
+        value: anomalyDetector.anomalyGradeThresholdValue,
+        enum: anomalyDetector.anomalyGradeThresholdEnum,
+      },
+      anomalyConfidence: {
+        value: anomalyDetector.anomalyConfidenceThresholdValue,
+        enum: anomalyDetector.anomalyConfidenceThresholdEnum,
+      },
+    };
+  }
+  return { [values.name]: triggerMetadata };
 }
 
 export function formikToCondition(values, monitorUiMetadata = {}) {
@@ -52,10 +75,27 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
   const aggregationType = _.get(monitorUiMetadata, 'search.aggregationType', 'count');
 
   if (searchType === SEARCH_TYPE.QUERY) return { script: values.script };
+  if (searchType === SEARCH_TYPE.AD) return getADCondition(values);
   const isCount = aggregationType === 'count';
   const resultsPath = getResultsPath(isCount);
   const operator = getOperator(thresholdEnum);
   return getCondition(resultsPath, operator, thresholdValue, isCount);
+}
+
+export function getADCondition(values) {
+  const { anomalyDetector } = values;
+  if (anomalyDetector.triggerType === TRIGGER_TYPE.AD) {
+    const anomalyGradeOperator = getOperator(anomalyDetector.anomalyGradeThresholdEnum);
+    const anomalyConfidenceOperator = getOperator(anomalyDetector.anomalyConfidenceThresholdEnum);
+    return {
+      script: {
+        lang: 'painless',
+        source: `return ${ANOMALY_GRADE_RESULT_PATH} != null && ${ANOMALY_GRADE_RESULT_PATH} ${anomalyGradeOperator} ${anomalyDetector.anomalyGradeThresholdValue} && ${ANOMALY_CONFIDENCE_RESULT_PATH} ${anomalyConfidenceOperator} ${anomalyDetector.anomalyConfidenceThresholdValue}`,
+      },
+    };
+  } else {
+    return { script: values.script };
+  }
 }
 
 export function getCondition(resultsPath, operator, value, isCount) {
@@ -64,7 +104,7 @@ export function getCondition(resultsPath, operator, value, isCount) {
     script: {
       lang: 'painless',
       source: isCount ? baseSource : `return ${resultsPath} == null ? false : ${baseSource}`,
-    }
+    },
   };
 }
 

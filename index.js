@@ -14,14 +14,15 @@
  */
 
 import { resolve } from 'path';
-import { alerts, destinations, elasticsearch, monitors } from './server/routes';
+import { alerts, destinations, elasticsearch, monitors, detectors } from './server/routes';
 import {
   AlertService,
   DestinationsService,
   ElasticsearchService,
   MonitorService,
+  AnomalyDetectorService,
 } from './server/services';
-import { createAlertingCluster } from './server/clusters';
+import { createAlertingCluster, createAlertingADCluster } from './server/clusters';
 import { PLUGIN_NAME } from './utils/constants';
 
 export default function(kibana) {
@@ -33,6 +34,7 @@ export default function(kibana) {
         title: 'Alerting',
         description: 'Kibana Alerting Plugin',
         main: `plugins/${PLUGIN_NAME}/app`,
+        icon: `plugins/${PLUGIN_NAME}/images/alerting_icon.svg`,
       },
 
       hacks: [`plugins/${PLUGIN_NAME}/hack`],
@@ -47,6 +49,7 @@ export default function(kibana) {
     init(server, options) {
       // Create clusters
       createAlertingCluster(server);
+      createAlertingADCluster(server);
 
       // Initialize services
       const esDriver = server.plugins.elasticsearch;
@@ -54,11 +57,13 @@ export default function(kibana) {
       const elasticsearchService = new ElasticsearchService(esDriver);
       const monitorService = new MonitorService(esDriver);
       const destinationsService = new DestinationsService(esDriver);
+      const anomalyDetectorService = new AnomalyDetectorService(esDriver);
       const services = {
         alertService,
         destinationsService,
         elasticsearchService,
         monitorService,
+        anomalyDetectorService,
       };
 
       // Add server routes
@@ -66,6 +71,7 @@ export default function(kibana) {
       destinations(server, services);
       elasticsearch(server, services);
       monitors(server, services);
+      detectors(server, services);
     },
   });
 }

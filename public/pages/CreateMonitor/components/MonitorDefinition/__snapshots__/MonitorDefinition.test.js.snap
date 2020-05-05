@@ -11,7 +11,7 @@ exports[`MonitorDefinition renders 1`] = `
       class="euiFormLabel"
       for="searchType"
     >
-      How do you want to define the monitor?
+      Method of definition
     </label>
   </div>
   <div

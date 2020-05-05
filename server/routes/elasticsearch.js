@@ -39,4 +39,9 @@ export default function(server, services) {
     method: 'POST',
     handler: elasticsearchService.getMappings,
   });
+  server.route({
+    path: '/api/alerting/_plugins',
+    method: 'GET',
+    handler: elasticsearchService.getPlugins,
+  });
 }
