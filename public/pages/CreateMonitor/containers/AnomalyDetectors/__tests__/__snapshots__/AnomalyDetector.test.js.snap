@@ -113,7 +113,13 @@ exports[`AnomalyDetectors renders 1`] = `
       }
     }
   >
-    <div>
+    <div
+      style={
+        Object {
+          "maxWidth": "390px",
+        }
+      }
+    >
       <FormikComboBox
         fieldProps={
           Object {

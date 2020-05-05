@@ -297,8 +297,7 @@ export default class MonitorDetails extends Component {
                     external="true"
                     target="_blank"
                   >
-                    {detector.name}
-                    <EuiIcon size="s" type="popout" />
+                    {detector.name} <EuiIcon size="s" type="popout" />
                   </EuiLink>
                 </EuiText>
               </EuiFlexItem>
