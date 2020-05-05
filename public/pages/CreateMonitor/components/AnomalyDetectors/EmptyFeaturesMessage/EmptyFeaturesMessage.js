@@ -16,7 +16,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EuiEmptyPrompt, EuiButton, EuiText, EuiLoadingChart } from '@elastic/eui';
-import { ES_AD_PLUGIN } from '../../../../../utils/constants';
+import { KIBANA_AD_PLUGIN } from '../../../../../utils/constants';
 
 const EmptyFeaturesMessage = props => (
   <div
@@ -43,7 +43,7 @@ const EmptyFeaturesMessage = props => (
         actions={[
           <EuiButton
             data-test-subj="createButton"
-            href={`${ES_AD_PLUGIN}#/detectors/${props.detectorId}/features`}
+            href={`${KIBANA_AD_PLUGIN}#/detectors/${props.detectorId}/features`}
             target="_blank"
           >
             Add Feature
