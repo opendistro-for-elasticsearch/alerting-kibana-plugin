@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmptyFeaturesMessage renders  1`] = `
+<div
+  style="border-radius:5px;padding:10px;border:1px solid #D9D9D9;height:250px;width:100%"
+>
+  <div
+    class="euiEmptyPrompt"
+    style="max-width:45em"
+  >
+    <span
+      class="euiTextColor euiTextColor--subdued"
+    >
+      <div
+        class="euiText euiText--medium"
+      >
+        <div
+          class="euiText euiText--medium"
+        >
+          No features have been added to this anomaly detector. A feature is a metric that is used for anomaly detection. A detector can discover anomalies across one or more features.
+        </div>
+      </div>
+    </span>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div
+      class="euiSpacer euiSpacer--s"
+    />
+    <div
+      class="euiFlexGroup euiFlexGroup--gutterMedium euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentCenter euiFlexGroup--directionColumn euiFlexGroup--responsive"
+    >
+      <div
+        class="euiFlexItem euiFlexItem--flexGrowZero"
+      >
+        <a
+          class="euiButton euiButton--primary"
+          data-test-subj="createButton"
+          href="opendistro-anomaly-detection#/detectors/tempId/features"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span
+            class="euiButton__content"
+          >
+            <span
+              class="euiButton__text"
+            >
+              Add Feature
+            </span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

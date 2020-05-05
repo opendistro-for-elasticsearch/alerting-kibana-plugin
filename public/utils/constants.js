@@ -31,6 +31,7 @@ export const APP_PATH = {
 export const SEARCH_TYPE = {
   GRAPH: 'graph',
   QUERY: 'query',
+  AD: 'ad',
 };
 
 export const DESTINATION_ACTIONS = {
@@ -52,3 +53,11 @@ export const DATA_TYPES = {
   BOOLEAN: 'boolean',
   KEYWORD: 'keyword',
 };
+
+export const ES_AD_PLUGIN = 'opendistro-anomaly-detection';
+
+export const INPUTS_DETECTOR_ID = '0.search.query.query.bool.filter[1].term.detector_id.value';
+
+export const MONITOR_INPUT_DETECTOR_ID = `inputs.${INPUTS_DETECTOR_ID}`;
+
+export const AD_PREVIEW_DAYS = 7;

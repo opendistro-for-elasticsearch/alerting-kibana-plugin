@@ -14,7 +14,7 @@
  */
 
 import _ from 'lodash';
-import { FORMIK_INITIAL_VALUES } from './constants';
+import { FORMIK_INITIAL_VALUES, TRIGGER_TYPE } from './constants';
 
 export function triggerToFormik(trigger, monitor) {
   const {
@@ -26,18 +26,37 @@ export function triggerToFormik(trigger, monitor) {
     min_time_between_executions: minTimeBetweenExecutions,
     rolling_window_size: rollingWindowSize,
   } = trigger;
-
   const thresholdEnum = _.get(
     monitor,
-    `ui_metadata.thresholds[${name}].enum`,
+    `ui_metadata.triggers[${name}].enum`,
     FORMIK_INITIAL_VALUES.thresholdEnum
   );
   const thresholdValue = _.get(
     monitor,
-    `ui_metadata.thresholds[${name}].value`,
+    `ui_metadata.triggers[${name}].value`,
     FORMIK_INITIAL_VALUES.thresholdValue
   );
-
+  const anomalyConfidenceThresholdValue = _.get(
+    monitor,
+    `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyConfidence.value`,
+    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyConfidenceThresholdValue
+  );
+  const anomalyConfidenceThresholdEnum = _.get(
+    monitor,
+    `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyConfidence.enum`,
+    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyConfidenceThresholdEnum
+  );
+  const anomalyGradeThresholdValue = _.get(
+    monitor,
+    `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyGrade.value`,
+    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyGradeThresholdValue
+  );
+  const anomalyGradeThresholdEnum = _.get(
+    monitor,
+    `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyGrade.enum`,
+    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyGradeThresholdEnum
+  );
+  const triggerType = _.get(monitor, `ui_metadata.triggers[${name}].adTriggerMetadata.triggerType`);
   return {
     ..._.cloneDeep(FORMIK_INITIAL_VALUES),
     id,
@@ -49,5 +68,16 @@ export function triggerToFormik(trigger, monitor) {
     rollingWindowSize,
     thresholdEnum,
     thresholdValue,
+    anomalyDetector: {
+      /*If trigger type doesn't exist fallback to query trigger with following reasons
+        1. User has changed monitory type from normal monitor to AD monitor.
+        2. User has created / updated from API and visiting Kibana to do other operations.
+      */
+      triggerType: triggerType ? triggerType : TRIGGER_TYPE.ALERT_TRIGGER,
+      anomalyGradeThresholdValue,
+      anomalyGradeThresholdEnum,
+      anomalyConfidenceThresholdValue,
+      anomalyConfidenceThresholdEnum,
+    },
   };
 }

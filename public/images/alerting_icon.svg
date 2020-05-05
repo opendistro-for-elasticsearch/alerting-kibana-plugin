@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>Alerting</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Alerting" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2" transform="translate(4.000000, 0.500000)">
+            <g id="Group-13">
+                <path d="M9.49121094,20.5 C9.49121094,19.1192881 8.37192281,18 6.99121094,18 C5.61049906,18 4.49121094,19.1192881 4.49121094,20.5" id="Oval-Copy-80" stroke="#007D73" transform="translate(6.991211, 19.250000) scale(1, -1) translate(-6.991211, -19.250000) "></path>
+                <path d="M12.9912109,9.1 C12.9912109,6.0072054 10.3049194,3.5 6.99121094,3.5 C3.67750244,3.5 0.991210938,6.0072054 0.991210938,9.1 C0.991210938,12.8807292 0.660807292,15.6807292 0,17.5 L13.9875,17.5 C12.9912109,14.7215104 12.9912109,12.1927946 12.9912109,9.1 Z" id="Oval" stroke="#333741"></path>
+                <circle id="Oval-Copy-67" stroke="#333741" cx="6.99121094" cy="2" r="1.5"></circle>
+            </g>
+            <path d="M2.5,14.5 L11.5,14.5" id="Line-9" stroke="#007D73" stroke-linecap="square"></path>
+        </g>
+    </g>
+</svg>

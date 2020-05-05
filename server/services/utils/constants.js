@@ -15,6 +15,7 @@
 
 export const API_ROUTE_PREFIX = '/_opendistro/_alerting';
 export const MONITOR_BASE_API = `${API_ROUTE_PREFIX}/monitors`;
+export const AD_BASE_API = `/_opendistro/_anomaly_detection/detectors`;
 export const DESTINATION_BASE_API = `${API_ROUTE_PREFIX}/destinations`;
 export const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
@@ -24,5 +25,6 @@ export const DEFAULT_HEADERS = {
 export const CLUSTER = {
   ADMIN: 'admin',
   ALERTING: 'opendistro_alerting',
+  AD_ALERTING: 'alerting_ad',
   DATA: 'data',
 };

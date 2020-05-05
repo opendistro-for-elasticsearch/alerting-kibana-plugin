@@ -300,15 +300,20 @@ class MonitorHistory extends PureComponent {
     } = this.state;
     const { triggers, onShowTrigger } = this.props;
     return (
-      <ContentPanel title="History" titleSize="s" bodyStyles={{ minHeight: 200, padding: 0 }}>
+      <ContentPanel
+        title="History"
+        titleSize="s"
+        bodyStyles={{ minHeight: 200, padding: 0 }}
+        actions={[
+          <DateRangePicker
+            initialStartTime={this.initialStartTime}
+            initialEndTime={this.initialEndTime}
+            onRangeChange={this.handleRangeChange}
+          />,
+        ]}
+      >
         {triggers.length > 0 ? (
           <React.Fragment>
-            <DateRangePicker
-              initialStartTime={this.initialStartTime}
-              initialEndTime={this.initialEndTime}
-              onRangeChange={this.handleRangeChange}
-            />
-            <EuiHorizontalRule margin="xs" />
             <TriggersTimeSeries
               triggers={triggers}
               isLoading={isLoading}

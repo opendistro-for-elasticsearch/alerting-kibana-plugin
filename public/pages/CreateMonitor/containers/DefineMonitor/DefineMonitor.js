@@ -17,7 +17,7 @@ import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
 import chrome from 'ui/chrome';
 import PropTypes from 'prop-types';
-import { EuiSpacer, EuiButton, EuiText } from '@elastic/eui';
+import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
@@ -29,7 +29,8 @@ import MonitorTimeField from '../../components/MonitorTimeField';
 import { formikToMonitor } from '../CreateMonitor/utils/formikToMonitor';
 import { getPathsPerDataType } from './utils/mappings';
 import { buildSearchRequest } from './utils/searchRequests';
-import { SEARCH_TYPE } from '../../../../utils/constants';
+import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
+import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
 
 function renderEmptyMessage(message) {
   return (
@@ -61,6 +62,7 @@ class DefineMonitor extends Component {
       performanceResponse: null,
       response: null,
       formikSnapshot: this.props.values,
+      plugins: [],
     };
 
     this.renderGraph = this.renderGraph.bind(this);
@@ -68,10 +70,17 @@ class DefineMonitor extends Component {
     this.resetResponse = this.resetResponse.bind(this);
     this.onQueryMappings = this.onQueryMappings.bind(this);
     this.queryMappings = this.queryMappings.bind(this);
+    this.renderVisualMonitor = this.renderVisualMonitor.bind(this);
+    this.renderExtractionQuery = this.renderExtractionQuery.bind(this);
+    this.renderAnomalyDetector = this.renderAnomalyDetector.bind(this);
+    this.getMonitorContent = this.getMonitorContent.bind(this);
+    this.getPlugins = this.getPlugins.bind(this);
+    this.showPluginWarning = this.showPluginWarning.bind(this);
     this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
   }
 
   componentDidMount() {
+    this.getPlugins();
     const { searchType, index, timeField } = this.props.values;
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
     const hasIndices = !!index.length;
@@ -111,6 +120,20 @@ class DefineMonitor extends Component {
       if (hasTimeField) {
         if (wasQuery || diffIndices || diffTimeFields) this.onRunQuery();
       }
+    }
+  }
+
+  async getPlugins() {
+    const { httpClient } = this.props;
+    try {
+      const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
+      if (pluginsResponse.data.ok) {
+        this.setState({ plugins: pluginsResponse.data.resp.map(plugin => plugin.component) });
+      } else {
+        console.error('There was a problem getting plugins list');
+      }
+    } catch (e) {
+      console.error('There was a problem getting plugins list', e);
     }
   }
 
@@ -214,12 +237,34 @@ class DefineMonitor extends Component {
       throw err;
     }
   }
-
-  render() {
+  renderVisualMonitor() {
     const { httpClient, values } = this.props;
-    const { dataTypes, response, performanceResponse } = this.state;
-    const { index, searchType, timeField } = values;
-    const isGraph = searchType === SEARCH_TYPE.GRAPH;
+    const { index, timeField } = values;
+    const { dataTypes, performanceResponse } = this.state;
+    let content = null;
+    if (index.length) {
+      content = timeField
+        ? this.renderGraph()
+        : renderEmptyMessage('You must specify a time field.');
+    } else {
+      content = renderEmptyMessage('You must specify an index.');
+    }
+    return {
+      actions: [],
+      content: (
+        <React.Fragment>
+          <MonitorIndex httpClient={httpClient} />
+          <MonitorTimeField dataTypes={dataTypes} />
+          <div style={{ padding: '0px 10px' }}>{content}</div>
+          <EuiSpacer size="m" />
+          <QueryPerformance response={performanceResponse} />
+        </React.Fragment>
+      ),
+    };
+  }
+  renderExtractionQuery() {
+    const { httpClient, values } = this.props;
+    const { response, performanceResponse } = this.state;
     let invalidJSON = false;
     try {
       JSON.parse(values.query);
@@ -227,44 +272,89 @@ class DefineMonitor extends Component {
       invalidJSON = true;
     }
     const runIsDisabled = invalidJSON || !values.index.length;
-    const actions = isGraph
-      ? []
-      : [
-          <EuiButton disabled={runIsDisabled} onClick={this.onRunQuery}>
-            Run
-          </EuiButton>,
-        ];
-
     let content = renderEmptyMessage('You must specify an index.');
-
-    if (index.length) {
-      if (isGraph) {
-        content = timeField
-          ? this.renderGraph()
-          : renderEmptyMessage('You must specify a time field.');
-      } else {
-        content = (
-          <ExtractionQuery
-            response={JSON.stringify(response || '', null, 4)}
-            isDarkMode={this.isDarkMode}
-          />
-        );
-      }
+    if (values.index.length) {
+      content = (
+        <ExtractionQuery
+          response={JSON.stringify(response || '', null, 4)}
+          isDarkMode={this.isDarkMode}
+        />
+      );
     }
+    return {
+      actions: [
+        <EuiButton disabled={runIsDisabled} onClick={this.onRunQuery}>
+          Run
+        </EuiButton>,
+      ],
+      content: (
+        <React.Fragment>
+          <MonitorIndex httpClient={httpClient} />
+          <div style={{ padding: '0px 10px' }}>{content}</div>
+          <EuiSpacer size="m" />
+          <QueryPerformance response={performanceResponse} />
+        </React.Fragment>
+      ),
+    };
+  }
+  renderAnomalyDetector() {
+    const { httpClient, values, detectorId } = this.props;
+    return {
+      actions: [],
+      content: (
+        <React.Fragment>
+          <div style={{ padding: '0px 10px' }}>
+            <AnomalyDetectors
+              httpClient={httpClient}
+              values={values}
+              renderEmptyMessage={renderEmptyMessage}
+              detectorId={detectorId}
+            />
+          </div>
+        </React.Fragment>
+      ),
+    };
+  }
 
+  getMonitorContent() {
+    const { values } = this.props;
+    switch (values.searchType) {
+      case SEARCH_TYPE.AD:
+        return this.renderAnomalyDetector();
+      case SEARCH_TYPE.GRAPH:
+        return this.renderVisualMonitor();
+      default:
+        return this.renderExtractionQuery();
+    }
+  }
+  showPluginWarning() {
+    const { values } = this.props;
+    const { plugins } = this.state;
+    return values.searchType == SEARCH_TYPE.AD && plugins.indexOf(ES_AD_PLUGIN) == -1;
+  }
+
+  render() {
+    const monitorContent = this.getMonitorContent();
     return (
       <ContentPanel
         title="Define monitor"
         titleSize="s"
         bodyStyles={{ padding: 'initial' }}
-        actions={actions}
+        actions={monitorContent.actions}
       >
-        <MonitorDefinition resetResponse={this.resetResponse} />
-        <MonitorIndex httpClient={httpClient} />
-        {isGraph && <MonitorTimeField dataTypes={dataTypes} />}
-        <div style={{ padding: '0px 10px' }}>{content}</div>
-        <EuiSpacer size="m" />
-        <QueryPerformance response={performanceResponse} />
+        {this.showPluginWarning()
+          ? [
+              <EuiCallOut
+                color="warning"
+                title="Anomaly detector plugin is not installed on Elasticsearch, This monitor will not functional properly."
+                iconType="help"
+                size="s"
+              />,
+              <EuiSpacer size="s" />,
+            ]
+          : null}
+        <MonitorDefinition resetResponse={this.resetResponse} plugins={this.state.plugins} />
+        {monitorContent.content}
       </ContentPanel>
     );
   }

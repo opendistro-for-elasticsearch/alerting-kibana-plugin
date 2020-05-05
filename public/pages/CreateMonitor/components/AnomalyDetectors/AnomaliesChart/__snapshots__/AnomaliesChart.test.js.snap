@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnomaliesChart renders  1`] = `
+Array [
+  <div
+    class="euiText euiText--extraSmall"
+  >
+    <strong>
+      Sample preview for anomaly score
+    </strong>
+  </div>,
+  <div
+    class="euiSpacer euiSpacer--s"
+  />,
+  <div>
+    <div
+      style="border-radius:5px;padding:10px;border:1px solid #D9D9D9;height:300px;width:100%;opacity:1"
+    >
+      <div
+        class="echChart"
+      >
+        <div
+          class="echChartStatus"
+          data-ech-render-complete="false"
+          data-ech-render-count="0"
+        />
+        <div
+          class="echChartResizer"
+        />
+        <div
+          class="echContainer"
+        >
+          <div
+            class="echReactiveChart_unavailable"
+          >
+            <p>
+              No data to display
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+]
+`;

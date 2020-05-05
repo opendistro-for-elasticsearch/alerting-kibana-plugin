@@ -15,8 +15,9 @@
 
 import React from 'react';
 import FormikSelect from '../../../../components/FormControls/FormikSelect/FormikSelect';
+import { ES_AD_PLUGIN } from '../../../../utils/constants';
 
-const selectDefinitions = [
+const defaultSelectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
 ];
@@ -27,7 +28,13 @@ const onChangeDefinition = (e, form, resetResponse) => {
   form.setFieldValue('searchType', type);
 };
 
-const MonitorDefinition = ({ resetResponse }) => (
+const selectDefinitions = plugins => {
+  return plugins === undefined || plugins.indexOf(ES_AD_PLUGIN) == -1
+    ? defaultSelectDefinitions
+    : [...defaultSelectDefinitions, { value: 'ad', text: 'Define using Anomaly detector' }];
+};
+
+const MonitorDefinition = ({ resetResponse, plugins }) => (
   <FormikSelect
     name="searchType"
     formRow
@@ -36,7 +43,7 @@ const MonitorDefinition = ({ resetResponse }) => (
       style: { paddingLeft: '10px' },
     }}
     inputProps={{
-      options: selectDefinitions,
+      options: selectDefinitions(plugins),
       onChange: (e, field, form) => {
         onChangeDefinition(e, form, resetResponse);
       },

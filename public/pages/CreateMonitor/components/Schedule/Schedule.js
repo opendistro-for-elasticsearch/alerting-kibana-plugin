@@ -17,16 +17,31 @@ import React, { Fragment } from 'react';
 import { EuiSpacer, EuiText } from '@elastic/eui';
 
 import { Frequency, FrequencyPicker } from './Frequencies';
+import Interval from './Frequencies/Interval';
 
-const Schedule = () => (
+const Schedule = ({ isAd }) => (
   <Fragment>
-    <EuiText size="xs" style={{ paddingLeft: '10px' }}>
-      When do you want this monitor to run?
+    <EuiText size="xs" style={{ paddingLeft: '10px', maxWidth: '400px' }}>
+      {isAd ? (
+        <p>
+          Define how often the monitor collects data and determines how often you may receive
+          alerts. We recommend two times of detector interval to avoid missing anomaly results due
+          to any potential delay of processing time.
+        </p>
+      ) : (
+        'When do you want this monitor to run?'
+      )}
     </EuiText>
     <EuiSpacer size="s" />
     <div style={{ maxWidth: '400px' }}>
-      <Frequency />
-      <FrequencyPicker />
+      {isAd ? (
+        <Interval />
+      ) : (
+        <div>
+          <Frequency />
+          <FrequencyPicker />
+        </div>
+      )}
     </div>
   </Fragment>
 );

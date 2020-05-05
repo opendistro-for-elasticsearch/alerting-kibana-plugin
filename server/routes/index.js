@@ -17,5 +17,6 @@ import alerts from './alerts';
 import destinations from './destinations';
 import elasticsearch from './elasticsearch';
 import monitors from './monitors';
+import detectors from './anomalyDetector';
 
-export { alerts, destinations, elasticsearch, monitors };
+export { alerts, destinations, elasticsearch, monitors, detectors };
