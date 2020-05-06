@@ -38,7 +38,7 @@ import Triggers from './Triggers';
 import {
   MONITOR_ACTIONS,
   TRIGGER_ACTIONS,
-  ES_AD_PLUGIN,
+  KIBANA_AD_PLUGIN,
   MONITOR_INPUT_DETECTOR_ID,
 } from '../../../utils/constants';
 import { migrateTriggerMetadata } from './utils/helpers';
@@ -292,11 +292,7 @@ export default class MonitorDetails extends Component {
               <EuiFlexItem grow={false}>
                 <EuiText size="s">
                   Created from detector:{' '}
-                  <EuiLink
-                    href={`${ES_AD_PLUGIN}#/detectors/${detectorId}`}
-                    external="true"
-                    target="_blank"
-                  >
+                  <EuiLink href={`${KIBANA_AD_PLUGIN}#/detectors/${detectorId}`} target="_blank">
                     {detector.name} <EuiIcon size="s" type="popout" />
                   </EuiLink>
                 </EuiText>
