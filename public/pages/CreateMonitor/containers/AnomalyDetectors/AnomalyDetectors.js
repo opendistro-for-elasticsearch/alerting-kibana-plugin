@@ -92,7 +92,7 @@ class AnomalyDetectors extends React.Component {
               form.setFieldValue('detectorId', get(options, '0.value', ''));
               form.setFieldValue('period', {
                 interval: 2 * get(options, '0.interval.period.interval'),
-                unit: get(options, '0.interval.period.unit'),
+                unit: get(options, '0.interval.period.unit', 'MINUTES').toUpperCase(),
               });
             },
             singleSelection: { asPlaintext: true },
