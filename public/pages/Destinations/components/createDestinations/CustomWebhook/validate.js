@@ -15,7 +15,8 @@
 
 import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants';
 
-const regname = '((www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,63})';
+const fqdn = '(?:[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(?:\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})*)'
+const regname = `(?:[a-zA-Z0-9._-]+(?::[^@]*)?@)?${fqdn}`;
 const ipv4 = '(((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))';
 const h16 = '([0-9a-fA-F]{1,4})';
 const ls32 = `((${h16}:${h16})|${ipv4})`;
@@ -44,7 +45,7 @@ export const validateHost = (value, allValues) => {
   const type = allValues.type;
   if (allValues[type].urlType !== URL_TYPE.ATTRIBUTE_URL) return;
   if (!value) return 'Required';
-  const regexHost = `^${regname}|${ipv4}|${ipv6}$`
+  const regexHost = `^${fqdn}|${ipv4}|${ipv6}$`
   const isValidUrl = new RegExp(regexHost).test(value);
   if (!isValidUrl) return 'Invalid Host';
 };

@@ -32,6 +32,12 @@ describe('validateUrl', () => {
     expect(
       validateUrl('https://opendistro.github.io/for-elasticsearch/news.html', typeFullUrl)
     ).toBeUndefined();
+    expect(
+      validateUrl('https://username:password@opendistro.github.io/for-elasticsearch/news.html', typeFullUrl)
+    ).toBeUndefined();
+    expect(
+      validateUrl('http://alerts-smtp-forwarder:8080/email', typeFullUrl)
+    ).toBeUndefined();
     expect(validateUrl('http://127.0.0.1:8080/', typeFullUrl)).toBeUndefined();
     expect(
       validateUrl('http://192.168.0.1/test.php?foo=bar&action=test', typeFullUrl)
@@ -82,6 +88,9 @@ describe('validateHost', () => {
   test('returns undefined if valid', () => {
     expect(
       validateHost('opendistro.github.io', typeAttributeUrl)
+    ).toBeUndefined();
+    expect(
+      validateHost('alerts-smtp-forwarder', typeAttributeUrl)
     ).toBeUndefined();
     expect(validateHost('127.0.0.1', typeAttributeUrl)).toBeUndefined();
     expect(
