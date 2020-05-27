@@ -22,7 +22,6 @@ import {
   getSpecId,
   getAxisId,
   RectAnnotation,
-  getAnnotationId,
   niceTimeFormatter,
 } from '@elastic/charts';
 import { EuiPagination, EuiText, EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
@@ -70,7 +69,7 @@ class FeatureChart extends React.Component {
                 <Chart>
                   <RectAnnotation
                     dataValues={annotations || []}
-                    annotationId={getAnnotationId('react')}
+                    annotationId="react"
                     style={{
                       stroke: '#FCAAAA',
                       strokeWidth: 1.5,

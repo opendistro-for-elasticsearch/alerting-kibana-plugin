@@ -23,7 +23,6 @@ import {
   niceTimeFormatter,
   Settings,
   Position,
-  getAnnotationId,
   LineAnnotation,
 } from '@elastic/charts';
 import { ChartContainer } from '../../../../../components/ChartContainer/ChartContainer';
@@ -69,7 +68,7 @@ const AnomaliesChart = props => {
                 />
                 {props.annotationData ? (
                   <LineAnnotation
-                    annotationId={getAnnotationId('anomalyAnnotation')}
+                    annotationId="anomalyAnnotation"
                     domainType="yDomain"
                     dataValues={props.annotationData}
                     style={{
