@@ -15,16 +15,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Chart,
-  Axis,
-  LineSeries,
-  getSpecId,
-  getAxisId,
-  RectAnnotation,
-  getAnnotationId,
-  niceTimeFormatter,
-} from '@elastic/charts';
+import { Chart, Axis, LineSeries, RectAnnotation, niceTimeFormatter } from '@elastic/charts';
 import { EuiPagination, EuiText, EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 import DelayedLoader from '../../../../../components/DelayedLoader';
 import { ChartContainer } from '../../../../../components/ChartContainer/ChartContainer';
@@ -70,17 +61,17 @@ class FeatureChart extends React.Component {
                 <Chart>
                   <RectAnnotation
                     dataValues={annotations || []}
-                    annotationId={getAnnotationId('react')}
+                    annotationId="react"
                     style={{
                       stroke: '#FCAAAA',
                       strokeWidth: 1.5,
                       fill: '#FCAAAA',
                     }}
                   />
-                  <Axis id={getAxisId('left')} title={currentFeature.featureName} position="left" />
-                  <Axis id={getAxisId('bottom')} position="bottom" tickFormat={timeFormatter} />
+                  <Axis id="left" title={currentFeature.featureName} position="left" />
+                  <Axis id="bottom" position="bottom" tickFormat={timeFormatter} />
                   <LineSeries
-                    id={getSpecId('lines')}
+                    id="lines"
                     xScaleType="time"
                     yScaleType="linear"
                     xAccessor={'startTime'}

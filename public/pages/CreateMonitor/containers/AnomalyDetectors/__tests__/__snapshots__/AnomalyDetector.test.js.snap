@@ -639,6 +639,7 @@ exports[`AnomalyDetectors renders 1`] = `
                         onFocus={[Function]}
                       >
                         <EuiComboBox
+                          async={false}
                           compressed={false}
                           fullWidth={false}
                           id="detectorId"
@@ -666,7 +667,6 @@ exports[`AnomalyDetectors renders 1`] = `
                             <EuiComboBoxInput
                               autoSizeInputRef={[Function]}
                               compressed={false}
-                              focusedOptionId={null}
                               fullWidth={false}
                               hasSelectedOptions={false}
                               id="detectorId"
@@ -717,7 +717,7 @@ exports[`AnomalyDetectors renders 1`] = `
                                       className="euiComboBox__inputWrap euiComboBox__inputWrap--noWrap"
                                       data-test-subj="comboBoxInput"
                                       onClick={[Function]}
-                                      tabIndex="-1"
+                                      tabIndex={-1}
                                     >
                                       <p
                                         className="euiComboBoxPlaceholder"
@@ -725,8 +725,7 @@ exports[`AnomalyDetectors renders 1`] = `
                                         Select a detector
                                       </p>
                                       <AutosizeInput
-                                        aria-activedescendant={null}
-                                        aria-controls={null}
+                                        aria-controls=""
                                         className="euiComboBox__input"
                                         data-test-subj="comboBoxSearchInput"
                                         id="detectorId"
@@ -754,8 +753,7 @@ exports[`AnomalyDetectors renders 1`] = `
                                           }
                                         >
                                           <input
-                                            aria-activedescendant={null}
-                                            aria-controls={null}
+                                            aria-controls=""
                                             data-test-subj="comboBoxSearchInput"
                                             id="detectorId"
                                             onBlur={[Function]}

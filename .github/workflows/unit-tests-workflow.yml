@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: opendistro-for-elasticsearch/kibana-oss
-          ref: 7.6.1
+          ref: 7.7.0
           token: ${{ secrets.GITHUB_KIBANA_OSS }}
           path: kibana
       - name: Get node and yarn versions

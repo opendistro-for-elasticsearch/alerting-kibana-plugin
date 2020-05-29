@@ -98,6 +98,7 @@ exports[`Frequencies renders CustomCron 1`] = `
                   style="font-size:14px;display:inline-block"
                 >
                   <input
+                    aria-controls=""
                     data-test-subj="comboBoxSearchInput"
                     id="timezone"
                     role="textbox"

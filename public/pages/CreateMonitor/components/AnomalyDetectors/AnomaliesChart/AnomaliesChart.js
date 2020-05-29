@@ -18,14 +18,11 @@ import PropTypes from 'prop-types';
 import { EuiText, EuiSpacer } from '@elastic/eui';
 import {
   Chart,
-  getAxisId,
   Axis,
-  getSpecId,
   LineSeries,
   niceTimeFormatter,
   Settings,
   Position,
-  getAnnotationId,
   LineAnnotation,
 } from '@elastic/charts';
 import { ChartContainer } from '../../../../../components/ChartContainer/ChartContainer';
@@ -62,16 +59,16 @@ const AnomaliesChart = props => {
                     showLegendDisplayValue={false}
                   />
                 ) : null}
-                <Axis id={getAxisId('bottom')} position="bottom" tickFormat={timeFormatter} />
+                <Axis id="bottom" position="bottom" tickFormat={timeFormatter} />
                 <Axis
-                  id={getAxisId('left')}
+                  id="left"
                   title={getAxisTitle(props.displayGrade, props.displayConfidence)}
                   position="left"
                   domain={{ min: 0, max: 1 }}
                 />
                 {props.annotationData ? (
                   <LineAnnotation
-                    annotationId={getAnnotationId('anomalyAnnotation')}
+                    annotationId="anomalyAnnotation"
                     domainType="yDomain"
                     dataValues={props.annotationData}
                     style={{
@@ -84,7 +81,7 @@ const AnomaliesChart = props => {
                 ) : null}
                 {props.displayGrade ? (
                   <LineSeries
-                    id={getSpecId('Anomaly grade')}
+                    id="Anomaly grade"
                     xScaleType="time"
                     yScaleType="linear"
                     xAccessor={'plotTime'}
@@ -94,7 +91,7 @@ const AnomaliesChart = props => {
                 ) : null}
                 {props.displayConfidence ? (
                   <LineSeries
-                    id={getSpecId('Confidence')}
+                    id="Confidence"
                     xScaleType="time"
                     yScaleType="linear"
                     xAccessor={'plotTime'}

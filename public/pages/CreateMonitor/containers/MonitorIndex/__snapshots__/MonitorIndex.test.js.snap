@@ -664,7 +664,6 @@ exports[`MonitorIndex renders 1`] = `
                           <EuiComboBoxInput
                             autoSizeInputRef={[Function]}
                             compressed={false}
-                            focusedOptionId={null}
                             fullWidth={false}
                             hasSelectedOptions={false}
                             id="index"
@@ -712,7 +711,7 @@ exports[`MonitorIndex renders 1`] = `
                                     className="euiComboBox__inputWrap euiComboBox__inputWrap-isClearable"
                                     data-test-subj="comboBoxInput"
                                     onClick={[Function]}
-                                    tabIndex="-1"
+                                    tabIndex={-1}
                                   >
                                     <p
                                       className="euiComboBoxPlaceholder"
@@ -720,8 +719,7 @@ exports[`MonitorIndex renders 1`] = `
                                       Select indices
                                     </p>
                                     <AutosizeInput
-                                      aria-activedescendant={null}
-                                      aria-controls={null}
+                                      aria-controls=""
                                       className="euiComboBox__input"
                                       data-test-subj="comboBoxSearchInput"
                                       id="index"
@@ -749,8 +747,7 @@ exports[`MonitorIndex renders 1`] = `
                                         }
                                       >
                                         <input
-                                          aria-activedescendant={null}
-                                          aria-controls={null}
+                                          aria-controls=""
                                           data-test-subj="comboBoxSearchInput"
                                           id="index"
                                           onBlur={[Function]}

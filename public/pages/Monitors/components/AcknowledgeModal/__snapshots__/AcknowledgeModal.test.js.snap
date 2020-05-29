@@ -3,7 +3,6 @@
 exports[`AcknowledgeModal renders 1`] = `
 <EuiOverlayMask>
   <EuiConfirmModal
-    buttonColor="primary"
     cancelButtonText="cancel"
     confirmButtonText="Acknowledge"
     maxWidth={650}
