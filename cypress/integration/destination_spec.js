@@ -22,7 +22,7 @@ const SAMPLE_DESTINATION_2 = 'sample_destination_chime';
 const UPDATED_DESTINATION = 'updated_destination';
 const SAMPLE_URL = 'http://www.sample.com';
 
-describe('Monitors', () => {
+describe('Destinations', () => {
   beforeEach(() => {
     // Set welcome screen tracking to false
     localStorage.setItem('home:welcome:show', 'false');
@@ -141,7 +141,7 @@ describe('Monitors', () => {
         .focus()
         .type(SAMPLE_DESTINATION_2);
 
-      // Confirm we filtered down to our one and only monitor
+      // Confirm we filtered down to our one and only destination
       cy.get('tbody > tr').should($tr => {
         expect($tr, '1 row').to.have.length(1);
         expect($tr, 'item').to.contain(SAMPLE_DESTINATION_2);
