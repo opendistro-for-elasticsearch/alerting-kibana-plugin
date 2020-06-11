@@ -13,11 +13,10 @@
  * permissions and limitations under the License.
  */
 
-import { INDEX, PLUGIN_NAME } from '../support/constants';
+import { PLUGIN_NAME } from '../support/constants';
 import sampleMonitor from '../fixtures/sample_monitor';
 import sampleMonitorWithAnotherName from '../fixtures/sample_monitor_with_another_name';
 
-// const POLICY_ID = "test_policy_id";
 const SAMPLE_MONITOR = 'sample_monitor';
 const UPDATED_MONITOR = 'updated_trigger';
 const SAMPLE_MONITOR_WITH_ANOTHER_NAME = 'sample_monitor_with_another_name';
@@ -52,7 +51,7 @@ describe('Monitors', () => {
       // Select the method of definition
       cy.get('#searchType').select('query', { force: true });
 
-      // Wait for input to load and then type in the policy ID
+      // Wait for input to load and then type in the index name
       cy.get('#index').type('*', { force: true });
 
       // Click the create button
@@ -107,7 +106,7 @@ describe('Monitors', () => {
         .contains('Update')
         .click({ force: true });
 
-      // Go back to main page of the Plugin
+      // Go back to main page of Alerting plugin
       cy.get('a')
         .contains('Alerting')
         .click({ force: true });
@@ -154,10 +153,13 @@ describe('Monitors', () => {
     });
 
     it('successfully', () => {
+      // Click the button to open the menu to change the rows display in one page
       cy.contains('Rows per page').click({ force: true });
+
+      // Change the table to display 5 rows in one page
       cy.contains('5 rows').click({ force: true });
 
-      // Sort the table by policy name
+      // Sort the table by monitor name in alphabetical order
       cy.get('thead > tr > th')
         .contains('Monitor name')
         .click({ force: true });
@@ -170,7 +172,7 @@ describe('Monitors', () => {
         .focus()
         .type(`${SAMPLE_MONITOR_WITH_ANOTHER_NAME}`);
 
-      // Confirm we filtered down to our one and only policy
+      // Confirm we filtered down to our one and only monitor
       cy.get('tbody > tr').should($tr => {
         expect($tr, '1 row').to.have.length(1);
         expect($tr, 'item').to.contain(`${SAMPLE_MONITOR_WITH_ANOTHER_NAME}`);
