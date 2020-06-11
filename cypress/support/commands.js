@@ -59,3 +59,7 @@ Cypress.Commands.add('deleteAllMonitors', () => {
 Cypress.Commands.add('createMonitor', monitorJSON => {
   cy.request('POST', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}`, monitorJSON);
 });
+
+Cypress.Commands.add('createDestination', destinationJSON => {
+  cy.request('POST', `${Cypress.env('elasticsearch')}${API.DESTINATION_BASE}`, destinationJSON);
+});

@@ -19,6 +19,18 @@
       }
     }
   ],
+  "triggers": [
+    {
+      "name": "always_true_trigger",
+      "severity": "3",
+      "condition": {
+        "script": {
+          "source": "return true",
+          "lang": "painless"
+        }
+      }
+    }
+  ],
   "ui_metadata": {
     "schedule": {}
   }
