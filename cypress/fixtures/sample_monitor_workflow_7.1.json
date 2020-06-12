@@ -1,5 +1,5 @@
 {
-  "name": "sample_monitor_with_always_true_trigger",
+  "name": "sample_monitor_workflow",
   "enabled": true,
   "schedule": {
     "period": {
@@ -10,10 +10,10 @@
   "inputs": [
     {
       "search": {
-        "indices": ["*"],
+        "indices": [".*"],
         "query": {
           "query": {
-            "match_all": {}
+            "term": { "monitor.type": "monitor" }
           }
         }
       }
@@ -21,17 +21,15 @@
   ],
   "triggers": [
     {
-      "name": "always_true_trigger",
+      "name": "sample_trigger",
       "severity": "3",
       "condition": {
         "script": {
-          "source": "return true",
+          "source": "ctx.results[0].hits.total.value > 1",
           "lang": "painless"
         }
-      }
+      },
+      "actions": []
     }
-  ],
-  "ui_metadata": {
-    "schedule": {}
-  }
+  ]
 }

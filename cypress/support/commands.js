@@ -63,3 +63,15 @@ Cypress.Commands.add('createMonitor', monitorJSON => {
 Cypress.Commands.add('createDestination', destinationJSON => {
   cy.request('POST', `${Cypress.env('elasticsearch')}${API.DESTINATION_BASE}`, destinationJSON);
 });
+
+Cypress.Commands.add('createAndExecuteMonitor', monitorJSON => {
+  cy.request('POST', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}`, monitorJSON).then(
+    response => {
+      // response.body is automatically serialized into JSON
+      cy.request(
+        'POST',
+        `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/${response.body._id}/_execute`
+      );
+    }
+  );
+});

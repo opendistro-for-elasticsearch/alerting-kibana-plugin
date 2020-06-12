@@ -20,7 +20,7 @@ import sampleDestination from '../fixtures/sample_destination.json';
 
 const SAMPLE_MONITOR = 'sample_monitor';
 const UPDATED_MONITOR = 'updated_monitor';
-const SAMPLE_MONITOR_2 = 'sample_monitor_with_always_true_trigger';
+const SAMPLE_MONITOR_WITH_ANOTHER_NAME = 'sample_monitor_with_always_true_trigger';
 const SAMPLE_TRIGGER = 'sample_trigger';
 const SAMPLE_ACTION = 'sample_action';
 
@@ -155,32 +155,32 @@ describe('Monitors', () => {
       for (let i = 0; i < 20; i++) {
         cy.createMonitor(sampleMonitor);
       }
-      cy.createMonitor(sampleMonitorWithAnotherName);
+      cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it.only('successfully', () => {
+    it('successfully', () => {
       // Sort the table by monitor name in alphabetical order
       cy.get('thead > tr > th')
         .contains('Monitor name')
         .click({ force: true });
 
       // Confirm the monitor with a different name does not exist
-      cy.contains(SAMPLE_MONITOR_2).should('not.exist');
+      cy.contains(SAMPLE_MONITOR_WITH_ANOTHER_NAME).should('not.exist');
 
       // Type in monitor name in search box
       cy.get(`input[type="search"]`)
         .focus()
-        .type(SAMPLE_MONITOR_2);
+        .type(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
 
       // Confirm we filtered down to our one and only monitor
       cy.get('tbody > tr').should($tr => {
         expect($tr, '1 row').to.have.length(1);
-        expect($tr, 'item').to.contain(SAMPLE_MONITOR_2);
+        expect($tr, 'item').to.contain(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
       });
     });
   });
 
-  describe('a trigger can be added to a monitor', () => {
+  describe('can have a trigger', () => {
     before(() => {
       cy.deleteAllIndices();
       cy.createMonitor(sampleMonitor);
@@ -214,7 +214,7 @@ describe('Monitors', () => {
     });
   });
 
-  describe('an action can be added to a trigger', () => {
+  describe('can have an action with its trigger', () => {
     before(() => {
       cy.deleteAllIndices();
       cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);

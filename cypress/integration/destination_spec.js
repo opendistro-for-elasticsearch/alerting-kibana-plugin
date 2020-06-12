@@ -18,7 +18,7 @@ import sampleDestination from '../fixtures/sample_destination';
 import sampleDestinationChime from '../fixtures/sample_destination_chime';
 
 const SAMPLE_DESTINATION = 'sample_destination';
-const SAMPLE_DESTINATION_2 = 'sample_destination_chime';
+const SAMPLE_DESTINATION_WITH_ANOTHER_NAME = 'sample_destination_chime';
 const UPDATED_DESTINATION = 'updated_destination';
 const SAMPLE_URL = 'http://www.sample.com';
 
@@ -127,24 +127,24 @@ describe('Destinations', () => {
       cy.createDestination(sampleDestinationChime);
     });
 
-    it.only('successfully', () => {
+    it('successfully', () => {
       // Sort the table by monitor name in alphabetical order
       cy.get('thead > tr > th')
         .contains('Destination name')
         .click({ force: true });
 
       // Confirm the monitor with a different name does not exist
-      cy.contains(SAMPLE_DESTINATION_2).should('not.exist');
+      cy.contains(SAMPLE_DESTINATION_WITH_ANOTHER_NAME).should('not.exist');
 
       // Type in monitor name in search box
       cy.get(`input[type="search"]`)
         .focus()
-        .type(SAMPLE_DESTINATION_2);
+        .type(SAMPLE_DESTINATION_WITH_ANOTHER_NAME);
 
       // Confirm we filtered down to our one and only destination
       cy.get('tbody > tr').should($tr => {
         expect($tr, '1 row').to.have.length(1);
-        expect($tr, 'item').to.contain(SAMPLE_DESTINATION_2);
+        expect($tr, 'item').to.contain(SAMPLE_DESTINATION_WITH_ANOTHER_NAME);
       });
     });
   });
