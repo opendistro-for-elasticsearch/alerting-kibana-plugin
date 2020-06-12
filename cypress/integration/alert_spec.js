@@ -83,7 +83,7 @@ describe('Alerts', () => {
       cy.createAndExecuteMonitor(sampleMonitorWorkflow);
     });
 
-    it('successfully', () => {
+    it.only('successfully', () => {
       //Confirm there is an active alert
       cy.contains('Active');
 
@@ -116,6 +116,11 @@ describe('Alerts', () => {
 
       // Click the Delete button
       cy.contains('Delete').click({ force: true });
+
+      // Clear the text in the search box
+      cy.get(`input[type="search"]`)
+        .focus()
+        .clear();
 
       // Confirm we can see only one monitor in the list
       cy.get('tbody > tr').should($tr => {
