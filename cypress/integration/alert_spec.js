@@ -83,7 +83,7 @@ describe('Alerts', () => {
       cy.createAndExecuteMonitor(sampleMonitorWorkflow);
     });
 
-    it.only('successfully', () => {
+    it('successfully', () => {
       //Confirm there is an active alert
       cy.contains('Active');
 
