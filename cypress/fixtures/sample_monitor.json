@@ -1,0 +1,25 @@
+{
+  "name": "sample_monitor",
+  "enabled": true,
+  "schedule": {
+    "period": {
+      "interval": "1",
+      "unit": "MINUTES"
+    }
+  },
+  "inputs": [
+    {
+      "search": {
+        "indices": ["*"],
+        "query": {
+          "query": {
+            "match_all": {}
+          }
+        }
+      }
+    }
+  ],
+  "ui_metadata": {
+    "schedule": {}
+  }
+}
