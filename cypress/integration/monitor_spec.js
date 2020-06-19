@@ -107,8 +107,13 @@ describe('Monitors', () => {
       // Click Update button
       cy.get('button')
         .contains('Update')
+        .last()
         .click({ force: true });
 
+      // Confirm the update process is done and the page loaded
+      cy.contains('Create trigger');
+
+      // This step is used to make the monitors list refresh
       // Go back to main page of Alerting plugin
       cy.get('a')
         .contains('Alerting')
@@ -241,7 +246,7 @@ describe('Monitors', () => {
       // Click the Add Action button to configure trigger actions
       cy.contains('Add action').click({ force: true });
 
-      // Wait for input to load and then type in the trigger name
+      // Wait for input to load and then type in the action name
       cy.get('input[name="actions.0.name"]').type(SAMPLE_ACTION, { force: true });
 
       // Click the combo box to list all the destinations
@@ -256,11 +261,25 @@ describe('Monitors', () => {
         .click({ force: true });
 
       // The following is used to validate the action has been added.
+      // Confirm the update process is done and the page loaded
+      cy.contains('Create trigger');
+
+      // This step is used to make the actions list of the trigger refresh
+      // Go to the Monitors list
+      cy.get('a')
+        .contains('Monitors')
+        .click({ force: true });
+
+      // Select the existing monitor
+      cy.get('a')
+        .contains(SAMPLE_MONITOR)
+        .click({ force: true });
+
       // Select checkbox for the existing monitor
       cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
 
       // Click the trigger Edit button
-      cy.get('.euiPanel')
+      cy.get('div.euiPanel')
         .contains('Edit')
         .click({ force: true });
 
