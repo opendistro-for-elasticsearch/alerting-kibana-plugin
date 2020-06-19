@@ -28,8 +28,8 @@ describe('Alerts', () => {
     // Visit Alerting Kibana
     cy.visit(`${Cypress.env('kibana')}/app/${PLUGIN_NAME}#`);
 
-    // Common text to wait for to confirm page loaded, give up to 20 seconds for initial load
-    cy.contains('Acknowledge', { timeout: 20000 });
+    // Common text to wait for to confirm page loaded, give up to 30 seconds for initial load
+    cy.contains('Acknowledge', { timeout: 30000 });
   });
 
   describe("can be in 'Active' state", () => {
@@ -38,7 +38,7 @@ describe('Alerts', () => {
       cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it('successfully', () => {
+    it.only('successfully', () => {
       // Wait for 1 minute
       cy.wait(60000);
 
