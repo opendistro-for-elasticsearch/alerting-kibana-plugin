@@ -15,6 +15,7 @@
 
 import _ from 'lodash';
 import { FORMIK_INITIAL_VALUES } from './constants';
+import { customWebhookToFormik } from '../../../../Destinations/containers/CreateDestination/utils/destinationToFormik';
 
 // Convert Monitor JSON to Formik values used in UI forms
 export default function monitorToFormik(monitor) {
@@ -27,6 +28,8 @@ export default function monitorToFormik(monitor) {
     inputs,
     ui_metadata: { schedule = {}, search = {} } = {},
   } = monitor;
+
+  // TODO: handle 'searchType' condition that creating HTTP monitors through API
   // Default searchType to query, because if there is no ui_metadata or search then it was created through API or overwritten by API
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
   const { searchType = 'query', fieldName } = search;

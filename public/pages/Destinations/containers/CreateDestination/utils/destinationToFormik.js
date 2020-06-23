@@ -17,13 +17,13 @@ import _ from 'lodash';
 import { URL_TYPE, CONTENT_TYPE_KEY } from './constants';
 import { DESTINATION_TYPE } from '../../../utils/constants';
 
-const getAttributeArrayFromValues = attributes =>
-  Object.keys(attributes).map(currentKey => ({
+const getAttributeArrayFromValues = (attributes) =>
+  Object.keys(attributes).map((currentKey) => ({
     key: currentKey,
     value: attributes[currentKey],
   }));
 
-const customWebhookToFormik = ({
+export const customWebhookToFormik = ({
   query_params: queryParams = {},
   header_params: headerParams = {},
   port,
@@ -46,7 +46,7 @@ const customWebhookToFormik = ({
   };
 };
 
-export const destinationToFormik = values => {
+export const destinationToFormik = (values) => {
   const updatedValues = { ..._.omit(values, ['id', 'version', 'last_update_time']) };
   if (values.type === DESTINATION_TYPE.CUSTOM_HOOK) {
     const customWebhookValues = customWebhookToFormik(updatedValues[values.type]);
