@@ -20,10 +20,19 @@ import {
 } from '../../CreateMonitor/utils/formikToMonitor';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
-export const buildSearchRequest = (values, uiGraphQuery = true) =>
-  values.searchType === SEARCH_TYPE.GRAPH
-    ? buildGraphSearchRequest(values, uiGraphQuery)
-    : buildQuerySearchRequest(values);
+export const buildSearchRequest = (values, uiGraphQuery = true) => {
+  console.log('#values in buildSearchRequest: ', values);
+  switch (values.searchType) {
+    case SEARCH_TYPE.QUERY:
+      return buildQuerySearchRequest(values);
+    case SEARCH_TYPE.GRAPH:
+      return buildGraphSearchRequest(values, uiGraphQuery);
+    case SEARCH_TYPE.HTTP:
+      return buildHttpRequest(values);
+  }
+};
+
+console.log('#entered search request');
 
 function buildQuerySearchRequest(values) {
   const indices = formikToIndices(values);
@@ -35,4 +44,9 @@ function buildGraphSearchRequest(values, uiGraphQuery) {
   const query = uiGraphQuery ? formikToUiGraphQuery(values) : formikToGraphQuery(values);
   const indices = formikToIndices(values);
   return { query, indices };
+}
+
+function buildHttpRequest(values) {
+  const http = values.http;
+  return http;
 }
