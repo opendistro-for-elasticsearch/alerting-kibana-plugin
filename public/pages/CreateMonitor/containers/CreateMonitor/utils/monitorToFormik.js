@@ -15,7 +15,10 @@
 
 import _ from 'lodash';
 import { FORMIK_INITIAL_VALUES } from './constants';
-import { SEARCH_TYPE, INPUTS_DETECTOR_ID } from '../../../../../utils/constants';
+import { SEARCH_TYPE } from '../../../../../utils/constants';
+import { formikToHttp, formikToSearch } from './formikToMonitor';
+import { customWebhookToFormik } from '../../../../Destinations/containers/CreateDestination/utils/destinationToFormik';
+import { DESTINATION_TYPE } from '../../../../Destinations/utils/constants';
 
 // Convert Monitor JSON to Formik values used in UI forms
 export default function monitorToFormik(monitor) {
