@@ -41,6 +41,7 @@ import { formikToTrigger, formikToTriggerUiMetadata } from './utils/formikToTrig
 import { triggerToFormik } from './utils/triggerToFormik';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
+import { buildHTTPRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/httpRequests';
 
 export default class CreateTrigger extends Component {
   constructor(props) {
@@ -127,8 +128,8 @@ export default class CreateTrigger extends Component {
       _.set(monitorToExecute, 'inputs[0].search', searchRequest);
     }
     if (searchType == SEARCH_TYPE.HTTP) {
-      const httpRequest = formikValues.http;
-      _.set(monitorToExecute, 'inputs[0]', httpRequest);
+      const httpRequest = buildHTTPRequest(formikValues);
+      _.set(monitorToExecute, 'inputs[0].http', httpRequest);
     }
     console.log('monitor to excute in trigger: ', monitorToExecute);
     httpClient
