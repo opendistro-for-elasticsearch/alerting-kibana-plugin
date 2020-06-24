@@ -122,10 +122,15 @@ export default class CreateTrigger extends Component {
     const monitorToExecute = _.cloneDeep(monitor);
     const searchRequest = buildSearchRequest(formikValues);
     _.set(monitorToExecute, 'triggers', triggers);
-    if (formikValues.searchType !== SEARCH_TYPE.AD) {
+    if (searchType == SEARCH_TYPE.QUERY || searchType == SEARCH_TYPE.GRAPH) {
       const searchRequest = buildSearchRequest(formikValues);
       _.set(monitorToExecute, 'inputs[0].search', searchRequest);
     }
+    if (searchType == SEARCH_TYPE.HTTP) {
+      const httpRequest = formikValues.http;
+      _.set(monitorToExecute, 'inputs[0]', httpRequest);
+    }
+    console.log('monitor to excute in trigger: ', monitorToExecute);
     httpClient
       .post('../api/alerting/monitors/_execute', monitorToExecute)
       .then(resp => {

@@ -56,5 +56,6 @@ export default function monitorToFormik(monitor) {
     detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
     index: inputs[0].search.indices.map(index => ({ label: index })),
     query: JSON.stringify(inputs[0].search.query, null, 4),
+    http: customWebhookToFormik(http),
   };
 }
