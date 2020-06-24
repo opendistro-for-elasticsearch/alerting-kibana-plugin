@@ -131,7 +131,6 @@ export default class CreateTrigger extends Component {
       const httpRequest = buildHTTPRequest(formikValues);
       _.set(monitorToExecute, 'inputs[0].http', httpRequest);
     }
-    console.log('monitor to excute in trigger: ', monitorToExecute);
     httpClient
       .post('../api/alerting/monitors/_execute', monitorToExecute)
       .then(resp => {
