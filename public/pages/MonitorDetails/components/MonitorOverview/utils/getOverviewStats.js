@@ -27,6 +27,19 @@ function getTime(time) {
   return DEFAULT_EMPTY_DATA;
 }
 
+function getMonitorType(searchType) {
+  switch (searchType) {
+    case SEARCH_TYPE.GRAPH:
+      return 'Visual Graph';
+    case SEARCH_TYPE.AD:
+      return 'Anomaly Detector';
+    case SEARCH_TYPE.HTTP:
+      return 'HTTP Input';
+    default:
+      return 'Extraction Query';
+  }
+}
+
 export default function getOverviewStats(monitor, monitorId, monitorVersion, activeCount) {
   const searchType = _.get(monitor, 'ui_metadata.search.searchType', 'query');
   return [
@@ -36,7 +49,7 @@ export default function getOverviewStats(monitor, monitorId, monitorVersion, act
     },
     {
       header: 'Monitor definition type',
-      value: searchType === SEARCH_TYPE.QUERY ? 'Extraction Query' : 'Visual graph',
+      value: getMonitorType(searchType),
     },
     {
       header: 'Total active alerts',
