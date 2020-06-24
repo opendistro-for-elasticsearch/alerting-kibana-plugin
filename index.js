@@ -13,7 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-import { resolve } from 'path';
 import { alerts, destinations, elasticsearch, monitors, detectors } from './server/routes';
 import {
   AlertService,
@@ -24,8 +23,9 @@ import {
 } from './server/services';
 import { createAlertingCluster, createAlertingADCluster } from './server/clusters';
 import { PLUGIN_NAME } from './utils/constants';
+import { DEFAULT_APP_CATEGORIES } from '../../src/core/utils';
 
-export default function(kibana) {
+export default function (kibana) {
   return new kibana.Plugin({
     require: ['elasticsearch'],
     name: PLUGIN_NAME,
@@ -35,6 +35,7 @@ export default function(kibana) {
         description: 'Kibana Alerting Plugin',
         main: `plugins/${PLUGIN_NAME}/app`,
         icon: `plugins/${PLUGIN_NAME}/images/alerting_icon.svg`,
+        category: DEFAULT_APP_CATEGORIES.kibana,
       },
 
       hacks: [`plugins/${PLUGIN_NAME}/hack`],
