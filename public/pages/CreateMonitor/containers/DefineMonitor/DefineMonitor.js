@@ -334,7 +334,7 @@ class DefineMonitor extends Component {
     }
     return {
       actions: [
-        <EuiButton disabled={runIsDisabled} onClick={this.onRunRequest}>
+        <EuiButton disabled={runIsDisabled} onClick={this.onRunQuery}>
           Run
         </EuiButton>,
       ],
