@@ -121,7 +121,6 @@ export default class CreateTrigger extends Component {
     const { httpClient, monitor } = this.props;
     const formikValues = monitorToFormik(monitor);
     const monitorToExecute = _.cloneDeep(monitor);
-    const searchRequest = buildSearchRequest(formikValues);
     _.set(monitorToExecute, 'triggers', triggers);
     if (searchType == SEARCH_TYPE.QUERY || searchType == SEARCH_TYPE.GRAPH) {
       const searchRequest = buildSearchRequest(formikValues);
@@ -213,7 +212,7 @@ export default class CreateTrigger extends Component {
                 context={this.getTriggerContext(executeResponse, monitor, values)}
                 executeResponse={executeResponse}
                 monitorValues={monitorToFormik(monitor)}
-                onRun={this.onRunExecute}
+                onRun={this.onRun}
                 setFlyout={setFlyout}
                 triggers={monitor.triggers}
                 triggerValues={values}
