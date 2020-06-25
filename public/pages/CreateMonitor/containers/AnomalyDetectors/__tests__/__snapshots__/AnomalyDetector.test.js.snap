@@ -655,6 +655,7 @@ exports[`AnomalyDetectors renders 1`] = `
                               "asPlaintext": true,
                             }
                           }
+                          sortMatchesBy="none"
                         >
                           <div
                             aria-expanded={false}

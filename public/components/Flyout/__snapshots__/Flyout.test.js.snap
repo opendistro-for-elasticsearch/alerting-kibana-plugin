@@ -2,23 +2,15 @@
 
 exports[`Flyout defaults if bad flyout data 1`] = `
 <EuiFlyout
-  closeButtonAriaLabel="Closes this dialog"
-  hideCloseButton={false}
-  maxWidth={false}
   onClose={[MockFunction]}
-  ownFocus={false}
-  size="m"
 />
 `;
 
 exports[`Flyout renders 1`] = `
 <EuiFlyout
   aria-labelledby="messageFlyout"
-  closeButtonAriaLabel="Closes this dialog"
-  hideCloseButton={false}
   maxWidth={500}
   onClose={[MockFunction]}
-  ownFocus={false}
   size="m"
 >
   <EuiFlyoutHeader
