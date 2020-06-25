@@ -9,11 +9,15 @@ jobs:
     name: Run unit tests
     runs-on: ubuntu-latest
     steps:
+      - name: Get Kibana version
+        id: kibana_version
+        run: |
+          echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/package.json').kibana.version).match(/[.0-9]+/)[0]")"
       - name: Checkout Kibana
         uses: actions/checkout@v2
         with:
           repository: opendistro-for-elasticsearch/kibana-oss
-          ref: 7.7.0
+          ref: ${{ steps.kibana_version.outputs.kibana_version }}
           token: ${{ secrets.GITHUB_KIBANA_OSS }}
           path: kibana
       - name: Get node and yarn versions
