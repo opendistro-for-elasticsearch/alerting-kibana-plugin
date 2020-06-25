@@ -8,6 +8,7 @@ exports[`MonitorIndex renders 1`] = `
       "aggregationType": "count",
       "bucketUnitOfTime": "h",
       "bucketValue": 1,
+      "connection_timeout": 5,
       "cronExpression": "0 */1 * * *",
       "daily": 0,
       "detectorId": "",
@@ -16,6 +17,20 @@ exports[`MonitorIndex renders 1`] = `
       "frequency": "interval",
       "groupedOverFieldName": "bytes",
       "groupedOverTop": 5,
+      "http": Object {
+        "host": "",
+        "path": "",
+        "port": "",
+        "queryParams": Array [
+          Object {
+            "key": "",
+            "value": "",
+          },
+        ],
+        "scheme": "https",
+        "url": "",
+        "urlType": "url",
+      },
       "index": Array [],
       "monthly": Object {
         "day": 1,
@@ -34,6 +49,7 @@ exports[`MonitorIndex renders 1`] = `
     }
 }",
       "searchType": "graph",
+      "socket_timeout": 60,
       "timeField": "",
       "timezone": Array [],
       "weekly": Object {
@@ -133,6 +149,7 @@ exports[`MonitorIndex renders 1`] = `
                   "aggregationType": "count",
                   "bucketUnitOfTime": "h",
                   "bucketValue": 1,
+                  "connection_timeout": 5,
                   "cronExpression": "0 */1 * * *",
                   "daily": 0,
                   "detectorId": "",
@@ -141,6 +158,20 @@ exports[`MonitorIndex renders 1`] = `
                   "frequency": "interval",
                   "groupedOverFieldName": "bytes",
                   "groupedOverTop": 5,
+                  "http": Object {
+                    "host": "",
+                    "path": "",
+                    "port": "",
+                    "queryParams": Array [
+                      Object {
+                        "key": "",
+                        "value": "",
+                      },
+                    ],
+                    "scheme": "https",
+                    "url": "",
+                    "urlType": "url",
+                  },
                   "index": Array [],
                   "monthly": Object {
                     "day": 1,
@@ -159,6 +190,7 @@ exports[`MonitorIndex renders 1`] = `
     }
 }",
                   "searchType": "graph",
+                  "socket_timeout": 60,
                   "timeField": "",
                   "timezone": Array [],
                   "weekly": Object {
@@ -207,6 +239,7 @@ exports[`MonitorIndex renders 1`] = `
                   "aggregationType": "count",
                   "bucketUnitOfTime": "h",
                   "bucketValue": 1,
+                  "connection_timeout": 5,
                   "cronExpression": "0 */1 * * *",
                   "daily": 0,
                   "detectorId": "",
@@ -215,6 +248,20 @@ exports[`MonitorIndex renders 1`] = `
                   "frequency": "interval",
                   "groupedOverFieldName": "bytes",
                   "groupedOverTop": 5,
+                  "http": Object {
+                    "host": "",
+                    "path": "",
+                    "port": "",
+                    "queryParams": Array [
+                      Object {
+                        "key": "",
+                        "value": "",
+                      },
+                    ],
+                    "scheme": "https",
+                    "url": "",
+                    "urlType": "url",
+                  },
                   "index": Array [],
                   "monthly": Object {
                     "day": 1,
@@ -233,6 +280,7 @@ exports[`MonitorIndex renders 1`] = `
     }
 }",
                   "searchType": "graph",
+                  "socket_timeout": 60,
                   "timeField": "",
                   "timezone": Array [],
                   "weekly": Object {
@@ -271,6 +319,7 @@ exports[`MonitorIndex renders 1`] = `
                     "aggregationType": "count",
                     "bucketUnitOfTime": "h",
                     "bucketValue": 1,
+                    "connection_timeout": 5,
                     "cronExpression": "0 */1 * * *",
                     "daily": 0,
                     "detectorId": "",
@@ -279,6 +328,20 @@ exports[`MonitorIndex renders 1`] = `
                     "frequency": "interval",
                     "groupedOverFieldName": "bytes",
                     "groupedOverTop": 5,
+                    "http": Object {
+                      "host": "",
+                      "path": "",
+                      "port": "",
+                      "queryParams": Array [
+                        Object {
+                          "key": "",
+                          "value": "",
+                        },
+                      ],
+                      "scheme": "https",
+                      "url": "",
+                      "urlType": "url",
+                    },
                     "index": Array [],
                     "monthly": Object {
                       "day": 1,
@@ -297,6 +360,7 @@ exports[`MonitorIndex renders 1`] = `
     }
 }",
                     "searchType": "graph",
+                    "socket_timeout": 60,
                     "timeField": "",
                     "timezone": Array [],
                     "weekly": Object {
@@ -343,6 +407,7 @@ exports[`MonitorIndex renders 1`] = `
                     "aggregationType": "count",
                     "bucketUnitOfTime": "h",
                     "bucketValue": 1,
+                    "connection_timeout": 5,
                     "cronExpression": "0 */1 * * *",
                     "daily": 0,
                     "detectorId": "",
@@ -351,6 +416,20 @@ exports[`MonitorIndex renders 1`] = `
                     "frequency": "interval",
                     "groupedOverFieldName": "bytes",
                     "groupedOverTop": 5,
+                    "http": Object {
+                      "host": "",
+                      "path": "",
+                      "port": "",
+                      "queryParams": Array [
+                        Object {
+                          "key": "",
+                          "value": "",
+                        },
+                      ],
+                      "scheme": "https",
+                      "url": "",
+                      "urlType": "url",
+                    },
                     "index": Array [],
                     "monthly": Object {
                       "day": 1,
@@ -369,6 +448,7 @@ exports[`MonitorIndex renders 1`] = `
     }
 }",
                     "searchType": "graph",
+                    "socket_timeout": 60,
                     "timeField": "",
                     "timezone": Array [],
                     "weekly": Object {
@@ -474,6 +554,7 @@ exports[`MonitorIndex renders 1`] = `
                             "aggregationType": "count",
                             "bucketUnitOfTime": "h",
                             "bucketValue": 1,
+                            "connection_timeout": 5,
                             "cronExpression": "0 */1 * * *",
                             "daily": 0,
                             "detectorId": "",
@@ -482,6 +563,20 @@ exports[`MonitorIndex renders 1`] = `
                             "frequency": "interval",
                             "groupedOverFieldName": "bytes",
                             "groupedOverTop": 5,
+                            "http": Object {
+                              "host": "",
+                              "path": "",
+                              "port": "",
+                              "queryParams": Array [
+                                Object {
+                                  "key": "",
+                                  "value": "",
+                                },
+                              ],
+                              "scheme": "https",
+                              "url": "",
+                              "urlType": "url",
+                            },
                             "index": Array [],
                             "monthly": Object {
                               "day": 1,
@@ -500,6 +595,7 @@ exports[`MonitorIndex renders 1`] = `
     }
 }",
                             "searchType": "graph",
+                            "socket_timeout": 60,
                             "timeField": "",
                             "timezone": Array [],
                             "weekly": Object {
@@ -546,6 +642,7 @@ exports[`MonitorIndex renders 1`] = `
                             "aggregationType": "count",
                             "bucketUnitOfTime": "h",
                             "bucketValue": 1,
+                            "connection_timeout": 5,
                             "cronExpression": "0 */1 * * *",
                             "daily": 0,
                             "detectorId": "",
@@ -554,6 +651,20 @@ exports[`MonitorIndex renders 1`] = `
                             "frequency": "interval",
                             "groupedOverFieldName": "bytes",
                             "groupedOverTop": 5,
+                            "http": Object {
+                              "host": "",
+                              "path": "",
+                              "port": "",
+                              "queryParams": Array [
+                                Object {
+                                  "key": "",
+                                  "value": "",
+                                },
+                              ],
+                              "scheme": "https",
+                              "url": "",
+                              "urlType": "url",
+                            },
                             "index": Array [],
                             "monthly": Object {
                               "day": 1,
@@ -572,6 +683,7 @@ exports[`MonitorIndex renders 1`] = `
     }
 }",
                             "searchType": "graph",
+                            "socket_timeout": 60,
                             "timeField": "",
                             "timezone": Array [],
                             "weekly": Object {

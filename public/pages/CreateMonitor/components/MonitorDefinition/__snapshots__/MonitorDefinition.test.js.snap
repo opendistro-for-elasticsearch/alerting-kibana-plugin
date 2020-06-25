@@ -40,6 +40,11 @@ exports[`MonitorDefinition renders 1`] = `
           >
             Define using extraction query
           </option>
+          <option
+            value="http"
+          >
+            Define using HTTP endpoint
+          </option>
         </select>
         <div
           class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
