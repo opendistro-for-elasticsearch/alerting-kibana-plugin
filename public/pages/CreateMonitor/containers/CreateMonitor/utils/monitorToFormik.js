@@ -15,6 +15,7 @@
 
 import _ from 'lodash';
 import { FORMIK_INITIAL_VALUES } from './constants';
+import { SEARCH_TYPE, INPUTS_DETECTOR_ID } from '../../../../../utils/constants';
 import { customWebhookToFormik } from '../../../../Destinations/containers/CreateDestination/utils/destinationToFormik';
 
 // Convert Monitor JSON to Formik values used in UI forms
@@ -34,6 +35,7 @@ export default function monitorToFormik(monitor) {
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
   const { searchType = 'query', fieldName } = search;
   const isAD = searchType === SEARCH_TYPE.AD;
+  const isHTTP = searchType === SEARCH_TYPE.HTTP;
 
   return {
     /* INITIALIZE WITH DEFAULTS */
@@ -53,9 +55,9 @@ export default function monitorToFormik(monitor) {
     fieldName: fieldName ? [{ label: fieldName }] : [],
     timezone: timezone ? [{ label: timezone }] : [],
 
+    index: isHTTP ? undefined : inputs[0].search.indices.map((index) => ({ label: index })),
+    query: isHTTP ? undefined : JSON.stringify(inputs[0].search.query, null, 4),
     detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
-    index: inputs[0].search.indices.map(index => ({ label: index })),
-    query: JSON.stringify(inputs[0].search.query, null, 4),
-    http: customWebhookToFormik(http),
+    http: isHTTP ? customWebhookToFormik(inputs[0].http) : undefined,
   };
 }
