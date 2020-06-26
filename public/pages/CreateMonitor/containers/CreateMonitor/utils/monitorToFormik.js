@@ -55,8 +55,8 @@ export default function monitorToFormik(monitor) {
     fieldName: fieldName ? [{ label: fieldName }] : [],
     timezone: timezone ? [{ label: timezone }] : [],
 
-    index: isHTTP ? undefined : inputs[0].search.indices.map((index) => ({ label: index })),
-    query: isHTTP ? undefined : JSON.stringify(inputs[0].search.query, null, 4),
+    index: isHTTP ? {} : inputs[0].search.indices.map((index) => ({ label: index })),
+    query: isHTTP ? {} : JSON.stringify(inputs[0].search.query, null, 4),
     detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
     http: isHTTP ? customWebhookToFormik(inputs[0].http) : undefined,
   };
