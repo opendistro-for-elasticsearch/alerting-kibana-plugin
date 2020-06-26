@@ -39,8 +39,11 @@ export function formikToMonitor(values) {
 }
 
 export function formikToInputs(values) {
-  const isHttp = values.searchType === SEARCH_TYPE.HTTP;
-  return [isHttp ? formikToHttp(values) : formikToSearch(values)];
+  if (values.searchType === SEARCH_TYPE.HTTP) {
+    return [formikToHttp(values)];
+  } else {
+    return [formikToSearch(values)];
+  }
 }
 
 export function formikToSearch(values) {
@@ -97,16 +100,6 @@ export function formikToAd(values) {
   return {
     anomaly_detector: {
       detector_id: values.detectorId,
-    },
-  };
-}
-export function formikToSearch(values) {
-  const query = formikToQuery(values);
-  const indices = formikToIndices(values);
-  return {
-    search: {
-      indices,
-      query,
     },
   };
 }
