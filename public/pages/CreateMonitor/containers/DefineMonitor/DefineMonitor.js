@@ -198,7 +198,7 @@ class DefineMonitor extends Component {
         const monitor = formikToMonitor(values);
         _.set(monitor, 'name', 'TEMP_MONITOR');
         _.set(monitor, 'triggers', []);
-        if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.HTTP)
+        if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH)
           _.set(monitor, 'inputs[0].search', generalRequest);
         else if (searchType === SEARCH_TYPE.HTTP) _.set(monitor, 'inputs[0].http', generalRequest);
         return httpClient.post('../api/alerting/monitors/_execute', monitor);
