@@ -51,6 +51,7 @@ export default function monitorToFormik(monitor) {
           query: JSON.stringify(query, null, 4),
         };
       } else {
+        // when searchType is Query or Graph
         return {
           index: indices.map((index) => ({ label: index })),
           query: JSON.stringify(query, null, 4),
