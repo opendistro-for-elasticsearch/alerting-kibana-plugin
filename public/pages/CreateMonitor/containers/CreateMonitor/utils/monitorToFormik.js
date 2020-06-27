@@ -34,8 +34,30 @@ export default function monitorToFormik(monitor) {
   // Default searchType to query, because if there is no ui_metadata or search then it was created through API or overwritten by API
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
   const { searchType = 'query', fieldName } = search;
-  const isAD = searchType === SEARCH_TYPE.AD;
-  const isHTTP = searchType === SEARCH_TYPE.HTTP;
+
+  function inputsToFormik() {
+    if (searchType === SEARCH_TYPE.HTTP) {
+      return {
+        http: customWebhookToFormik(inputs[0].http),
+      };
+    } else {
+      const {
+        search: { indices, query },
+      } = inputs[0];
+      if (searchType === SEARCH_TYPE.AD) {
+        return {
+          detectorId: _.get(inputs, INPUTS_DETECTOR_ID),
+          index: indices.map((index) => ({ label: index })),
+          query: JSON.stringify(query, null, 4),
+        };
+      } else {
+        return {
+          index: indices.map((index) => ({ label: index })),
+          query: JSON.stringify(query, null, 4),
+        };
+      }
+    }
+  }
 
   return {
     /* INITIALIZE WITH DEFAULTS */
@@ -55,9 +77,6 @@ export default function monitorToFormik(monitor) {
     fieldName: fieldName ? [{ label: fieldName }] : [],
     timezone: timezone ? [{ label: timezone }] : [],
 
-    index: isHTTP ? {} : inputs[0].search.indices.map((index) => ({ label: index })),
-    query: isHTTP ? {} : JSON.stringify(inputs[0].search.query, null, 4),
-    detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
-    http: isHTTP ? customWebhookToFormik(inputs[0].http) : undefined,
+    ...inputsToFormik(),
   };
 }
