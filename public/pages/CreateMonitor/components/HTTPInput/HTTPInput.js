@@ -17,19 +17,18 @@ import React from 'react';
 import { EuiSpacer, EuiFlexItem, EuiFlexGroup, EuiCodeEditor, EuiFormRow } from '@elastic/eui';
 import { FormikFieldNumber } from '../../../../components/FormControls';
 import { isInvalid } from '../../../../utils/validate';
-import { URL_TYPE } from '../../../Destinations/containers/CreateDestination/utils/constants';
-import URLInfo from './URLInfo';
-import QueryParamsEditor from '../../../Destinations/components/createDestinations/CustomWebhook/QueryParamsEditor';
+import URLInfo from '../../../Destinations/components/createDestinations/CustomWebhook/URLInfo';
 
 const HTTPInput = ({ isDarkMode, response, values }) => (
   <div>
     <EuiFlexGroup>
       <EuiFlexItem>
-        <URLInfo isDarkMode={isDarkMode} response={response} values={values} />
-        <EuiSpacer size="m" />
-        {values.http.urlType === URL_TYPE.ATTRIBUTE_URL && (
-          <QueryParamsEditor type={values.searchType} queryParams={values.http.queryParams} />
-        )}
+        <URLInfo
+          isDarkMode={isDarkMode}
+          response={response}
+          type={values.searchType}
+          values={values}
+        />
         <EuiSpacer size="m" />
         <FormikFieldNumber
           name="connection_timeout"

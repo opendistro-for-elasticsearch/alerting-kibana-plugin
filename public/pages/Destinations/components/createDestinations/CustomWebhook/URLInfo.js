@@ -32,7 +32,10 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,
 };
-const protocolOptions = [{ value: 'HTTPS', text: 'HTTPS' }, { value: 'HTTP', text: 'HTTP' }];
+const protocolOptions = [
+  { value: 'HTTPS', text: 'HTTPS' },
+  { value: 'HTTP', text: 'HTTP' },
+];
 
 const URLInfo = ({ type, values }) => {
   const isUrlEnabled = values[type].urlType === URL_TYPE.FULL_URL;
@@ -78,10 +81,11 @@ const URLInfo = ({ type, values }) => {
         name={`${type}.url`}
         formRow
         fieldProps={{
-          validate: fieldValue => validateUrl(fieldValue, values),
+          validate: (fieldValue) => validateUrl(fieldValue, values, type),
         }}
         rowProps={{
-          label: 'Webhook URL',
+          // type is "http" when the component is used to define a monitor
+          label: type === 'http' ? 'URL' : 'Webhook URL',
           style: { paddingLeft: '10px' },
           isInvalid,
           error: hasError,
@@ -126,7 +130,7 @@ const URLInfo = ({ type, values }) => {
         name={`${type}.host`}
         formRow
         fieldProps={{
-          validate: fieldValue => validateHost(fieldValue, values),
+          validate: (fieldValue) => validateHost(fieldValue, values, type),
         }}
         rowProps={{
           label: 'Host',
@@ -170,7 +174,11 @@ const URLInfo = ({ type, values }) => {
           isInvalid,
         }}
       />
-      <QueryParamsEditor type={type} queryParams={values[type].queryParams} isEnabled={!isUrlEnabled} />
+      <QueryParamsEditor
+        type={type}
+        queryParams={values[type].queryParams}
+        isEnabled={!isUrlEnabled}
+      />
     </Fragment>
   );
 };
