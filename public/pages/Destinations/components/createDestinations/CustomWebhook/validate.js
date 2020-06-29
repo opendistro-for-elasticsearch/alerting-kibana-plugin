@@ -15,7 +15,9 @@
 
 import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants';
 
-export const validateUrl = (value, allValues, type) => {
+export const validateUrl = (value, allValues) => {
+  // type is "http" when the component URLInfo is used to define a monitor
+  const type = allValues.type ? allValues.type : 'http';
   if (allValues[type].urlType !== URL_TYPE.FULL_URL) return;
   if (!value) return 'Required';
   const regname = '((www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,63})';
@@ -37,7 +39,6 @@ export const validateUrl = (value, allValues, type) => {
     `)\\]`;
   const path = `(:[0-9]{1,5})?([/?#][-a-zA-Z0-9@:%_\\+.~#?&//=]*)`;
   const localhost = `(localhost)`;
-  // type is "http" when the component is used to define a monitor
   const regexUrl =
     type === 'http'
       ? `^https?:\\/\\/(${regname}|${ipv4}|${ipv6}|${localhost})${path}?$`
@@ -51,7 +52,6 @@ export const validateHost = (value, allValues, type) => {
   if (!value) return 'Required';
   const host = `^(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$`;
   const localhost = `(localhost)`;
-  // type is "http" when the component is used to define a monitor
   const regexHost = type === 'http' ? `${host}|${localhost}` : host;
   const isValidUrl = new RegExp(regexHost).test(value);
   if (!isValidUrl) return 'Invalid Host';

@@ -81,7 +81,7 @@ const URLInfo = ({ type, values }) => {
         name={`${type}.url`}
         formRow
         fieldProps={{
-          validate: (fieldValue) => validateUrl(fieldValue, values, type),
+          validate: (fieldValue) => validateUrl(fieldValue, values),
         }}
         rowProps={{
           // type is "http" when the component is used to define a monitor
@@ -130,7 +130,7 @@ const URLInfo = ({ type, values }) => {
         name={`${type}.host`}
         formRow
         fieldProps={{
-          validate: (fieldValue) => validateHost(fieldValue, values, type),
+          validate: (fieldValue) => validateHost(fieldValue, values),
         }}
         rowProps={{
           label: 'Host',
