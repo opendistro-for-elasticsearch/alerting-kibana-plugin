@@ -104,6 +104,15 @@ export function formikToAd(values) {
   };
 }
 
+// this function is used for unit test
+export function formikToAd(values) {
+  return {
+    anomaly_detector: {
+      detector_id: values.detectorId,
+    },
+  };
+}
+
 export function formikToHttp(values) {
   const http =
     values.http.urlType === URL_TYPE.FULL_URL ? formikToFullUrl(values) : formikToCustomUrl(values);
