@@ -23,6 +23,7 @@ beforeEach(() => {
 
 describe('validateUrl', () => {
   const typeFullUrl = { type: 'custom_webhook', custom_webhook: { urlType: URL_TYPE.FULL_URL } };
+  const httpInputTypeFullUrl = { http: { urlType: URL_TYPE.FULL_URL } };
 
   test('returns Required if is empty', () => {
     expect(validateUrl('', typeFullUrl)).toBe('Required');
@@ -47,6 +48,7 @@ describe('validateUrl', () => {
     ).toBeUndefined();
     expect(validateUrl('http://[64:ff9b::192.0.2.128]:80/', typeFullUrl)).toBeUndefined();
     expect(validateUrl('https://org.example/', typeFullUrl)).toBeUndefined();
+    expect(validateUrl('http://localhost:9200/_foo/bar', httpInputTypeFullUrl)).toBeUndefined();
   });
 
   test('returns error string if invalid', () => {
@@ -69,5 +71,6 @@ describe('validateUrl', () => {
         typeFullUrl
       )
     ).toBe(invalidText);
+    expect(validateUrl('http://localhost:9200/_foo/bar', typeFullUrl)).toBe(invalidText);
   });
 });
