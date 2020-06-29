@@ -78,6 +78,13 @@ describe('formikToCondition', () => {
     });
   });
 
+  test('can return condition when searchType is http', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    expect(formikToCondition(formikValues, { search: { searchType: 'http' } })).toEqual({
+      script: formikValues.script,
+    });
+  });
+
   test('can return condition when searchType is ad', () => {
     const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
     expect(formikToCondition(formikValues, { search: { searchType: 'ad' } })).toEqual({
