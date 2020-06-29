@@ -16,7 +16,7 @@
 import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants';
 
 export const validateUrl = (value, allValues) => {
-  // type is "http" when the component URLInfo is used to define a monitor
+  // type is "http" when the component 'URLInfo' is used to define a monitor
   const type = allValues.type ? allValues.type : 'http';
   if (allValues[type].urlType !== URL_TYPE.FULL_URL) return;
   if (!value) return 'Required';
@@ -47,7 +47,9 @@ export const validateUrl = (value, allValues) => {
   if (!isValidUrl) return 'Invalid URL';
 };
 
-export const validateHost = (value, allValues, type) => {
+export const validateHost = (value, allValues) => {
+  // type is "http" when the component 'URLInfo' is used to define a monitor
+  const type = allValues.type ? allValues.type : 'http';
   if (allValues[type].urlType !== URL_TYPE.ATTRIBUTE_URL) return;
   if (!value) return 'Required';
   const host = `^(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$`;
