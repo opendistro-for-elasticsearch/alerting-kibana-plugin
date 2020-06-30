@@ -31,10 +31,10 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
         />
         <EuiSpacer size="m" />
         <FormikFieldNumber
-          name="connection_timeout"
+          name="connectionTimeout"
           formRow
           rowProps={{
-            label: 'Connection Timeout(s)',
+            label: 'Connection Timeout',
             style: { paddingLeft: '10px' },
             isInvalid,
           }}
@@ -43,11 +43,12 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
           }}
         />
         <FormikFieldNumber
-          name="socket_timeout"
+          name="socketTimeout"
           formRow
           rowProps={{
-            label: 'Socket Timeout(s)',
+            label: 'Socket Timeout',
             style: { paddingLeft: '10px' },
+            helpText: 'The time units are in seconds',
             isInvalid,
           }}
           inputProps={{
