@@ -72,7 +72,6 @@ describe('formikToSearch', () => {
   test('can build search for non-AD monitor', () => {
     expect(formikToSearch(formikValues)).toMatchSnapshot();
   });
-  const formikValuesAD = _.cloneDeep(FORMIK_INITIAL_VALUES);
   test('can build search for AD monitor', () => {
     formikValues.searchType = 'ad';
     expect(formikToSearch(formikValues)).toMatchSnapshot();

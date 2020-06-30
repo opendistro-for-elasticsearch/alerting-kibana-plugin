@@ -90,7 +90,7 @@ describe('monitorToFormik', () => {
         JSON.stringify(exampleMonitor.inputs[0].search.query, null, 4)
       );
       expect(formikValues.index).toEqual(
-        exampleMonitor.inputs[0].search.indices.map(index => ({ label: index }))
+        exampleMonitor.inputs[0].search.indices.map((index) => ({ label: index }))
       );
     });
 
@@ -118,6 +118,7 @@ describe('monitorToFormik', () => {
       const formikValues = monitorToFormik(localExampleMonitor);
       expect(formikValues.cronExpression).toBe(FORMIK_INITIAL_VALUES.cronExpression);
     });
+
     test('can build AD monitor', () => {
       const adMonitor = _.cloneDeep(exampleMonitor);
       adMonitor.ui_metadata.search.searchType = 'ad';
@@ -160,5 +161,20 @@ describe('monitorToFormik', () => {
       expect(formikValues.detectorId).toBe('zIqG0nABwoJjo1UZKHnL');
       expect(formikValues.query).toContain('zIqG0nABwoJjo1UZKHnL');
     });
+  });
+
+  test('can build HTTP monitor', () => {
+    const httpMonitor = _.cloneDeep(exampleMonitor);
+    httpMonitor.ui_metadata.search.searchType = 'http';
+    httpMonitor.inputs = [
+      {
+        http: {
+          urlType: 'url',
+          url: 'http://localhost:9200/',
+        },
+      },
+    ];
+    const formikValues = monitorToFormik(httpMonitor);
+    expect(formikValues.http.url).toBe('http://localhost:9200/');
   });
 });
