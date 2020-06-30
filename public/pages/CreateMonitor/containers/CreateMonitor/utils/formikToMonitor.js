@@ -29,7 +29,7 @@ export function formikToMonitor(values) {
     type: 'monitor',
     enabled: !values.disabled,
     schedule,
-    inputs: formikToInputs(values),
+    inputs: [formikToInputs(values)],
     triggers: [],
     ui_metadata: {
       schedule: uiSchedule,
@@ -40,9 +40,9 @@ export function formikToMonitor(values) {
 
 export function formikToInputs(values) {
   if (values.searchType === SEARCH_TYPE.HTTP) {
-    return [formikToHttp(values)];
+    return formikToHttp(values);
   } else {
-    return [formikToSearch(values)];
+    return formikToSearch(values);
   }
 }
 
