@@ -140,44 +140,40 @@ Array [
 `;
 
 exports[`formikToInputs can call formikToHttp 1`] = `
-Array [
-  Object {
-    "http": Object {
-      "connection_timeout": 5,
-      "socket_timeout": 60,
-      "url": "",
-    },
+Object {
+  "http": Object {
+    "connection_timeout": 5,
+    "socket_timeout": 60,
+    "url": "",
   },
-]
+}
 `;
 
 exports[`formikToInputs can call formikToSearch 1`] = `
-Array [
-  Object {
-    "search": Object {
-      "indices": Array [],
+Object {
+  "search": Object {
+    "indices": Array [],
+    "query": Object {
+      "aggregations": Object {},
       "query": Object {
-        "aggregations": Object {},
-        "query": Object {
-          "bool": Object {
-            "filter": Array [
-              Object {
-                "range": Object {
-                  "": Object {
-                    "format": "epoch_millis",
-                    "gte": "{{period_end}}||-1h",
-                    "lte": "{{period_end}}",
-                  },
+        "bool": Object {
+          "filter": Array [
+            Object {
+              "range": Object {
+                "": Object {
+                  "format": "epoch_millis",
+                  "gte": "{{period_end}}||-1h",
+                  "lte": "{{period_end}}",
                 },
               },
-            ],
-          },
+            },
+          ],
         },
-        "size": 0,
       },
+      "size": 0,
     },
   },
-]
+}
 `;
 
 exports[`formikToMonitor can build monitor 1`] = `

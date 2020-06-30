@@ -79,9 +79,9 @@ describe('formikToSearch', () => {
 });
 
 describe('formikToDetector', () => {
-  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
-  formikValues.detectorId = 'temp_detector';
   test('can build detector', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    formikValues.detectorId = 'temp_detector';
     expect(formikToAd(formikValues)).toMatchSnapshot();
   });
 });
@@ -98,15 +98,15 @@ describe('formikToHttp', () => {
 });
 
 describe('formikToFullUrl', () => {
-  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
   test('can build full url http request', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
     expect(formikToFullUrl(formikValues)).toMatchSnapshot();
   });
 });
 
 describe('formikToCustomUrl', () => {
-  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
   test('can build custom url http request', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
     expect(formikToCustomUrl(formikValues)).toMatchSnapshot();
   });
 });
