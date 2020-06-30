@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@ import React from 'react';
 import { render } from 'enzyme';
 import { Formik } from 'formik';
 
-import ExtractionQuery from './ExtractionQuery';
+import HTTPInput from './HTTPInput';
 
 // FIXME: This has an issue where EuiCodeEditor is generating a random HTML id and failing snapshot test
-describe.skip('ExtractionQuery', () => {
+describe.skip('HTTPInput', () => {
   test('renders', () => {
     const component = (
       <Formik>
-        <ExtractionQuery response={JSON.stringify({ hits: 10 })} />
+        <HTTPInput values={{ http: { urlType: 'url' }, searchType: 'http' }} />
       </Formik>
     );
 
