@@ -45,6 +45,20 @@ Object {
 }
 `;
 
+exports[`formikToCustomUrl can build custom url http request 1`] = `
+Object {
+  "connection_timeout": 5,
+  "host": "",
+  "path": "",
+  "port": "",
+  "query_params": Object {
+    "": "",
+  },
+  "scheme": "https",
+  "socket_timeout": 60,
+}
+`;
+
 exports[`formikToDetector can build detector 1`] = `
 Object {
   "anomaly_detector": Object {
@@ -59,6 +73,14 @@ Object {
     "match_all": Object {},
   },
   "size": 0,
+}
+`;
+
+exports[`formikToFullUrl can build full url http request 1`] = `
+Object {
+  "connection_timeout": 5,
+  "socket_timeout": 60,
+  "url": "",
 }
 `;
 
@@ -84,10 +106,77 @@ Object {
 }
 `;
 
+exports[`formikToHttp can call formikToCustomUrl 1`] = `
+Object {
+  "http": Object {
+    "connection_timeout": 5,
+    "host": "",
+    "path": "",
+    "port": "",
+    "query_params": Object {
+      "": "",
+    },
+    "scheme": "https",
+    "socket_timeout": 60,
+  },
+}
+`;
+
+exports[`formikToHttp can call formikToFullUrl 1`] = `
+Object {
+  "http": Object {
+    "connection_timeout": 5,
+    "socket_timeout": 60,
+    "url": "",
+  },
+}
+`;
+
 exports[`formikToIndices can build index 1`] = `
 Array [
   "index1",
   "index2",
+]
+`;
+
+exports[`formikToInputs can call formikToHttp 1`] = `
+Array [
+  Object {
+    "http": Object {
+      "connection_timeout": 5,
+      "socket_timeout": 60,
+      "url": "",
+    },
+  },
+]
+`;
+
+exports[`formikToInputs can call formikToSearch 1`] = `
+Array [
+  Object {
+    "search": Object {
+      "indices": Array [],
+      "query": Object {
+        "aggregations": Object {},
+        "query": Object {
+          "bool": Object {
+            "filter": Array [
+              Object {
+                "range": Object {
+                  "": Object {
+                    "format": "epoch_millis",
+                    "gte": "{{period_end}}||-1h",
+                    "lte": "{{period_end}}",
+                  },
+                },
+              },
+            ],
+          },
+        },
+        "size": 0,
+      },
+    },
+  },
 ]
 `;
 
@@ -206,6 +295,84 @@ Object {
     },
   },
   "size": 0,
+}
+`;
+
+exports[`formikToSearch can build search for AD monitor 1`] = `
+Object {
+  "search": Object {
+    "indices": Array [
+      ".opendistro-anomaly-results*",
+    ],
+    "query": Object {
+      "aggregations": Object {
+        "max_anomaly_grade": Object {
+          "max": Object {
+            "field": "anomaly_grade",
+          },
+        },
+      },
+      "query": Object {
+        "bool": Object {
+          "filter": Array [
+            Object {
+              "range": Object {
+                "data_end_time": Object {
+                  "from": "{{period_end}}||-1m",
+                  "include_lower": true,
+                  "include_upper": true,
+                  "to": "{{period_end}}",
+                },
+              },
+            },
+            Object {
+              "term": Object {
+                "detector_id": Object {
+                  "value": "",
+                },
+              },
+            },
+          ],
+        },
+      },
+      "size": 1,
+      "sort": Array [
+        Object {
+          "anomaly_grade": "desc",
+        },
+        Object {
+          "confidence": "desc",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`formikToSearch can build search for non-AD monitor 1`] = `
+Object {
+  "search": Object {
+    "indices": Array [],
+    "query": Object {
+      "aggregations": Object {},
+      "query": Object {
+        "bool": Object {
+          "filter": Array [
+            Object {
+              "range": Object {
+                "": Object {
+                  "format": "epoch_millis",
+                  "gte": "{{period_end}}||-1h",
+                  "lte": "{{period_end}}",
+                },
+              },
+            },
+          ],
+        },
+      },
+      "size": 0,
+    },
+  },
 }
 `;
 

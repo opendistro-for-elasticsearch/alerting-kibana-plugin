@@ -28,6 +28,11 @@ import {
   buildSchedule,
   formikToWhereClause,
   formikToAd,
+  formikToInputs,
+  formikToSearch,
+  formikToHttp,
+  formikToFullUrl,
+  formikToCustomUrl,
 } from './formikToMonitor';
 
 import { FORMIK_INITIAL_VALUES } from './constants';
@@ -51,11 +56,59 @@ describe('formikToMonitor', () => {
   });
 });
 
+describe('formikToInputs', () => {
+  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+  test('can call formikToSearch', () => {
+    expect(formikToInputs(formikValues)).toMatchSnapshot();
+  });
+  test('can call formikToHttp', () => {
+    formikValues.searchType = 'http';
+    expect(formikToInputs(formikValues)).toMatchSnapshot();
+  });
+});
+
+describe('formikToSearch', () => {
+  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+  test('can build search for non-AD monitor', () => {
+    expect(formikToSearch(formikValues)).toMatchSnapshot();
+  });
+  const formikValuesAD = _.cloneDeep(FORMIK_INITIAL_VALUES);
+  test('can build search for AD monitor', () => {
+    formikValues.searchType = 'ad';
+    expect(formikToSearch(formikValues)).toMatchSnapshot();
+  });
+});
+
 describe('formikToDetector', () => {
   const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
   formikValues.detectorId = 'temp_detector';
   test('can build detector', () => {
     expect(formikToAd(formikValues)).toMatchSnapshot();
+  });
+});
+
+describe('formikToHttp', () => {
+  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+  test('can call formikToFullUrl', () => {
+    expect(formikToHttp(formikValues)).toMatchSnapshot();
+  });
+  test('can call formikToCustomUrl', () => {
+    formikValues.http.urlType = 'custom_url';
+    expect(formikToHttp(formikValues)).toMatchSnapshot();
+  });
+});
+
+describe('formikToFullUrl', () => {
+  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+  test('can build full url http request', () => {
+    expect(formikToFullUrl(formikValues)).toMatchSnapshot();
+  });
+});
+
+describe('formikToCustomUrl', () => {
+  const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+  test('can build custom url http request', () => {
+    expect(formikToCustomUrl(formikValues)).toMatchSnapshot();
   });
 });
 
