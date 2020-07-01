@@ -77,13 +77,13 @@ export default class CreateTrigger extends Component {
       triggers: { ...uiMetadata.triggers, ...triggerMetadata },
     };
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
-      .then(res => {
+      .then((res) => {
         setSubmitting(false);
         if (res.data.ok) {
           onCloseTrigger();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setSubmitting(false);
         // TODO: setErrors
@@ -104,13 +104,13 @@ export default class CreateTrigger extends Component {
     const updatedTriggers = triggers.slice();
     updatedTriggers.splice(indexToUpdate, 1, trigger);
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
-      .then(res => {
+      .then((res) => {
         setSubmitting(false);
         if (res.data.ok) {
           onCloseTrigger();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setSubmitting(false);
         // TODO: setErrors
@@ -120,6 +120,7 @@ export default class CreateTrigger extends Component {
   onRunExecute = (triggers = []) => {
     const { httpClient, monitor } = this.props;
     const formikValues = monitorToFormik(monitor);
+    const searchType = formikValues.searchType;
     const monitorToExecute = _.cloneDeep(monitor);
     _.set(monitorToExecute, 'triggers', triggers);
     if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH) {
@@ -132,7 +133,7 @@ export default class CreateTrigger extends Component {
     }
     httpClient
       .post('../api/alerting/monitors/_execute', monitorToExecute)
-      .then(resp => {
+      .then((resp) => {
         if (resp.data.ok) {
           this.setState({ executeResponse: resp.data.resp });
         } else {
@@ -140,7 +141,7 @@ export default class CreateTrigger extends Component {
           console.error('err:', resp);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err:', err);
       });
   };
@@ -185,7 +186,7 @@ export default class CreateTrigger extends Component {
   getTriggerContext = (executeResponse, monitor, values) => ({
     periodStart: moment.utc(_.get(executeResponse, 'period_start', Date.now())).format(),
     periodEnd: moment.utc(_.get(executeResponse, 'period_end', Date.now())).format(),
-    results: [_.get(executeResponse, 'input_results.results[0]')].filter(result => !!result),
+    results: [_.get(executeResponse, 'input_results.results[0]')].filter((result) => !!result),
     trigger: formikToTrigger(values, _.get(this.props.monitor, 'ui_metadata', {})),
     alert: null,
     error: null,
@@ -222,7 +223,7 @@ export default class CreateTrigger extends Component {
               <FieldArray
                 name="actions"
                 validateOnChange={true}
-                render={arrayHelpers => (
+                render={(arrayHelpers) => (
                   <ConfigureActions
                     arrayHelpers={arrayHelpers}
                     context={this.getTriggerContext(executeResponse, monitor, values)}

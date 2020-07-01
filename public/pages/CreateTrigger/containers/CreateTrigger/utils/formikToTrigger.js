@@ -40,7 +40,7 @@ export function formikToTrigger(values, monitorUiMetadata = {}) {
 export function formikToAction(values) {
   const actions = values.actions;
   if (actions && actions.length > 0) {
-    return actions.map(action => {
+    return actions.map((action) => {
       if (!action.throttle_enabled) return _.omit(action, ['throttle']);
       return action;
     });
@@ -74,9 +74,9 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
   const searchType = _.get(monitorUiMetadata, 'search.searchType', 'query');
   const aggregationType = _.get(monitorUiMetadata, 'search.aggregationType', 'count');
 
-  if (searchType === SEARCH_TYPE.AD) return getADCondition(values);
   if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.HTTP)
     return { script: values.script };
+  if (searchType === SEARCH_TYPE.AD) return getADCondition(values);
   const isCount = aggregationType === 'count';
   const resultsPath = getResultsPath(isCount);
   const operator = getOperator(thresholdEnum);
@@ -105,7 +105,7 @@ export function getCondition(resultsPath, operator, value, isCount) {
     script: {
       lang: 'painless',
       source: isCount ? baseSource : `return ${resultsPath} == null ? false : ${baseSource}`,
-    }
+    },
   };
 }
 
