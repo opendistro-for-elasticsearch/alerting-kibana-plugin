@@ -96,14 +96,6 @@ export function formikToAdQuery(values) {
   };
 }
 
-export function formikToAd(values) {
-  return {
-    anomaly_detector: {
-      detector_id: values.detectorId,
-    },
-  };
-}
-
 // this function is used for unit test
 export function formikToAd(values) {
   return {
