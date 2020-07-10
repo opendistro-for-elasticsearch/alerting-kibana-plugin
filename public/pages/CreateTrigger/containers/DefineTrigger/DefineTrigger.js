@@ -82,8 +82,7 @@ const DefineTrigger = ({
   triggerValues,
   isDarkMode,
 }) => {
-  const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
-  const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
+  const searchType = _.get(monitorValues, 'searchType');
   const detectorId = _.get(monitorValues, 'detectorId');
   const response = _.get(executeResponse, 'input_results.results[0]');
   const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
@@ -97,17 +96,18 @@ const DefineTrigger = ({
       executeResponse={executeResponse}
       onRun={onRun}
       response={response}
-      setFlyout={setFlyout}
       triggerValues={triggerValues}
+      searchType={searchType}
+      setFlyout={setFlyout}
       isDarkMode={isDarkMode}
     />
   );
-  if (isAd && adTriggerType === TRIGGER_TYPE.AD) {
+  if (searchType === SEARCH_TYPE.AD && adTriggerType === TRIGGER_TYPE.AD) {
     triggerContent = (
       <AnomalyDetectorTrigger detectorId={detectorId} adValues={triggerValues.anomalyDetector} />
     );
   }
-  if (isGraph) {
+  if (searchType === SEARCH_TYPE.GRAPH) {
     triggerContent = (
       <TriggerGraph
         monitorValues={monitorValues}
@@ -134,7 +134,7 @@ const DefineTrigger = ({
         rowProps={selectRowProps}
         inputProps={selectInputProps}
       />
-      {isAd ? (
+      {searchType === SEARCH_TYPE.AD ? (
         <FormikSelect
           name="anomalyDetector.triggerType"
           formRow

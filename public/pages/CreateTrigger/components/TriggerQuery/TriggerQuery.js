@@ -31,7 +31,7 @@ import 'brace/snippets/javascript';
 import 'brace/ext/language_tools';
 import { formikToTrigger } from '../../containers/CreateTrigger/utils/formikToTrigger';
 
-export const getExecuteMessage = response => {
+export const getExecuteMessage = (response) => {
   if (!response) return 'No response';
   const triggerResults = _.get(response, 'trigger_results');
   if (!triggerResults) return 'No trigger results';
@@ -50,6 +50,7 @@ const TriggerQuery = ({
   onRun,
   response,
   triggerValues,
+  searchType,
   setFlyout,
   isDarkMode,
 }) => {
@@ -59,7 +60,10 @@ const TriggerQuery = ({
     <div style={{ padding: '0px 10px', marginTop: '0px' }}>
       <EuiFlexGroup direction="column">
         <EuiFlexItem>
-          <EuiFormRow label="Extraction query response" fullWidth>
+          <EuiFormRow
+            label={searchType === 'http' ? 'HTTP response' : 'Extraction query response'}
+            fullWidth
+          >
             <EuiCodeEditor
               mode="json"
               theme={isDarkMode ? 'sense-dark' : 'github'}
@@ -101,7 +105,7 @@ const TriggerQuery = ({
                   theme={isDarkMode ? 'sense-dark' : 'github'}
                   height="200px"
                   width="100%"
-                  onChange={source => {
+                  onChange={(source) => {
                     setFieldValue('script.source', source);
                   }}
                   onBlur={() => setFieldTouched('script.source', true)}
