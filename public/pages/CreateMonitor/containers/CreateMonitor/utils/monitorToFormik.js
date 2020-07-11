@@ -34,7 +34,7 @@ export default function monitorToFormik(monitor) {
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
   let { searchType = 'query', fieldName } = search;
   // There is a new searchType - http, and can be created through API, this condition needs to be handled.
-  if ('http' in inputs[0]) searchType = SEARCH_TYPE.HTTP;
+  if (_.isEmpty(search) && 'http' in inputs[0]) searchType = SEARCH_TYPE.HTTP;
 
   function inputsToFormik() {
     if (searchType === SEARCH_TYPE.HTTP) {

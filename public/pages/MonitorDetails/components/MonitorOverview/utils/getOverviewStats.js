@@ -34,14 +34,17 @@ function getMonitorType(searchType) {
     case SEARCH_TYPE.AD:
       return 'Anomaly Detector';
     case SEARCH_TYPE.HTTP:
-      return 'HTTP Input';
+      return 'HTTP Endpoint';
     default:
       return 'Extraction Query';
   }
 }
 
 export default function getOverviewStats(monitor, monitorId, monitorVersion, activeCount) {
-  const searchType = _.get(monitor, 'ui_metadata.search.searchType', 'query');
+  const { inputs, ui_metadata: { search = {} } = {} } = monitor;
+  let { searchType = 'query' } = search;
+  // Set searchType for HTTP monitors which created through API
+  if (_.isEmpty(search) && 'http' in inputs[0]) searchType = SEARCH_TYPE.HTTP;
   return [
     {
       header: 'State',
