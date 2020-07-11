@@ -135,7 +135,7 @@ export default class CreateTrigger extends Component {
       .post('../api/alerting/monitors/_execute', monitorToExecute)
       .then((resp) => {
         if (resp.data.ok) {
-          this.setState({ executeResponse: resp.data.resp });
+          this.setState({ executeResponse: resp.data.resp }, this.overrideInitialValues);
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
@@ -192,6 +192,18 @@ export default class CreateTrigger extends Component {
     error: null,
     monitor: monitor,
   });
+
+  overrideInitialValues = () => {
+    const { monitor } = this.props;
+    const { initialValues, executeResponse } = this.state;
+    // When searchType of the monitor is 'http',
+    // Override the default trigger condition with the first name of the name-value pairs in the HTTP response
+    if ('http' in monitor.inputs[0]) {
+      const response = _.get(executeResponse, 'input_results.results[0]');
+      _.set(initialValues, 'script.source', 'ctx.results[0].' + _.keys(response)[0] + ' != null');
+      this.setState({ initialValues: initialValues });
+    }
+  };
 
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient } = this.props;
