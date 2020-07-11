@@ -30,10 +30,11 @@ export default function monitorToFormik(monitor) {
     ui_metadata: { schedule = {}, search = {} } = {},
   } = monitor;
 
-  // TODO: handle 'searchType' condition that creating HTTP monitors through API
   // Default searchType to query, because if there is no ui_metadata or search then it was created through API or overwritten by API
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
-  const { searchType = 'query', fieldName } = search;
+  let { searchType = 'query', fieldName } = search;
+  // There is a new searchType - http, and can be created through API, this condition needs to be handled.
+  if ('http' in inputs[0]) searchType = SEARCH_TYPE.HTTP;
 
   function inputsToFormik() {
     if (searchType === SEARCH_TYPE.HTTP) {
