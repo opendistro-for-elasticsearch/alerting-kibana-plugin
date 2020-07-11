@@ -194,11 +194,12 @@ export default class CreateTrigger extends Component {
   });
 
   overrideInitialValues = () => {
-    const { monitor } = this.props;
+    const { monitor, edit, triggerToEdit } = this.props;
     const { initialValues, executeResponse } = this.state;
+    const useTriggerToFormik = edit && triggerToEdit;
     // When searchType of the monitor is 'http',
     // Override the default trigger condition with the first name of the name-value pairs in the HTTP response
-    if ('http' in monitor.inputs[0]) {
+    if (!useTriggerToFormik && 'http' in monitor.inputs[0]) {
       const response = _.get(executeResponse, 'input_results.results[0]');
       _.set(initialValues, 'script.source', 'ctx.results[0].' + _.keys(response)[0] + ' != null');
       this.setState({ initialValues: initialValues });
