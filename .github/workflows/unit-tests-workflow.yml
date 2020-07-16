@@ -9,6 +9,10 @@ jobs:
     name: Run unit tests
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Alerting Kibana plugin
+        uses: actions/checkout@v2
+        with:
+          path: alerting-kibana-plugin
       - name: Get Kibana version
         id: kibana_version
         run: |
@@ -35,12 +39,10 @@ jobs:
           npm uninstall -g yarn
           echo "Installing yarn ${{ steps.versions_step.outputs.yarn_version }}"
           npm i -g yarn@${{ steps.versions_step.outputs.yarn_version }}
-      - name: Checkout Alerting Kibana plugin
-        uses: actions/checkout@v2
-        with:
-          path: kibana/plugins/alerting-kibana-plugin
       - name: Bootstrap plugin/kibana
         run: |
+          mkdir -p kibana/plugins
+          mv alerting-kibana-plugin kibana/plugins
           cd kibana/plugins/alerting-kibana-plugin
           yarn kbn bootstrap
       - name: Run tests
