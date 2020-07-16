@@ -25,6 +25,7 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 
 import ConfigureMonitor from '../ConfigureMonitor';
 import DefineMonitor from '../DefineMonitor';
@@ -136,7 +137,7 @@ export default class CreateMonitor extends Component {
           initialValues={initialValues}
           onSubmit={this.onSubmit}
           validateOnChange={false}
-          render={({ values, errors, handleSubmit, isSubmitting }) => (
+          render={(props) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
@@ -145,8 +146,8 @@ export default class CreateMonitor extends Component {
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
               <DefineMonitor
-                values={values}
-                errors={errors}
+                values={props.values}
+                errors={props.errors}
                 httpClient={httpClient}
                 detectorId={this.props.detectorId}
               />
@@ -161,15 +162,37 @@ export default class CreateMonitor extends Component {
                   <EuiButtonEmpty onClick={this.onCancel}>Cancel</EuiButtonEmpty>
                 </EuiFlexItem>
                 <EuiFlexItem grow={false}>
-                  <EuiButton fill onClick={handleSubmit} isLoading={isSubmitting}>
+                  <EuiButton fill onClick={props.handleSubmit} isLoading={props.isSubmitting}>
                     {edit ? 'Update' : 'Create'}
                   </EuiButton>
                 </EuiFlexItem>
               </EuiFlexGroup>
+              <SubmitErrorHandler
+                formik={props}
+                onSubmitError={() =>
+                  toastNotifications.addDanger({
+                    title: 'Failed to create the monitor.',
+                    text: 'Fix all highlighted error(s) before continuing.',
+                  })
+                }
+              />
             </Fragment>
           )}
         />
       </div>
     );
   }
+}
+
+// This function is use to show additional error messages when validation fails on submit
+// Reference: https://github.com/formium/formik/issues/1484
+function SubmitErrorHandler(props) {
+  const { submitCount, isSubmitting, isValid, onSubmitError } = props.formik;
+  const effect = () => {
+    if (submitCount > 0 && !isSubmitting && !isValid) {
+      onSubmitError();
+    }
+  };
+  React.useEffect(effect, [submitCount, isSubmitting]);
+  return null;
 }
