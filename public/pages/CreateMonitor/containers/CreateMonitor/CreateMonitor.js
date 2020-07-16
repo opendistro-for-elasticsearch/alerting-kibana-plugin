@@ -153,7 +153,7 @@ export default class CreateMonitor extends Component {
               />
               <Fragment>
                 <EuiSpacer />
-                <DefineSchedule isAd={values.searchType === SEARCH_TYPE.AD} />
+                <DefineSchedule isAd={props.values.searchType === SEARCH_TYPE.AD} />
               </Fragment>
               <EuiSpacer />
               <EuiSpacer />
@@ -187,10 +187,10 @@ export default class CreateMonitor extends Component {
 // This function is use to show additional error messages when validation fails on submit
 // Reference: https://github.com/formium/formik/issues/1484
 function SubmitErrorHandler(props) {
-  const { submitCount, isSubmitting, isValid, onSubmitError } = props.formik;
+  const { submitCount, isSubmitting, isValid } = props.formik;
   const effect = () => {
     if (submitCount > 0 && !isSubmitting && !isValid) {
-      onSubmitError();
+      props.onSubmitError();
     }
   };
   React.useEffect(effect, [submitCount, isSubmitting]);
