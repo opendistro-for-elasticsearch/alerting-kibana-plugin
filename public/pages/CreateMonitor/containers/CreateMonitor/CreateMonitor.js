@@ -35,6 +35,7 @@ import { formikToMonitor } from './utils/formikToMonitor';
 import { DefineSchedule } from '../DefineSchedule';
 import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
 import { initializeFromQueryParams } from './utils/monitorQueryParams';
+import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -137,7 +138,7 @@ export default class CreateMonitor extends Component {
           initialValues={initialValues}
           onSubmit={this.onSubmit}
           validateOnChange={false}
-          render={(props) => (
+          render={({ values, errors, handleSubmit, isSubmitting, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
@@ -146,14 +147,14 @@ export default class CreateMonitor extends Component {
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
               <DefineMonitor
-                values={props.values}
-                errors={props.errors}
+                values={values}
+                errors={errors}
                 httpClient={httpClient}
                 detectorId={this.props.detectorId}
               />
               <Fragment>
                 <EuiSpacer />
-                <DefineSchedule isAd={props.values.searchType === SEARCH_TYPE.AD} />
+                <DefineSchedule isAd={values.searchType === SEARCH_TYPE.AD} />
               </Fragment>
               <EuiSpacer />
               <EuiSpacer />
@@ -162,13 +163,15 @@ export default class CreateMonitor extends Component {
                   <EuiButtonEmpty onClick={this.onCancel}>Cancel</EuiButtonEmpty>
                 </EuiFlexItem>
                 <EuiFlexItem grow={false}>
-                  <EuiButton fill onClick={props.handleSubmit} isLoading={props.isSubmitting}>
+                  <EuiButton fill onClick={handleSubmit} isLoading={isSubmitting}>
                     {edit ? 'Update' : 'Create'}
                   </EuiButton>
                 </EuiFlexItem>
               </EuiFlexGroup>
               <SubmitErrorHandler
-                formik={props}
+                errors={errors}
+                isSubmitting={isSubmitting}
+                isValid={isValid}
                 onSubmitError={() =>
                   toastNotifications.addDanger({
                     title: 'Failed to create the monitor.',
@@ -182,17 +185,4 @@ export default class CreateMonitor extends Component {
       </div>
     );
   }
-}
-
-// This function is use to show additional error messages when validation fails on submit
-// Reference: https://github.com/formium/formik/issues/1484
-function SubmitErrorHandler(props) {
-  const { submitCount, isSubmitting, isValid } = props.formik;
-  const effect = () => {
-    if (submitCount > 0 && !isSubmitting && !isValid) {
-      props.onSubmitError();
-    }
-  };
-  React.useEffect(effect, [submitCount, isSubmitting]);
-  return null;
 }
