@@ -19,16 +19,15 @@ import { useEffect } from 'react';
 // 2. auto scroll the page to the first field with error
 // Reference: https://github.com/formium/formik/issues/1484 and https://github.com/formium/formik/issues/146
 export const SubmitErrorHandler = (props) => {
-  const { errors, isSubmitting, isValid, onSubmitError } = props;
-  const errorKeys = Object.keys(errors);
+  const errorKeys = Object.keys(props.errors);
   const effect = () => {
-    if (errorKeys.length > 0 && !isSubmitting && !isValid) {
-      onSubmitError();
+    if (errorKeys.length > 0 && !props.isSubmitting && !props.isValid) {
+      props.onSubmitError();
       const selector = `[name="${errorKeys[0]}"]`;
       const errorElement = document.querySelector(selector);
       if (errorElement) errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
-  useEffect(effect, [isSubmitting]);
+  useEffect(effect, [props.isSubmitting]);
   return null;
 };
