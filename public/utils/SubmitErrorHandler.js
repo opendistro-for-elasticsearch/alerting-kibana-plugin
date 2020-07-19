@@ -23,12 +23,9 @@ export const SubmitErrorHandler = (props) => {
   const effect = () => {
     if (errorKeys.length > 0 && !props.isSubmitting && !props.isValid) {
       props.onSubmitError();
-      /* Use 2 selectors to locate the input field. Because some <input> elements only have 'name' attribute,
-      some <input> only have 'id', but are nested in a <div> with same value in 'name' attribute. */
-      const idSelector = `[id="${errorKeys[0]}"]`;
-      const nameSelector = `[name="${errorKeys[0]}"]`;
-      const errorElement =
-        document.querySelector(idSelector) ?? document.querySelector(nameSelector);
+      /* Use 2 selectors to locate the form elements. Because some elements only have 'name' attribute,
+      some only have 'id' attribute, but are nested in a <div> with same the value in 'name' attribute. */
+      const selector = `[id="${errorKeys[0]}"], [name="${errorKeys[0]}"]:not(div)`;
       if (errorElement) {
         errorElement.focus();
         errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
