@@ -22,6 +22,7 @@ import FormikFormRow from '../FormikFormRow';
 
 const FormikFieldNumber = ({
   name,
+  toolTipText,
   formRow = false,
   fieldProps = {},
   rowProps = {},
@@ -29,10 +30,11 @@ const FormikFieldNumber = ({
 }) => (
   <FormikInputWrapper
     name={name}
+    toolTipText={toolTipText}
     fieldProps={fieldProps}
     render={({ field, form }) =>
       formRow ? (
-        <FormikFormRow name={name} form={form} rowProps={rowProps}>
+        <FormikFormRow name={name} tooltipText={toolTipText} form={form} rowProps={rowProps}>
           <FieldNumber name={name} form={form} field={field} inputProps={inputProps} />
         </FormikFormRow>
       ) : (
@@ -46,13 +48,16 @@ const FieldNumber = ({ name, form, field, inputProps: { onChange, isInvalid, ...
   <EuiFieldNumber
     {...field}
     {...rest}
-    onChange={e => (typeof onChange === 'function' ? onChange(e, field, form) : field.onChange(e))}
+    onChange={(e) =>
+      typeof onChange === 'function' ? onChange(e, field, form) : field.onChange(e)
+    }
     isInvalid={typeof isInvalid === 'function' ? isInvalid(name, form) : isInvalid}
   />
 );
 
 FormikFieldNumber.propTypes = {
   name: PropTypes.string.isRequired,
+  tooltipText: PropTypes.string,
   formRow: PropTypes.bool,
   fieldProps: PropTypes.object,
   rowProps: PropTypes.object,

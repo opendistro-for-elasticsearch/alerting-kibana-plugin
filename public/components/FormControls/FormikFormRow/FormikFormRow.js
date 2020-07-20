@@ -15,11 +15,28 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EuiFormRow } from '@elastic/eui';
+import { EuiIcon, EuiFormRow, EuiToolTip } from '@elastic/eui';
 
-const FormikFormRow = ({ children, form, name, rowProps: { isInvalid, error, ...rest } }) => (
+const FormikFormRow = ({
+  children,
+  form,
+  name,
+  tooltipText,
+  rowProps: { isInvalid, error, label, ...rest },
+}) => (
   <EuiFormRow
     id={`${name}-form-row`}
+    label={
+      tooltipText ? (
+        <EuiToolTip content={tooltipText}>
+          <span>
+            {label} <EuiIcon type="questionInCircle" color="subdued" />
+          </span>
+        </EuiToolTip>
+      ) : (
+        label
+      )
+    }
     isInvalid={typeof isInvalid === 'function' ? isInvalid(name, form) : isInvalid}
     error={typeof error === 'function' ? error(name, form) : error}
     {...rest}
@@ -32,6 +49,7 @@ FormikFormRow.propTypes = {
   name: PropTypes.string.isRequired,
   rowProps: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired,
+  tooltipText: PropTypes.string,
   children: PropTypes.node.isRequired,
 };
 

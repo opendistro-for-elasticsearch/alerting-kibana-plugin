@@ -22,6 +22,7 @@ import FormikFormRow from '../FormikFormRow';
 
 const FormikFieldText = ({
   name,
+  tooltipText,
   formRow = false,
   fieldProps = {},
   rowProps = {},
@@ -29,10 +30,11 @@ const FormikFieldText = ({
 }) => (
   <FormikInputWrapper
     name={name}
+    tooltipText={tooltipText}
     fieldProps={fieldProps}
     render={({ field, form }) =>
       formRow ? (
-        <FormikFormRow name={name} form={form} rowProps={rowProps}>
+        <FormikFormRow name={name} tooltipText={tooltipText} form={form} rowProps={rowProps}>
           <FieldText name={name} form={form} field={field} inputProps={inputProps} />
         </FormikFormRow>
       ) : (
@@ -51,8 +53,10 @@ const FieldText = ({
   <EuiFieldText
     {...field}
     {...rest}
-    onChange={e => (typeof onChange === 'function' ? onChange(e, field, form) : field.onChange(e))}
-    onFocus={typeof onFocus === 'function' ? e => onFocus(e, field, form) : onFocus}
+    onChange={(e) =>
+      typeof onChange === 'function' ? onChange(e, field, form) : field.onChange(e)
+    }
+    onFocus={typeof onFocus === 'function' ? (e) => onFocus(e, field, form) : onFocus}
     isInvalid={typeof isInvalid === 'function' ? isInvalid(name, form) : isInvalid}
   />
 );
@@ -60,6 +64,7 @@ const FieldText = ({
 FormikFieldText.propTypes = {
   name: PropTypes.string.isRequired,
   formRow: PropTypes.bool,
+  tooltipText: PropTypes.string,
   fieldProps: PropTypes.object,
   rowProps: PropTypes.object,
   inputProps: PropTypes.object,

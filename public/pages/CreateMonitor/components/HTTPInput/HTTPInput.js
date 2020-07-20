@@ -42,6 +42,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
           inputProps={{
             append: 'sec',
             isInvalid,
+            min: 0,
           }}
         />
         <FormikFieldNumber
@@ -55,6 +56,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
           inputProps={{
             append: 'sec',
             isInvalid,
+            min: 0,
           }}
         />
       </EuiFlexItem>
