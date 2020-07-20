@@ -40,6 +40,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
             isInvalid,
           }}
           inputProps={{
+            append: 'sec',
             isInvalid,
           }}
         />
@@ -49,10 +50,10 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
           rowProps={{
             label: 'Socket Timeout',
             style: { paddingLeft: '10px' },
-            helpText: 'The time units are in seconds',
             isInvalid,
           }}
           inputProps={{
+            append: 'sec',
             isInvalid,
           }}
         />
