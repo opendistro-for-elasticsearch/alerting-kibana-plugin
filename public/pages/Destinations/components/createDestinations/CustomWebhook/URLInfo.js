@@ -77,24 +77,6 @@ const URLInfo = ({ type, values }) => {
           },
         }}
       />
-      <FormikFieldText
-        name={`${type}.url`}
-        formRow
-        fieldProps={{
-          validate: (fieldValue) => validateUrl(fieldValue, values),
-        }}
-        rowProps={{
-          // type is "http" when the component is used to define a monitor
-          label: type === 'http' ? 'URL' : 'Webhook URL',
-          style: { paddingLeft: '10px' },
-          isInvalid,
-          error: hasError,
-        }}
-        inputProps={{
-          disabled: !isUrlEnabled,
-          isInvalid,
-        }}
-      />
       <FormikFieldRadio
         name={`${type}.urlType`}
         formRow
@@ -114,12 +96,30 @@ const URLInfo = ({ type, values }) => {
           },
         }}
       />
+      <FormikFieldText
+        name={`${type}.url`}
+        formRow
+        fieldProps={{
+          validate: (fieldValue) => validateUrl(fieldValue, values),
+        }}
+        rowProps={{
+          // type is "http" when the component is used to define a monitor
+          label: type === 'http' ? 'URL' : 'Webhook URL',
+          style: { paddingLeft: '10px', display: isUrlEnabled ? 'block' : 'none' },
+          isInvalid,
+          error: hasError,
+        }}
+        inputProps={{
+          disabled: !isUrlEnabled,
+          isInvalid,
+        }}
+      />
       <FormikSelect
         name={`${type}.scheme`}
         formRow
         rowProps={{
           label: 'Type',
-          style: { paddingLeft: '10px' },
+          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
         }}
         inputProps={{
           disabled: isUrlEnabled,
@@ -134,7 +134,7 @@ const URLInfo = ({ type, values }) => {
         }}
         rowProps={{
           label: 'Host',
-          style: { paddingLeft: '10px' },
+          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
           isInvalid,
           error: hasError,
         }}
@@ -151,7 +151,7 @@ const URLInfo = ({ type, values }) => {
         formRow
         rowProps={{
           label: 'Port',
-          style: { paddingLeft: '10px' },
+          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
           isInvalid,
           error: hasError,
         }}
@@ -165,7 +165,7 @@ const URLInfo = ({ type, values }) => {
         formRow
         rowProps={{
           label: 'Path',
-          style: { paddingLeft: '10px' },
+          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
           isInvalid,
           error: hasError,
         }}

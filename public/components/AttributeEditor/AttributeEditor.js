@@ -52,10 +52,17 @@ const AttributeEditor = ({
   removeButtonText,
   isEnabled,
 }) => {
+  /* Comments for the CSS style:
+  titleText: 'marginTop: 25' - make the text has got same margin with other form elements
+  key/valueField: 'width: 182' - make the max width of the text field to be half of the default width*/
   return (
-    <EuiFlexGroup direction="column" alignItems="flexStart" style={{ paddingLeft: '10px' }}>
+    <EuiFlexGroup
+      direction="column"
+      alignItems="flexStart"
+      style={{ paddingLeft: '10px', visibility: isEnabled ? 'visible' : 'hidden' }}
+    >
       {!_.isEmpty(titleText) ? (
-        <EuiFlexItem>
+        <EuiFlexItem style={{ marginTop: 25, marginBottom: 0 }}>
           <EuiText size="xs">{titleText}</EuiText>
         </EuiFlexItem>
       ) : null}
