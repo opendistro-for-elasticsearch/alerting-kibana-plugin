@@ -16,7 +16,7 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { EuiFlexGroup, EuiFlexItem, EuiButton, EuiText } from '@elastic/eui';
+import { EuiIcon, EuiFlexGroup, EuiFlexItem, EuiButton, EuiText } from '@elastic/eui';
 
 const propTypes = {
   titleText: PropTypes.string,
@@ -63,21 +63,21 @@ const AttributeEditor = ({
         items.map((item, index) => (
           <EuiFlexItem style={{ marginBottom: 0 }} key={`${name}.${index}.key`}>
             <EuiFlexGroup alignItems="center">
-              <EuiFlexItem>
+              <EuiFlexItem style={{ width: 182 }}>
                 {onRenderKeyField(`${name}.${index}.key`, index, isEnabled)}
               </EuiFlexItem>
-              <EuiFlexItem>
+              <EuiFlexItem style={{ width: 182 }}>
                 {onRenderValueField(`${name}.${index}.value`, index, isEnabled)}
               </EuiFlexItem>
               <EuiFlexItem grow={false}>
-                <EuiButton
-                  style={{ marginTop: 10 }}
-                  size="s"
-                  onClick={e => onRemove(index)}
+                <EuiIcon
+                  type="minusInCircleFilled"
+                  size="l"
+                  onClick={(e) => onRemove(index)}
                   disabled={!isEnabled}
                 >
                   {removeButtonText}
-                </EuiButton>
+                </EuiIcon>
               </EuiFlexItem>
             </EuiFlexGroup>
           </EuiFlexItem>
