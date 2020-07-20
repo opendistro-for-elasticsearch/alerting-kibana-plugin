@@ -16,7 +16,7 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { EuiIcon, EuiFlexGroup, EuiFlexItem, EuiButton, EuiText } from '@elastic/eui';
+import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiIcon, EuiSpacer, EuiText } from '@elastic/eui';
 
 const propTypes = {
   titleText: PropTypes.string,
@@ -53,7 +53,6 @@ const AttributeEditor = ({
   isEnabled,
 }) => {
   /* Comments for the CSS style:
-  titleText: 'marginTop: 25' - make the text has got same margin with other form elements
   key/valueField: 'width: 182' - make the max width of the text field to be half of the default width*/
   return (
     <EuiFlexGroup
@@ -62,7 +61,8 @@ const AttributeEditor = ({
       style={{ paddingLeft: '10px', visibility: isEnabled ? 'visible' : 'hidden' }}
     >
       {!_.isEmpty(titleText) ? (
-        <EuiFlexItem style={{ marginTop: 25, marginBottom: 0 }}>
+        <EuiFlexItem style={{ marginBottom: 0 }}>
+          <EuiSpacer size="m" />
           <EuiText size="xs">{titleText}</EuiText>
         </EuiFlexItem>
       ) : null}

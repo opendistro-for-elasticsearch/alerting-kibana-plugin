@@ -23,6 +23,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
   <div>
     <EuiFlexGroup>
       <EuiFlexItem>
+        <EuiSpacer size="m" />
         <URLInfo
           isDarkMode={isDarkMode}
           response={response}
