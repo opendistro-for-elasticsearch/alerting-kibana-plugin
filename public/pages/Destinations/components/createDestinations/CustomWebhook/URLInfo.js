@@ -46,6 +46,9 @@ const URLInfo = ({ type, values }) => {
       <FormikFieldRadio
         name={`${type}.urlType`}
         formRow
+        rowProps={{
+          label: 'HTTP endpoint type',
+        }}
         inputProps={{
           id: 'fullUrl',
           value: URL_TYPE.FULL_URL,
@@ -83,6 +86,9 @@ const URLInfo = ({ type, values }) => {
         name={`${type}.urlType`}
         formRow
         value="customUrl"
+        rowProps={{
+          style: { marginTop: 5 },
+        }}
         inputProps={{
           id: 'customUrl',
           value: URL_TYPE.ATTRIBUTE_URL,
@@ -108,7 +114,7 @@ const URLInfo = ({ type, values }) => {
         rowProps={{
           // type is "http" when the component is used to define a monitor
           label: type === 'http' ? 'URL' : 'Webhook URL',
-          style: { paddingLeft: '10px', display: isUrlEnabled ? 'block' : 'none' },
+          style: { display: isUrlEnabled ? 'block' : 'none' },
           isInvalid,
           error: hasError,
         }}
@@ -122,7 +128,7 @@ const URLInfo = ({ type, values }) => {
         formRow
         rowProps={{
           label: 'Type',
-          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
+          style: { display: isUrlEnabled ? 'none' : 'block' },
         }}
         inputProps={{
           disabled: isUrlEnabled,
@@ -137,7 +143,7 @@ const URLInfo = ({ type, values }) => {
         }}
         rowProps={{
           label: 'Host',
-          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
+          style: { display: isUrlEnabled ? 'none' : 'block' },
           isInvalid,
           error: hasError,
         }}
@@ -155,7 +161,7 @@ const URLInfo = ({ type, values }) => {
         formRow
         rowProps={{
           label: 'Port',
-          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
+          style: { display: isUrlEnabled ? 'none' : 'block' },
           isInvalid,
           error: hasError,
         }}
@@ -169,7 +175,7 @@ const URLInfo = ({ type, values }) => {
         formRow
         rowProps={{
           label: 'Path',
-          style: { paddingLeft: '10px', display: isUrlEnabled ? 'none' : 'block' },
+          style: { display: isUrlEnabled ? 'none' : 'block' },
           isInvalid,
           error: hasError,
         }}

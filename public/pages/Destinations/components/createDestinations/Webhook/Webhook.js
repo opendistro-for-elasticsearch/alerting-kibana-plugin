@@ -19,7 +19,7 @@ import { FormikFieldText } from '../../../../../components/FormControls';
 import { hasError, isInvalid } from '../../../../../utils/validate';
 
 //TODO:: verify the Regex for all the cases based on what backend support
-const validateURL = value => {
+const validateURL = (value) => {
   if (!value) return 'Required';
   const isValidUrl = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(
     value
@@ -35,7 +35,6 @@ const Webhook = ({ type }) => {
       fieldProps={{ validate: validateURL }}
       rowProps={{
         label: 'Webhook URL:',
-        style: { paddingLeft: '10px' },
         isInvalid,
         error: hasError,
       }}

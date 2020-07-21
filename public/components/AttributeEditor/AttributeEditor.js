@@ -58,7 +58,7 @@ const AttributeEditor = ({
     <EuiFlexGroup
       direction="column"
       alignItems="flexStart"
-      style={{ paddingLeft: '10px', visibility: isEnabled ? 'visible' : 'hidden' }}
+      style={{ visibility: isEnabled ? 'visible' : 'hidden' }}
     >
       {!_.isEmpty(titleText) ? (
         <EuiFlexItem style={{ marginBottom: 0 }}>
