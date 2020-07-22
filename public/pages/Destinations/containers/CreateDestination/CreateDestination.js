@@ -26,7 +26,7 @@ import {
   EuiButtonEmpty,
 } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
-import { hasError, isInvalid } from '../../../../utils/validate';
+import { hasError, isInvalid, required } from '../../../../utils/validate';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
 import SubHeader from '../../../../components/SubHeader';
 import { formikInitialValues } from './utils/constants';
@@ -37,9 +37,9 @@ import { destinationToFormik } from './utils/destinationToFormik';
 import { Webhook, CustomWebhook } from '../../components/createDestinations';
 
 const destinationType = {
-  [DESTINATION_TYPE.SLACK]: props => <Webhook {...props} />,
-  [DESTINATION_TYPE.CHIME]: props => <Webhook {...props} />,
-  [DESTINATION_TYPE.CUSTOM_HOOK]: props => <CustomWebhook {...props} />,
+  [DESTINATION_TYPE.SLACK]: (props) => <Webhook {...props} />,
+  [DESTINATION_TYPE.CHIME]: (props) => <Webhook {...props} />,
+  [DESTINATION_TYPE.CUSTOM_HOOK]: (props) => <CustomWebhook {...props} />,
 };
 
 class CreateDestination extends React.Component {
@@ -68,7 +68,7 @@ class CreateDestination extends React.Component {
     };
   }
 
-  getDestination = async destinationId => {
+  getDestination = async (destinationId) => {
     const { httpClient, history } = this.props;
     try {
       const resp = await httpClient.get(`../api/alerting/destinations/${destinationId}`);
@@ -170,38 +170,45 @@ class CreateDestination extends React.Component {
               <EuiSpacer size="m" />
               <ContentPanel title="Destination" titleSize="s" bodyStyles={{ padding: 'initial' }}>
                 <div style={{ padding: '0px 10px' }}>
-                  <FormikFieldText
-                    name="name"
-                    formRow
-                    fieldProps={{
-                      validate: validateDestinationName(
-                        httpClient,
-                        _.get(location, 'state.destinationToEdit')
-                      ),
-                    }}
-                    rowProps={{
-                      label: 'Name',
-                      helpText: 'Specify a name of the destination.',
-                      style: { paddingLeft: '10px' },
-                      isInvalid,
-                      error: hasError,
-                    }}
-                    inputProps={{
-                      isInvalid,
-                    }}
-                  />
-                  <FormikSelect
-                    name="type"
-                    formRow
-                    rowProps={{
-                      label: 'Type',
-                      style: { paddingLeft: '10px' },
-                    }}
-                    inputProps={{
-                      disabled: edit,
-                      options: DESTINATION_OPTIONS,
-                    }}
-                  />
+                  <div style={{ padding: '0px 10px' }}>
+                    <FormikFieldText
+                      name="name"
+                      formRow
+                      fieldProps={{
+                        validate: validateDestinationName(
+                          httpClient,
+                          _.get(location, 'state.destinationToEdit')
+                        ),
+                      }}
+                      rowProps={{
+                        label: 'Name',
+                        helpText: 'Specify a name of the destination.',
+                        isInvalid,
+                        error: hasError,
+                      }}
+                      inputProps={{
+                        isInvalid,
+                        /* To reduce the frequency of search request,
+                      the comprehension 'validateDestinationName()' is only called onBlur,
+                      but we enable the basic 'required()' validation onChange for good user experience.*/
+                        onChange: (e, field, form) => {
+                          field.onChange(e);
+                          form.setFieldError('name', required(e.target.value));
+                        },
+                      }}
+                    />
+                    <FormikSelect
+                      name="type"
+                      formRow
+                      rowProps={{
+                        label: 'Type',
+                      }}
+                      inputProps={{
+                        disabled: edit,
+                        options: DESTINATION_OPTIONS,
+                      }}
+                    />
+                  </div>
                   <EuiSpacer size="m" />
                   <SubHeader title={<h4>Settings</h4>} description={''} />
                   <EuiSpacer size="m" />
