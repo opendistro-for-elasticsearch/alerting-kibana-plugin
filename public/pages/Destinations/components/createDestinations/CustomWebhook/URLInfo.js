@@ -15,7 +15,6 @@
 
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { EuiIconTip } from '@elastic/eui';
 import {
   FormikFieldText,
   FormikSelect,

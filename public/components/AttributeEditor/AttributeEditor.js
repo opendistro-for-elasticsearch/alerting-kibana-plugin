@@ -61,7 +61,7 @@ const AttributeEditor = ({
   isEnabled,
 }) => {
   /* Comments for the CSS style:
-  key/valueField: 'width: 182' - make the max width of the text field to be half of the default width*/
+  key/valueField: 'width: 188' - make the max width of the text field to be half of the default width*/
   return (
     <EuiFlexGroup
       direction="column"
@@ -78,10 +78,10 @@ const AttributeEditor = ({
         items.map((item, index) => (
           <EuiFlexItem style={{ marginBottom: 0 }} key={`${name}.${index}.key`}>
             <EuiFlexGroup alignItems="center">
-              <EuiFlexItem style={{ width: 182 }}>
+              <EuiFlexItem style={{ maxWidth: 188 }}>
                 {onRenderKeyField(`${name}.${index}.key`, index, isEnabled)}
               </EuiFlexItem>
-              <EuiFlexItem style={{ width: 182 }}>
+              <EuiFlexItem style={{ maxWidth: 188 }}>
                 {onRenderValueField(`${name}.${index}.value`, index, isEnabled)}
               </EuiFlexItem>
               <EuiFlexItem grow={false}>
