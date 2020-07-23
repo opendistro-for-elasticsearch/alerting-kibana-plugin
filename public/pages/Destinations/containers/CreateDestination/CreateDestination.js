@@ -170,45 +170,45 @@ class CreateDestination extends React.Component {
               <EuiSpacer size="m" />
               <ContentPanel title="Destination" titleSize="s" bodyStyles={{ padding: 'initial' }}>
                 <div style={{ padding: '0px 10px' }}>
-                  <div style={{ padding: '0px 10px' }}>
-                    <FormikFieldText
-                      name="name"
-                      formRow
-                      fieldProps={{
-                        validate: validateDestinationName(
-                          httpClient,
-                          _.get(location, 'state.destinationToEdit')
-                        ),
-                      }}
-                      rowProps={{
-                        label: 'Name',
-                        helpText: 'Specify a name of the destination.',
-                        isInvalid,
-                        error: hasError,
-                      }}
-                      inputProps={{
-                        isInvalid,
-                        /* To reduce the frequency of search request,
+                  <FormikFieldText
+                    name="name"
+                    formRow
+                    fieldProps={{
+                      validate: validateDestinationName(
+                        httpClient,
+                        _.get(location, 'state.destinationToEdit')
+                      ),
+                    }}
+                    rowProps={{
+                      label: 'Name',
+                      helpText: 'Specify a name of the destination.',
+                      style: { paddingLeft: '10px' },
+                      isInvalid,
+                      error: hasError,
+                    }}
+                    inputProps={{
+                      isInvalid,
+                      /* To reduce the frequency of search request,
                       the comprehension 'validateDestinationName()' is only called onBlur,
                       but we enable the basic 'required()' validation onChange for good user experience.*/
-                        onChange: (e, field, form) => {
-                          field.onChange(e);
-                          form.setFieldError('name', required(e.target.value));
-                        },
-                      }}
-                    />
-                    <FormikSelect
-                      name="type"
-                      formRow
-                      rowProps={{
-                        label: 'Type',
-                      }}
-                      inputProps={{
-                        disabled: edit,
-                        options: DESTINATION_OPTIONS,
-                      }}
-                    />
-                  </div>
+                      onChange: (e, field, form) => {
+                        field.onChange(e);
+                        form.setFieldError('name', required(e.target.value));
+                      },
+                    }}
+                  />
+                  <FormikSelect
+                    name="type"
+                    formRow
+                    rowProps={{
+                      label: 'Type',
+                      style: { paddingLeft: '10px' },
+                    }}
+                    inputProps={{
+                      disabled: edit,
+                      options: DESTINATION_OPTIONS,
+                    }}
+                  />
                   <EuiSpacer size="m" />
                   <SubHeader title={<h4>Settings</h4>} description={''} />
                   <EuiSpacer size="m" />
