@@ -21,7 +21,7 @@ import URLInfo from '../../../Destinations/components/createDestinations/CustomW
 
 const HTTPInput = ({ isDarkMode, response, values }) => (
   <div>
-    <EuiFlexGroup>
+    <EuiFlexGroup alignItems={'flexStart'}>
       <EuiFlexItem>
         <EuiSpacer size="m" />
         <URLInfo

@@ -58,17 +58,18 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   queryParams: PropTypes.array.isRequired,
   isEnabled: PropTypes.bool,
+  isResponsive: PropTypes.bool,
 };
 
-const QueryParamsEditor = ({ type, queryParams, isEnabled = true }) => (
+const QueryParamsEditor = ({ type, queryParams, isEnabled = true, isResponsive = false }) => (
   <FieldArray
     name={`${type}.queryParams`}
     validateOnChange={true}
-    render={arrayHelpers => (
+    render={(arrayHelpers) => (
       <AttributeEditor
         titleText="Query parameters"
         onAdd={() => arrayHelpers.push({ key: '', value: '' })}
-        onRemove={index => arrayHelpers.remove(index)}
+        onRemove={(index) => arrayHelpers.remove(index)}
         items={queryParams}
         name={`${type}.queryParams`}
         addButtonText="Add parameter"
@@ -76,6 +77,7 @@ const QueryParamsEditor = ({ type, queryParams, isEnabled = true }) => (
         onRenderKeyField={handleRenderKeyField}
         onRenderValueField={handleRenderValueField}
         isEnabled={isEnabled}
+        isResponsive={isResponsive}
       />
     )}
   />

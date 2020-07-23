@@ -187,6 +187,7 @@ const URLInfo = ({ type, values }) => {
         type={type}
         queryParams={values[type].queryParams}
         isEnabled={!isUrlEnabled}
+        isResponsive={type === 'http'}
       />
     </Fragment>
   );

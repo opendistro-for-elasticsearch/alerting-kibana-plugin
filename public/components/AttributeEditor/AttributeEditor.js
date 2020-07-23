@@ -38,6 +38,7 @@ const propTypes = {
   addButtonText: PropTypes.string,
   removeButtonText: PropTypes.string,
   isEnabled: PropTypes.bool,
+  isResponsive: PropTypes.bool,
 };
 const defaultProps = {
   titleText: '',
@@ -45,6 +46,7 @@ const defaultProps = {
   addButtonText: 'Add',
   removeButtonText: 'Remove',
   isEnabled: true,
+  isResponsive: false,
 };
 
 const AttributeEditor = ({
@@ -59,9 +61,11 @@ const AttributeEditor = ({
   addButtonText,
   removeButtonText,
   isEnabled,
+  isResponsive,
 }) => {
   /* Comments for the CSS style:
-  key/valueField: 'width: 188' - make the max width of the text field to be half of the default width*/
+  key/valueField: 'maxWidth: 188' - make the max width of the text field to be half of the default width
+  removeButton: 'marginTop: 30 or 10' - Adjust the button position to align with the text field, and the first button needs more remedy*/
   return (
     <EuiFlexGroup
       direction="column"
@@ -84,24 +88,22 @@ const AttributeEditor = ({
               <EuiFlexItem style={{ maxWidth: 188 }}>
                 {onRenderValueField(`${name}.${index}.value`, index, isEnabled)}
               </EuiFlexItem>
-              <EuiFlexItem grow={false}>
-                <EuiShowFor sizes={['xs', 's', 'm']}>
+              <EuiFlexItem grow={false} style={{ marginTop: index === 0 ? 30 : 10 }}>
+                <EuiShowFor sizes={['m']}>
                   <EuiIcon
                     type="minusInCircleFilled"
                     size="l"
+                    style={{ visibility: isResponsive ? 'inline' : 'hidden' }}
                     onClick={(e) => onRemove(index)}
                     disabled={!isEnabled}
                   >
                     {removeButtonText}
                   </EuiIcon>
                 </EuiShowFor>
-                <EuiShowFor sizes={['l', 'xl']}>
-                  <EuiButton
-                    style={{ marginTop: 10 }}
-                    size="s"
-                    onClick={(e) => onRemove(index)}
-                    disabled={!isEnabled}
-                  >
+                <EuiShowFor
+                  sizes={isResponsive ? ['xs', 's', 'l', 'xl'] : ['xs', 's', 'm', 'l', 'xl']}
+                >
+                  <EuiButton size="s" onClick={(e) => onRemove(index)} disabled={!isEnabled}>
                     {removeButtonText}
                   </EuiButton>
                 </EuiShowFor>
