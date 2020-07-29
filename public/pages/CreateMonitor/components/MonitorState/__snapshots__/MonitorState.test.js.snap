@@ -2,23 +2,6 @@
 
 exports[`MonitorState renders 1`] = `
 Array [
-  <h4
-    class="euiTitle euiTitle--xsmall"
-    style="padding-left:10px"
-  >
-    Monitor state
-  </h4>,
-  <hr
-    class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginXSmall"
-  />,
-  <div
-    class="euiText euiText--extraSmall"
-    style="padding-left:10px"
-  >
-    <span>
-      Disabled monitors do not run.
-    </span>
-  </div>,
   <div
     class="euiSpacer euiSpacer--s"
   />,
@@ -27,6 +10,16 @@ Array [
     id="disabled-form-row-row"
     style="padding-left:10px"
   >
+    <div
+      class="euiFormRow__labelWrapper"
+    >
+      <label
+        class="euiFormLabel euiFormRow__label"
+        for="disabled-form-row"
+      >
+        Monitor state
+      </label>
+    </div>
     <div
       class="euiFormRow__fieldWrapper"
     >
@@ -48,6 +41,12 @@ Array [
         >
           Disable monitor
         </label>
+      </div>
+      <div
+        class="euiFormHelpText euiFormRow__text"
+        id="disabled-form-row-help"
+      >
+        Disabled monitors do not run.
       </div>
     </div>
   </div>,
