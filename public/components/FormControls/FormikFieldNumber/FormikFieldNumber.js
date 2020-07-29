@@ -22,7 +22,6 @@ import FormikFormRow from '../FormikFormRow';
 
 const FormikFieldNumber = ({
   name,
-  toolTipText,
   formRow = false,
   fieldProps = {},
   rowProps = {},
@@ -30,11 +29,10 @@ const FormikFieldNumber = ({
 }) => (
   <FormikInputWrapper
     name={name}
-    toolTipText={toolTipText}
     fieldProps={fieldProps}
     render={({ field, form }) =>
       formRow ? (
-        <FormikFormRow name={name} tooltipText={toolTipText} form={form} rowProps={rowProps}>
+        <FormikFormRow name={name} form={form} rowProps={rowProps}>
           <FieldNumber name={name} form={form} field={field} inputProps={inputProps} />
         </FormikFormRow>
       ) : (

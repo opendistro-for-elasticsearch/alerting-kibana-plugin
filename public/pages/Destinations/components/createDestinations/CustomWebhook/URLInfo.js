@@ -27,7 +27,6 @@ import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants'
 import { formikInitialValues } from '../../../containers/CreateDestination/utils/constants';
 import { DESTINATION_TYPE } from '../../../utils/constants';
 import QueryParamsEditor from './QueryParamsEditor';
-import FormikFormRow from '../../../../../components/FormControls/FormikFormRow';
 
 const propTypes = {
   type: PropTypes.string.isRequired,
@@ -105,7 +104,6 @@ const URLInfo = ({ type, values }) => {
       />
       <FormikFieldText
         name={`${type}.url`}
-        tooltipText={'123'}
         formRow
         fieldProps={{
           validate: (fieldValue) => validateUrl(fieldValue, values),
@@ -156,7 +154,6 @@ const URLInfo = ({ type, values }) => {
       />
       <FormikFieldNumber
         name={`${type}.port`}
-        tooltipText={''}
         formRow
         rowProps={{
           label: 'Port',
