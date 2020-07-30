@@ -26,7 +26,11 @@ const CustomWebhook = ({ type, values }) => (
   <div>
     <URLInfo type={type} values={values} />
     <EuiSpacer size="m" />
-    <HeaderParamsEditor type={type} headerParams={values[type].headerParams} />
+    <HeaderParamsEditor
+      type={type}
+      headerParams={values[type].headerParams}
+      useGlyphAsRemoveButton={['xs']}
+    />
   </div>
 );
 

@@ -67,6 +67,8 @@ const AttributeEditor = ({
   /* Comments for the CSS style:
   key/valueField: 'maxWidth: 188' - make the max width of the text field to be half of the default width
   removeButton: 'marginTop: 30 or 10' - Adjust the button position to align with the text field, and the first button needs more remedy*/
+  /* useGlyphAsRemoveButton: 'sizes' property of 'EuiShowFor' component,
+  used to show Glyph instead of the Remove button in narrow window for simplicity.*/
   return (
     <EuiFlexGroup
       direction="column"
