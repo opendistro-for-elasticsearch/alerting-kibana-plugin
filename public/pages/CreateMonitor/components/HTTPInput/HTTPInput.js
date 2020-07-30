@@ -20,8 +20,9 @@ import { isInvalid } from '../../../../utils/validate';
 import URLInfo from '../../../Destinations/components/createDestinations/CustomWebhook/URLInfo';
 
 const HTTPInput = ({ isDarkMode, response, values }) => (
+  // alignItems='flexStart' is required for EuiFlexGroup to display correctly in narrow window
   <div>
-    <EuiFlexGroup alignItems={'flexStart'}>
+    <EuiFlexGroup alignItems="flexStart">
       <EuiFlexItem>
         <EuiSpacer size="m" />
         <URLInfo

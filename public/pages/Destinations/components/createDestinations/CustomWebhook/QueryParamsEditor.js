@@ -58,10 +58,10 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   queryParams: PropTypes.array.isRequired,
   isEnabled: PropTypes.bool,
-  isResponsive: PropTypes.bool,
+  useGlyphAsRemoveButton: PropTypes.array,
 };
 
-const QueryParamsEditor = ({ type, queryParams, isEnabled = true, isResponsive = false }) => (
+const QueryParamsEditor = ({ type, queryParams, isEnabled = true, useGlyphAsRemoveButton }) => (
   <FieldArray
     name={`${type}.queryParams`}
     validateOnChange={true}
@@ -77,7 +77,7 @@ const QueryParamsEditor = ({ type, queryParams, isEnabled = true, isResponsive =
         onRenderKeyField={handleRenderKeyField}
         onRenderValueField={handleRenderValueField}
         isEnabled={isEnabled}
-        isResponsive={isResponsive}
+        useGlyphAsRemoveButton={useGlyphAsRemoveButton}
       />
     )}
   />

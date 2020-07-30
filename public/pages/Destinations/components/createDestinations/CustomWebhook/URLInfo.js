@@ -27,6 +27,7 @@ import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants'
 import { formikInitialValues } from '../../../containers/CreateDestination/utils/constants';
 import { DESTINATION_TYPE } from '../../../utils/constants';
 import QueryParamsEditor from './QueryParamsEditor';
+import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 const propTypes = {
   type: PropTypes.string.isRequired,
@@ -184,7 +185,7 @@ const URLInfo = ({ type, values }) => {
         type={type}
         queryParams={values[type].queryParams}
         isEnabled={!isUrlEnabled}
-        isResponsive={type === 'http'}
+        useGlyphAsRemoveButton={type === SEARCH_TYPE.HTTP ? ['xs', 'm'] : ['xs']}
       />
     </Fragment>
   );

@@ -20,6 +20,7 @@ import {
   EuiButton,
   EuiFlexGroup,
   EuiFlexItem,
+  EuiHideFor,
   EuiIcon,
   EuiShowFor,
   EuiSpacer,
@@ -38,7 +39,7 @@ const propTypes = {
   addButtonText: PropTypes.string,
   removeButtonText: PropTypes.string,
   isEnabled: PropTypes.bool,
-  isResponsive: PropTypes.bool,
+  useGlyphAsRemoveButton: PropTypes.array,
 };
 const defaultProps = {
   titleText: '',
@@ -46,7 +47,7 @@ const defaultProps = {
   addButtonText: 'Add',
   removeButtonText: 'Remove',
   isEnabled: true,
-  isResponsive: false,
+  useGlyphAsRemoveButton: [],
 };
 
 const AttributeEditor = ({
@@ -61,7 +62,7 @@ const AttributeEditor = ({
   addButtonText,
   removeButtonText,
   isEnabled,
-  isResponsive,
+  useGlyphAsRemoveButton,
 }) => {
   /* Comments for the CSS style:
   key/valueField: 'maxWidth: 188' - make the max width of the text field to be half of the default width
@@ -81,7 +82,7 @@ const AttributeEditor = ({
       {!_.isEmpty(items) ? (
         items.map((item, index) => (
           <EuiFlexItem style={{ marginBottom: 0 }} key={`${name}.${index}.key`}>
-            <EuiFlexGroup alignItems="center">
+            <EuiFlexGroup alignItems="center" responsive={false}>
               <EuiFlexItem style={{ maxWidth: 188 }}>
                 {onRenderKeyField(`${name}.${index}.key`, index, isEnabled)}
               </EuiFlexItem>
@@ -89,24 +90,22 @@ const AttributeEditor = ({
                 {onRenderValueField(`${name}.${index}.value`, index, isEnabled)}
               </EuiFlexItem>
               <EuiFlexItem grow={false} style={{ marginTop: index === 0 ? 30 : 10 }}>
-                <EuiShowFor sizes={['m']}>
+                <EuiShowFor sizes={useGlyphAsRemoveButton}>
                   <EuiIcon
                     type="minusInCircleFilled"
                     size="l"
-                    style={{ visibility: isResponsive ? 'inline' : 'hidden' }}
+                    style={{ display: useGlyphAsRemoveButton.length === 0 ? 'none' : 'inline' }}
                     onClick={(e) => onRemove(index)}
                     disabled={!isEnabled}
                   >
                     {removeButtonText}
                   </EuiIcon>
                 </EuiShowFor>
-                <EuiShowFor
-                  sizes={isResponsive ? ['xs', 's', 'l', 'xl'] : ['xs', 's', 'm', 'l', 'xl']}
-                >
+                <EuiHideFor sizes={useGlyphAsRemoveButton}>
                   <EuiButton size="s" onClick={(e) => onRemove(index)} disabled={!isEnabled}>
                     {removeButtonText}
                   </EuiButton>
-                </EuiShowFor>
+                </EuiHideFor>
               </EuiFlexItem>
             </EuiFlexGroup>
           </EuiFlexItem>
