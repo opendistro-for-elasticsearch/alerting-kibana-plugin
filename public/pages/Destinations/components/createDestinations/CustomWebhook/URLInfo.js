@@ -15,6 +15,7 @@
 
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { EuiSpacer } from '@elastic/eui';
 import {
   FormikFieldText,
   FormikSelect,
@@ -121,72 +122,71 @@ const URLInfo = ({ type, values }) => {
           isInvalid,
         }}
       />
-      <FormikSelect
-        name={`${type}.scheme`}
-        formRow
-        rowProps={{
-          label: 'Type',
-          style: { display: isUrlEnabled ? 'none' : 'block' },
-        }}
-        inputProps={{
-          disabled: isUrlEnabled,
-          options: protocolOptions,
-        }}
-      />
-      <FormikFieldText
-        name={`${type}.host`}
-        formRow
-        fieldProps={{
-          validate: (fieldValue) => validateHost(fieldValue, values),
-        }}
-        rowProps={{
-          label: 'Host',
-          style: { display: isUrlEnabled ? 'none' : 'block' },
-          isInvalid,
-          error: hasError,
-        }}
-        inputProps={{
-          disabled: isUrlEnabled,
-          isInvalid,
-          onFocus: (e, field, form) => {
-            form.setFieldError(`${type}.host`, undefined);
-          },
-        }}
-      />
-      <FormikFieldNumber
-        name={`${type}.port`}
-        formRow
-        rowProps={{
-          label: 'Port',
-          style: { display: isUrlEnabled ? 'none' : 'block' },
-          isInvalid,
-          error: hasError,
-        }}
-        inputProps={{
-          disabled: isUrlEnabled,
-          isInvalid,
-        }}
-      />
-      <FormikFieldText
-        name={`${type}.path`}
-        formRow
-        rowProps={{
-          label: 'Path',
-          style: { display: isUrlEnabled ? 'none' : 'block' },
-          isInvalid,
-          error: hasError,
-        }}
-        inputProps={{
-          disabled: isUrlEnabled,
-          isInvalid,
-        }}
-      />
-      <QueryParamsEditor
-        type={type}
-        queryParams={values[type].queryParams}
-        isEnabled={!isUrlEnabled}
-        useGlyphAsRemoveButton={type === SEARCH_TYPE.HTTP ? ['xs', 'm'] : ['xs']}
-      />
+      <div style={{ display: isUrlEnabled ? 'none' : 'block' }}>
+        <FormikSelect
+          name={`${type}.scheme`}
+          formRow
+          rowProps={{
+            label: 'Type',
+          }}
+          inputProps={{
+            disabled: isUrlEnabled,
+            options: protocolOptions,
+          }}
+        />
+        <FormikFieldText
+          name={`${type}.host`}
+          formRow
+          fieldProps={{
+            validate: (fieldValue) => validateHost(fieldValue, values),
+          }}
+          rowProps={{
+            label: 'Host',
+            isInvalid,
+            error: hasError,
+          }}
+          inputProps={{
+            disabled: isUrlEnabled,
+            isInvalid,
+            onFocus: (e, field, form) => {
+              form.setFieldError(`${type}.host`, undefined);
+            },
+          }}
+        />
+        <FormikFieldNumber
+          name={`${type}.port`}
+          formRow
+          rowProps={{
+            label: 'Port',
+            isInvalid,
+            error: hasError,
+          }}
+          inputProps={{
+            disabled: isUrlEnabled,
+            isInvalid,
+          }}
+        />
+        <FormikFieldText
+          name={`${type}.path`}
+          formRow
+          rowProps={{
+            label: 'Path',
+            isInvalid,
+            error: hasError,
+          }}
+          inputProps={{
+            disabled: isUrlEnabled,
+            isInvalid,
+          }}
+        />
+        <EuiSpacer size="m" />
+        <QueryParamsEditor
+          type={type}
+          queryParams={values[type].queryParams}
+          isEnabled={!isUrlEnabled}
+          useGlyphAsRemoveButton={type === SEARCH_TYPE.HTTP ? ['xs', 'm'] : ['xs']}
+        />
+      </div>
     </Fragment>
   );
 };

@@ -70,11 +70,7 @@ const AttributeEditor = ({
   /* useGlyphAsRemoveButton: 'sizes' property of 'EuiShowFor' component,
   used to show Glyph instead of the Remove button in narrow window for simplicity.*/
   return (
-    <EuiFlexGroup
-      direction="column"
-      alignItems="flexStart"
-      style={{ visibility: isEnabled ? 'visible' : 'hidden' }}
-    >
+    <EuiFlexGroup direction="column" alignItems="flexStart">
       {!_.isEmpty(titleText) ? (
         <EuiFlexItem style={{ marginBottom: 0 }}>
           <EuiSpacer size="m" />

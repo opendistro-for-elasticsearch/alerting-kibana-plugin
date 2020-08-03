@@ -13,15 +13,16 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { EuiSpacer, EuiFlexItem, EuiFlexGroup, EuiCodeEditor, EuiFormRow } from '@elastic/eui';
 import { FormikFieldNumber } from '../../../../components/FormControls';
 import { isInvalid } from '../../../../utils/validate';
 import URLInfo from '../../../Destinations/components/createDestinations/CustomWebhook/URLInfo';
+import SubHeader from '../../../../components/SubHeader';
 
 const HTTPInput = ({ isDarkMode, response, values }) => (
   // alignItems='flexStart' is required for EuiFlexGroup to display correctly in narrow window
-  <div>
+  <Fragment>
     <EuiFlexGroup alignItems="flexStart">
       <EuiFlexItem>
         <EuiSpacer size="m" />
@@ -32,32 +33,35 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
           values={values}
         />
         <EuiSpacer size="m" />
-        <FormikFieldNumber
-          name="connectionTimeout"
-          formRow
-          rowProps={{
-            label: 'Connection Timeout',
-            isInvalid,
-          }}
-          inputProps={{
-            append: 'sec',
-            isInvalid,
-            min: 0,
-          }}
-        />
-        <FormikFieldNumber
-          name="socketTimeout"
-          formRow
-          rowProps={{
-            label: 'Socket Timeout',
-            isInvalid,
-          }}
-          inputProps={{
-            append: 'sec',
-            isInvalid,
-            min: 0,
-          }}
-        />
+        <Fragment>
+          <SubHeader title={<h6>Timeout settings</h6>} description={''} />
+          <FormikFieldNumber
+            name="connectionTimeout"
+            formRow
+            rowProps={{
+              label: 'Connection Timeout',
+              isInvalid,
+            }}
+            inputProps={{
+              append: 'sec',
+              isInvalid,
+              min: 0,
+            }}
+          />
+          <FormikFieldNumber
+            name="socketTimeout"
+            formRow
+            rowProps={{
+              label: 'Socket Timeout',
+              isInvalid,
+            }}
+            inputProps={{
+              append: 'sec',
+              isInvalid,
+              min: 0,
+            }}
+          />
+        </Fragment>
       </EuiFlexItem>
       <EuiFlexItem>
         <EuiFormRow label="HTTP response" fullWidth>
@@ -72,7 +76,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
         </EuiFormRow>
       </EuiFlexItem>
     </EuiFlexGroup>
-  </div>
+  </Fragment>
 );
 
 export default HTTPInput;

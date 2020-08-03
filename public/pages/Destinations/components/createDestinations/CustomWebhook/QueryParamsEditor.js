@@ -13,12 +13,13 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'formik';
 import AttributeEditor from '../../../../../components/AttributeEditor';
 import { FormikFieldText } from '../../../../../components/FormControls';
 import { isInvalid, required } from '../../../../../utils/validate';
+import SubHeader from '../../../../../components/SubHeader';
 
 const handleRenderKeyField = (fieldName, index, isEnabled) => (
   <FormikFieldText
@@ -62,25 +63,27 @@ const propTypes = {
 };
 
 const QueryParamsEditor = ({ type, queryParams, isEnabled = true, useGlyphAsRemoveButton }) => (
-  <FieldArray
-    name={`${type}.queryParams`}
-    validateOnChange={true}
-    render={(arrayHelpers) => (
-      <AttributeEditor
-        titleText="Query parameters"
-        onAdd={() => arrayHelpers.push({ key: '', value: '' })}
-        onRemove={(index) => arrayHelpers.remove(index)}
-        items={queryParams}
-        name={`${type}.queryParams`}
-        addButtonText="Add parameter"
-        removeButtonText="Remove parameter"
-        onRenderKeyField={handleRenderKeyField}
-        onRenderValueField={handleRenderValueField}
-        isEnabled={isEnabled}
-        useGlyphAsRemoveButton={useGlyphAsRemoveButton}
-      />
-    )}
-  />
+  <Fragment>
+    <SubHeader title={<h6>Query parameters</h6>} description={''} />
+    <FieldArray
+      name={`${type}.queryParams`}
+      validateOnChange={true}
+      render={(arrayHelpers) => (
+        <AttributeEditor
+          onAdd={() => arrayHelpers.push({ key: '', value: '' })}
+          onRemove={(index) => arrayHelpers.remove(index)}
+          items={queryParams}
+          name={`${type}.queryParams`}
+          addButtonText="Add parameter"
+          removeButtonText="Remove parameter"
+          onRenderKeyField={handleRenderKeyField}
+          onRenderValueField={handleRenderValueField}
+          isEnabled={isEnabled}
+          useGlyphAsRemoveButton={useGlyphAsRemoveButton}
+        />
+      )}
+    />
+  </Fragment>
 );
 
 QueryParamsEditor.propTypes = propTypes;
