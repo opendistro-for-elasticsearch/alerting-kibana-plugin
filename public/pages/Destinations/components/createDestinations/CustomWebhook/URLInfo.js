@@ -104,6 +104,7 @@ const URLInfo = ({ type, values }) => {
           },
         }}
       />
+      <EuiSpacer size="m" />
       <FormikFieldText
         name={`${type}.url`}
         formRow
