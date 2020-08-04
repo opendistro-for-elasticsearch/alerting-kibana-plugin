@@ -60,8 +60,14 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   headerParams: PropTypes.array.isRequired,
   useGlyphAsRemoveButton: PropTypes.array,
+  buttonInFirstRowIsEnabled: PropTypes.bool,
 };
-const HeaderParamsEditor = ({ type, headerParams, useGlyphAsRemoveButton }) => (
+const HeaderParamsEditor = ({
+  type,
+  headerParams,
+  useGlyphAsRemoveButton,
+  buttonInFirstRowIsEnabled,
+}) => (
   <Fragment>
     <SubHeader title={<h6>Header information</h6>} description={''} />
     <FieldArray
@@ -78,6 +84,7 @@ const HeaderParamsEditor = ({ type, headerParams, useGlyphAsRemoveButton }) => (
           onRenderKeyField={handleRenderKeyField}
           onRenderValueField={handleRenderValueField}
           useGlyphAsRemoveButton={useGlyphAsRemoveButton}
+          buttonInFirstRowIsEnabled={buttonInFirstRowIsEnabled}
         />
       )}
     />

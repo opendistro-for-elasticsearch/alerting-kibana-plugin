@@ -21,11 +21,14 @@ import { FormikFieldText } from '../../../../../components/FormControls';
 import { isInvalid, required } from '../../../../../utils/validate';
 import SubHeader from '../../../../../components/SubHeader';
 
-const handleRenderKeyField = (fieldName, index, isEnabled) => (
+const handleRenderKeyField = (fieldName, index, isEnabled, buttonInFirstRowIsEnabled) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      validate: isEnabled ? required : null,
+      /* The Remove button in the first row should be disabled (buttonInFirstRowIsEnabled is 'false')
+      when the parameters are optional and the key/value pairs can be empty for a better UX.
+      Under this circumstance, no validation is needed.*/
+      validate: isEnabled ? (buttonInFirstRowIsEnabled ? required : null) : null,
     }}
     rowProps={{
       label: index === 0 ? 'Key' : null,
@@ -38,11 +41,11 @@ const handleRenderKeyField = (fieldName, index, isEnabled) => (
   />
 );
 
-const handleRenderValueField = (fieldName, index, isEnabled) => (
+const handleRenderValueField = (fieldName, index, isEnabled, buttonInFirstRowIsEnabled) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      validate: isEnabled ? required : null,
+      validate: isEnabled ? (buttonInFirstRowIsEnabled ? required : null) : null,
     }}
     rowProps={{
       label: index === 0 ? 'Value' : null,
@@ -60,9 +63,16 @@ const propTypes = {
   queryParams: PropTypes.array.isRequired,
   isEnabled: PropTypes.bool,
   useGlyphAsRemoveButton: PropTypes.array,
+  buttonInFirstRowIsEnabled: PropTypes.bool,
 };
 
-const QueryParamsEditor = ({ type, queryParams, isEnabled = true, useGlyphAsRemoveButton }) => (
+const QueryParamsEditor = ({
+  type,
+  queryParams,
+  isEnabled,
+  useGlyphAsRemoveButton,
+  buttonInFirstRowIsEnabled,
+}) => (
   <Fragment>
     <SubHeader title={<h6>Query parameters</h6>} description={''} />
     <FieldArray
@@ -80,6 +90,7 @@ const QueryParamsEditor = ({ type, queryParams, isEnabled = true, useGlyphAsRemo
           onRenderValueField={handleRenderValueField}
           isEnabled={isEnabled}
           useGlyphAsRemoveButton={useGlyphAsRemoveButton}
+          buttonInFirstRowIsEnabled={buttonInFirstRowIsEnabled}
         />
       )}
     />

@@ -18,10 +18,10 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
   EuiButton,
+  EuiButtonIcon,
   EuiFlexGroup,
   EuiFlexItem,
   EuiHideFor,
-  EuiIcon,
   EuiShowFor,
   EuiSpacer,
   EuiText,
@@ -40,6 +40,7 @@ const propTypes = {
   removeButtonText: PropTypes.string,
   isEnabled: PropTypes.bool,
   useGlyphAsRemoveButton: PropTypes.array,
+  buttonInFirstRowIsEnabled: PropTypes.bool,
 };
 const defaultProps = {
   titleText: '',
@@ -48,6 +49,7 @@ const defaultProps = {
   removeButtonText: 'Remove',
   isEnabled: true,
   useGlyphAsRemoveButton: [],
+  buttonInFirstRowIsEnabled: true,
 };
 
 const AttributeEditor = ({
@@ -63,17 +65,18 @@ const AttributeEditor = ({
   removeButtonText,
   isEnabled,
   useGlyphAsRemoveButton,
+  buttonInFirstRowIsEnabled,
 }) => {
   /* Comments for the CSS style:
   key/valueField: 'maxWidth: 188' - make the max width of the text field to be half of the default width
   removeButton: 'marginTop: 30 or 10' - Adjust the button position to align with the text field, and the first button needs more remedy*/
   /* useGlyphAsRemoveButton: 'sizes' property of 'EuiShowFor' component,
   used to show Glyph instead of the Remove button in narrow window for simplicity.*/
+  // buttonInFirstRowIsEnabled: If the attribute is optional, the Remove button in the first row should be disabled for a better UX.
   return (
     <EuiFlexGroup direction="column" alignItems="flexStart">
       {!_.isEmpty(titleText) ? (
         <EuiFlexItem style={{ marginBottom: 0 }}>
-          <EuiSpacer size="m" />
           <EuiText size="xs">{titleText}</EuiText>
         </EuiFlexItem>
       ) : null}
@@ -89,18 +92,20 @@ const AttributeEditor = ({
               </EuiFlexItem>
               <EuiFlexItem grow={false} style={{ marginTop: index === 0 ? 30 : 10 }}>
                 <EuiShowFor sizes={useGlyphAsRemoveButton}>
-                  <EuiIcon
-                    type="minusInCircleFilled"
-                    size="l"
+                  <EuiButtonIcon
+                    iconType="minusInCircleFilled"
+                    iconSize="l"
                     style={{ display: useGlyphAsRemoveButton.length === 0 ? 'none' : 'inline' }}
                     onClick={(e) => onRemove(index)}
-                    disabled={!isEnabled}
-                  >
-                    {removeButtonText}
-                  </EuiIcon>
+                    disabled={!isEnabled || (!buttonInFirstRowIsEnabled ? index === 0 : false)}
+                  />
                 </EuiShowFor>
                 <EuiHideFor sizes={useGlyphAsRemoveButton}>
-                  <EuiButton size="s" onClick={(e) => onRemove(index)} disabled={!isEnabled}>
+                  <EuiButton
+                    size="s"
+                    onClick={(e) => onRemove(index)}
+                    disabled={!isEnabled || (!buttonInFirstRowIsEnabled ? index === 0 : false)}
+                  >
                     {removeButtonText}
                   </EuiButton>
                 </EuiHideFor>

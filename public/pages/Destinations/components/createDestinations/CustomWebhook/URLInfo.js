@@ -186,6 +186,7 @@ const URLInfo = ({ type, values }) => {
           queryParams={values[type].queryParams}
           isEnabled={!isUrlEnabled}
           useGlyphAsRemoveButton={type === SEARCH_TYPE.HTTP ? ['xs', 'm'] : ['xs']}
+          buttonInFirstRowIsEnabled={false}
         />
       </div>
     </Fragment>

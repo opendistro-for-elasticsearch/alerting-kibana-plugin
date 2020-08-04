@@ -30,6 +30,7 @@ const CustomWebhook = ({ type, values }) => (
       type={type}
       headerParams={values[type].headerParams}
       useGlyphAsRemoveButton={['xs']}
+      buttonInFirstRowIsEnabled={false}
     />
   </div>
 );
