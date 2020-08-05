@@ -50,7 +50,7 @@ export const formikToDestination = values => {
       destinationValues[type] = getCustomWebhookValues(values[type]);
       break;
     case DESTINATION_TYPE.SLACK:
-    case DESTINATION_TYPE.MAIL:
+    case DESTINATION_TYPE.EMAIL:
     case DESTINATION_TYPE.CHIME:
       destinationValues[type] = values[type];
       break;

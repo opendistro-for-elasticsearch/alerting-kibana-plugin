@@ -13,6 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-import Mail from './Mail';
+import Email from './Email';
 
-export default Mail;
+export default Email;

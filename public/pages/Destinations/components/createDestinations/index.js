@@ -15,6 +15,6 @@
 
 import Webhook from './Webhook/Webhook';
 import CustomWebhook from './CustomWebhook';
-import Mail from './Mail';
+import Email from './Email';
 
-export { Webhook, CustomWebhook, Mail };
+export { Webhook, CustomWebhook, Email };

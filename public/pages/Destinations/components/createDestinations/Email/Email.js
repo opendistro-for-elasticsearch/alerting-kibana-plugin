@@ -21,7 +21,7 @@ import { hasError, isInvalid } from '../../../../../utils/validate';
 const propTypes = {
   type: PropTypes.string.isRequired,
 };
-const Mail = ({ type, values }) => (
+const Email = ({ type, values }) => (
   <div>
     <Fragment>
       <FormikFieldText
@@ -43,6 +43,6 @@ const Mail = ({ type, values }) => (
   </div>
 );
 
-Mail.propTypes = propTypes;
+Email.propTypes = propTypes;
 
-export default Mail;
+export default Email;

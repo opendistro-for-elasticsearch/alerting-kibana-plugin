@@ -29,8 +29,8 @@ export const ActionsMap = {
     label: 'Custom webhook',
     component: props => <Message isSubjectDisabled {...props} />,
   },
-  mail: {
-    label: 'Mail notification',
+  email: {
+    label: 'Email notification',
     component: props => <Message {...props} />,
   },
 };

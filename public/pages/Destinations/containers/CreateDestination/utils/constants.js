@@ -50,7 +50,7 @@ export const formikInitialValues = {
       },
     ],
   },
-  [DESTINATION_TYPE.MAIL]: {
+  [DESTINATION_TYPE.EMAIL]: {
     recipients: '',
   },
 };
