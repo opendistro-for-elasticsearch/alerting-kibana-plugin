@@ -40,6 +40,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
             formRow
             rowProps={{
               label: 'Connection Timeout',
+              style: { paddingLeft: '10px' },
               isInvalid,
             }}
             inputProps={{
@@ -53,6 +54,7 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
             formRow
             rowProps={{
               label: 'Socket Timeout',
+              style: { paddingLeft: '10px' },
               isInvalid,
             }}
             inputProps={{

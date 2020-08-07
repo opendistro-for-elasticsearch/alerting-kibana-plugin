@@ -59,15 +59,9 @@ const handleRenderValueField = (fieldName, index) => (
 const propTypes = {
   type: PropTypes.string.isRequired,
   headerParams: PropTypes.array.isRequired,
-  useGlyphAsRemoveButton: PropTypes.array,
   buttonInFirstRowIsEnabled: PropTypes.bool,
 };
-const HeaderParamsEditor = ({
-  type,
-  headerParams,
-  useGlyphAsRemoveButton,
-  buttonInFirstRowIsEnabled,
-}) => (
+const HeaderParamsEditor = ({ type, headerParams, buttonInFirstRowIsEnabled }) => (
   <Fragment>
     <SubHeader title={<h6>Header information</h6>} description={''} />
     <FieldArray
@@ -80,10 +74,9 @@ const HeaderParamsEditor = ({
           items={headerParams}
           name={`${type}.headerParams`}
           addButtonText="Add header"
-          removeButtonText="Remove header"
+          removeButtonText="Remove"
           onRenderKeyField={handleRenderKeyField}
           onRenderValueField={handleRenderValueField}
-          useGlyphAsRemoveButton={useGlyphAsRemoveButton}
           buttonInFirstRowIsEnabled={buttonInFirstRowIsEnabled}
         />
       )}

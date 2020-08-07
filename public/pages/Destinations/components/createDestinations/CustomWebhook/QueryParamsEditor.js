@@ -62,19 +62,19 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   queryParams: PropTypes.array.isRequired,
   isEnabled: PropTypes.bool,
-  useGlyphAsRemoveButton: PropTypes.array,
   buttonInFirstRowIsEnabled: PropTypes.bool,
 };
 
-const QueryParamsEditor = ({
-  type,
-  queryParams,
-  isEnabled,
-  useGlyphAsRemoveButton,
-  buttonInFirstRowIsEnabled,
-}) => (
+const QueryParamsEditor = ({ type, queryParams, isEnabled, buttonInFirstRowIsEnabled }) => (
   <Fragment>
-    <SubHeader title={<h6>Query parameters</h6>} description={''} />
+    <SubHeader
+      title={
+        <h6>
+          Query parameters<span style={{ fontStyle: 'italic' }}> - optional</span>
+        </h6>
+      }
+      description={''}
+    />
     <FieldArray
       name={`${type}.queryParams`}
       validateOnChange={true}
@@ -85,11 +85,10 @@ const QueryParamsEditor = ({
           items={queryParams}
           name={`${type}.queryParams`}
           addButtonText="Add parameter"
-          removeButtonText="Remove parameter"
+          removeButtonText="Remove"
           onRenderKeyField={handleRenderKeyField}
           onRenderValueField={handleRenderValueField}
           isEnabled={isEnabled}
-          useGlyphAsRemoveButton={useGlyphAsRemoveButton}
           buttonInFirstRowIsEnabled={buttonInFirstRowIsEnabled}
         />
       )}

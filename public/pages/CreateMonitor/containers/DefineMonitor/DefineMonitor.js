@@ -345,13 +345,11 @@ class DefineMonitor extends Component {
       ],
       content: (
         <React.Fragment>
-          <div style={{ padding: '0px 10px' }}>
-            <HTTPInput
-              response={JSON.stringify(response || '', null, 4)}
-              isDarkMode={this.isDarkMode}
-              values={values}
-            />
-          </div>
+          <HTTPInput
+            response={JSON.stringify(response || '', null, 4)}
+            isDarkMode={this.isDarkMode}
+            values={values}
+          />
         </React.Fragment>
       ),
     };

@@ -48,6 +48,7 @@ const URLInfo = ({ type, values }) => {
         formRow
         rowProps={{
           label: 'HTTP endpoint type',
+          style: { paddingLeft: '10px' },
         }}
         inputProps={{
           id: 'fullUrl',
@@ -87,7 +88,8 @@ const URLInfo = ({ type, values }) => {
         formRow
         value="customUrl"
         rowProps={{
-          style: { marginTop: 5 },
+          // 'marginTop: 5' to make the 2 radio buttons closer as a group
+          style: { paddingLeft: '10px', marginTop: 5 },
         }}
         inputProps={{
           id: 'customUrl',
@@ -114,7 +116,7 @@ const URLInfo = ({ type, values }) => {
         rowProps={{
           // type is "http" when the component is used to define a monitor
           label: type === 'http' ? 'URL' : 'Webhook URL',
-          style: { display: isUrlEnabled ? 'block' : 'none' },
+          style: { paddingLeft: '10px', display: isUrlEnabled ? 'block' : 'none' },
           isInvalid,
           error: hasError,
         }}
@@ -129,6 +131,7 @@ const URLInfo = ({ type, values }) => {
           formRow
           rowProps={{
             label: 'Type',
+            style: { paddingLeft: '10px' },
           }}
           inputProps={{
             disabled: isUrlEnabled,
@@ -143,6 +146,7 @@ const URLInfo = ({ type, values }) => {
           }}
           rowProps={{
             label: 'Host',
+            style: { paddingLeft: '10px' },
             isInvalid,
             error: hasError,
           }}
@@ -159,6 +163,7 @@ const URLInfo = ({ type, values }) => {
           formRow
           rowProps={{
             label: 'Port',
+            style: { paddingLeft: '10px' },
             isInvalid,
             error: hasError,
           }}
@@ -172,6 +177,7 @@ const URLInfo = ({ type, values }) => {
           formRow
           rowProps={{
             label: 'Path',
+            style: { paddingLeft: '10px' },
             isInvalid,
             error: hasError,
           }}

@@ -16,16 +16,7 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import {
-  EuiButton,
-  EuiButtonIcon,
-  EuiFlexGroup,
-  EuiFlexItem,
-  EuiHideFor,
-  EuiShowFor,
-  EuiSpacer,
-  EuiText,
-} from '@elastic/eui';
+import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiText } from '@elastic/eui';
 
 const propTypes = {
   titleText: PropTypes.string,
@@ -39,7 +30,6 @@ const propTypes = {
   addButtonText: PropTypes.string,
   removeButtonText: PropTypes.string,
   isEnabled: PropTypes.bool,
-  useGlyphAsRemoveButton: PropTypes.array,
   buttonInFirstRowIsEnabled: PropTypes.bool,
 };
 const defaultProps = {
@@ -64,17 +54,14 @@ const AttributeEditor = ({
   addButtonText,
   removeButtonText,
   isEnabled,
-  useGlyphAsRemoveButton,
   buttonInFirstRowIsEnabled,
 }) => {
   /* Comments for the CSS style:
   key/valueField: 'maxWidth: 188' - make the max width of the text field to be half of the default width
   removeButton: 'marginTop: 30 or 10' - Adjust the button position to align with the text field, and the first button needs more remedy*/
-  /* useGlyphAsRemoveButton: 'sizes' property of 'EuiShowFor' component,
-  used to show Glyph instead of the Remove button in narrow window for simplicity.*/
   // buttonInFirstRowIsEnabled: If the attribute is optional, the Remove button in the first row should be disabled for a better UX.
   return (
-    <EuiFlexGroup direction="column" alignItems="flexStart">
+    <EuiFlexGroup direction="column" alignItems="flexStart" style={{ paddingLeft: '10px' }}>
       {!_.isEmpty(titleText) ? (
         <EuiFlexItem style={{ marginBottom: 0 }}>
           <EuiText size="xs">{titleText}</EuiText>
@@ -83,7 +70,7 @@ const AttributeEditor = ({
       {!_.isEmpty(items) ? (
         items.map((item, index) => (
           <EuiFlexItem style={{ marginBottom: 0 }} key={`${name}.${index}.key`}>
-            <EuiFlexGroup alignItems="center" responsive={false}>
+            <EuiFlexGroup alignItems="center">
               <EuiFlexItem style={{ maxWidth: 188 }}>
                 {onRenderKeyField(`${name}.${index}.key`, index, isEnabled)}
               </EuiFlexItem>
@@ -91,24 +78,13 @@ const AttributeEditor = ({
                 {onRenderValueField(`${name}.${index}.value`, index, isEnabled)}
               </EuiFlexItem>
               <EuiFlexItem grow={false} style={{ marginTop: index === 0 ? 30 : 10 }}>
-                <EuiShowFor sizes={useGlyphAsRemoveButton}>
-                  <EuiButtonIcon
-                    iconType="minusInCircleFilled"
-                    iconSize="l"
-                    style={{ display: useGlyphAsRemoveButton.length === 0 ? 'none' : 'inline' }}
-                    onClick={(e) => onRemove(index)}
-                    disabled={!isEnabled || (!buttonInFirstRowIsEnabled ? index === 0 : false)}
-                  />
-                </EuiShowFor>
-                <EuiHideFor sizes={useGlyphAsRemoveButton}>
-                  <EuiButton
-                    size="s"
-                    onClick={(e) => onRemove(index)}
-                    disabled={!isEnabled || (!buttonInFirstRowIsEnabled ? index === 0 : false)}
-                  >
-                    {removeButtonText}
-                  </EuiButton>
-                </EuiHideFor>
+                <EuiButton
+                  size="s"
+                  onClick={(e) => onRemove(index)}
+                  disabled={!isEnabled || (!buttonInFirstRowIsEnabled ? index === 0 : false)}
+                >
+                  {removeButtonText}
+                </EuiButton>
               </EuiFlexItem>
             </EuiFlexGroup>
           </EuiFlexItem>

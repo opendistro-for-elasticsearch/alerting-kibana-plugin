@@ -35,6 +35,7 @@ const Webhook = ({ type }) => {
       fieldProps={{ validate: validateURL }}
       rowProps={{
         label: 'Webhook URL:',
+        style: { paddingLeft: '10px' },
         isInvalid,
         error: hasError,
       }}
