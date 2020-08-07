@@ -18,11 +18,11 @@ import { Field } from 'formik';
 import _ from 'lodash';
 import {
   EuiButton,
-  EuiButtonEmpty,
   EuiCodeEditor,
   EuiFlexGroup,
   EuiFlexItem,
   EuiFormRow,
+  EuiLink,
   EuiSpacer,
 } from '@elastic/eui';
 import 'brace/mode/json';
@@ -84,14 +84,14 @@ const TriggerQuery = ({
                 label={
                   <div>
                     <span>Trigger condition</span>
-                    <EuiButtonEmpty
-                      size="s"
+                    <EuiLink
                       onClick={() => {
                         setFlyout({ type: 'triggerCondition', payload: context });
                       }}
+                      style={{ marginLeft: '10px' }}
                     >
                       Info
-                    </EuiButtonEmpty>
+                    </EuiLink>
                   </div>
                 }
                 fullWidth
@@ -116,7 +116,7 @@ const TriggerQuery = ({
           />
         </EuiFlexItem>
         <EuiFlexItem grow={false}>
-          <EuiFormRow label="Trigger condition response:" fullWidth>
+          <EuiFormRow label="Trigger condition response" fullWidth>
             <EuiCodeEditor
               mode="plain_text"
               theme={isDarkMode ? 'sense-dark' : 'github'}
