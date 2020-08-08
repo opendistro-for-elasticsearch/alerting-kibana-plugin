@@ -117,6 +117,7 @@ const URLInfo = ({ type, values }) => {
           // type is "http" when the component is used to define a monitor
           label: type === 'http' ? 'URL' : 'Webhook URL',
           style: { paddingLeft: '10px', display: isUrlEnabled ? 'block' : 'none' },
+          helpText: 'The absolute URL for the HTTP request.',
           isInvalid,
           error: hasError,
         }}
@@ -130,8 +131,10 @@ const URLInfo = ({ type, values }) => {
           name={`${type}.scheme`}
           formRow
           rowProps={{
-            label: 'Type',
+            label: 'Schema',
             style: { paddingLeft: '10px' },
+            helpText:
+              'The protocol that is used to access the server. Choose "HTTPS" when TLS-based encrypted communication is required by the server.',
           }}
           inputProps={{
             disabled: isUrlEnabled,
@@ -147,6 +150,7 @@ const URLInfo = ({ type, values }) => {
           rowProps={{
             label: 'Host',
             style: { paddingLeft: '10px' },
+            helpText: 'The hostname or domain name where the server will be accessible.',
             isInvalid,
             error: hasError,
           }}
@@ -164,6 +168,8 @@ const URLInfo = ({ type, values }) => {
           rowProps={{
             label: 'Port',
             style: { paddingLeft: '10px' },
+            helpText:
+              'The TCP port number on which the server is listening. If no port is given, the default port is implied: "80" for HTTP, and "443" for HTTPS.',
             isInvalid,
             error: hasError,
           }}
@@ -178,6 +184,8 @@ const URLInfo = ({ type, values }) => {
           rowProps={{
             label: 'Path',
             style: { paddingLeft: '10px' },
+            helpText:
+              'The exact location of the resource in the host that you want to access. It is separated by “/”.',
             isInvalid,
             error: hasError,
           }}
