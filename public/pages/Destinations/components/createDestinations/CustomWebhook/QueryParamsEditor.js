@@ -80,6 +80,7 @@ const QueryParamsEditor = ({ type, queryParams, isEnabled, buttonInFirstRowIsEna
       validateOnChange={true}
       render={(arrayHelpers) => (
         <AttributeEditor
+          titleText={'Define set of parameters attached to the end of the url.'}
           onAdd={() => arrayHelpers.push({ key: '', value: '' })}
           onRemove={(index) => arrayHelpers.remove(index)}
           items={queryParams}

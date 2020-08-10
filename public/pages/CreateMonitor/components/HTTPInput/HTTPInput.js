@@ -41,6 +41,8 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
             rowProps={{
               label: 'Connection Timeout',
               style: { paddingLeft: '10px' },
+              helpText:
+                'The maximum amount of time that the program can wait to setup a connection to the sever.',
               isInvalid,
             }}
             inputProps={{
@@ -55,6 +57,8 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
             rowProps={{
               label: 'Socket Timeout',
               style: { paddingLeft: '10px' },
+              helpText:
+                'The maximum amount of time that the program can wait to receive the full response from the server.',
               isInvalid,
             }}
             inputProps={{
