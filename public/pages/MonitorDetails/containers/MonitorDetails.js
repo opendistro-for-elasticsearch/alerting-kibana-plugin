@@ -27,6 +27,7 @@ import {
   EuiText,
   EuiTitle,
   EuiIcon,
+  EuiToolTip,
 } from '@elastic/eui';
 
 import CreateMonitor from '../../CreateMonitor';
@@ -35,6 +36,7 @@ import MonitorOverview from '../components/MonitorOverview';
 import MonitorHistory from './MonitorHistory';
 import Dashboard from '../../Dashboard/containers/Dashboard';
 import Triggers from './Triggers';
+import { NAME_REGEX } from './utils/helpers';
 import {
   MONITOR_ACTIONS,
   TRIGGER_ACTIONS,
@@ -42,6 +44,11 @@ import {
   MONITOR_INPUT_DETECTOR_ID,
 } from '../../../utils/constants';
 import { migrateTriggerMetadata } from './utils/helpers';
+import getScheduleFromMonitor from '../components/MonitorOverview/utils/getScheduleFromMonitor';
+import monitorToFormik from '../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
+import FORMIK_INITIAL_VALUES from '../../CreateMonitor/containers/CreateMonitor/utils/constants.js';
+import { formikToWhereClause } from '../../CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
+import { displayText } from '../../CreateMonitor/components/MonitorExpressions/expressions/utils/whereHelpers';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -55,6 +62,7 @@ export default class MonitorDetails extends Component {
       activeCount: 0,
       loading: true,
       updating: false,
+      creatingDetector: false,
       error: null,
       triggerToEdit: null,
     };
@@ -77,11 +85,11 @@ export default class MonitorDetails extends Component {
     this.props.setFlyout(null);
   }
 
-  getDetector = id => {
+  getDetector = (id) => {
     const { httpClient } = this.props;
     httpClient
       .get(`../api/alerting/detectors/${id}`)
-      .then(resp => {
+      .then((resp) => {
         const { ok, detector, version: detectorVersion, seqNo, primaryTerm } = resp.data;
         if (ok) {
           this.setState({
@@ -92,16 +100,16 @@ export default class MonitorDetails extends Component {
           console.log('can not get detector', id);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error while getting detector', err);
       });
   };
 
-  getMonitor = id => {
+  getMonitor = (id) => {
     const { httpClient } = this.props;
     httpClient
       .get(`../api/alerting/monitors/${id}`)
-      .then(resp => {
+      .then((resp) => {
         const {
           ok,
           resp: monitor,
@@ -131,12 +139,12 @@ export default class MonitorDetails extends Component {
           this.props.history.push('/monitors');
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
       });
   };
 
-  updateMonitor = update => {
+  updateMonitor = (update) => {
     const {
       match: {
         params: { monitorId },
@@ -150,12 +158,12 @@ export default class MonitorDetails extends Component {
         `../api/alerting/monitors/${monitorId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         { ...monitor, ...update }
       )
-      .then(resp => {
+      .then((resp) => {
         const { version: monitorVersion } = resp.data;
         this.setState({ monitorVersion, updating: false });
         return resp;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
         this.setState({ updating: false });
         return err;
@@ -174,12 +182,150 @@ export default class MonitorDetails extends Component {
     this.setState({ triggerToEdit: null });
   };
 
-  onEditTrigger = trigger => {
+  onEditTrigger = (trigger) => {
     this.setState({ triggerToEdit: trigger });
     this.props.history.push({
       ...this.props.location,
       search: `?action=${TRIGGER_ACTIONS.UPDATE_TRIGGER}`,
     });
+  };
+
+  convertToADConfigs = async (monitor) => {
+    const uiMetadata = _.get(monitor, 'ui_metadata');
+    let inputNeeded = [];
+    let autoChanges = [];
+
+    let adName = monitor.name;
+    if (!NAME_REGEX.test(monitor.name)) {
+      adName = '';
+      inputNeeded.push('name');
+    }
+    let adTimeField = uiMetadata.search.timeField;
+    if (adTimeField == undefined || null || '') {
+      adTimeField = '';
+      inputNeeded.push('timeField');
+    }
+    let adIndices = monitor.inputs[0].search.indices;
+    let adDetectorInterval = { period: { interval: 1, unit: 'MINUTES' } };
+    const {
+      frequency,
+      period: { interval, unit },
+      daily,
+      weekly,
+      monthly: { day },
+      cronExpression,
+      timezone,
+    } = _.get(uiMetadata, 'schedule', {});
+    const search = _.get(uiMetadata, 'search');
+    if (frequency !== 'interval') {
+      autoChanges.push(
+        'detector interval cannot use cron expression so a period interval was chosen instead'
+      );
+    } else {
+      adDetectorInterval = { period: { unit: unit, interval: interval } };
+    }
+    let windowDelay = await this.getLatestTimeStamp(adTimeField, adIndices);
+    let adWindowDelay = { period: { interval: 10, unit: 'MINUTES' } };
+    if (adWindowDelay) {
+      adWindowDelay = { period: { interval: windowDelay, unit: 'MINUTES' } };
+    }
+    let filterQuery = formikToWhereClause(search);
+    let adFilterQuery = '';
+    if (filterQuery) {
+      adFilterQuery = { bool: { filter: [filterQuery] } };
+    } else {
+      adFilterQuery = { match_all: { boost: 1.0 } };
+    }
+    const { aggregationType, fieldName } = search;
+    let adFeatures;
+    if (!aggregationType || !fieldName) {
+      adFeatures = {};
+    } else {
+      adFeatures = {
+        feature_name: 'feature-1',
+        feature_enabled: true,
+        aggregation_query: {
+          aggregation_name: { [aggregationType]: { field: fieldName } },
+        },
+      };
+    }
+    let adConfigs = {
+      name: adName,
+      description: '',
+      time_field: adTimeField,
+      indices: adIndices,
+      feature_attributes: [adFeatures],
+      filter_query: adFilterQuery,
+      detection_interval: adDetectorInterval,
+      window_delay: adWindowDelay,
+    };
+    let validationResponse = await this.validateADConfigs(adConfigs);
+    if (
+      Object.keys(validationResponse.failures).length === 0 &&
+      Object.keys(validationResponse.suggestedChanges).length === 0
+    ) {
+      adConfigs.filter_query =
+        displayText(_.get(search, 'where')) === 'all fields are included'
+          ? '-'
+          : displayText(_.get(search, 'where'));
+      this.props.setFlyout({ type: 'createDetector', payload: adConfigs });
+    }
+  };
+
+  validateADConfigs = async (configs) => {
+    const { httpClient } = this.props;
+    try {
+      const response = await httpClient.post('../api/alerting/detectors/_validate', {
+        configs,
+      });
+      console.log('response inside monitordetails: ' + JSON.stringify(response));
+
+      let resp = _.get(response, 'data.response');
+      return resp;
+    } catch (err) {
+      if (typeof err === 'string') throw err;
+      console.log(err);
+      throw 'There was a problem validating the configurations';
+    }
+  };
+
+  getLatestTimeStamp = async (adTimeField, adIndices) => {
+    const { httpClient } = this.props;
+    const searchQuery = {
+      size: 1,
+      sort: [
+        {
+          timestamp: {
+            order: 'desc',
+          },
+        },
+      ],
+      aggregations: {
+        max_timefield: {
+          max: {
+            field: adTimeField,
+          },
+        },
+      },
+    };
+    try {
+      const options = {
+        index: adIndices,
+        query: searchQuery,
+      };
+      const response = await httpClient.post('../api/alerting/_search', options);
+      let maxStamp = _.get(response, 'data.resp.aggregations.max_timefield.value');
+      let delayMS = Date.now() - maxStamp;
+      console.log('maxstamp: ' + maxStamp);
+      console.log('delay millisec: ' + delayMS);
+      let delayMinutes = Math.ceil(delayMS / 60000) + 1;
+      return delayMinutes;
+      console.log(JSON.stringify(response));
+    } catch (err) {
+      if (typeof err === 'string') throw err;
+      console.log(err);
+      throw 'There was a problem getting the last historical data point';
+    }
   };
 
   renderNoTriggersCallOut = () => {
@@ -269,7 +415,7 @@ export default class MonitorDetails extends Component {
         />
       );
     }
-
+    console.log(this.state.monitor);
     return (
       <div style={{ padding: '25px 50px' }}>
         {this.renderNoTriggersCallOut()}
@@ -299,7 +445,27 @@ export default class MonitorDetails extends Component {
               </EuiFlexItem>
             ) : null}
           </EuiFlexItem>
-
+          <EuiFlexItem grow={false}>
+            <EuiToolTip
+              position="top"
+              content={
+                monitor.ui_metadata.search.searchType === 'graph'
+                  ? ''
+                  : 'Anomaly detector can only be automatically created from monitor defintion type "visual editor"'
+              }
+            >
+              <EuiButton
+                isLoading={updating}
+                onClick={() => this.convertToADConfigs(this.state.monitor)}
+                disabled={
+                  monitor.ui_metadata.search.searchType !== 'graph' ||
+                  monitor.ui_metadata.search.fieldName === ''
+                }
+              >
+                Create Detector
+              </EuiButton>
+            </EuiToolTip>
+          </EuiFlexItem>
           <EuiFlexItem grow={false}>
             <EuiButton
               onClick={() => {

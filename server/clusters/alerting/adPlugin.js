@@ -34,6 +34,13 @@ export default function alertingADPlugin(Client, config, components) {
     method: 'GET',
   });
 
+  alertingAD.validateDetector = ca({
+    url: {
+      fmt: `${AD_BASE_API}/_validate`,
+    },
+    method: 'POST',
+  });
+
   alertingAD.searchDetectors = ca({
     url: {
       fmt: `${AD_BASE_API}/_search`,

@@ -13,7 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-export default function(server, services) {
+export default function (server, services) {
   const { anomalyDetectorService } = services;
 
   server.route({
@@ -26,6 +26,12 @@ export default function(server, services) {
     path: '/api/alerting/detectors/_search',
     method: 'POST',
     handler: anomalyDetectorService.getDetectors,
+  });
+
+  server.route({
+    path: '/api/alerting/detectors/_validate',
+    method: 'POST',
+    handler: anomalyDetectorService.validateDetector,
   });
 
   server.route({

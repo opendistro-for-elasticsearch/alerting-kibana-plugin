@@ -128,7 +128,7 @@ class DefineMonitor extends Component {
     try {
       const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
       if (pluginsResponse.data.ok) {
-        this.setState({ plugins: pluginsResponse.data.resp.map(plugin => plugin.component) });
+        this.setState({ plugins: pluginsResponse.data.resp.map((plugin) => plugin.component) });
       } else {
         console.error('There was a problem getting plugins list');
       }
@@ -166,8 +166,9 @@ class DefineMonitor extends Component {
 
   async onRunQuery() {
     const { httpClient, values } = this.props;
+    // console.log("http client: " + httpClient);
     const formikSnapshot = _.cloneDeep(values);
-
+    //console.log("formik snap: " + JSON.stringify(formikSnapshot));
     // If we are running a visual graph query, then we need to run two separate queries
     // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
     // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
@@ -175,10 +176,11 @@ class DefineMonitor extends Component {
     const searchRequests = [buildSearchRequest(values)];
     if (values.searchType === SEARCH_TYPE.GRAPH) {
       searchRequests.push(buildSearchRequest(values, false));
+      console.log('search requests: ' + JSON.stringify(searchRequests));
     }
 
     try {
-      const promises = searchRequests.map(searchRequest => {
+      const promises = searchRequests.map((searchRequest) => {
         // Fill in monitor name in case it's empty (in create workflow)
         // Set triggers to empty array so they are not executed (if in edit workflow)
         // Set input search to query/graph query and then use execute API to fill in period_start/period_end
@@ -190,10 +192,14 @@ class DefineMonitor extends Component {
       });
 
       const [queryResponse, optionalResponse] = await Promise.all(promises);
+      //console.log("promises: " + JSON.stringify(promises));
+
+      //console.log("query response: " + JSON.stringify(queryResponse));
 
       if (queryResponse.data.ok) {
         const response = _.get(queryResponse.data.resp, 'input_results.results[0]');
         // If there is an optionalResponse use it's results, otherwise use the original response
+        console.log(response);
         const performanceResponse = optionalResponse
           ? _.get(optionalResponse, 'data.resp.input_results.results[0]', null)
           : response;

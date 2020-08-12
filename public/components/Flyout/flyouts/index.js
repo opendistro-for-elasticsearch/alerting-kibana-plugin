@@ -16,11 +16,13 @@
 import message from './message';
 import messageFrequency from './messageFrequency';
 import triggerCondition from './triggerCondition';
+import createDetector from './createDetector';
 
 const Flyouts = {
   messageFrequency,
   message,
   triggerCondition,
+  createDetector,
 };
 
 export default Flyouts;

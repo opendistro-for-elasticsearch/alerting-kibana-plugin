@@ -42,6 +42,28 @@ export default class DestinationsService {
     }
   };
 
+  validateDetector = async (req, h) => {
+    console.log('payload: ' + JSON.stringify(req.payload));
+    console.log('payload: ' + req.payload);
+    const params = { body: JSON.stringify(req.payload.configs) };
+    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+    console.log('params: ' + JSON.stringify(params));
+    try {
+      const resp = await callWithRequest(req, 'alertingAD.validateDetector', params);
+      console.log('hello: ' + JSON.stringify(resp));
+      console.log('hello: ' + resp);
+
+      return {
+        ok: true,
+        response: resp,
+      };
+    } catch (err) {
+      console.error('Alerting - AnomalyDetectorService - getDetector:', err);
+      console.log('err inside service: ' + err);
+      return { ok: false, resp: err.message };
+    }
+  };
+
   getDetectors = async (req, h) => {
     const searchRequest = {
       query: { match_all: {} },
@@ -54,7 +76,7 @@ export default class DestinationsService {
       });
 
       const totalDetectors = resp.hits.total.value;
-      const detectors = resp.hits.hits.map(hit => {
+      const detectors = resp.hits.hits.map((hit) => {
         const {
           _source: detector,
           _id: id,
@@ -126,7 +148,7 @@ export default class DestinationsService {
         const anomaliesResponse = await callWithRequest(req, 'alertingAD.searchResults', {
           body: requestBody,
         });
-        const transformedKeys = get(anomaliesResponse, 'hits.hits', []).map(result =>
+        const transformedKeys = get(anomaliesResponse, 'hits.hits', []).map((result) =>
           mapKeysDeep(result._source, toCamel)
         );
         return {
