@@ -166,7 +166,7 @@ const URLInfo = ({ type, values }) => {
           name={`${type}.port`}
           formRow
           rowProps={{
-            label: 'Port',
+            label: 'Port - optional',
             style: { paddingLeft: '10px' },
             helpText:
               'The TCP port number on which the server is listening. If no port is given, the default port is implied: "80" for HTTP, and "443" for HTTPS.',
@@ -176,13 +176,15 @@ const URLInfo = ({ type, values }) => {
           inputProps={{
             disabled: isUrlEnabled,
             isInvalid,
+            min: 0,
+            max: 65535, // TCP port number range
           }}
         />
         <FormikFieldText
           name={`${type}.path`}
           formRow
           rowProps={{
-            label: 'Path',
+            label: 'Path - optional',
             style: { paddingLeft: '10px' },
             helpText:
               'The exact location of the resource in the host that you want to access. It is separated by “/”.',

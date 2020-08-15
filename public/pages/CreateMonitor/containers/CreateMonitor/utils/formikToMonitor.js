@@ -124,19 +124,18 @@ export function formikToFullUrl(values) {
 
 export function formikToCustomUrl(values) {
   const { connection_timeout, socket_timeout } = values;
-  // filter deduplicate pairs
   const updatedQueryParams = values.http.queryParams.reduce(
     (acc, { key, value }) => ({
       ...acc,
       [key]: value,
     }),
     {}
-  );
+  ); // deduplicate pairs
   delete updatedQueryParams['']; // filter empty key
   return {
     scheme: values.http.scheme,
     host: values.http.host,
-    port: values.http.port,
+    port: values.http.port ? values.http.port : -1,
     path: values.http.path,
     query_params: updatedQueryParams,
     connection_timeout,

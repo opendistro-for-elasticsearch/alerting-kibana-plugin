@@ -22,7 +22,8 @@ const getCustomWebhookValues = ({ queryParams, headerParams, urlType, ...rest })
       [key]: value,
     }),
     {}
-  );
+  ); // deduplicate pairs
+  delete updatedHeaders['']; // filter empty key
   const updatedQueryParams = queryParams.reduce(
     (acc, { key, value }) => ({
       ...acc,
@@ -30,6 +31,7 @@ const getCustomWebhookValues = ({ queryParams, headerParams, urlType, ...rest })
     }),
     {}
   );
+  delete updatedQueryParams[''];
 
   return {
     ...rest,
@@ -39,7 +41,7 @@ const getCustomWebhookValues = ({ queryParams, headerParams, urlType, ...rest })
   };
 };
 
-export const formikToDestination = values => {
+export const formikToDestination = (values) => {
   const type = values.type;
   const destinationValues = {
     name: values.name,
