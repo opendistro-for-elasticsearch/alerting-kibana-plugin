@@ -124,17 +124,15 @@ export function formikToFullUrl(values) {
 
 export function formikToCustomUrl(values) {
   const { connection_timeout, socket_timeout } = values;
-  // Filter all falsy keys ( "", 0, false, null, undefined ), and deduplicate pairs
+  // filter deduplicate pairs
   const updatedQueryParams = values.http.queryParams.reduce(
-    (acc, { key, value }) =>
-      key
-        ? {
-            ...acc,
-            [key]: value,
-          }
-        : acc,
+    (acc, { key, value }) => ({
+      ...acc,
+      [key]: value,
+    }),
     {}
   );
+  delete updatedQueryParams['']; // filter empty key
   return {
     scheme: values.http.scheme,
     host: values.http.host,

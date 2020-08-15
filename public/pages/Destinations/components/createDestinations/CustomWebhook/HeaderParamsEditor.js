@@ -21,11 +21,12 @@ import SubHeader from '../../../../../components/SubHeader';
 import { FormikFieldText } from '../../../../../components/FormControls';
 import { hasError, isInvalid, required } from '../../../../../utils/validate';
 
-const handleRenderKeyField = (fieldName, index) => (
+const handleRenderKeyField = (fieldName, index, isEnabled, isOptional) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      validate: required,
+      // no validation is needed when the field is optional
+      validate: isEnabled && !isOptional ? required : null,
     }}
     rowProps={{
       label: index === 0 ? 'Key' : null,
@@ -40,11 +41,11 @@ const handleRenderKeyField = (fieldName, index) => (
   />
 );
 
-const handleRenderValueField = (fieldName, index) => (
+const handleRenderValueField = (fieldName, index, isEnabled, isOptional) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      validate: required,
+      validate: isEnabled && !isOptional ? required : null,
     }}
     rowProps={{
       label: index === 0 ? 'Value' : null,
@@ -59,9 +60,9 @@ const handleRenderValueField = (fieldName, index) => (
 const propTypes = {
   type: PropTypes.string.isRequired,
   headerParams: PropTypes.array.isRequired,
-  buttonInFirstRowIsEnabled: PropTypes.bool,
+  isOptional: PropTypes.bool,
 };
-const HeaderParamsEditor = ({ type, headerParams, buttonInFirstRowIsEnabled }) => (
+const HeaderParamsEditor = ({ type, headerParams, isEnabled, isOptional = false }) => (
   <Fragment>
     <SubHeader title={<h6>Header information</h6>} description={''} />
     <FieldArray
@@ -77,7 +78,8 @@ const HeaderParamsEditor = ({ type, headerParams, buttonInFirstRowIsEnabled }) =
           removeButtonText="Remove"
           onRenderKeyField={handleRenderKeyField}
           onRenderValueField={handleRenderValueField}
-          buttonInFirstRowIsEnabled={buttonInFirstRowIsEnabled}
+          isEnabled={isEnabled}
+          isOptional={isOptional}
         />
       )}
     />

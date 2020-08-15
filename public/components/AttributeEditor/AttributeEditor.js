@@ -20,7 +20,6 @@ import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiText } from '@elastic/eui';
 
 const propTypes = {
   titleText: PropTypes.string,
-  emptyText: PropTypes.string,
   name: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
   onAdd: PropTypes.func.isRequired,
@@ -30,21 +29,17 @@ const propTypes = {
   addButtonText: PropTypes.string,
   removeButtonText: PropTypes.string,
   isEnabled: PropTypes.bool,
-  buttonInFirstRowIsEnabled: PropTypes.bool,
+  isOptional: PropTypes.bool.isRequired,
 };
 const defaultProps = {
   titleText: '',
-  emptyText: 'No attributes found.',
   addButtonText: 'Add',
   removeButtonText: 'Remove',
   isEnabled: true,
-  useGlyphAsRemoveButton: [],
-  buttonInFirstRowIsEnabled: true,
 };
 
 const AttributeEditor = ({
   titleText,
-  emptyText,
   name,
   items,
   onAdd,
@@ -54,12 +49,12 @@ const AttributeEditor = ({
   addButtonText,
   removeButtonText,
   isEnabled,
-  buttonInFirstRowIsEnabled,
+  isOptional,
 }) => {
   /* Comments for the CSS style:
   key/valueField: 'maxWidth: 188' - make the max width of the text field to be half of the default width
   removeButton: 'marginTop: 30 or 10' - Adjust the button position to align with the text field, and the first button needs more remedy*/
-  // buttonInFirstRowIsEnabled: If the attribute is optional, the Remove button in the first row should be disabled for a better UX.
+  // The Remove button in the first row should be disabled for a better UX.
   return (
     <EuiFlexGroup direction="column" alignItems="flexStart" style={{ paddingLeft: '10px' }}>
       {!_.isEmpty(titleText) ? (
@@ -67,33 +62,29 @@ const AttributeEditor = ({
           <EuiText size="xs">{titleText}</EuiText>
         </EuiFlexItem>
       ) : null}
-      {!_.isEmpty(items) ? (
-        items.map((item, index) => (
-          <EuiFlexItem style={{ marginBottom: 0 }} key={`${name}.${index}.key`}>
-            <EuiFlexGroup alignItems="center">
-              <EuiFlexItem style={{ maxWidth: 188 }}>
-                {onRenderKeyField(`${name}.${index}.key`, index, isEnabled)}
-              </EuiFlexItem>
-              <EuiFlexItem style={{ maxWidth: 188 }}>
-                {onRenderValueField(`${name}.${index}.value`, index, isEnabled)}
-              </EuiFlexItem>
-              <EuiFlexItem grow={false} style={{ marginTop: index === 0 ? 30 : 10 }}>
-                <EuiButton
-                  size="s"
-                  onClick={(e) => onRemove(index)}
-                  disabled={!isEnabled || (!buttonInFirstRowIsEnabled ? index === 0 : false)}
-                >
-                  {removeButtonText}
-                </EuiButton>
-              </EuiFlexItem>
-            </EuiFlexGroup>
-          </EuiFlexItem>
-        ))
-      ) : (
-        <EuiFlexItem style={{ marginBottom: 0 }}>
-          <EuiText size="xs"> {emptyText} </EuiText>
-        </EuiFlexItem>
-      )}
+      {!_.isEmpty(items)
+        ? items.map((item, index) => (
+            <EuiFlexItem style={{ marginBottom: 0 }} key={`${name}.${index}.key`}>
+              <EuiFlexGroup alignItems="center">
+                <EuiFlexItem style={{ maxWidth: 188 }}>
+                  {onRenderKeyField(`${name}.${index}.key`, index, isEnabled, isOptional)}
+                </EuiFlexItem>
+                <EuiFlexItem style={{ maxWidth: 188 }}>
+                  {onRenderValueField(`${name}.${index}.value`, index, isEnabled, isOptional)}
+                </EuiFlexItem>
+                <EuiFlexItem grow={false} style={{ marginTop: index === 0 ? 30 : 10 }}>
+                  <EuiButton
+                    size="s"
+                    onClick={(e) => onRemove(index)}
+                    disabled={!isEnabled || index === 0}
+                  >
+                    {removeButtonText}
+                  </EuiButton>
+                </EuiFlexItem>
+              </EuiFlexGroup>
+            </EuiFlexItem>
+          ))
+        : onAdd()}
       <EuiFlexItem>
         <EuiButton size="s" onClick={onAdd} disabled={!isEnabled}>
           {addButtonText}

@@ -21,14 +21,12 @@ import { FormikFieldText } from '../../../../../components/FormControls';
 import { isInvalid, required } from '../../../../../utils/validate';
 import SubHeader from '../../../../../components/SubHeader';
 
-const handleRenderKeyField = (fieldName, index, isEnabled, buttonInFirstRowIsEnabled) => (
+const handleRenderKeyField = (fieldName, index, isEnabled, isOptional) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      /* The Remove button in the first row should be disabled (buttonInFirstRowIsEnabled is 'false')
-      when the parameters are optional and the key/value pairs can be empty for a better UX.
-      Under this circumstance, no validation is needed.*/
-      validate: isEnabled ? (buttonInFirstRowIsEnabled ? required : null) : null,
+      // no validation is needed when the field is optional
+      validate: isEnabled && !isOptional ? required : null,
     }}
     rowProps={{
       label: index === 0 ? 'Key' : null,
@@ -41,11 +39,11 @@ const handleRenderKeyField = (fieldName, index, isEnabled, buttonInFirstRowIsEna
   />
 );
 
-const handleRenderValueField = (fieldName, index, isEnabled, buttonInFirstRowIsEnabled) => (
+const handleRenderValueField = (fieldName, index, isEnabled, isOptional) => (
   <FormikFieldText
     formRow={index === 0}
     fieldProps={{
-      validate: isEnabled ? (buttonInFirstRowIsEnabled ? required : null) : null,
+      validate: isEnabled && !isOptional ? required : null,
     }}
     rowProps={{
       label: index === 0 ? 'Value' : null,
@@ -62,10 +60,10 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   queryParams: PropTypes.array.isRequired,
   isEnabled: PropTypes.bool,
-  buttonInFirstRowIsEnabled: PropTypes.bool,
+  isOptional: PropTypes.bool,
 };
 
-const QueryParamsEditor = ({ type, queryParams, isEnabled, buttonInFirstRowIsEnabled }) => (
+const QueryParamsEditor = ({ type, queryParams, isEnabled = true, isOptional = true }) => (
   <Fragment>
     <SubHeader
       title={
@@ -90,7 +88,7 @@ const QueryParamsEditor = ({ type, queryParams, isEnabled, buttonInFirstRowIsEna
           onRenderKeyField={handleRenderKeyField}
           onRenderValueField={handleRenderValueField}
           isEnabled={isEnabled}
-          buttonInFirstRowIsEnabled={buttonInFirstRowIsEnabled}
+          isOptional={isOptional}
         />
       )}
     />
