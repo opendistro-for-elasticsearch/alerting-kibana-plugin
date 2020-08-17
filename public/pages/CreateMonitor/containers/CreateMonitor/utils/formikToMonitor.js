@@ -114,16 +114,14 @@ export function formikToHttp(values) {
 }
 
 export function formikToFullUrl(values) {
-  const { connection_timeout, socket_timeout } = values;
   return {
     url: values.http.url,
-    connection_timeout,
-    socket_timeout,
+    connection_timeout: values.http.connection_timeout,
+    socket_timeout: values.http.socket_timeout,
   };
 }
 
 export function formikToCustomUrl(values) {
-  const { connection_timeout, socket_timeout } = values;
   const updatedQueryParams = values.http.queryParams.reduce(
     (acc, { key, value }) => ({
       ...acc,
@@ -138,8 +136,8 @@ export function formikToCustomUrl(values) {
     port: values.http.port ? values.http.port : -1,
     path: values.http.path,
     query_params: updatedQueryParams,
-    connection_timeout,
-    socket_timeout,
+    connection_timeout: values.http.connection_timeout,
+    socket_timeout: values.http.socket_timeout,
   };
 }
 

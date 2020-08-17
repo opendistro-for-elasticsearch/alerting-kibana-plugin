@@ -36,35 +36,37 @@ const HTTPInput = ({ isDarkMode, response, values }) => (
         <Fragment>
           <SubHeader title={<h6>Timeout settings</h6>} description={''} />
           <FormikFieldNumber
-            name="connectionTimeout"
+            name={`${values.searchType}.connection_timeout`}
             formRow
             rowProps={{
               label: 'Connection Timeout',
               style: { paddingLeft: '10px' },
               helpText:
-                'The maximum amount of time that the program can wait to setup a connection to the sever.',
+                'The maximum amount of time that the program can wait to setup a connection to the sever. Up to 5 seconds.',
               isInvalid,
             }}
             inputProps={{
               append: 'sec',
               isInvalid,
-              min: 0,
+              min: 1,
+              max: 5,
             }}
           />
           <FormikFieldNumber
-            name="socketTimeout"
+            name={`${values.searchType}.socket_timeout`}
             formRow
             rowProps={{
               label: 'Socket Timeout',
               style: { paddingLeft: '10px' },
               helpText:
-                'The maximum amount of time that the program can wait to receive the full response from the server.',
+                'The maximum amount of time that the program can wait to receive the full response from the server. Up to 60 seconds.',
               isInvalid,
             }}
             inputProps={{
               append: 'sec',
               isInvalid,
-              min: 0,
+              min: 1,
+              max: 60,
             }}
           />
         </Fragment>

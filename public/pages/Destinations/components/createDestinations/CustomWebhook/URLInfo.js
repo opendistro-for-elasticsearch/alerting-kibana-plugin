@@ -115,7 +115,7 @@ const URLInfo = ({ type, values }) => {
         }}
         rowProps={{
           // type is "http" when the component is used to define a monitor
-          label: type === 'http' ? 'URL' : 'Webhook URL',
+          label: type === SEARCH_TYPE.HTTP ? 'URL' : 'Webhook URL',
           style: { paddingLeft: '10px', display: isUrlEnabled ? 'block' : 'none' },
           helpText: 'The absolute URL for the HTTP request.',
           isInvalid,
@@ -124,6 +124,7 @@ const URLInfo = ({ type, values }) => {
         inputProps={{
           disabled: !isUrlEnabled,
           isInvalid,
+          placeholder: 'e.g. http://www.example.com:80/my/path?key=value',
         }}
       />
       <div style={{ display: isUrlEnabled ? 'none' : 'block' }}>
@@ -160,16 +161,17 @@ const URLInfo = ({ type, values }) => {
             onFocus: (e, field, form) => {
               form.setFieldError(`${type}.host`, undefined);
             },
+            placeholder: 'e.g. "localhost", "127.0.0.1", "example.com"',
           }}
         />
         <FormikFieldNumber
           name={`${type}.port`}
           formRow
           rowProps={{
-            label: 'Port - optional',
+            label: 'Port (optional)',
             style: { paddingLeft: '10px' },
             helpText:
-              'The TCP port number on which the server is listening. If no port is given, the default port is implied: "80" for HTTP, and "443" for HTTPS.',
+              'The TCP port number on which the server is listening. If no port is given, the default port is implied: 80 for HTTP, and 443 for HTTPS.',
             isInvalid,
             error: hasError,
           }}
@@ -178,22 +180,23 @@ const URLInfo = ({ type, values }) => {
             isInvalid,
             min: 0,
             max: 65535, // TCP port number range
+            placeholder: 'A number between 0 and 65535',
           }}
         />
         <FormikFieldText
           name={`${type}.path`}
           formRow
           rowProps={{
-            label: 'Path - optional',
+            label: 'Path (optional)',
             style: { paddingLeft: '10px' },
-            helpText:
-              'The exact location of the resource in the host that you want to access. It is separated by “/”.',
+            helpText: 'The exact location of the resource in the host that you want to access.',
             isInvalid,
             error: hasError,
           }}
           inputProps={{
             disabled: isUrlEnabled,
             isInvalid,
+            placeholder: 'Separated by “/”, like "_cluster/health"',
           }}
         />
         <EuiSpacer size="m" />
