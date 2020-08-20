@@ -48,6 +48,7 @@ export default class DestinationsService {
     const params = { body: JSON.stringify(req.payload.configs) };
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
     console.log('params: ' + JSON.stringify(params));
+
     try {
       const resp = await callWithRequest(req, 'alertingAD.validateDetector', params);
       console.log('hello: ' + JSON.stringify(resp));
@@ -58,8 +59,31 @@ export default class DestinationsService {
         response: resp,
       };
     } catch (err) {
-      console.error('Alerting - AnomalyDetectorService - getDetector:', err);
+      console.error('Alerting - AnomalyDetectorService - validateDetector:', err);
       console.log('err inside service: ' + err);
+      return { ok: false, resp: err.message };
+    }
+  };
+
+  createDetector = async (req, h) => {
+    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+    const requestBody = { body: JSON.stringify(req.payload.configs) };
+    console.log(' request body: ' + JSON.stringify(requestBody));
+    let params = {
+      detectorId: undefined,
+      ifSeqNo: undefined,
+      ifPrimaryTerm: undefined,
+      body: requestBody,
+    };
+    try {
+      const resp = await callWithRequest(req, 'alertingAD.createDetector', requestBody);
+      console.log('create detector response: ' + JSON.stringify(resp));
+      return {
+        ok: true,
+        response: resp,
+      };
+    } catch (err) {
+      console.error('Alerting - AnomalyDetectorService - createDetector:', err);
       return { ok: false, resp: err.message };
     }
   };
@@ -90,6 +114,25 @@ export default class DestinationsService {
     } catch (err) {
       console.error('Alerting - AnomalyDetectorService - searchDetectors:', err);
       return { ok: false, resp: err.message };
+    }
+  };
+
+  startDetector = async (req, h) => {
+    console.log('INSIDE START DETECTOR \n \n \n');
+    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+    const { detectorId } = req.params;
+    console.log('detectorid inside start server: ' + detectorId);
+    try {
+      const response = await callWithRequest(req, 'alertingAD.startDetector', { detectorId });
+      console.log('start detector response: ' + JSON.stringify(response));
+
+      return {
+        ok: true,
+        response: response,
+      };
+    } catch (err) {
+      console.log('Alerting - AnomalyDetectorService - startDetector', err);
+      return { ok: false, response: err.message };
     }
   };
 

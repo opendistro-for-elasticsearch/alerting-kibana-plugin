@@ -45,7 +45,11 @@ const Flyout = ({ flyout, onClose }) => {
   } = flyoutData;
 
   const flyoutHeader = header && <EuiFlyoutHeader {...headerProps}>{header}</EuiFlyoutHeader>;
-  const flyoutBody = body && <EuiFlyoutBody {...bodyProps}>{body}</EuiFlyoutBody>;
+  const flyoutBody = body && (
+    <EuiFlyoutBody onClose={onClose} {...bodyProps}>
+      {body}
+    </EuiFlyoutBody>
+  );
   const flyoutFooter = footer && <EuiFlyoutFooter {...footerProps}>{footer}</EuiFlyoutFooter>;
 
   return (

@@ -23,6 +23,18 @@ export default function (server, services) {
   });
 
   server.route({
+    path: '/api/alerting/detectors',
+    method: 'POST',
+    handler: anomalyDetectorService.createDetector,
+  });
+
+  server.route({
+    path: '/api/alerting/detectors/{detectorId}/_start',
+    method: 'POST',
+    handler: anomalyDetectorService.startDetector,
+  });
+
+  server.route({
     path: '/api/alerting/detectors/_search',
     method: 'POST',
     handler: anomalyDetectorService.getDetectors,

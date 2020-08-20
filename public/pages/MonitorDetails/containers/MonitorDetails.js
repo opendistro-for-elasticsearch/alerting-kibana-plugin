@@ -49,6 +49,7 @@ import monitorToFormik from '../../CreateMonitor/containers/CreateMonitor/utils/
 import FORMIK_INITIAL_VALUES from '../../CreateMonitor/containers/CreateMonitor/utils/constants.js';
 import { formikToWhereClause } from '../../CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
 import { displayText } from '../../CreateMonitor/components/MonitorExpressions/expressions/utils/whereHelpers';
+import Flyout from '../../../components/Flyout';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -65,6 +66,8 @@ export default class MonitorDetails extends Component {
       creatingDetector: false,
       error: null,
       triggerToEdit: null,
+      detectorCreated: false,
+      detectorID: '',
     };
   }
 
@@ -192,10 +195,10 @@ export default class MonitorDetails extends Component {
 
   convertToADConfigs = async (monitor) => {
     const uiMetadata = _.get(monitor, 'ui_metadata');
-    let inputNeeded = [];
+    let nameInvalid = false;
     let autoChanges = [];
 
-    let adName = monitor.name;
+    let adName = monitor.name + '-Detector';
     if (!NAME_REGEX.test(monitor.name)) {
       adName = '';
       inputNeeded.push('name');
@@ -260,15 +263,142 @@ export default class MonitorDetails extends Component {
       window_delay: adWindowDelay,
     };
     let validationResponse = await this.validateADConfigs(adConfigs);
+    let queriesForOverview = {
+      filter_query:
+        displayText(_.get(search, 'where')) === 'all fields are included'
+          ? '-'
+          : displayText(_.get(search, 'where')),
+      feature_attributes: {
+        feature_name: 'feature-1',
+        aggregationType: aggregationType,
+        fieldName: fieldName,
+      },
+    };
+    this.renderFlyout(adConfigs, validationResponse, queriesForOverview);
+  };
+
+  onClose = () => {
+    this.setFlyout(null);
+  };
+
+  renderFlyout = (adConfigs, validationResponse, queriesForOverview) => {
+    console.log('render flyout');
+    const { httpClient } = this.props;
+    const setFlyout = this.props.setFlyout;
+    const renderDetectorCallOut = this.renderDetectorCallOut;
+    const renderFlyout = this.renderFlyout;
     if (
       Object.keys(validationResponse.failures).length === 0 &&
       Object.keys(validationResponse.suggestedChanges).length === 0
     ) {
-      adConfigs.filter_query =
-        displayText(_.get(search, 'where')) === 'all fields are included'
-          ? '-'
-          : displayText(_.get(search, 'where'));
-      this.props.setFlyout({ type: 'createDetector', payload: adConfigs });
+      this.props.setFlyout({
+        type: 'createDetector',
+        payload: { adConfigs, queriesForOverview, httpClient, setFlyout, renderDetectorCallOut },
+      });
+    } else if (
+      Object.keys(validationResponse.failures).length === 0 &&
+      Object.keys(validationResponse.suggestedChanges).length !== 0
+    ) {
+      Object.entries(validationResponse.suggestedChanges).forEach(([key, value]) => {
+        if (key === 'detection_interval') {
+          if (!isNaN(value[0].charAt(0))) {
+            let suggestedChanges = {
+              detectionIntervalReccomendation: value,
+            };
+            console.log('inside interval sugg');
+            this.props.setFlyout({
+              type: 'createDetector',
+              payload: {
+                adConfigs,
+                queriesForOverview,
+                httpClient,
+                setFlyout,
+                suggestedChanges,
+                renderDetectorCallOut,
+                renderFlyout,
+              },
+            });
+          } else {
+            let suggesteChanges = {
+              detectionIntervalMax: 1,
+            };
+          }
+          this.props.setFlyout({});
+        }
+      });
+    } else {
+      Object.entries(validationResponse.failures).forEach(([key, value]) => {
+        if (key === 'duplicates') {
+          let failures = {
+            duplicates: value,
+          };
+          this.props.setFlyout({
+            type: 'createDetector',
+            payload: {
+              adConfigs,
+              queriesForOverview,
+              httpClient,
+              setFlyout,
+              failures,
+              renderDetectorCallOut,
+              renderFlyout,
+            },
+          });
+        }
+      });
+    }
+  };
+
+  renderDetectorCallOut = (id) => {
+    if (id) {
+      this.setState({
+        detectorCreated: true,
+        detectorID: id,
+      });
+    }
+  };
+
+  createAndStartDetector = async (adConfigs) => {
+    const { httpClient } = this.props;
+    console.log('adconfig' + JSON.stringify(adConfigs));
+    try {
+      const response = await httpClient.post('../api/alerting/detectors', {
+        adConfigs,
+      });
+      console.log('response inside createdetector after call: ' + JSON.stringify(response));
+      let resp = _.get(response, 'data.response');
+    } catch (err) {
+      if (typeof err === 'string') throw err;
+      console.log('error from create and start: ' + err);
+      throw 'There was a problem validating the configurations';
+    }
+  };
+
+  detectorCreatedCallOut = () => {
+    if (this.state.detectorCreated) {
+      return (
+        <Fragment>
+          <EuiCallOut
+            title={
+              <span>
+                Anomaly detector has been created from the monitor and can be accessed{' '}
+                {
+                  <EuiLink
+                    style={{ textDecoration: 'underline' }}
+                    href={`${KIBANA_AD_PLUGIN}#/detectors/${this.state.detectorID}`}
+                    target="_blank"
+                  >
+                    {'here'} <EuiIcon size="s" type="popout" />
+                  </EuiLink>
+                }
+              </span>
+            }
+            iconType="alert"
+            size="s"
+          />
+          <EuiSpacer size="s" />
+        </Fragment>
+      );
     }
   };
 
@@ -279,7 +409,6 @@ export default class MonitorDetails extends Component {
         configs,
       });
       console.log('response inside monitordetails: ' + JSON.stringify(response));
-
       let resp = _.get(response, 'data.response');
       return resp;
     } catch (err) {
@@ -316,11 +445,8 @@ export default class MonitorDetails extends Component {
       const response = await httpClient.post('../api/alerting/_search', options);
       let maxStamp = _.get(response, 'data.resp.aggregations.max_timefield.value');
       let delayMS = Date.now() - maxStamp;
-      console.log('maxstamp: ' + maxStamp);
-      console.log('delay millisec: ' + delayMS);
       let delayMinutes = Math.ceil(delayMS / 60000) + 1;
       return delayMinutes;
-      console.log(JSON.stringify(response));
     } catch (err) {
       if (typeof err === 'string') throw err;
       console.log(err);
@@ -418,6 +544,7 @@ export default class MonitorDetails extends Component {
     console.log(this.state.monitor);
     return (
       <div style={{ padding: '25px 50px' }}>
+        {this.detectorCreatedCallOut()}
         {this.renderNoTriggersCallOut()}
         <EuiFlexGroup alignItems="center">
           <EuiFlexItem>
