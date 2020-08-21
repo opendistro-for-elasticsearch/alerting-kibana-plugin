@@ -18,6 +18,8 @@ import DestinationsService from './DestinationsService';
 import ElasticsearchService from './ElasticsearchService';
 import MonitorService from './MonitorService';
 import AnomalyDetectorService from './AnomalyDetectorService';
+import EmailAccountService from './EmailAccountService';
+import EmailGroupService from './EmailGroupService';
 
 export {
   AlertService,
@@ -25,4 +27,6 @@ export {
   ElasticsearchService,
   MonitorService,
   AnomalyDetectorService,
+  EmailAccountService,
+  EmailGroupService,
 };

@@ -18,5 +18,7 @@ import destinations from './destinations';
 import elasticsearch from './elasticsearch';
 import monitors from './monitors';
 import detectors from './anomalyDetector';
+import emailAccounts from './emailAccounts';
+import emailGroups from './emailGroups';
 
-export { alerts, destinations, elasticsearch, monitors, detectors };
+export { alerts, destinations, elasticsearch, monitors, detectors, emailAccounts, emailGroups };

@@ -13,13 +13,23 @@
  *   permissions and limitations under the License.
  */
 
-import { alerts, destinations, elasticsearch, monitors, detectors } from './server/routes';
+import {
+  alerts,
+  destinations,
+  elasticsearch,
+  monitors,
+  detectors,
+  emailAccounts,
+  emailGroups,
+} from './server/routes';
 import {
   AlertService,
   DestinationsService,
   ElasticsearchService,
   MonitorService,
   AnomalyDetectorService,
+  EmailAccountService,
+  EmailGroupService,
 } from './server/services';
 import { createAlertingCluster, createAlertingADCluster } from './server/clusters';
 import { PLUGIN_NAME } from './utils/constants';
@@ -59,12 +69,16 @@ export default function (kibana) {
       const monitorService = new MonitorService(esDriver);
       const destinationsService = new DestinationsService(esDriver);
       const anomalyDetectorService = new AnomalyDetectorService(esDriver);
+      const emailAccountService = new EmailAccountService(esDriver);
+      const emailGroupService = new EmailGroupService(esDriver);
       const services = {
         alertService,
         destinationsService,
         elasticsearchService,
         monitorService,
         anomalyDetectorService,
+        emailAccountService,
+        emailGroupService,
       };
 
       // Add server routes
@@ -73,6 +87,8 @@ export default function (kibana) {
       elasticsearch(server, services);
       monitors(server, services);
       detectors(server, services);
+      emailAccounts(server, services);
+      emailGroups(server, services);
     },
   });
 }
