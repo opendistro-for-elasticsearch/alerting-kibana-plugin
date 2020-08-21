@@ -50,6 +50,7 @@ import FORMIK_INITIAL_VALUES from '../../CreateMonitor/containers/CreateMonitor/
 import { formikToWhereClause } from '../../CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
 import { displayText } from '../../CreateMonitor/components/MonitorExpressions/expressions/utils/whereHelpers';
 import Flyout from '../../../components/Flyout';
+import DetectorFailureModal from '../components/DetectorFailureModal/DetectorFailureModal';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -68,6 +69,7 @@ export default class MonitorDetails extends Component {
       triggerToEdit: null,
       detectorCreated: false,
       detectorID: '',
+      showFailureModal: false,
     };
   }
 
@@ -195,18 +197,17 @@ export default class MonitorDetails extends Component {
 
   convertToADConfigs = async (monitor) => {
     const uiMetadata = _.get(monitor, 'ui_metadata');
-    let nameInvalid = false;
+    let nameInvalidRegex = false;
     let autoChanges = [];
 
     let adName = monitor.name + '-Detector';
     if (!NAME_REGEX.test(monitor.name)) {
-      adName = '';
-      inputNeeded.push('name');
+      nameInvalidRegex = true;
     }
     let adTimeField = uiMetadata.search.timeField;
     if (adTimeField == undefined || null || '') {
       adTimeField = '';
-      inputNeeded.push('timeField');
+      //inputNeeded.push('timeField');
     }
     let adIndices = monitor.inputs[0].search.indices;
     let adDetectorInterval = { period: { interval: 1, unit: 'MINUTES' } };
@@ -274,79 +275,91 @@ export default class MonitorDetails extends Component {
         fieldName: fieldName,
       },
     };
-    this.renderFlyout(adConfigs, validationResponse, queriesForOverview);
+
+    if (validationResponse.failures.others) {
+      this.setState({
+        showFailureModel: true,
+      });
+      console.log('hello inside others');
+    } else {
+      if (nameInvalidRegex) {
+        console.log(JSON.stringify(validationResponse.failures));
+        validationResponse.failures.regex =
+          'Valid characters are a-z, A-Z, 0-9, -(hyphen) and _(underscore)';
+      }
+      this.renderFlyout(adConfigs, validationResponse, queriesForOverview);
+    }
   };
 
   onClose = () => {
     this.setFlyout(null);
   };
 
+  showModal = () => {
+    this.setState({
+      showFailureModel: true,
+    });
+  };
+
+  closeModal() {
+    this.setState({
+      showCodeModel: false,
+    });
+  }
+
+  getModalVisibilityChange = () => {
+    return this.state.showCodeModel;
+  };
+
+  renderStartedDetectorFlyout = (configs, detectorID, queries) => {
+    const { httpClient } = this.props;
+    console.log('went into renderstarted detector flyout');
+    const setFlyout = this.props.setFlyout;
+    let startedDetector = true;
+    const adConfigs = configs;
+    const queriesForOverview = queries;
+    this.props.setFlyout({
+      type: 'createDetector',
+      payload: {
+        adConfigs,
+        queriesForOverview,
+        httpClient,
+        setFlyout,
+        startedDetector,
+        detectorID,
+      },
+    });
+  };
+
   renderFlyout = (adConfigs, validationResponse, queriesForOverview) => {
     console.log('render flyout');
     const { httpClient } = this.props;
     const setFlyout = this.props.setFlyout;
-    const renderDetectorCallOut = this.renderDetectorCallOut;
+    const renderStartedDetectorFlyout = this.renderStartedDetectorFlyout;
     const renderFlyout = this.renderFlyout;
-    if (
-      Object.keys(validationResponse.failures).length === 0 &&
-      Object.keys(validationResponse.suggestedChanges).length === 0
-    ) {
-      this.props.setFlyout({
-        type: 'createDetector',
-        payload: { adConfigs, queriesForOverview, httpClient, setFlyout, renderDetectorCallOut },
-      });
-    } else if (
-      Object.keys(validationResponse.failures).length === 0 &&
-      Object.keys(validationResponse.suggestedChanges).length !== 0
-    ) {
-      Object.entries(validationResponse.suggestedChanges).forEach(([key, value]) => {
-        if (key === 'detection_interval') {
-          if (!isNaN(value[0].charAt(0))) {
-            let suggestedChanges = {
-              detectionIntervalReccomendation: value,
-            };
-            console.log('inside interval sugg');
-            this.props.setFlyout({
-              type: 'createDetector',
-              payload: {
-                adConfigs,
-                queriesForOverview,
-                httpClient,
-                setFlyout,
-                suggestedChanges,
-                renderDetectorCallOut,
-                renderFlyout,
-              },
-            });
-          } else {
-            let suggesteChanges = {
-              detectionIntervalMax: 1,
-            };
-          }
-          this.props.setFlyout({});
-        }
-      });
-    } else {
-      Object.entries(validationResponse.failures).forEach(([key, value]) => {
-        if (key === 'duplicates') {
-          let failures = {
-            duplicates: value,
-          };
-          this.props.setFlyout({
-            type: 'createDetector',
-            payload: {
-              adConfigs,
-              queriesForOverview,
-              httpClient,
-              setFlyout,
-              failures,
-              renderDetectorCallOut,
-              renderFlyout,
-            },
-          });
-        }
-      });
+    const failures = Object.assign(validationResponse.failures);
+    const suggestedChanges = Object.assign(validationResponse.suggestedChanges);
+    let valid = false;
+    let startedDetector = false;
+    if (Object.keys(failures).length == 0 && Object.keys(suggestedChanges).length == 0) {
+      valid = true;
     }
+    console.log('valid ', valid);
+    this.props.setFlyout({
+      type: 'createDetector',
+      payload: {
+        adConfigs,
+        queriesForOverview,
+        httpClient,
+        setFlyout,
+        renderStartedDetectorFlyout,
+        failures,
+        suggestedChanges,
+        renderFlyout,
+        valid,
+        startedDetector,
+      },
+    });
   };
 
   renderDetectorCallOut = (id) => {
@@ -492,6 +505,7 @@ export default class MonitorDetails extends Component {
       updating,
       loading,
       triggerToEdit,
+      showFailureModal,
     } = this.state;
     const {
       location,
@@ -541,6 +555,20 @@ export default class MonitorDetails extends Component {
         />
       );
     }
+    console.log('inside this check for modal', showFailureModal);
+
+    if (showFailureModal) {
+      console.log('inside this check for modal');
+      return (
+        <DetectorFailureModal
+          title="Unable To Create Anomaly Detector From This Monitor"
+          subtitle={validationResponse.failures.others}
+          getModalVisibilityChange={this.getModalVisibilityChange}
+          closeModal={this.closeModal}
+        />
+      );
+    }
+
     console.log(this.state.monitor);
     return (
       <div style={{ padding: '25px 50px' }}>
