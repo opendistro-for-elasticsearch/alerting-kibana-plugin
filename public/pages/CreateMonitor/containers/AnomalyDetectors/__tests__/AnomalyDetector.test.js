@@ -22,6 +22,11 @@ import AnomalyDetectors from '../AnomalyDetectors';
 import { httpClientMock } from '../../../../../../test/mocks';
 import { AppContext } from '../../../../../utils/AppContext';
 
+import '@testing-library/jest-dom/extend-expect';
+import { render, fireEvent, wait } from '@testing-library/react';
+// @ts-ignore
+import userEvent from '@testing-library/user-event';
+
 jest.mock('ui/chrome', () => ({
   getBasePath: () => {
     return 'http://localhost/app';
@@ -52,7 +57,7 @@ describe('AnomalyDetectors', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('should be able to select the detector', done => {
+  test('should be able to select the detector', (done) => {
     httpClientMock.post.mockResolvedValueOnce({
       data: {
         ok: true,
@@ -72,10 +77,64 @@ describe('AnomalyDetectors', () => {
         .find('[data-test-subj="comboBoxSearchInput"]')
         .hostNodes()
         .simulate('change', { target: { value: 'sample-detector' } })
-        .simulate('keyDown', { keyCode: 40 })
-        .simulate('keyDown', { keyCode: 13 });
+        .simulate('keyDown', { key: 'ArrowDown' })
+        .simulate('keyDown', { key: 'Enter' });
       expect(wrapper.instance().state.values.detectorId).toEqual('sample-id');
       done();
     });
+  });
+
+  test('testing library', async () => {
+    httpClientMock.post.mockResolvedValueOnce({
+      data: {
+        ok: true,
+        detectors: [{ name: 'sample-detector', id: 'sample-id', feature_attributes: [] }],
+      },
+    });
+    //Preview mock
+    httpClientMock.post.mockResolvedValueOnce({
+      data: {
+        ok: true,
+        response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
+      },
+    });
+    const { container, queryByTestId, getByLabelText, debug } = render(
+      <Formik
+        initialValues={FORMIK_INITIAL_VALUES}
+        render={({ values }) => (
+          <AnomalyDetectors
+            httpClient={httpClientMock}
+            values={values}
+            renderEmptyMessage={renderEmptyMessage}
+          />
+        )}
+      />
+    );
+
+    // <AnomalyDetectors
+    //   httpClient={httpClientMock}
+    //   values={{ detectorId: ''}}
+    //   renderEmptyMessage={renderEmptyMessage}
+    //   detectorId={undefined}
+    // />
+    debug();
+
+    // const label = getByLabelText("Detector")
+    // console.log(label);
+
+    const searchInput = queryByTestId('comboBoxSearchInput');
+    console.log(searchInput);
+
+    fireEvent.change(queryByTestId('comboBoxSearchInput'), {
+      target: { value: 'sample-detector' },
+    });
+    fireEvent.keyDown(queryByTestId('comboBoxSearchInput'), {
+      key: 'ArrowDown',
+      code: 'ArrowDown',
+    });
+    fireEvent.keyDown(queryByTestId('comboBoxSearchInput'), { key: 'Enter', code: 'Enter' });
+
+    // const detectorId = findByText(/sampe-detector/)
+    // expect(detectorId).equal("sample-id")
   });
 });

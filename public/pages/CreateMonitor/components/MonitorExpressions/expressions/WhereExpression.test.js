@@ -33,7 +33,7 @@ const closeExpression = jest.fn();
 const getMountWrapper = (state = false) => (
   <Formik
     initialValues={FORMIK_INITIAL_VALUES}
-    render={props => (
+    render={(props) => (
       <WhereExpression
         formik={props}
         dataTypes={dataTypes}
@@ -64,7 +64,7 @@ describe('WhereExpression', () => {
   test('calls closeExpression when closing popover', () => {
     const wrapper = mount(getMountWrapper(true));
     const button = wrapper.find(EuiExpression);
-    button.simulate('keyDown', { keyCode: 27 });
+    button.simulate('keyDown', { key: 'Escape' });
     expect(closeExpression).toHaveBeenCalled();
   });
   test('should render text input for the text data types', () => {
@@ -73,8 +73,8 @@ describe('WhereExpression', () => {
       .find('[data-test-subj="comboBoxSearchInput"]')
       .hostNodes()
       .simulate('change', { target: { value: 'cityName' } })
-      .simulate('keyDown', { keyCode: 40 })
-      .simulate('keyDown', { keyCode: 13 })
+      .simulate('keyDown', { key: 'ArrowDown' })
+      .simulate('keyDown', { key: 'Enter' })
       .simulate('blur');
 
     wrapper.update();

@@ -62,8 +62,8 @@ describe('TriggerExpressions', () => {
     wrapper.update();
     expect(openExpression).toHaveBeenCalled();
     expect(wrapper.find(TriggerExpressions).state().openedStates[Expressions.THRESHOLD]).toBe(true);
-    await new Promise(res => setTimeout(() => res()));
-    button.simulate('keyDown', { keyCode: 27 });
+    await new Promise((res) => setTimeout(() => res()));
+    button.simulate('keyDown', { key: 'Escape' });
     wrapper.update();
     expect(closeExpression).toHaveBeenCalled();
     expect(wrapper.find(TriggerExpressions).state().openedStates[Expressions.THRESHOLD]).toBe(
