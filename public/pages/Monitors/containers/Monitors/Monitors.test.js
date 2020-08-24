@@ -24,7 +24,7 @@ import AlertingFakes from '../../../../../test/utils/helpers';
 const alertingFakes = new AlertingFakes('random seed');
 
 jest.unmock('lodash');
-_.debounce = jest.fn(fn => fn);
+_.debounce = jest.fn((fn) => fn);
 
 const match = {
   isExact: true,
@@ -160,10 +160,12 @@ describe('Monitors', () => {
 
     expect(updateMonitor).toHaveBeenCalled();
     expect(httpClientMock.put).toHaveBeenCalled();
-    expect(httpClientMock.put).toHaveBeenCalledWith(
-      `../api/alerting/monitors/random_id?ifSeqNo=17&ifPrimaryTerm=20`,
-      { ...monitor, name: 'UNIQUE_NAME' }
-    );
+    expect(
+      httpClientMock.put
+    ).toHaveBeenCalledWith(`../api/alerting/monitors/random_id?ifSeqNo=17&ifPrimaryTerm=20`, {
+      ...monitor,
+      name: 'UNIQUE_NAME',
+    });
     expect(response).toEqual({ data: { ok: true } });
     const error = await mountWrapper
       .instance()
@@ -201,6 +203,7 @@ describe('Monitors', () => {
     const getActiveAlerts = jest.spyOn(Monitors.prototype, 'getActiveAlerts');
     const mountWrapper = getMountWrapper();
     const monitor = alertingFakes.randomMonitor();
+    httpClientMock.get.mockResolvedValue({ data: { ok: true, alerts: [], totalAlerts: 0 } });
     mountWrapper.instance().onClickAcknowledge(monitor);
 
     expect(onClickAcknowledge).toHaveBeenCalled();
@@ -291,6 +294,7 @@ describe('Monitors', () => {
     mountWrapper.setState({ selectedItems });
     mountWrapper.update();
 
+    httpClientMock.get.mockResolvedValue({ data: { ok: true, alerts: [], totalAlerts: 0 } });
     mountWrapper.instance().onBulkAcknowledge();
 
     expect(onBulkAcknowledge).toHaveBeenCalled();
@@ -307,7 +311,6 @@ describe('Monitors', () => {
 
     mountWrapper.setState({ selectedItems });
     mountWrapper.update();
-
     mountWrapper.instance().onBulkEnable();
 
     expect(onBulkEnable).toHaveBeenCalled();

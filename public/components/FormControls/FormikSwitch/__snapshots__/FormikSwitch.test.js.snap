@@ -5,7 +5,7 @@ exports[`FormikSwitch renders 1`] = `
   class="euiSwitch"
 >
   <button
-    aria-labelledby="some_make_id"
+    aria-labelledby="generated-id"
     class="euiSwitch__button"
     id="testing"
     name="testing"
@@ -32,7 +32,7 @@ exports[`FormikSwitch renders 1`] = `
   </button>
   <span
     class="euiSwitch__label"
-    id="some_make_id"
+    id="generated-id"
   />
 </div>
 `;

@@ -127,7 +127,7 @@ exports[`Message renders 1`] = `
   </div>
   <div
     class="euiFormRow"
-    id="testing-id-row"
+    id="generated-id-row"
     style="max-width:100%"
   >
     <div
@@ -135,7 +135,7 @@ exports[`Message renders 1`] = `
     >
       <label
         class="euiFormLabel euiFormRow__label"
-        for="testing-id"
+        for="generated-id"
       >
         Message preview
       </label>
@@ -145,7 +145,7 @@ exports[`Message renders 1`] = `
     >
       <textarea
         class="euiTextArea euiTextArea--resizeVertical euiTextArea--fullWidth read-only-text-area"
-        id="testing-id"
+        id="generated-id"
         placeholder="Preview of mustache template"
         readonly=""
         rows="6"
@@ -163,7 +163,7 @@ exports[`Message renders 1`] = `
   />
   <div
     class="euiFormRow"
-    id="testing-id-row"
+    id="generated-id-row"
     style="max-width:100%"
   >
     <div
@@ -171,7 +171,7 @@ exports[`Message renders 1`] = `
     >
       <label
         class="euiFormLabel euiFormRow__label"
-        for="testing-id"
+        for="generated-id"
       >
         <div>
           <span
@@ -201,7 +201,7 @@ exports[`Message renders 1`] = `
     >
       <div
         class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionColumn euiFlexGroup--responsive"
-        id="testing-id"
+        id="generated-id"
       >
         <div
           class="euiFlexItem euiFlexItem--flexGrowZero"
@@ -237,14 +237,14 @@ exports[`Message renders 1`] = `
           >
             <div
               class="euiFormRow"
-              id="testing-id-row"
+              id="generated-id-row"
             >
               <div
                 class="euiFormRow__labelWrapper"
               >
                 <label
                   class="euiFormLabel euiFormRow__label"
-                  for="testing-id"
+                  for="generated-id"
                 >
                   Throttle actions to only trigger every
                 </label>
