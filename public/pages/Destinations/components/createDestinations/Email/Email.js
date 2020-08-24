@@ -17,12 +17,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormikFieldText } from '../../../../../components/FormControls';
 import { hasError, isInvalid } from '../../../../../utils/validate';
+import EmailSender from '../../../containers/CreateDestination/EmailSender';
 
 const propTypes = {
   type: PropTypes.string.isRequired,
 };
-const Email = ({ type, values }) => (
+const Email = ({ httpClient, type, values }) => (
   <div>
+    <EmailSender httpClient={httpClient} />
     <Fragment>
       <FormikFieldText
         name={`${type}.recipients`}
