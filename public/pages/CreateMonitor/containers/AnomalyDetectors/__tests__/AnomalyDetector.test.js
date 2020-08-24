@@ -22,11 +22,6 @@ import AnomalyDetectors from '../AnomalyDetectors';
 import { httpClientMock } from '../../../../../../test/mocks';
 import { AppContext } from '../../../../../utils/AppContext';
 
-import '@testing-library/jest-dom/extend-expect';
-import { render, fireEvent, wait } from '@testing-library/react';
-// @ts-ignore
-import userEvent from '@testing-library/user-event';
-
 jest.mock('ui/chrome', () => ({
   getBasePath: () => {
     return 'http://localhost/app';
