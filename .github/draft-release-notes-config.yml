@@ -1,0 +1,46 @@
+# https://github.com/marketplace/actions/release-drafter
+# As pull requests are merged, a draft release is kept up-to-date listing the changes, ready to publish when you’re ready
+
+template: |
+  Compatible with Kibana (**set version here**).
+  $CHANGES
+# Setting the formatting and sorting for the release notes body
+name-template: Version (set version here)
+change-template: '* $TITLE (#$NUMBER)'
+sort-by: merged_at
+sort-direction: ascending
+replacers:
+  - search: '##'
+    replace: '###'
+
+# Organizing the tagged PRs into unified ODFE categories
+categories:
+  - title: 'Breaking changes'
+    labels:
+      - 'breaking change'
+  - title: 'Features'
+    labels:
+      - 'feature'
+  - title: 'Enhancements'
+    labels:
+      - 'enhancement'
+      - 'action'
+      - 'API'
+  - title: 'Bug Fixes'
+    labels:
+      - 'bug'
+  - title: 'Infrastructure'
+    labels:
+      - 'infra'
+      - 'testing'
+      - 'CI/CD'
+      - 'dependencies'
+  - title: 'Documentation'
+    labels:
+      - 'documentation'
+  - title: 'Maintenance'
+    labels:
+      - 'version support'
+  - title: 'Refactoring'
+    labels:
+      - 'refactor'
