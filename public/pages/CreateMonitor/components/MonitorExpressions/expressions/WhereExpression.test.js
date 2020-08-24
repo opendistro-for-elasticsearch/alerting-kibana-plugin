@@ -64,7 +64,7 @@ describe('WhereExpression', () => {
   test('calls closeExpression when closing popover', () => {
     const wrapper = mount(getMountWrapper(true));
     const button = wrapper.find(EuiExpression);
-    button.simulate('keyDown', { key: 'Escape' });
+    button.simulate('keyDown', { keyCode: 27 });
     expect(closeExpression).toHaveBeenCalled();
   });
   test('should render text input for the text data types', () => {
