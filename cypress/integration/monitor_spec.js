@@ -58,22 +58,16 @@ describe('Monitors', () => {
       cy.get('#index').type('*', { force: true });
 
       // Click the create button
-      cy.get('button')
-        .contains('Create')
-        .click({ force: true });
+      cy.get('button').contains('Create').click({ force: true });
 
       // Confirm "monitor is created" shows
       cy.contains(`Monitor ${SAMPLE_MONITOR} has been created`);
 
       // Go back to main page of the Plugin
-      cy.get('a')
-        .contains('Alerting')
-        .click({ force: true });
+      cy.get('a').contains('Alerting').click({ force: true });
 
       // Go to the Monitors list
-      cy.get('button')
-        .contains('Monitors')
-        .click({ force: true });
+      cy.get('button').contains('Monitors').click({ force: true });
 
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
@@ -91,38 +85,26 @@ describe('Monitors', () => {
       cy.contains(SAMPLE_MONITOR);
 
       // Select the existing monitor
-      cy.get('a')
-        .contains(SAMPLE_MONITOR)
-        .click({ force: true });
+      cy.get('a').contains(SAMPLE_MONITOR).click({ force: true });
 
       // Click Edit button
       cy.contains('Edit').click({ force: true });
 
       // Wait for input to load and then type in the new monitor name
-      cy.get('input[name="name"]')
-        .focus()
-        .clear()
-        .type(UPDATED_MONITOR, { force: true });
+      cy.get('input[name="name"]').focus().clear().type(UPDATED_MONITOR, { force: true });
 
       // Click Update button
-      cy.get('button')
-        .contains('Update')
-        .last()
-        .click({ force: true });
+      cy.get('button').contains('Update').last().click({ force: true });
 
       // Confirm the update process is done and the page loaded
       cy.contains('Create trigger');
 
       // This step is used to make the monitors list refresh
       // Go back to main page of Alerting plugin
-      cy.get('a')
-        .contains('Alerting')
-        .click({ force: true });
+      cy.get('a').contains('Alerting').click({ force: true });
 
       // Go to the Monitors list
-      cy.get('button')
-        .contains('Monitors')
-        .click({ force: true });
+      cy.get('button').contains('Monitors').click({ force: true });
 
       // Confirm we can see the updated monitor in the list
       cy.contains(UPDATED_MONITOR);
@@ -165,20 +147,16 @@ describe('Monitors', () => {
 
     it('successfully', () => {
       // Sort the table by monitor name in alphabetical order
-      cy.get('thead > tr > th')
-        .contains('Monitor name')
-        .click({ force: true });
+      cy.get('thead > tr > th').contains('Monitor name').click({ force: true });
 
       // Confirm the monitor with a different name does not exist
       cy.contains(SAMPLE_MONITOR_WITH_ANOTHER_NAME).should('not.exist');
 
       // Type in monitor name in search box
-      cy.get(`input[type="search"]`)
-        .focus()
-        .type(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
+      cy.get(`input[type="search"]`).focus().type(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
 
       // Confirm we filtered down to our one and only monitor
-      cy.get('tbody > tr').should($tr => {
+      cy.get('tbody > tr').should(($tr) => {
         expect($tr, '1 row').to.have.length(1);
         expect($tr, 'item').to.contain(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
       });
@@ -196,9 +174,7 @@ describe('Monitors', () => {
       cy.contains(SAMPLE_MONITOR);
 
       // Select the existing monitor
-      cy.get('a')
-        .contains(SAMPLE_MONITOR)
-        .click({ force: true });
+      cy.get('a').contains(SAMPLE_MONITOR).click({ force: true });
 
       // Click Create Trigger button
       cy.contains('Create trigger').click({ force: true });
@@ -207,9 +183,7 @@ describe('Monitors', () => {
       cy.get('input[name="name"]').type(SAMPLE_TRIGGER, { force: true });
 
       // Click the create button
-      cy.get('button')
-        .contains('Create')
-        .click({ force: true });
+      cy.get('button').contains('Create').click({ force: true });
 
       // Confirm we can see only one row in the trigger list
       cy.contains('This table contains 1 row');
@@ -231,17 +205,13 @@ describe('Monitors', () => {
       cy.contains(SAMPLE_MONITOR);
 
       // Select the existing monitor
-      cy.get('a')
-        .contains(SAMPLE_MONITOR)
-        .click({ force: true });
+      cy.get('a').contains(SAMPLE_MONITOR).click({ force: true });
 
       // Select checkbox for the existing monitor
       cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
 
       // Click the trigger Edit button
-      cy.get('.euiPanel')
-        .contains('Edit')
-        .click({ force: true });
+      cy.get('.euiPanel').contains('Edit').click({ force: true });
 
       // Click the Add Action button to configure trigger actions
       cy.contains('Add action').click({ force: true });
@@ -256,9 +226,7 @@ describe('Monitors', () => {
       cy.get('button[type="custom_webhook"]').click({ force: true });
 
       // Click Update button to update the monitor
-      cy.get('button')
-        .contains('Update')
-        .click({ force: true });
+      cy.get('button').contains('Update').click({ force: true });
 
       // The following is used to validate the action has been added.
       // Confirm the update process is done and the page loaded
@@ -266,22 +234,16 @@ describe('Monitors', () => {
 
       // This step is used to make the actions list of the trigger refresh
       // Go to the Monitors list
-      cy.get('a')
-        .contains('Monitors')
-        .click({ force: true });
+      cy.get('a').contains('Monitors').click({ force: true });
 
       // Select the existing monitor
-      cy.get('a')
-        .contains(SAMPLE_MONITOR)
-        .click({ force: true });
+      cy.get('a').contains(SAMPLE_MONITOR).click({ force: true });
 
-      // Select checkbox for the existing monitor
+      // Select checkbox for the created trigger
       cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
 
       // Click the trigger Edit button
-      cy.get('div.euiPanel')
-        .contains('Edit')
-        .click({ force: true });
+      cy.get('div.euiPanel').contains('Edit').click({ force: true });
 
       // Confirm we can see the new action
       cy.contains(SAMPLE_ACTION);
