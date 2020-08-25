@@ -30,7 +30,7 @@ describe('Destinations', () => {
     // Visit Alerting Kibana
     cy.visit(`${Cypress.env('kibana')}/app/${PLUGIN_NAME}#/destinations`);
 
-    // Common text to wait for to confirm page loaded, give upto 20 seconds for initial load
+    // Common text to wait for to confirm page loaded, give up to 20 seconds for initial load
     cy.contains('Add destination', { timeout: 20000 });
   });
 
