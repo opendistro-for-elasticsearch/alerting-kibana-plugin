@@ -3,4 +3,4 @@
 Compatible with Kibana 7.9
 
 ### Maintenance
-  * Adds support for Kibana 7.9 [(#171)](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/171)
+  * Adds support for Kibana 7.9 ([#171](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/171))
