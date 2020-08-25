@@ -22,18 +22,19 @@ import { validateEmailSender } from './utils/validate';
 import { isInvalid, hasError } from '../../../../../utils/validate';
 import ManageSenders from '../ManageSenders';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
+import getSenders from './utils/helpers';
 
 export default class EmailSender extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      senders: [],
       senderOptions: [],
       loadingSenders: true,
       showManageSendersModal: false,
     };
 
+    this.getSenders = getSenders.bind(this);
     this.onClickManageSenders = this.onClickManageSenders.bind(this);
     this.onClickCancel = this.onClickCancel.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
@@ -117,36 +118,24 @@ export default class EmailSender extends React.Component {
     this.loadSenders().then(r => this.setState({ showManageSendersModal: false }));
   };
 
-  loadSenders = async (searchText = '') => {
-    const { httpClient } = this.props;
+  loadSenders = async () => {
     this.setState({ loadingSenders: true });
-    try {
-      const response = await httpClient.get(
-        `../api/alerting/email_accounts?search=${searchText}&size=200`
-      );
-      const emailAccounts = response.data.emailAccounts;
-      const emailAccountOptions = emailAccounts.map(emailAccount => ({
-        label: emailAccount.name,
-        value: emailAccount.id,
-      }));
-      this.setState({
-        senders: emailAccounts,
-        senderOptions: emailAccountOptions,
-        loadingSenders: false,
-      });
-    } catch (err) {
-      console.error(err);
-      this.setState({
-        senders: [],
-        senderOptions: [],
-        loadingSenders: false,
-      });
-    }
+
+    const senders = await this.getSenders();
+    const senderOptions = senders.map(sender => ({
+      label: sender.name,
+      value: sender.id,
+    }));
+
+    this.setState({
+      senderOptions,
+      loadingSenders: false,
+    });
   };
 
   render() {
     const { httpClient, type } = this.props;
-    const { senders, senderOptions, loadingSenders, showManageSendersModal } = this.state;
+    const { senderOptions, loadingSenders, showManageSendersModal } = this.state;
     return (
       <Fragment>
         <EuiFlexGroup
@@ -191,15 +180,12 @@ export default class EmailSender extends React.Component {
           </EuiFlexItem>
         </EuiFlexGroup>
 
-        {showManageSendersModal && (
-          <ManageSenders
-            httpClient={httpClient}
-            senders={senders}
-            loadingSenders={loadingSenders}
-            onClickCancel={this.onClickCancel}
-            onClickSave={this.onClickSave}
-          />
-        )}
+        <ManageSenders
+          httpClient={httpClient}
+          isVisible={showManageSendersModal}
+          onClickCancel={this.onClickCancel}
+          onClickSave={this.onClickSave}
+        />
       </Fragment>
     );
   }

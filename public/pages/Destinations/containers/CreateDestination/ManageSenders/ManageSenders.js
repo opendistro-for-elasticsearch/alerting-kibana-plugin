@@ -36,6 +36,7 @@ import AddSenderButton from '../../../components/createDestinations/AddSenderBut
 import Sender from '../../../components/createDestinations/Email/Sender';
 import SenderEmptyPrompt from '../../../components/createDestinations/SenderEmptyPrompt';
 import { senderToFormik } from './utils/helpers';
+import getSenders from '../EmailSender/utils/helpers';
 
 const createSenderContext = senders => ({
   ctx: {
@@ -50,29 +51,36 @@ export default class ManageSenders extends React.Component {
   constructor(props) {
     super(props);
 
-    const { senders } = this.props;
-    const initialValues = getInitialValues(senders);
-
     this.state = {
-      initialValues,
       sendersToDelete: [],
+      loadingSenders: true,
     };
+
+    this.getSenders = getSenders.bind(this);
   }
 
-  // Reload initial values so the change reflects on subsequent renders
-  // after senders have been altered
+  componentDidMount() {
+    this.loadInitialValues();
+  }
+
+  // Reload initial values when modal is no longer visible so changes
+  // are reflected the next time it is opened
   componentDidUpdate(prevProps) {
-    if (!this.props.loadingSenders && prevProps.loadingSenders) {
-      this.reloadInitialValues(this.props.senders);
+    if (prevProps.isVisible && !this.props.isVisible) {
+      this.loadInitialValues();
     }
   }
 
-  reloadInitialValues = senders => {
+  loadInitialValues = async () => {
+    this.setState({ loadingSenders: true });
+
+    const senders = await this.getSenders();
     const initialValues = getInitialValues(senders);
 
     this.setState({
       initialValues,
       sendersToDelete: [],
+      loadingSenders: false,
     });
   };
 
@@ -109,9 +117,9 @@ export default class ManageSenders extends React.Component {
   };
 
   render() {
-    const { loadingSenders, onClickCancel, onClickSave } = this.props;
+    const { isVisible, loadingSenders, onClickCancel, onClickSave } = this.props;
     const { initialValues, sendersToDelete } = this.state;
-    return (
+    return isVisible ? (
       <Formik
         initialValues={initialValues}
         onSubmit={onClickSave(sendersToDelete)}
@@ -159,19 +167,17 @@ export default class ManageSenders extends React.Component {
           </EuiOverlayMask>
         )}
       />
-    );
+    ) : null;
   }
 }
 
 ManageSenders.propTypes = {
   httpClient: PropTypes.func.isRequired,
-  senders: PropTypes.array,
-  loadingSenders: PropTypes.bool,
+  isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
 };
 
 ManageSenders.defaultProps = {
-  senders: [],
-  loadingSenders: false,
+  isVisible: false,
 };
