@@ -30,7 +30,7 @@ describe('Destinations', () => {
     // Visit Alerting Kibana
     cy.visit(`${Cypress.env('kibana')}/app/${PLUGIN_NAME}#/destinations`);
 
-    // Common text to wait for to confirm page loaded, give up to 20 seconds for initial load
+    // Common text to wait for to confirm page loaded, give upto 20 seconds for initial load
     cy.contains('Add destination', { timeout: 20000 });
   });
 
@@ -56,9 +56,7 @@ describe('Destinations', () => {
       cy.get('input[name="custom_webhook.url"]').type(SAMPLE_URL, { force: true });
 
       // Click the create button
-      cy.get('button')
-        .contains('Create')
-        .click({ force: true });
+      cy.get('button').contains('Create').click({ force: true });
 
       // Confirm we can see the created destination in the list
       cy.contains(SAMPLE_DESTINATION);
@@ -76,20 +74,13 @@ describe('Destinations', () => {
       cy.contains(SAMPLE_DESTINATION);
 
       // Click the Edit button
-      cy.get('button')
-        .contains('Edit')
-        .click({ force: true });
+      cy.get('button').contains('Edit').click({ force: true });
 
       // Wait for input to load and then type in the destination name
-      cy.get('input[name="name"]')
-        .focus()
-        .clear()
-        .type(UPDATED_DESTINATION, { force: true });
+      cy.get('input[name="name"]').focus().clear().type(UPDATED_DESTINATION, { force: true });
 
       // Click the create button
-      cy.get('button')
-        .contains('Update')
-        .click({ force: true });
+      cy.get('button').contains('Update').click({ force: true });
 
       // Confirm we can see the updated destination in the list
       cy.contains(UPDATED_DESTINATION);
@@ -129,20 +120,16 @@ describe('Destinations', () => {
 
     it('successfully', () => {
       // Sort the table by monitor name in alphabetical order
-      cy.get('thead > tr > th')
-        .contains('Destination name')
-        .click({ force: true });
+      cy.get('thead > tr > th').contains('Destination name').click({ force: true });
 
       // Confirm the monitor with a different name does not exist
       cy.contains(SAMPLE_DESTINATION_WITH_ANOTHER_NAME).should('not.exist');
 
       // Type in monitor name in search box
-      cy.get(`input[type="search"]`)
-        .focus()
-        .type(SAMPLE_DESTINATION_WITH_ANOTHER_NAME);
+      cy.get(`input[type="search"]`).focus().type(SAMPLE_DESTINATION_WITH_ANOTHER_NAME);
 
       // Confirm we filtered down to our one and only destination
-      cy.get('tbody > tr').should($tr => {
+      cy.get('tbody > tr').should(($tr) => {
         expect($tr, '1 row').to.have.length(1);
         expect($tr, 'item').to.contain(SAMPLE_DESTINATION_WITH_ANOTHER_NAME);
       });

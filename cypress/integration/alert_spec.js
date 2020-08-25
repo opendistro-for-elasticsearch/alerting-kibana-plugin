@@ -38,7 +38,7 @@ describe('Alerts', () => {
       cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it.only('successfully', () => {
+    it('successfully', () => {
       // Wait for 1 minute
       cy.wait(60000);
 
@@ -46,7 +46,7 @@ describe('Alerts', () => {
       cy.reload();
 
       // Confirm we can see one and only alert in Active state
-      cy.get('tbody > tr').should($tr => {
+      cy.get('tbody > tr').should(($tr) => {
         expect($tr, '1 row').to.have.length(1);
         expect($tr, 'item').to.contain('Active');
       });
@@ -67,9 +67,7 @@ describe('Alerts', () => {
       cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
 
       // Click Acknowledge button
-      cy.get('button')
-        .contains('Acknowledge')
-        .click({ force: true });
+      cy.get('button').contains('Acknowledge').click({ force: true });
 
       // Confirm we can see the alert is in 'Acknowledged' state
       cy.contains('Acknowledged');
@@ -91,25 +89,19 @@ describe('Alerts', () => {
       cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
 
       // Click Monitors button to route to Monitors tab
-      cy.get('button')
-        .contains('Monitors')
-        .click({ force: true });
+      cy.get('button').contains('Monitors').click({ force: true });
 
       // Type in monitor name in search box
-      cy.get(`input[type="search"]`)
-        .focus()
-        .type(SAMPLE_MONITOR_TO_BE_DELETED);
+      cy.get(`input[type="search"]`).focus().type(SAMPLE_MONITOR_TO_BE_DELETED);
 
       // Confirm we filtered down to our one and only monitor
-      cy.get('tbody > tr').should($tr => {
+      cy.get('tbody > tr').should(($tr) => {
         expect($tr, '1 row').to.have.length(1);
         expect($tr, 'item').to.contain(SAMPLE_MONITOR_TO_BE_DELETED);
       });
 
       // Select checkbox for the existing monitor
-      cy.get('input[data-test-subj^="checkboxSelectRow-"]')
-        .first()
-        .click({ force: true });
+      cy.get('input[data-test-subj^="checkboxSelectRow-"]').first().click({ force: true });
 
       // Click Actions button to open the actions menu
       cy.contains('Actions').click({ force: true });
@@ -118,12 +110,10 @@ describe('Alerts', () => {
       cy.contains('Delete').click({ force: true });
 
       // Clear the text in the search box
-      cy.get(`input[type="search"]`)
-        .focus()
-        .clear();
+      cy.get(`input[type="search"]`).focus().clear();
 
       // Confirm we can see only one monitor in the list
-      cy.get('tbody > tr').should($tr => {
+      cy.get('tbody > tr').should(($tr) => {
         expect($tr, '1 row').to.have.length(1);
         expect($tr, 'item').to.contain(SAMPLE_MONITOR_WORKFLOW);
       });
@@ -132,9 +122,7 @@ describe('Alerts', () => {
       cy.wait(60000);
 
       // Click Dashboard button to route to Dashboard tab
-      cy.get('button')
-        .contains('Dashboard')
-        .click({ force: true });
+      cy.get('button').contains('Dashboard').click({ force: true });
 
       // Confirm we can see the alert is in 'Completed' state
       cy.contains('Completed');
@@ -166,9 +154,7 @@ describe('Alerts', () => {
       cy.contains('Active');
 
       // Click Monitors button to route to Monitors tab
-      cy.get('button')
-        .contains('Monitors')
-        .click({ force: true });
+      cy.get('button').contains('Monitors').click({ force: true });
 
       // Confirm we can see a monitor in the list
       cy.contains(SAMPLE_MONITOR_TO_BE_DELETED);
@@ -186,9 +172,7 @@ describe('Alerts', () => {
       cy.contains('There are no existing monitors');
 
       // Click Dashboard button to route to Dashboard tab
-      cy.get('button')
-        .contains('Dashboard')
-        .click({ force: true });
+      cy.get('button').contains('Dashboard').click({ force: true });
 
       // Confirm we can see the alert is in 'Deleted' state
       cy.contains('Deleted');
