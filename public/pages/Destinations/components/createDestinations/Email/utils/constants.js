@@ -19,7 +19,7 @@ export const METHOD_TYPE = {
   TLS: 'starttls',
 };
 
-export const SENDER_STATE = {
+export const STATE = {
   NO_OP: 'no_op',
   UPDATED: 'updated',
   CREATED: 'created',
@@ -31,5 +31,11 @@ export const FORMIK_INITIAL_SENDER_VALUES = {
   host: '',
   port: '',
   method: METHOD_TYPE.NONE,
-  state: SENDER_STATE.CREATED,
+  state: STATE.CREATED,
+};
+
+export const FORMIK_INITIAL_EMAIL_GROUP_VALUES = {
+  name: '',
+  emails: [],
+  state: STATE.CREATED,
 };

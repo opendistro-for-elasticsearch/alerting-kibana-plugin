@@ -14,22 +14,15 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { EuiSpacer } from '@elastic/eui';
-import EmailSender from '../../../containers/CreateDestination/EmailSender';
-import EmailRecipients from '../../../containers/CreateDestination/EmailRecipients';
+import _ from 'lodash';
+import { EuiButton } from '@elastic/eui';
 
-const propTypes = {
-  type: PropTypes.string.isRequired,
-};
-const Email = ({ httpClient, type, values }) => (
-  <div>
-    <EmailSender httpClient={httpClient} type={type} />
-    <EuiSpacer size="m" />
-    <EmailRecipients httpClient={httpClient} type={type} />
-  </div>
+import { FORMIK_INITIAL_EMAIL_GROUP_VALUES } from '../Email/utils/constants';
+
+const AddEmailGroupButton = ({ arrayHelpers }) => (
+  <EuiButton onClick={() => arrayHelpers.unshift(_.cloneDeep(FORMIK_INITIAL_EMAIL_GROUP_VALUES))}>
+    Add email group
+  </EuiButton>
 );
 
-Email.propTypes = propTypes;
-
-export default Email;
+export default AddEmailGroupButton;

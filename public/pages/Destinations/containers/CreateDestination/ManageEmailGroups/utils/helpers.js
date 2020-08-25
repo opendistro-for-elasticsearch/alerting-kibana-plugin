@@ -13,23 +13,21 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { EuiSpacer } from '@elastic/eui';
-import EmailSender from '../../../containers/CreateDestination/EmailSender';
-import EmailRecipients from '../../../containers/CreateDestination/EmailRecipients';
+import _ from 'lodash';
+import {
+  FORMIK_INITIAL_EMAIL_GROUP_VALUES,
+  STATE,
+} from '../../../../components/createDestinations/Email/utils/constants';
 
-const propTypes = {
-  type: PropTypes.string.isRequired,
-};
-const Email = ({ httpClient, type, values }) => (
-  <div>
-    <EmailSender httpClient={httpClient} type={type} />
-    <EuiSpacer size="m" />
-    <EmailRecipients httpClient={httpClient} type={type} />
-  </div>
-);
-
-Email.propTypes = propTypes;
-
-export default Email;
+export function emailGroupToFormik(emailGroup) {
+  const { id, ifSeqNo, ifPrimaryTerm, name, emails } = emailGroup;
+  return {
+    ..._.cloneDeep(FORMIK_INITIAL_EMAIL_GROUP_VALUES),
+    id,
+    ifSeqNo,
+    ifPrimaryTerm,
+    name,
+    emails: emails.map(e => e.email),
+    state: STATE.NO_OP,
+  };
+}

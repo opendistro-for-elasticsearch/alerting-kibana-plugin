@@ -32,65 +32,78 @@ import {
 } from '@elastic/eui';
 import PropTypes from 'prop-types';
 
-import AddSenderButton from '../../../components/createDestinations/AddSenderButton/AddSenderButton';
-import Sender from '../../../components/createDestinations/Email/Sender';
-import SenderEmptyPrompt from '../../../components/createDestinations/SenderEmptyPrompt';
-import { senderToFormik } from './utils/helpers';
+import AddEmailGroupButton from '../../../components/createDestinations/AddEmailGroupButton/AddEmailGroupButton';
+import EmailGroup from '../../../components/createDestinations/Email/EmailGroup';
+import EmailGroupEmptyPrompt from '../../../components/createDestinations/EmailGroupEmptyPrompt';
+import { emailGroupToFormik } from './utils/helpers';
 
-const createSenderContext = senders => ({
+const createEmailGroupContext = emailGroups => ({
   ctx: {
-    senders,
+    emailGroups,
   },
 });
 
-const getInitialValues = senders =>
-  _.isEmpty(senders) ? { senders: [] } : { senders: senders.map(sender => senderToFormik(sender)) };
+const getInitialValues = emailGroups =>
+  _.isEmpty(emailGroups)
+    ? { emailGroups: [] }
+    : { emailGroups: emailGroups.map(emailGroup => emailGroupToFormik(emailGroup)) };
 
-export default class ManageSenders extends React.Component {
+const getEmailOptions = emailGroups => {
+  if (_.isEmpty(emailGroups)) return [];
+
+  // Return a unique list of all emails across all email groups
+  const nestedEmails = emailGroups.map(emailGroup => emailGroup.emails);
+  const emails = [].concat(...nestedEmails);
+  return [...new Set(emails)].map(email => ({ label: email }));
+};
+
+export default class ManageEmailGroups extends React.Component {
   constructor(props) {
     super(props);
 
-    const { senders } = this.props;
-    const initialValues = getInitialValues(senders);
+    const { emailGroups } = this.props;
+    const initialValues = getInitialValues(emailGroups);
 
     this.state = {
       initialValues,
-      sendersToDelete: [],
+      emailGroupsToDelete: [],
     };
   }
 
   // Reload initial values so the change reflects on subsequent renders
-  // after senders have been altered
+  // after email groups have been altered
   componentDidUpdate(prevProps) {
-    if (!this.props.loadingSenders && prevProps.loadingSenders) {
-      this.reloadInitialValues(this.props.senders);
+    if (!this.props.loadingEmailGroups && prevProps.loadingEmailGroups) {
+      this.reloadInitialValues(this.props.emailGroups);
     }
   }
 
-  reloadInitialValues = senders => {
-    const initialValues = getInitialValues(senders);
+  reloadInitialValues = emailGroups => {
+    const initialValues = getInitialValues(emailGroups);
 
     this.setState({
       initialValues,
-      sendersToDelete: [],
+      emailGroupsToDelete: [],
     });
   };
 
-  renderSenders = ({ values, arrayHelpers }) => {
-    const hasSenders = !_.isEmpty(values.senders);
-    return hasSenders ? (
+  renderEmailGroups = ({ values, arrayHelpers }) => {
+    const hasEmailGroups = !_.isEmpty(values.emailGroups);
+    const emailOptions = getEmailOptions(values.emailGroups);
+    return hasEmailGroups ? (
       <div>
-        {values.senders.map((sender, index) => (
+        {values.emailGroups.map((emailGroup, index) => (
           <div key={index}>
-            <Sender
-              sender={sender}
+            <EmailGroup
+              emailGroup={emailGroup}
+              emailOptions={emailOptions}
               arrayHelpers={arrayHelpers}
-              context={createSenderContext(values.senders)}
+              context={createEmailGroupContext(values.emailGroups)}
               index={index}
               onDelete={() => {
-                if (sender.id) {
+                if (emailGroup.id) {
                   this.setState(prevState => ({
-                    sendersToDelete: [...prevState.sendersToDelete, sender],
+                    emailGroupsToDelete: [...prevState.emailGroupsToDelete, emailGroup],
                   }));
                 }
                 arrayHelpers.remove(index);
@@ -100,42 +113,42 @@ export default class ManageSenders extends React.Component {
           </div>
         ))}
         <div style={{ justifyContent: 'left' }}>
-          <AddSenderButton arrayHelpers={arrayHelpers} />
+          <AddEmailGroupButton arrayHelpers={arrayHelpers} />
         </div>
       </div>
     ) : (
-      <SenderEmptyPrompt arrayHelpers={arrayHelpers} />
+      <EmailGroupEmptyPrompt arrayHelpers={arrayHelpers} />
     );
   };
 
   render() {
-    const { loadingSenders, onClickCancel, onClickSave } = this.props;
-    const { initialValues, sendersToDelete } = this.state;
+    const { loadingEmailGroups, onClickCancel, onClickSave } = this.props;
+    const { initialValues, emailGroupsToDelete } = this.state;
     return (
       <Formik
         initialValues={initialValues}
-        onSubmit={onClickSave(sendersToDelete)}
+        onSubmit={onClickSave(emailGroupsToDelete)}
         validateOnChange={false}
         render={({ values, handleSubmit, isSubmitting }) => (
           <EuiOverlayMask>
             <EuiModal className="modal-manage-email" maxWidth={1000} onClose={onClickCancel}>
               <EuiModalHeader>
-                <EuiModalHeaderTitle>Manage email senders</EuiModalHeaderTitle>
+                <EuiModalHeaderTitle>Manage email groups</EuiModalHeaderTitle>
               </EuiModalHeader>
 
               <EuiHorizontalRule />
 
               <EuiModalBody>
                 <FieldArray
-                  name="senders"
+                  name="emailGroups"
                   validateOnChange={true}
                   render={arrayHelpers =>
-                    loadingSenders ? (
+                    loadingEmailGroups ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        Loading Senders...
+                        Loading Email Groups...
                       </div>
                     ) : (
-                      this.renderSenders({ values, arrayHelpers })
+                      this.renderEmailGroups({ values, arrayHelpers })
                     )
                   }
                 />
@@ -163,15 +176,15 @@ export default class ManageSenders extends React.Component {
   }
 }
 
-ManageSenders.propTypes = {
+ManageEmailGroups.propTypes = {
   httpClient: PropTypes.func.isRequired,
-  senders: PropTypes.array,
-  loadingSenders: PropTypes.bool,
+  emailGroups: PropTypes.array,
+  loadingEmailGroups: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
 };
 
-ManageSenders.defaultProps = {
-  senders: [],
-  loadingSenders: false,
+ManageEmailGroups.defaultProps = {
+  emailGroups: [],
+  loadingEmailGroups: false,
 };

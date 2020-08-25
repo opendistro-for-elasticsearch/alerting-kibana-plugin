@@ -22,7 +22,7 @@ import {
 } from '../../../../../components/FormControls';
 import { isInvalid, hasError } from '../../../../../utils/validate';
 import { validateEmail, validateHost, validatePort, validateSenderName } from './utils/validate';
-import { METHOD_TYPE, SENDER_STATE } from './utils/constants';
+import { METHOD_TYPE, STATE } from './utils/constants';
 
 const methodOptions = [
   { value: METHOD_TYPE.NONE, text: 'None' },
@@ -33,10 +33,10 @@ const methodOptions = [
 const onSenderChange = (index, sender, arrayHelpers) => {
   // Checking for id here since new senders should not be marked as updated
   // Also will not replace the sender state if it has already been marked as updated
-  if (sender.id && sender.state !== SENDER_STATE.UPDATED) {
+  if (sender.id && sender.state !== STATE.UPDATED) {
     arrayHelpers.replace(index, {
       ...sender,
-      state: SENDER_STATE.UPDATED,
+      state: STATE.UPDATED,
     });
   }
 };
@@ -68,7 +68,7 @@ const Sender = ({ sender, arrayHelpers, context, index, onDelete }) => {
           error: hasError,
         }}
         inputProps={{
-          placeholder: 'my-sample-sender',
+          placeholder: 'my-sender',
           onChange: (e, field, form) => {
             field.onChange(e);
             onSenderChange(index, sender, arrayHelpers);

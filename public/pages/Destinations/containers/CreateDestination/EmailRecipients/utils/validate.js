@@ -13,23 +13,16 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { EuiSpacer } from '@elastic/eui';
-import EmailSender from '../../../containers/CreateDestination/EmailSender';
-import EmailRecipients from '../../../containers/CreateDestination/EmailRecipients';
+import _ from 'lodash';
+import { RECIPIENT_TYPE } from './constants';
+import { isValidEmail } from '../../../../components/createDestinations/Email/utils/validate';
 
-const propTypes = {
-  type: PropTypes.string.isRequired,
+export const validateEmailRecipients = options => {
+  if (_.isEmpty(options)) return 'Required';
+
+  for (const option of options) {
+    if (option.type === RECIPIENT_TYPE.EMAIL && !isValidEmail(option.value)) {
+      return 'At least one of the specified emails is invalid';
+    }
+  }
 };
-const Email = ({ httpClient, type, values }) => (
-  <div>
-    <EmailSender httpClient={httpClient} type={type} />
-    <EuiSpacer size="m" />
-    <EmailRecipients httpClient={httpClient} type={type} />
-  </div>
-);
-
-Email.propTypes = propTypes;
-
-export default Email;

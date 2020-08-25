@@ -21,7 +21,7 @@ import { FormikComboBox } from '../../../../../components/FormControls';
 import { validateEmailSender } from './utils/validate';
 import { isInvalid, hasError } from '../../../../../utils/validate';
 import ManageSenders from '../ManageSenders';
-import { SENDER_STATE } from '../../../components/createDestinations/Email/utils/constants';
+import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 
 export default class EmailSender extends React.Component {
   constructor(props) {
@@ -31,6 +31,7 @@ export default class EmailSender extends React.Component {
       senders: [],
       senderOptions: [],
       loadingSenders: true,
+      showManageSendersModal: false,
     };
 
     this.onClickManageSenders = this.onClickManageSenders.bind(this);
@@ -101,9 +102,9 @@ export default class EmailSender extends React.Component {
   onClickSave = sendersToDelete => async (values, formikBag) => {
     const { senders } = values;
     for (const sender of senders) {
-      if (sender.state === SENDER_STATE.CREATED) {
+      if (sender.state === STATE.CREATED) {
         await this.createSender(sender);
-      } else if (sender.state === SENDER_STATE.UPDATED) {
+      } else if (sender.state === STATE.UPDATED) {
         await this.updateSender(sender);
       }
     }
@@ -144,7 +145,7 @@ export default class EmailSender extends React.Component {
   };
 
   render() {
-    const { httpClient } = this.props;
+    const { httpClient, type } = this.props;
     const { senders, senderOptions, loadingSenders, showManageSendersModal } = this.state;
     return (
       <Fragment>
@@ -156,7 +157,7 @@ export default class EmailSender extends React.Component {
         >
           <EuiFlexItem grow={false}>
             <FormikComboBox
-              name="emailSender"
+              name={`${type}.emailSender`}
               formRow
               fieldProps={{ validate: validateEmailSender(senderOptions) }}
               rowProps={{
@@ -173,10 +174,10 @@ export default class EmailSender extends React.Component {
                 isLoading: loadingSenders,
                 options: senderOptions,
                 onChange: (options, field, form) => {
-                  form.setFieldValue('emailSender', options);
+                  form.setFieldValue(`${type}.emailSender`, options);
                 },
                 onBlur: (e, field, form) => {
-                  form.setFieldTouched('emailSender', true);
+                  form.setFieldTouched(`${type}.emailSender`, true);
                 },
                 singleSelection: { asPlainText: true },
                 isClearable: false,
@@ -206,4 +207,5 @@ export default class EmailSender extends React.Component {
 
 EmailSender.propTypes = {
   httpClient: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
 };

@@ -16,7 +16,7 @@
 import _ from 'lodash';
 import {
   FORMIK_INITIAL_SENDER_VALUES,
-  SENDER_STATE,
+  STATE,
 } from '../../../../components/createDestinations/Email/utils/constants';
 
 export function senderToFormik(sender) {
@@ -31,6 +31,6 @@ export function senderToFormik(sender) {
     host,
     port,
     method,
-    state: SENDER_STATE.NO_OP,
+    state: STATE.NO_OP,
   };
 }

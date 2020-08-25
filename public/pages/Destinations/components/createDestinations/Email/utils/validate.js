@@ -13,6 +13,8 @@
  *   permissions and limitations under the License.
  */
 
+import _ from 'lodash';
+
 export const validateSenderName = senders => value => {
   if (!value) {
     return 'Required';
@@ -24,10 +26,29 @@ export const validateSenderName = senders => value => {
   if (matches.length > 1) return 'Sender name is already being used';
 };
 
+export const validateEmailGroupName = emailGroups => value => {
+  if (!value) {
+    return 'Required';
+  } else if (!/^[A-Z0-9_-]+$/i.test(value)) {
+    return 'Invalid email group name';
+  }
+
+  const matches = emailGroups.filter(emailGroup => emailGroup.name === value);
+  if (matches.length > 1) return 'Email group name is already being used';
+};
+
+export const validateEmailGroupEmails = options => {
+  if (_.isEmpty(options)) return 'Must specify an email';
+
+  if (options.some(option => !isValidEmail(option))) {
+    return 'At least one of the specified emails is invalid';
+  }
+};
+
 export const validateEmail = value => {
   if (!value) {
     return 'Required';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+  } else if (!isValidEmail(value)) {
     return 'Invalid email address';
   }
 };
@@ -41,3 +62,5 @@ export const validateHost = value => {
 export const validatePort = value => {
   if (!value) return 'Required';
 };
+
+export const isValidEmail = value => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);

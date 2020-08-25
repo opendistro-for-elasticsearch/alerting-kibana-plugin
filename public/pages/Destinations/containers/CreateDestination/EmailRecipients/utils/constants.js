@@ -13,23 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { EuiSpacer } from '@elastic/eui';
-import EmailSender from '../../../containers/CreateDestination/EmailSender';
-import EmailRecipients from '../../../containers/CreateDestination/EmailRecipients';
-
-const propTypes = {
-  type: PropTypes.string.isRequired,
+export const RECIPIENT_TYPE = {
+  EMAIL: 'email',
+  EMAIL_GROUP: 'emailGroup',
 };
-const Email = ({ httpClient, type, values }) => (
-  <div>
-    <EmailSender httpClient={httpClient} type={type} />
-    <EuiSpacer size="m" />
-    <EmailRecipients httpClient={httpClient} type={type} />
-  </div>
-);
-
-Email.propTypes = propTypes;
-
-export default Email;
