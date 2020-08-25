@@ -32,7 +32,7 @@
     "@elastic/eslint-import-resolver-kibana": "link:../../packages/kbn-eslint-import-resolver-kibana",
     "@kbn/expect": "link:../../packages/kbn-expect",
     "@kbn/plugin-helpers": "link:../../packages/kbn-plugin-helpers",
-    "cypress": "^4.8.0",
+    "cypress": "^5.0.0",
     "husky": "^3.0.0",
     "lint-staged": "^9.2.0"
   },
