@@ -54,7 +54,8 @@ const getEmailOptions = emailGroups => {
   // Return a unique list of all emails across all email groups
   const nestedEmails = emailGroups.map(emailGroup => emailGroup.emails);
   const emails = [].concat(...nestedEmails);
-  return [...new Set(emails)].map(email => ({ label: email }));
+  // Don't wrap the email in a label if it was a custom option since it already is
+  return [...new Set(emails)].map(email => (_.isString(email) ? { label: email } : email));
 };
 
 export default class ManageEmailGroups extends React.Component {
