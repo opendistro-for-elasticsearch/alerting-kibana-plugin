@@ -21,7 +21,6 @@ import { FormikComboBox } from '../../../../../components/FormControls';
 import { validateEmailSender } from './utils/validate';
 import { isInvalid, hasError } from '../../../../../utils/validate';
 import ManageSenders from '../ManageSenders';
-import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import getSenders from './utils/helpers';
 
 export default class EmailSender extends React.Component {
@@ -52,69 +51,7 @@ export default class EmailSender extends React.Component {
     this.setState({ showManageSendersModal: false });
   }
 
-  createSender = async sender => {
-    const { httpClient } = this.props;
-    const body = {
-      name: sender.name,
-      email: sender.email,
-      host: sender.host,
-      port: sender.port,
-      method: sender.method,
-    };
-    try {
-      await httpClient.post(`../api/alerting/email_accounts`, body);
-    } catch (err) {
-      console.error('Unable to create sender', err);
-    }
-  };
-
-  updateSender = async updatedSender => {
-    const { httpClient } = this.props;
-    const { id, ifSeqNo, ifPrimaryTerm } = updatedSender;
-    const body = {
-      name: updatedSender.name,
-      email: updatedSender.email,
-      host: updatedSender.host,
-      port: updatedSender.port,
-      method: updatedSender.method,
-    };
-    try {
-      await httpClient.put(
-        `../api/alerting/email_accounts/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-        body
-      );
-    } catch (err) {
-      console.error('Unable to update sender', err);
-    }
-  };
-
-  deleteSender = async sender => {
-    const { httpClient } = this.props;
-    const { id } = sender;
-    try {
-      await httpClient.delete(`../api/alerting/email_accounts/${id}`);
-    } catch (err) {
-      console.error('Unable to delete sender', err);
-    }
-  };
-
-  // Using a curried function to pass custom values to the formik submission handler
-  // TODO: Cleanup this function (currently making sequential API calls since each one has 'awaits' on it)
-  onClickSave = sendersToDelete => async (values, formikBag) => {
-    const { senders } = values;
-    for (const sender of senders) {
-      if (sender.state === STATE.CREATED) {
-        await this.createSender(sender);
-      } else if (sender.state === STATE.UPDATED) {
-        await this.updateSender(sender);
-      }
-    }
-
-    for (const sender of sendersToDelete) {
-      await this.deleteSender(sender);
-    }
-
-    // this.setState({ showManageSendersModal: false });
+  onClickSave = () => {
     this.loadSenders().then(r => this.setState({ showManageSendersModal: false }));
   };
 

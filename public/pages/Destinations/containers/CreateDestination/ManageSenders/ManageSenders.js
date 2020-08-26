@@ -37,6 +37,7 @@ import Sender from '../../../components/createDestinations/Email/Sender';
 import SenderEmptyPrompt from '../../../components/createDestinations/SenderEmptyPrompt';
 import { senderToFormik } from './utils/helpers';
 import getSenders from '../EmailSender/utils/helpers';
+import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 
 const createSenderContext = senders => ({
   ctx: {
@@ -84,6 +85,72 @@ export default class ManageSenders extends React.Component {
     });
   };
 
+  createSender = async sender => {
+    const { httpClient } = this.props;
+    const body = {
+      name: sender.name,
+      email: sender.email,
+      host: sender.host,
+      port: sender.port,
+      method: sender.method,
+    };
+    try {
+      await httpClient.post(`../api/alerting/email_accounts`, body);
+    } catch (err) {
+      console.error('Unable to create sender', err);
+    }
+  };
+
+  updateSender = async updatedSender => {
+    const { httpClient } = this.props;
+    const { id, ifSeqNo, ifPrimaryTerm } = updatedSender;
+    const body = {
+      name: updatedSender.name,
+      email: updatedSender.email,
+      host: updatedSender.host,
+      port: updatedSender.port,
+      method: updatedSender.method,
+    };
+    try {
+      await httpClient.put(
+        `../api/alerting/email_accounts/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
+        body
+      );
+    } catch (err) {
+      console.error('Unable to update sender', err);
+    }
+  };
+
+  deleteSender = async sender => {
+    const { httpClient } = this.props;
+    const { id } = sender;
+    try {
+      await httpClient.delete(`../api/alerting/email_accounts/${id}`);
+    } catch (err) {
+      console.error('Unable to delete sender', err);
+    }
+  };
+
+  // TODO: Cleanup this function (currently making sequential API calls since each one has 'awaits' on it)
+  processSenders = async values => {
+    const { sendersToDelete } = this.state;
+    const { senders } = values;
+
+    // Create or update email senders
+    for (const sender of senders) {
+      if (sender.state === STATE.CREATED) {
+        await this.createSender(sender);
+      } else if (sender.state === STATE.UPDATED) {
+        await this.updateSender(sender);
+      }
+    }
+
+    // Delete any removed email senders
+    for (const sender of sendersToDelete) {
+      await this.deleteSender(sender);
+    }
+  };
+
   renderSenders = ({ values, arrayHelpers }) => {
     const hasSenders = !_.isEmpty(values.senders);
     return hasSenders ? (
@@ -118,11 +185,13 @@ export default class ManageSenders extends React.Component {
 
   render() {
     const { isVisible, onClickCancel, onClickSave } = this.props;
-    const { initialValues, loadingSenders, sendersToDelete } = this.state;
+    const { initialValues, loadingSenders } = this.state;
     return isVisible ? (
       <Formik
         initialValues={initialValues}
-        onSubmit={onClickSave(sendersToDelete)}
+        onSubmit={(values, formikBag) => {
+          this.processSenders(values).then(() => onClickSave());
+        }}
         validateOnChange={false}
         render={({ values, handleSubmit, isSubmitting }) => (
           <EuiOverlayMask>
