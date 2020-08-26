@@ -13,20 +13,20 @@
  *   permissions and limitations under the License.
  */
 
-export default async function getSenders(searchText = '') {
+export default async function getEmailGroups(searchText = '') {
   const { httpClient } = this.props;
   try {
     const response = await httpClient.get(
-      `../api/alerting/email_accounts?search=${searchText}&size=200`
+      `../api/alerting/email_groups?search=${searchText}&size=200`
     );
     if (response.data.ok) {
-      return response.data.emailAccounts;
+      return response.data.emailGroups;
     } else {
-      console.log('Unable to get email accounts', response.data.err);
+      console.log('Unable to get email groups', response.data.err);
       return [];
     }
   } catch (err) {
-    console.log('Unable to get email accounts', err);
+    console.log('Unable to get email groups', err);
     return [];
   }
 }

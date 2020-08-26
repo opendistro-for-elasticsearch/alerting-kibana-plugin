@@ -36,6 +36,7 @@ import AddEmailGroupButton from '../../../components/createDestinations/AddEmail
 import EmailGroup from '../../../components/createDestinations/Email/EmailGroup';
 import EmailGroupEmptyPrompt from '../../../components/createDestinations/EmailGroupEmptyPrompt';
 import { emailGroupToFormik } from './utils/helpers';
+import getEmailGroups from '../EmailRecipients/utils/helpers';
 
 const createEmailGroupContext = emailGroups => ({
   ctx: {
@@ -62,34 +63,42 @@ export default class ManageEmailGroups extends React.Component {
   constructor(props) {
     super(props);
 
-    const { emailGroups } = this.props;
-    const initialValues = getInitialValues(emailGroups);
-
     this.state = {
-      initialValues,
       emailGroupsToDelete: [],
+      loadingEmailGroups: true,
     };
+
+    this.getEmailGroups = getEmailGroups.bind(this);
   }
 
-  // Reload initial values so the change reflects on subsequent renders
-  // after email groups have been altered
+  componentDidMount() {
+    this.loadInitialValues();
+  }
+
+  // Reload initial values when modal is no longer visible so changes
+  // are reflected the next time it is opened
   componentDidUpdate(prevProps) {
-    if (!this.props.loadingEmailGroups && prevProps.loadingEmailGroups) {
-      this.reloadInitialValues(this.props.emailGroups);
+    if (prevProps.isVisible && !this.props.isVisible) {
+      this.loadInitialValues(this.props.emailGroups);
     }
   }
 
-  reloadInitialValues = emailGroups => {
+  loadInitialValues = async () => {
+    this.setState({ loadingEmailGroups: true });
+
+    const emailGroups = await this.getEmailGroups();
     const initialValues = getInitialValues(emailGroups);
 
     this.setState({
       initialValues,
       emailGroupsToDelete: [],
+      loadingEmailGroups: false,
     });
   };
 
   renderEmailGroups = ({ values, arrayHelpers }) => {
     const hasEmailGroups = !_.isEmpty(values.emailGroups);
+    // TODO: Change this to getEmailOptions from stored emailGroups state
     const emailOptions = getEmailOptions(values.emailGroups);
     return hasEmailGroups ? (
       <div>
@@ -123,9 +132,9 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   render() {
-    const { loadingEmailGroups, onClickCancel, onClickSave } = this.props;
-    const { initialValues, emailGroupsToDelete } = this.state;
-    return (
+    const { isVisible, onClickCancel, onClickSave } = this.props;
+    const { initialValues, loadingEmailGroups, emailGroupsToDelete } = this.state;
+    return isVisible ? (
       <Formik
         initialValues={initialValues}
         onSubmit={onClickSave(emailGroupsToDelete)}
@@ -173,19 +182,17 @@ export default class ManageEmailGroups extends React.Component {
           </EuiOverlayMask>
         )}
       />
-    );
+    ) : null;
   }
 }
 
 ManageEmailGroups.propTypes = {
   httpClient: PropTypes.func.isRequired,
-  emailGroups: PropTypes.array,
-  loadingEmailGroups: PropTypes.bool,
+  isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
 };
 
 ManageEmailGroups.defaultProps = {
-  emailGroups: [],
-  loadingEmailGroups: false,
+  isVisible: false,
 };

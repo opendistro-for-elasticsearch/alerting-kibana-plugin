@@ -40,7 +40,7 @@ export const validateEmailGroupName = emailGroups => value => {
 export const validateEmailGroupEmails = options => {
   if (_.isEmpty(options)) return 'Must specify an email';
 
-  if (options.some(option => !isValidEmail(option))) {
+  if (options.some(option => !isValidEmail(option.label))) {
     return 'At least one of the specified emails is invalid';
   }
 };

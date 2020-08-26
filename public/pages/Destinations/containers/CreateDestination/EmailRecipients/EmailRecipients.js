@@ -23,6 +23,7 @@ import ManageEmailGroups from '../ManageEmailGroups';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import { validateEmailRecipients } from './utils/validate';
 import { RECIPIENT_TYPE } from './utils/constants';
+import getEmailGroups from './utils/helpers';
 
 export default class EmailRecipients extends React.Component {
   constructor(props) {
@@ -35,6 +36,7 @@ export default class EmailRecipients extends React.Component {
       showManageEmailGroupsModal: false,
     };
 
+    this.getEmailGroups = getEmailGroups.bind(this);
     this.onClickManageEmailGroups = this.onClickManageEmailGroups.bind(this);
     this.onClickCancel = this.onClickCancel.bind(this);
   }
@@ -68,7 +70,7 @@ export default class EmailRecipients extends React.Component {
     const { httpClient } = this.props;
     const body = {
       name: emailGroup.name,
-      emails: emailGroup.emails.map(email => ({ email: email })),
+      emails: emailGroup.emails.map(email => ({ email: email.label })),
     };
     try {
       await httpClient.post(`../api/alerting/email_groups`, body);
@@ -82,7 +84,7 @@ export default class EmailRecipients extends React.Component {
     const { id, ifSeqNo, ifPrimaryTerm } = updatedEmailGroup;
     const body = {
       name: updatedEmailGroup.name,
-      emails: updatedEmailGroup.emails.map(email => ({ email: email })),
+      emails: updatedEmailGroup.emails.map(email => ({ email: email.label })),
     };
     try {
       await httpClient.put(
@@ -126,36 +128,24 @@ export default class EmailRecipients extends React.Component {
 
   // TODO: Only loading email groups here at the moment, should add emails as options too
   loadData = async (searchText = '') => {
-    const { httpClient } = this.props;
     this.setState({ isLoading: true });
-    try {
-      const response = await httpClient.get(
-        `../api/alerting/email_groups?search=${searchText}&size=200`
-      );
-      const emailGroups = response.data.emailGroups;
-      const emailGroupOptions = emailGroups.map(emailGroup => ({
-        label: emailGroup.name,
-        value: emailGroup.id,
-        type: RECIPIENT_TYPE.EMAIL_GROUP,
-      }));
-      this.setState({
-        emailGroups: emailGroups,
-        recipientOptions: emailGroupOptions,
-        isLoading: false,
-      });
-    } catch (err) {
-      console.log(err);
-      this.setState({
-        emailGroups: [],
-        recipientOptions: [],
-        isLoading: false,
-      });
-    }
+
+    const emailGroups = await this.getEmailGroups();
+    const emailGroupOptions = emailGroups.map(emailGroup => ({
+      label: emailGroup.name,
+      value: emailGroup.id,
+      type: RECIPIENT_TYPE.EMAIL_GROUP,
+    }));
+
+    this.setState({
+      recipientOptions: emailGroupOptions,
+      isLoading: false,
+    });
   };
 
   render() {
     const { httpClient, type } = this.props;
-    const { emailGroups, recipientOptions, isLoading, showManageEmailGroupsModal } = this.state;
+    const { recipientOptions, isLoading, showManageEmailGroupsModal } = this.state;
     return (
       <Fragment>
         <EuiFlexGroup
@@ -206,15 +196,12 @@ export default class EmailRecipients extends React.Component {
           </EuiFlexItem>
         </EuiFlexGroup>
 
-        {showManageEmailGroupsModal && (
-          <ManageEmailGroups
-            httpClient={httpClient}
-            emailGroups={emailGroups}
-            loadingEmailGroups={isLoading}
-            onClickCancel={this.onClickCancel}
-            onClickSave={this.onClickSave}
-          />
-        )}
+        <ManageEmailGroups
+          httpClient={httpClient}
+          isVisible={showManageEmailGroupsModal}
+          onClickCancel={this.onClickCancel}
+          onClickSave={this.onClickSave}
+        />
       </Fragment>
     );
   }

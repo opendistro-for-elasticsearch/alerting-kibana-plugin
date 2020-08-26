@@ -251,7 +251,7 @@ export default function alertingPlugin(Client, config, components) {
       fmt: `${EMAIL_GROUP_BASE_API}?refresh=wait_for`,
     },
     needBody: true,
-    method: 'PUT',
+    method: 'POST',
   });
 
   alerting.updateEmailGroup = ca({

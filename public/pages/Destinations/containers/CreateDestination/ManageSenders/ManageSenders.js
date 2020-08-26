@@ -117,8 +117,8 @@ export default class ManageSenders extends React.Component {
   };
 
   render() {
-    const { isVisible, loadingSenders, onClickCancel, onClickSave } = this.props;
-    const { initialValues, sendersToDelete } = this.state;
+    const { isVisible, onClickCancel, onClickSave } = this.props;
+    const { initialValues, loadingSenders, sendersToDelete } = this.state;
     return isVisible ? (
       <Formik
         initialValues={initialValues}
