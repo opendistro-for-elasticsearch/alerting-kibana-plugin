@@ -52,6 +52,8 @@ export default class EmailSender extends React.Component {
   }
 
   onClickSave = () => {
+    // TODO: Check if 'then' is necessary here
+    // this.setState({ showManageSendersModal: false })
     this.loadSenders().then(r => this.setState({ showManageSendersModal: false }));
   };
 

@@ -37,6 +37,7 @@ import EmailGroup from '../../../components/createDestinations/Email/EmailGroup'
 import EmailGroupEmptyPrompt from '../../../components/createDestinations/EmailGroupEmptyPrompt';
 import { emailGroupToFormik } from './utils/helpers';
 import getEmailGroups from '../EmailRecipients/utils/helpers';
+import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 
 const createEmailGroupContext = emailGroups => ({
   ctx: {
@@ -96,6 +97,66 @@ export default class ManageEmailGroups extends React.Component {
     });
   };
 
+  createEmailGroup = async emailGroup => {
+    const { httpClient } = this.props;
+    const body = {
+      name: emailGroup.name,
+      emails: emailGroup.emails.map(email => ({ email: email.label })),
+    };
+    try {
+      await httpClient.post(`../api/alerting/email_groups`, body);
+    } catch (err) {
+      console.error('Unable to create email group', err);
+    }
+  };
+
+  updateEmailGroup = async updatedEmailGroup => {
+    const { httpClient } = this.props;
+    const { id, ifSeqNo, ifPrimaryTerm } = updatedEmailGroup;
+    const body = {
+      name: updatedEmailGroup.name,
+      emails: updatedEmailGroup.emails.map(email => ({ email: email.label })),
+    };
+    try {
+      await httpClient.put(
+        `../api/alerting/email_groups/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
+        body
+      );
+    } catch (err) {
+      console.error('Unable to update email group', err);
+    }
+  };
+
+  deleteEmailGroup = async emailGroup => {
+    const { httpClient } = this.props;
+    const { id } = emailGroup;
+    try {
+      await httpClient.delete(`../api/alerting/email_groups/${id}`);
+    } catch (err) {
+      console.err('Unable to delete email group', err);
+    }
+  };
+
+  // TODO: Cleanup this function (currently making sequential API calls since each one has 'awaits' on it)
+  processEmailGroups = async values => {
+    const { emailGroupsToDelete } = this.state;
+    const { emailGroups } = values;
+
+    // Create or update email groups
+    for (const emailGroup of emailGroups) {
+      if (emailGroup.state === STATE.CREATED) {
+        await this.createEmailGroup(emailGroup);
+      } else if (emailGroup.state === STATE.UPDATED) {
+        await this.updateEmailGroup(emailGroup);
+      }
+    }
+
+    // Delete any removed email groups
+    for (const emailGroup of emailGroupsToDelete) {
+      await this.deleteEmailGroup(emailGroup);
+    }
+  };
+
   renderEmailGroups = ({ values, arrayHelpers }) => {
     const hasEmailGroups = !_.isEmpty(values.emailGroups);
     // TODO: Change this to getEmailOptions from stored emailGroups state
@@ -137,7 +198,9 @@ export default class ManageEmailGroups extends React.Component {
     return isVisible ? (
       <Formik
         initialValues={initialValues}
-        onSubmit={onClickSave(emailGroupsToDelete)}
+        onSubmit={(values, formikBag) => {
+          this.processEmailGroups(values).then(() => onClickSave());
+        }}
         validateOnChange={false}
         render={({ values, handleSubmit, isSubmitting }) => (
           <EuiOverlayMask>

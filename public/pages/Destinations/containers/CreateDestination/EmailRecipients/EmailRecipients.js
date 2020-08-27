@@ -66,62 +66,8 @@ export default class EmailRecipients extends React.Component {
     setFieldValue(fieldName, [...selectedOptions, newOption]);
   };
 
-  createEmailGroup = async emailGroup => {
-    const { httpClient } = this.props;
-    const body = {
-      name: emailGroup.name,
-      emails: emailGroup.emails.map(email => ({ email: email.label })),
-    };
-    try {
-      await httpClient.post(`../api/alerting/email_groups`, body);
-    } catch (err) {
-      console.error('Unable to create email group', err);
-    }
-  };
-
-  updateEmailGroup = async updatedEmailGroup => {
-    const { httpClient } = this.props;
-    const { id, ifSeqNo, ifPrimaryTerm } = updatedEmailGroup;
-    const body = {
-      name: updatedEmailGroup.name,
-      emails: updatedEmailGroup.emails.map(email => ({ email: email.label })),
-    };
-    try {
-      await httpClient.put(
-        `../api/alerting/email_groups/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-        body
-      );
-    } catch (err) {
-      console.error('Unable to update email group', err);
-    }
-  };
-
-  deleteEmailGroup = async emailGroup => {
-    const { httpClient } = this.props;
-    const { id } = emailGroup;
-    try {
-      await httpClient.delete(`../api/alerting/email_groups/${id}`);
-    } catch (err) {
-      console.err('Unable to delete email group', err);
-    }
-  };
-
-  // Using a curried function to pass custom values to the formik submission handler
-  // TODO: Cleanup this function (currently making sequential API calls since each one has 'awaits' on it)
-  onClickSave = emailGroupsToDelete => async (values, formikBag) => {
-    const { emailGroups } = values;
-    for (const emailGroup of emailGroups) {
-      if (emailGroup.state === STATE.CREATED) {
-        await this.createEmailGroup(emailGroup);
-      } else if (emailGroup.state === STATE.UPDATED) {
-        await this.updateEmailGroup(emailGroup);
-      }
-    }
-
-    for (const emailGroup of emailGroupsToDelete) {
-      await this.deleteEmailGroup(emailGroup);
-    }
-
+  onClickSave = () => {
+    // TODO: Check if 'then' is necessary here
     // this.setState({ showManageEmailGroupsModal: false });
     this.loadData().then(r => this.setState({ showManageEmailGroupsModal: false }));
   };
