@@ -15,5 +15,5 @@
 
 export const RECIPIENT_TYPE = {
   EMAIL: 'email',
-  EMAIL_GROUP: 'emailGroup',
+  EMAIL_GROUP: 'email_group',
 };

@@ -200,7 +200,7 @@ export default class ManageSenders extends React.Component {
                 <EuiModalHeaderTitle>Manage email senders</EuiModalHeaderTitle>
               </EuiModalHeader>
 
-              <EuiHorizontalRule />
+              <EuiHorizontalRule margin="s" />
 
               <EuiModalBody>
                 <FieldArray
@@ -218,7 +218,7 @@ export default class ManageSenders extends React.Component {
                 />
               </EuiModalBody>
 
-              <EuiHorizontalRule />
+              <EuiHorizontalRule margin="s" />
 
               <EuiModalFooter>
                 <EuiFlexGroup alignItems="center" justifyContent="flexEnd">

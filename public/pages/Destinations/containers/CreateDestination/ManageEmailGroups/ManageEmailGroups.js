@@ -209,7 +209,7 @@ export default class ManageEmailGroups extends React.Component {
                 <EuiModalHeaderTitle>Manage email groups</EuiModalHeaderTitle>
               </EuiModalHeader>
 
-              <EuiHorizontalRule />
+              <EuiHorizontalRule margin="s" />
 
               <EuiModalBody>
                 <FieldArray
@@ -227,7 +227,7 @@ export default class ManageEmailGroups extends React.Component {
                 />
               </EuiModalBody>
 
-              <EuiHorizontalRule />
+              <EuiHorizontalRule margin="s" />
 
               <EuiModalFooter>
                 <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
