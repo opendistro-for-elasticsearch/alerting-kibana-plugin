@@ -30,13 +30,17 @@ import { getURLQueryParams } from './utils/helpers';
 import { isDeleteAllowedQuery } from './utils/deleteHelpers';
 import { INDEX } from '../../../../../utils/constants';
 import { DESTINATION_ACTIONS } from '../../../../utils/constants';
+import ManageSenders from '../CreateDestination/ManageSenders';
+import ManageEmailGroups from '../CreateDestination/ManageEmailGroups';
 
 class DestinationsList extends React.Component {
   constructor(props) {
     super(props);
+
     const { from, size, search, sortField, sortDirection, type } = getURLQueryParams(
       props.location
     );
+
     this.state = {
       showDeleteConfirmation: false,
       isDestinationLoading: true,
@@ -52,7 +56,10 @@ class DestinationsList extends React.Component {
         type,
       },
       selectedItems: [],
+      showManageSenders: false,
+      showManageEmailGroups: false,
     };
+
     this.columns = [
       ...staticColumns,
       {
@@ -251,9 +258,7 @@ class DestinationsList extends React.Component {
       <React.Fragment>
         {destinationConsumedByOthers ? (
           <EuiCallOut
-            title={`Couldn't delete destination ${
-              destinationToDelete.name
-            }. One or more monitors uses this destination.`}
+            title={`Couldn't delete destination ${destinationToDelete.name}. One or more monitors uses this destination.`}
             iconType="cross"
             color="danger"
           />
@@ -261,7 +266,16 @@ class DestinationsList extends React.Component {
         <ContentPanel
           bodyStyles={{ padding: 'initial' }}
           title="Destinations"
-          actions={<DestinationsActions />}
+          actions={
+            <DestinationsActions
+              onClickManageSenders={() => {
+                this.setState({ showManageSenders: true });
+              }}
+              onClickManageEmailGroups={() => {
+                this.setState({ showManageEmailGroups: true });
+              }}
+            />
+          }
         >
           <DeleteConfirmation
             isVisible={this.state.showDeleteConfirmation}
@@ -269,6 +283,28 @@ class DestinationsList extends React.Component {
               this.setState({ showDeleteConfirmation: false });
             }}
             onConfirm={this.handleDeleteDestination}
+          />
+
+          <ManageSenders
+            httpClient={this.props.httpClient}
+            isVisible={this.state.showManageSenders}
+            onClickCancel={() => {
+              this.setState({ showManageSenders: false });
+            }}
+            onClickSave={() => {
+              this.setState({ showManageSenders: false });
+            }}
+          />
+
+          <ManageEmailGroups
+            httpClient={this.props.httpClient}
+            isVisible={this.state.showManageEmailGroups}
+            onClickCancel={() => {
+              this.setState({ showManageEmailGroups: false });
+            }}
+            onClickSave={() => {
+              this.setState({ showManageEmailGroups: false });
+            }}
           />
 
           <DestinationsControls

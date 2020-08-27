@@ -13,21 +13,81 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import { EuiButton, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
+import React, { Component } from 'react';
+import {
+  EuiButton,
+  EuiContextMenuPanel,
+  EuiContextMenuItem,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiPopover,
+} from '@elastic/eui';
+
 import { APP_PATH } from '../../../../../utils/constants';
 import { PLUGIN_NAME } from '../../../../../../utils/constants';
 
-const DestinationsActions = () => {
-  return (
-    <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
-      <EuiFlexItem grow={false}>
-        <EuiButton fill href={`${PLUGIN_NAME}#${APP_PATH.CREATE_DESTINATION}`}>
-          Add destination
-        </EuiButton>
-      </EuiFlexItem>
-    </EuiFlexGroup>
-  );
-};
+export default class DestinationsActions extends Component {
+  state = {
+    isActionsOpen: false,
+  };
 
-export default DestinationsActions;
+  getActions = () => {
+    return [
+      <EuiContextMenuItem
+        key="manageSenders"
+        onClick={() => {
+          this.onCloseActions();
+          this.props.onClickManageSenders();
+        }}
+      >
+        Manage email senders
+      </EuiContextMenuItem>,
+      <EuiContextMenuItem
+        key="manageEmailGroups"
+        onClick={() => {
+          this.onCloseActions();
+          this.props.onClickManageEmailGroups();
+        }}
+      >
+        Manage email groups
+      </EuiContextMenuItem>,
+    ];
+  };
+
+  onCloseActions = () => {
+    this.setState({ isActionsOpen: false });
+  };
+
+  onClickActions = () => {
+    this.setState(prevState => ({ isActionsOpen: !prevState.isActionsOpen }));
+  };
+
+  render() {
+    const { isActionsOpen } = this.state;
+    return (
+      <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
+        <EuiFlexItem>
+          <EuiPopover
+            id="destinationActionsPopover"
+            button={
+              <EuiButton onClick={this.onClickActions} iconType="arrowDown" iconSide="right">
+                Actions
+              </EuiButton>
+            }
+            isOpen={isActionsOpen}
+            closePopover={this.onCloseActions}
+            panelPaddingSize="none"
+            anchorPosition="downLeft"
+          >
+            <EuiContextMenuPanel items={this.getActions()} />
+          </EuiPopover>
+        </EuiFlexItem>
+        <EuiFlexItem grow={false}>
+          <EuiButton fill href={`${PLUGIN_NAME}#${APP_PATH.CREATE_DESTINATION}`}>
+            Add destination
+          </EuiButton>
+        </EuiFlexItem>
+      </EuiFlexGroup>
+    );
+  }
+}
