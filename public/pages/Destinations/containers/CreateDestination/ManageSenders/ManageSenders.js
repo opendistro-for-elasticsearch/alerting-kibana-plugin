@@ -38,6 +38,7 @@ import SenderEmptyPrompt from '../../../components/createDestinations/SenderEmpt
 import { senderToFormik } from './utils/helpers';
 import getSenders from '../EmailSender/utils/helpers';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
+import { ignoreEscape } from '../../../../../utils/helpers';
 
 const createSenderContext = senders => ({
   ctx: {
@@ -195,7 +196,11 @@ export default class ManageSenders extends React.Component {
         validateOnChange={false}
         render={({ values, handleSubmit, isSubmitting }) => (
           <EuiOverlayMask>
-            <EuiModal className="modal-manage-email" maxWidth={1000} onClose={onClickCancel}>
+            <EuiModal
+              className="modal-manage-email"
+              maxWidth={1000}
+              onClose={ignoreEscape(onClickCancel)}
+            >
               <EuiModalHeader>
                 <EuiModalHeaderTitle>Manage email senders</EuiModalHeaderTitle>
               </EuiModalHeader>

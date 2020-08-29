@@ -38,6 +38,7 @@ import EmailGroupEmptyPrompt from '../../../components/createDestinations/EmailG
 import { emailGroupToFormik } from './utils/helpers';
 import getEmailGroups from '../EmailRecipients/utils/helpers';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
+import { ignoreEscape } from '../../../../../utils/helpers';
 
 const createEmailGroupContext = emailGroups => ({
   ctx: {
@@ -204,7 +205,11 @@ export default class ManageEmailGroups extends React.Component {
         validateOnChange={false}
         render={({ values, handleSubmit, isSubmitting }) => (
           <EuiOverlayMask>
-            <EuiModal className="modal-manage-email" maxWidth={1000} onClose={onClickCancel}>
+            <EuiModal
+              className="modal-manage-email"
+              maxWidth={1000}
+              onClose={ignoreEscape(onClickCancel)}
+            >
               <EuiModalHeader>
                 <EuiModalHeaderTitle>Manage email groups</EuiModalHeaderTitle>
               </EuiModalHeader>
