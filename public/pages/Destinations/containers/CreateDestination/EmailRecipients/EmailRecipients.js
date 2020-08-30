@@ -20,7 +20,6 @@ import { EuiFlexGroup, EuiFlexItem, EuiButton } from '@elastic/eui';
 import { FormikComboBox } from '../../../../../components/FormControls';
 import { isInvalid, hasError } from '../../../../../utils/validate';
 import ManageEmailGroups from '../ManageEmailGroups';
-import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import { validateEmailRecipients } from './utils/validate';
 import { RECIPIENT_TYPE } from './utils/constants';
 import getEmailGroups from './utils/helpers';
@@ -36,7 +35,6 @@ export default class EmailRecipients extends React.Component {
       showManageEmailGroupsModal: false,
     };
 
-    this.getEmailGroups = getEmailGroups.bind(this);
     this.onClickManageEmailGroups = this.onClickManageEmailGroups.bind(this);
     this.onClickCancel = this.onClickCancel.bind(this);
   }
@@ -69,15 +67,16 @@ export default class EmailRecipients extends React.Component {
   onClickSave = () => {
     // TODO: Check if 'then' is necessary here
     // this.setState({ showManageEmailGroupsModal: false });
-    this.loadData().then(r => this.setState({ showManageEmailGroupsModal: false }));
+    this.loadData().then((r) => this.setState({ showManageEmailGroupsModal: false }));
   };
 
   // TODO: Only loading email groups here at the moment, should add emails as options too
   loadData = async (searchText = '') => {
+    const { httpClient } = this.props;
     this.setState({ isLoading: true });
 
-    const emailGroups = await this.getEmailGroups();
-    const emailGroupOptions = emailGroups.map(emailGroup => ({
+    const emailGroups = await getEmailGroups(httpClient);
+    const emailGroupOptions = emailGroups.map((emailGroup) => ({
       label: emailGroup.name,
       value: emailGroup.id,
       type: RECIPIENT_TYPE.EMAIL_GROUP,

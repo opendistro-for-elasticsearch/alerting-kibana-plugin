@@ -33,7 +33,6 @@ export default class EmailSender extends React.Component {
       showManageSendersModal: false,
     };
 
-    this.getSenders = getSenders.bind(this);
     this.onClickManageSenders = this.onClickManageSenders.bind(this);
     this.onClickCancel = this.onClickCancel.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
@@ -54,14 +53,15 @@ export default class EmailSender extends React.Component {
   onClickSave = () => {
     // TODO: Check if 'then' is necessary here
     // this.setState({ showManageSendersModal: false })
-    this.loadSenders().then(r => this.setState({ showManageSendersModal: false }));
+    this.loadSenders().then((r) => this.setState({ showManageSendersModal: false }));
   };
 
   loadSenders = async () => {
+    const { httpClient } = this.props;
     this.setState({ loadingSenders: true });
 
-    const senders = await this.getSenders();
-    const senderOptions = senders.map(sender => ({
+    const senders = await getSenders(httpClient);
+    const senderOptions = senders.map((sender) => ({
       label: sender.name,
       value: sender.id,
     }));

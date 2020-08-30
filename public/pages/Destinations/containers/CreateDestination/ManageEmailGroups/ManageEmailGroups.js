@@ -40,25 +40,25 @@ import getEmailGroups from '../EmailRecipients/utils/helpers';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import { ignoreEscape } from '../../../../../utils/helpers';
 
-const createEmailGroupContext = emailGroups => ({
+const createEmailGroupContext = (emailGroups) => ({
   ctx: {
     emailGroups,
   },
 });
 
-const getInitialValues = emailGroups =>
+const getInitialValues = (emailGroups) =>
   _.isEmpty(emailGroups)
     ? { emailGroups: [] }
-    : { emailGroups: emailGroups.map(emailGroup => emailGroupToFormik(emailGroup)) };
+    : { emailGroups: emailGroups.map((emailGroup) => emailGroupToFormik(emailGroup)) };
 
-const getEmailOptions = emailGroups => {
+const getEmailOptions = (emailGroups) => {
   if (_.isEmpty(emailGroups)) return [];
 
   // Return a unique list of all emails across all email groups
-  const nestedEmails = emailGroups.map(emailGroup => emailGroup.emails);
+  const nestedEmails = emailGroups.map((emailGroup) => emailGroup.emails);
   const emails = [].concat(...nestedEmails);
   // Don't wrap the email in a label if it was a custom option since it already is
-  return [...new Set(emails)].map(email => (_.isString(email) ? { label: email } : email));
+  return [...new Set(emails)].map((email) => (_.isString(email) ? { label: email } : email));
 };
 
 export default class ManageEmailGroups extends React.Component {
@@ -69,8 +69,6 @@ export default class ManageEmailGroups extends React.Component {
       emailGroupsToDelete: [],
       loadingEmailGroups: true,
     };
-
-    this.getEmailGroups = getEmailGroups.bind(this);
   }
 
   componentDidMount() {
@@ -86,9 +84,10 @@ export default class ManageEmailGroups extends React.Component {
   }
 
   loadInitialValues = async () => {
+    const { httpClient } = this.props;
     this.setState({ loadingEmailGroups: true });
 
-    const emailGroups = await this.getEmailGroups();
+    const emailGroups = await getEmailGroups(httpClient);
     const initialValues = getInitialValues(emailGroups);
 
     this.setState({
@@ -98,11 +97,11 @@ export default class ManageEmailGroups extends React.Component {
     });
   };
 
-  createEmailGroup = async emailGroup => {
+  createEmailGroup = async (emailGroup) => {
     const { httpClient } = this.props;
     const body = {
       name: emailGroup.name,
-      emails: emailGroup.emails.map(email => ({ email: email.label })),
+      emails: emailGroup.emails.map((email) => ({ email: email.label })),
     };
     try {
       await httpClient.post(`../api/alerting/email_groups`, body);
@@ -111,12 +110,12 @@ export default class ManageEmailGroups extends React.Component {
     }
   };
 
-  updateEmailGroup = async updatedEmailGroup => {
+  updateEmailGroup = async (updatedEmailGroup) => {
     const { httpClient } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm } = updatedEmailGroup;
     const body = {
       name: updatedEmailGroup.name,
-      emails: updatedEmailGroup.emails.map(email => ({ email: email.label })),
+      emails: updatedEmailGroup.emails.map((email) => ({ email: email.label })),
     };
     try {
       await httpClient.put(
@@ -128,7 +127,7 @@ export default class ManageEmailGroups extends React.Component {
     }
   };
 
-  deleteEmailGroup = async emailGroup => {
+  deleteEmailGroup = async (emailGroup) => {
     const { httpClient } = this.props;
     const { id } = emailGroup;
     try {
@@ -139,7 +138,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   // TODO: Cleanup this function (currently making sequential API calls since each one has 'awaits' on it)
-  processEmailGroups = async values => {
+  processEmailGroups = async (values) => {
     const { emailGroupsToDelete } = this.state;
     const { emailGroups } = values;
 
@@ -174,7 +173,7 @@ export default class ManageEmailGroups extends React.Component {
               index={index}
               onDelete={() => {
                 if (emailGroup.id) {
-                  this.setState(prevState => ({
+                  this.setState((prevState) => ({
                     emailGroupsToDelete: [...prevState.emailGroupsToDelete, emailGroup],
                   }));
                 }
@@ -220,7 +219,7 @@ export default class ManageEmailGroups extends React.Component {
                 <FieldArray
                   name="emailGroups"
                   validateOnChange={true}
-                  render={arrayHelpers =>
+                  render={(arrayHelpers) =>
                     loadingEmailGroups ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         Loading Email Groups...

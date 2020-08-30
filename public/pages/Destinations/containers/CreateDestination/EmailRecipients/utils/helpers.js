@@ -13,8 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-export default async function getEmailGroups(searchText = '') {
-  const { httpClient } = this.props;
+export default async function getEmailGroups(httpClient, searchText = '') {
   try {
     const response = await httpClient.get(
       `../api/alerting/email_groups?search=${searchText}&size=200`

@@ -13,8 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-export default async function getSenders(searchText = '') {
-  const { httpClient } = this.props;
+export default async function getSenders(httpClient, searchText = '') {
   try {
     const response = await httpClient.get(
       `../api/alerting/email_accounts?search=${searchText}&size=200`

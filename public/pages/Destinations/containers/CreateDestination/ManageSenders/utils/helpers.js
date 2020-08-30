@@ -20,17 +20,9 @@ import {
 } from '../../../../components/createDestinations/Email/utils/constants';
 
 export function senderToFormik(sender) {
-  const { id, ifSeqNo, ifPrimaryTerm, name, email, host, port, method } = sender;
   return {
     ..._.cloneDeep(FORMIK_INITIAL_SENDER_VALUES),
-    id,
-    ifSeqNo,
-    ifPrimaryTerm,
-    name,
-    email,
-    host,
-    port,
-    method,
+    ...sender,
     state: STATE.NO_OP,
   };
 }

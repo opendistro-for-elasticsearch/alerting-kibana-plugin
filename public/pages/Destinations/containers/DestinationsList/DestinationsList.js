@@ -233,7 +233,7 @@ class DestinationsList extends React.Component {
   };
 
   hideManageSendersModal = () => {
-    this.setState({ showManageSenders: true });
+    this.setState({ showManageSenders: false });
   };
 
   hideManageEmailGroupsModal = () => {

@@ -40,14 +40,16 @@ import getSenders from '../EmailSender/utils/helpers';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import { ignoreEscape } from '../../../../../utils/helpers';
 
-const createSenderContext = senders => ({
+const createSenderContext = (senders) => ({
   ctx: {
     senders,
   },
 });
 
-const getInitialValues = senders =>
-  _.isEmpty(senders) ? { senders: [] } : { senders: senders.map(sender => senderToFormik(sender)) };
+const getInitialValues = (senders) =>
+  _.isEmpty(senders)
+    ? { senders: [] }
+    : { senders: senders.map((sender) => senderToFormik(sender)) };
 
 export default class ManageSenders extends React.Component {
   constructor(props) {
@@ -57,8 +59,6 @@ export default class ManageSenders extends React.Component {
       sendersToDelete: [],
       loadingSenders: true,
     };
-
-    this.getSenders = getSenders.bind(this);
   }
 
   componentDidMount() {
@@ -74,9 +74,10 @@ export default class ManageSenders extends React.Component {
   }
 
   loadInitialValues = async () => {
+    const { httpClient } = this.props;
     this.setState({ loadingSenders: true });
 
-    const senders = await this.getSenders();
+    const senders = await getSenders(httpClient);
     const initialValues = getInitialValues(senders);
 
     this.setState({
@@ -86,7 +87,7 @@ export default class ManageSenders extends React.Component {
     });
   };
 
-  createSender = async sender => {
+  createSender = async (sender) => {
     const { httpClient } = this.props;
     const body = {
       name: sender.name,
@@ -102,7 +103,7 @@ export default class ManageSenders extends React.Component {
     }
   };
 
-  updateSender = async updatedSender => {
+  updateSender = async (updatedSender) => {
     const { httpClient } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm } = updatedSender;
     const body = {
@@ -122,7 +123,7 @@ export default class ManageSenders extends React.Component {
     }
   };
 
-  deleteSender = async sender => {
+  deleteSender = async (sender) => {
     const { httpClient } = this.props;
     const { id } = sender;
     try {
@@ -133,7 +134,7 @@ export default class ManageSenders extends React.Component {
   };
 
   // TODO: Cleanup this function (currently making sequential API calls since each one has 'awaits' on it)
-  processSenders = async values => {
+  processSenders = async (values) => {
     const { sendersToDelete } = this.state;
     const { senders } = values;
 
@@ -165,7 +166,7 @@ export default class ManageSenders extends React.Component {
               index={index}
               onDelete={() => {
                 if (sender.id) {
-                  this.setState(prevState => ({
+                  this.setState((prevState) => ({
                     sendersToDelete: [...prevState.sendersToDelete, sender],
                   }));
                 }
@@ -211,7 +212,7 @@ export default class ManageSenders extends React.Component {
                 <FieldArray
                   name="senders"
                   validateOnChange={true}
-                  render={arrayHelpers =>
+                  render={(arrayHelpers) =>
                     loadingSenders ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         Loading Senders...
