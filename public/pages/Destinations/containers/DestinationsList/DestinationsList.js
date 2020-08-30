@@ -106,7 +106,7 @@ class DestinationsList extends React.Component {
     return total === 0;
   };
 
-  handleDeleteAction = async destinationToDelete => {
+  handleDeleteAction = async (destinationToDelete) => {
     const { id, type } = destinationToDelete;
     const allowDelete = await this.isDeleteAllowed(type, id);
     if (allowDelete) {
@@ -148,7 +148,7 @@ class DestinationsList extends React.Component {
     }
   };
 
-  handleEditDestination = destinationToEdit => {
+  handleEditDestination = (destinationToEdit) => {
     this.props.history.push({
       pathname: `destinations/${destinationToEdit.id}`,
       search: `?action=${DESTINATION_ACTIONS.UPDATE_DESTINATION}`,
@@ -156,17 +156,17 @@ class DestinationsList extends React.Component {
     });
   };
 
-  handleSearchChange = e => {
+  handleSearchChange = (e) => {
     const searchText = e.target.value;
-    this.setState(state => ({
+    this.setState((state) => ({
       page: 0,
       queryParams: { ...state.queryParams, search: searchText },
     }));
   };
 
-  handleTypeChange = e => {
+  handleTypeChange = (e) => {
     const type = e.target.value;
-    this.setState(state => {
+    this.setState((state) => {
       return {
         page: 0,
         queryParams: { ...state.queryParams, type },
@@ -206,7 +206,7 @@ class DestinationsList extends React.Component {
     const { index: page, size } = tablePage;
     const { field: sortField, direction: sortDirection } = sort;
 
-    this.setState(state => ({
+    this.setState((state) => ({
       page,
       queryParams: {
         ...state.queryParams,
@@ -217,12 +217,12 @@ class DestinationsList extends React.Component {
     }));
   };
 
-  handlePageClick = page => {
+  handlePageClick = (page) => {
     this.setState({ page });
   };
 
   handleResetFilter = () => {
-    this.setState(state => ({
+    this.setState((state) => ({
       ...state,
       queryParams: {
         ...state.queryParams,
@@ -230,6 +230,14 @@ class DestinationsList extends React.Component {
         type: 'ALL',
       },
     }));
+  };
+
+  hideManageSendersModal = () => {
+    this.setState({ showManageSenders: true });
+  };
+
+  hideManageEmailGroupsModal = () => {
+    this.setState({ showManageEmailGroups: false });
   };
 
   render() {
@@ -288,23 +296,15 @@ class DestinationsList extends React.Component {
           <ManageSenders
             httpClient={this.props.httpClient}
             isVisible={this.state.showManageSenders}
-            onClickCancel={() => {
-              this.setState({ showManageSenders: false });
-            }}
-            onClickSave={() => {
-              this.setState({ showManageSenders: false });
-            }}
+            onClickCancel={this.hideManageSendersModal}
+            onClickSave={this.hideManageSendersModal}
           />
 
           <ManageEmailGroups
             httpClient={this.props.httpClient}
             isVisible={this.state.showManageEmailGroups}
-            onClickCancel={() => {
-              this.setState({ showManageEmailGroups: false });
-            }}
-            onClickSave={() => {
-              this.setState({ showManageEmailGroups: false });
-            }}
+            onClickCancel={this.hideManageEmailGroupsModal}
+            onClickSave={this.hideManageEmailGroupsModal}
           />
 
           <DestinationsControls
