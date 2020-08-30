@@ -143,7 +143,10 @@ const Sender = ({ sender, arrayHelpers, context, index, onDelete }) => {
         formRow
         rowProps={{
           label: 'Encryption method',
-          helpText: 'Add help text here',
+          helpText: `SSL or TLS is recommended for security.
+          SSL and TLS requires validation by adding the following fields to the Elasticsearch keystore:
+          opendistro.alerting.destination.email.${!name ? '[sender name]' : name}.username
+          opendistro.alerting.destination.email.${!name ? '[sender name]' : name}.password`,
           style: { padding: '10px 0px' },
         }}
         inputProps={{
