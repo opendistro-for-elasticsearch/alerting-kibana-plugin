@@ -54,11 +54,16 @@ const getInitialValues = (emailGroups) =>
 const getEmailOptions = (emailGroups) => {
   if (_.isEmpty(emailGroups)) return [];
 
-  // Return a unique list of all emails across all email groups
+  // Get emails from email groups
   const nestedEmails = emailGroups.map((emailGroup) => emailGroup.emails);
-  const emails = [].concat(...nestedEmails);
-  // Don't wrap the email in a label if it was a custom option since it already is
-  return [...new Set(emails)].map((email) => (_.isString(email) ? { label: email } : email));
+  const emailOptions = [].concat(...nestedEmails);
+
+  // Extract the email if it's already wrapped in a label (custom option)
+  // so it can be filtered out
+  const emails = emailOptions.map((email) => (_.isString(email) ? email : email.label));
+
+  // Return a unique list of emails as options
+  return [...new Set(emails)].map((email) => ({ label: email }));
 };
 
 export default class ManageEmailGroups extends React.Component {

@@ -15,52 +15,53 @@
 
 import _ from 'lodash';
 
-export const validateSenderName = senders => value => {
-  if (!value) {
-    return 'Required';
-  } else if (!/^[A-Z0-9_-]+$/i.test(value)) {
-    return 'Invalid sender name';
-  }
+export const validateSenderName = (senders) => (value) => {
+  if (!value) return 'Required';
 
-  const matches = senders.filter(sender => sender.name === value);
+  if (!/^[A-Z0-9_-]+$/i.test(value)) return 'Invalid sender name';
+
+  const matches = senders.filter((sender) => sender.name === value);
   if (matches.length > 1) return 'Sender name is already being used';
 };
 
-export const validateEmailGroupName = emailGroups => value => {
-  if (!value) {
-    return 'Required';
-  } else if (!/^[A-Z0-9_-]+$/i.test(value)) {
+export const validateEmailGroupName = (emailGroups) => (value) => {
+  if (!value) return 'Required';
+
+  if (!/^[A-Z0-9_-]+$/i.test(value)) {
     return 'Invalid email group name';
   }
 
-  const matches = emailGroups.filter(emailGroup => emailGroup.name === value);
+  const matches = emailGroups.filter((emailGroup) => emailGroup.name === value);
   if (matches.length > 1) return 'Email group name is already being used';
 };
 
-export const validateEmailGroupEmails = options => {
+export const validateEmailGroupEmails = (options) => {
   if (_.isEmpty(options)) return 'Must specify an email';
 
-  if (options.some(option => !isValidEmail(option.label))) {
-    return 'At least one of the specified emails is invalid';
+  const invalidEmails = options
+    .map((option) => option.label)
+    .filter((email) => !isValidEmail(email));
+  if (invalidEmails.length > 0) {
+    return `Invalid emails: ${invalidEmails}`;
   }
 };
 
-export const validateEmail = value => {
-  if (!value) {
-    return 'Required';
-  } else if (!isValidEmail(value)) {
+export const validateEmail = (value) => {
+  if (!value) return 'Required';
+
+  if (!isValidEmail(value)) {
     return 'Invalid email address';
   }
 };
 
-export const validateHost = value => {
+export const validateHost = (value) => {
   // SMTP hosts are usually of the format smtp.serveraddress.com
   // but this is not always the case so choosing not to validate the format here
   if (!value) return 'Required';
 };
 
-export const validatePort = value => {
+export const validatePort = (value) => {
   if (!value) return 'Required';
 };
 
-export const isValidEmail = value => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
+export const isValidEmail = (value) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
