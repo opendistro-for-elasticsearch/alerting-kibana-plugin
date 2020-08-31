@@ -240,11 +240,14 @@ export default class MonitorDetails extends Component {
     } else {
       adFilterQuery = { match_all: { boost: 1.0 } };
     }
-    const { aggregationType, fieldName } = search;
+    let { aggregationType, fieldName } = search;
     let adFeatures;
     if (!aggregationType || !fieldName) {
       adFeatures = {};
     } else {
+      if (aggregationType == 'count') {
+        aggregationType = 'value_count';
+      }
       adFeatures = {
         feature_name: 'feature-1',
         feature_enabled: true,
@@ -253,6 +256,8 @@ export default class MonitorDetails extends Component {
         },
       };
     }
+    const where = _.get(search, 'where');
+
     let adConfigs = {
       name: adName,
       description: '',
@@ -274,16 +279,22 @@ export default class MonitorDetails extends Component {
         aggregationType: aggregationType,
         fieldName: fieldName,
       },
+      where: where,
     };
+    const setFlyout = this.props.setFlyout;
+
+    console.log('Validation Response', JSON.stringify(validationResponse));
 
     if (validationResponse.failures.others) {
-      this.setState({
-        showFailureModel: true,
-      });
-      console.log('hello inside others');
+      let message = '';
+      for (let [key, value] of Object.entries(validationResponse.failures)) {
+        if (key === 'others') {
+          message = value;
+        }
+      }
+      this.props.setFlyout({ type: 'detectorFailure', payload: { setFlyout, message } });
     } else {
       if (nameInvalidRegex) {
-        console.log(JSON.stringify(validationResponse.failures));
         validationResponse.failures.regex =
           'Valid characters are a-z, A-Z, 0-9, -(hyphen) and _(underscore)';
       }
@@ -313,7 +324,7 @@ export default class MonitorDetails extends Component {
 
   renderStartedDetectorFlyout = (configs, detectorID, queries) => {
     const { httpClient } = this.props;
-    console.log('went into renderstarted detector flyout');
+    //console.log('went into renderstarted detector flyout');
     const setFlyout = this.props.setFlyout;
     let startedDetector = true;
     const adConfigs = configs;
@@ -332,7 +343,7 @@ export default class MonitorDetails extends Component {
   };
 
   renderFlyout = (adConfigs, validationResponse, queriesForOverview) => {
-    console.log('render flyout');
+    //console.log('render flyout');
     const { httpClient } = this.props;
     const setFlyout = this.props.setFlyout;
     const renderStartedDetectorFlyout = this.renderStartedDetectorFlyout;
@@ -344,7 +355,40 @@ export default class MonitorDetails extends Component {
     if (Object.keys(failures).length == 0 && Object.keys(suggestedChanges).length == 0) {
       valid = true;
     }
-    console.log('valid ', valid);
+
+    let filerQueryTooSparse = false;
+    let maxInterval = false;
+    let successfulRec = false;
+
+    for (let [key, value] of Object.entries(suggestedChanges)) {
+      if (key === 'detection_interval') {
+        let intervalMinutes = Math.ceil(value[0] / 60000) + 1;
+        if (isNaN(intervalMinutes) || intervalMinutes > 10080) {
+          suggestedChanges.detectionIntervalMax =
+            'Detection interval was recommended at over 7 days, this likely means the data is too sparse';
+          maxInterval = true;
+          adConfigs.detection_interval = { period: { interval: 10080, unit: 'MINUTES' } };
+        } else {
+          // if (intervalMinutes > 50 && intervalMinutes < 100) {
+          //   intervalMinutes = 90;
+          // }
+          successfulRec = true;
+          adConfigs.detection_interval = { period: { interval: intervalMinutes, unit: 'MINUTES' } };
+          if (Object.keys(failures).length == 0 && Object.keys(suggestedChanges).length == 1) {
+            valid = true;
+          }
+        }
+      }
+      if (
+        key === 'filter_query' &&
+        Object.keys(failures).length == 0 &&
+        Object.keys(suggestedChanges).length == 1
+      ) {
+        filerQueryTooSparse = true;
+        //adConfigs.detection_interval = { period: { interval: 50, unit: 'MINUTES' } };
+      }
+    }
+
     this.props.setFlyout({
       type: 'createDetector',
       payload: {
@@ -358,6 +402,9 @@ export default class MonitorDetails extends Component {
         renderFlyout,
         valid,
         startedDetector,
+        filerQueryTooSparse,
+        maxInterval,
+        successfulRec,
       },
     });
   };
@@ -373,7 +420,6 @@ export default class MonitorDetails extends Component {
 
   createAndStartDetector = async (adConfigs) => {
     const { httpClient } = this.props;
-    console.log('adconfig' + JSON.stringify(adConfigs));
     try {
       const response = await httpClient.post('../api/alerting/detectors', {
         adConfigs,
@@ -555,7 +601,6 @@ export default class MonitorDetails extends Component {
         />
       );
     }
-    console.log('inside this check for modal', showFailureModal);
 
     if (showFailureModal) {
       console.log('inside this check for modal');
@@ -614,7 +659,8 @@ export default class MonitorDetails extends Component {
                 onClick={() => this.convertToADConfigs(this.state.monitor)}
                 disabled={
                   monitor.ui_metadata.search.searchType !== 'graph' ||
-                  monitor.ui_metadata.search.fieldName === ''
+                  monitor.ui_metadata.search.fieldName === '' ||
+                  monitor.ui_metadata.schedule.timezone
                 }
               >
                 Create Detector

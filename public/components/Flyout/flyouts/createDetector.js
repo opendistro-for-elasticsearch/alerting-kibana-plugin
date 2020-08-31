@@ -13,11 +13,12 @@
  *   permissions and limitations under the License.
  */
 
-import React, { Component, Fragment, useState } from 'react';
+import React, { Component, Fragment, useState, useEffect } from 'react';
 import { Field, Formik } from 'formik';
 import {
   hasError,
   isInvalid,
+  required,
   validateDetectorName,
   validatePositiveInteger,
 } from '../../../utils/validate';
@@ -44,14 +45,38 @@ import {
   EuiFlexGrid,
   EuiFormLabel,
   EuiLink,
+  EuiPopover,
+  EuiExpression,
 } from '@elastic/eui';
 import ContentPanel from '../../ContentPanel';
 import { EuiFlyout } from '@elastic/eui';
-import { FormikFieldText, FormikFieldNumber } from '../../FormControls';
+import {
+  FormikFieldText,
+  FormikFieldNumber,
+  FormikComboBox,
+  FormikSelect,
+} from '../../FormControls';
 import { Context } from 'mocha';
 import FrequencyPicker from '../../../pages/CreateMonitor/components/Schedule/Frequencies/FrequencyPicker';
 import Frequency from '../../../pages/CreateMonitor/components/Schedule/Frequencies/Frequency';
-import { KIBANA_AD_PLUGIN } from '../../../utils/constants';
+import { KIBANA_AD_PLUGIN, DATA_TYPES } from '../../../utils/constants';
+import MonitorIndex from '../../../pages/CreateMonitor/containers/MonitorIndex';
+import { getIndexFields } from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/utils/dataTypes';
+import {
+  getOperators,
+  isNullOperator,
+  isRangeOperator,
+  validateRange,
+  displayText,
+} from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/utils/whereHelpers';
+import { WhereExpression } from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/WhereExpression';
+import {
+  POPOVER_STYLE,
+  EXPRESSION_STYLE,
+  WHERE_BOOLEAN_FILTERS,
+} from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/utils/constants';
+import { getPathsPerDataType } from '../../../pages/CreateMonitor/containers/DefineMonitor/utils/mappings';
+import { formikToWhereClause } from '../../../pages/CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
 
 export function toString(obj) {
   // render calls this method.  During different lifecylces, obj can be undefined
@@ -67,7 +92,7 @@ export function toString(obj) {
   return '-';
 }
 
-export class FeaturePreview extends Component {
+class FeaturePreview extends Component {
   constructor(props) {
     super(props);
   }
@@ -110,7 +135,7 @@ export class FeaturePreview extends Component {
     ];
 
     return (
-      <EuiFlexGroup direction="column" gutterSize="s">
+      <EuiFlexGroup direction="column" gutterSize="s" style={{ paddingTop: '20px' }}>
         <EuiFlexItem>
           <EuiTitle size="s">
             <h3>Features</h3>
@@ -165,7 +190,7 @@ export function extractIntervalReccomendation(context) {
 }
 
 export async function createAndStartDetector(context) {
-  console.log('adconfig: ' + JSON.stringify(context.adConfigs));
+  //const queriesForOverview = context.queriesForOverview;
   const configs = context.adConfigs;
   const httpClient = context.httpClient;
   try {
@@ -190,7 +215,6 @@ export async function createAndStartDetector(context) {
         } = response;
         console.log('start detector response: ' + JSON.stringify(response));
         if (ok) {
-          console.log('everything okay after start');
           context.setFlyout(null);
           context.renderStartedDetectorFlyout(configs, _id, context.queriesForOverview);
         }
@@ -208,15 +232,86 @@ export async function createAndStartDetector(context) {
   }
 }
 
-export function isValidatedOrStartedCallOut(context) {
+export function isValidatedOrStartedCallOut(context, validButNotGuarantee) {
   const valid = context.valid;
   const startedDetector = context.startedDetector;
   const adConfigs = context.adConfigs;
   const detectorID = context.detectorID;
-  console.log('starteddetector', startedDetector);
-  console.log('valid', valid);
-
-  if (valid) {
+  if (context.filerQueryTooSparse) {
+    return (
+      <EuiCallOut color="warning">
+        <EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <EuiIcon type="help" />
+          </EuiFlexItem>
+          <EuiFlexItem>
+            {' '}
+            <EuiTextColor>
+              "No Data is found with the current filter query used for the past 384 intervals, you
+              can try to manually change detector interval and still continue with validation
+              however the data is most likely too be too sparse"
+            </EuiTextColor>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </EuiCallOut>
+    );
+  }
+  if (context.maxInterval) {
+    return (
+      <EuiCallOut color="warning">
+        <EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <EuiIcon type="help" />
+          </EuiFlexItem>
+          <EuiFlexItem>
+            {' '}
+            <EuiTextColor>
+              "No optimal detector interval was found with the current data source, you can still
+              proceede with this detector creation however it will likely fail since the data is too
+              sparse"
+            </EuiTextColor>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </EuiCallOut>
+    );
+  }
+  if (!valid && !validButNotGuarantee && !startedDetector) {
+    return (
+      <EuiCallOut color="warning">
+        <EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <EuiIcon type="help" />
+          </EuiFlexItem>
+          <EuiFlexItem>
+            {' '}
+            <EuiTextColor>
+              "Please fix and validate any needed field in order to successfuly create an Anomaly
+              Detector. Anomaly detection creation requires configurations that lead to enough data"
+            </EuiTextColor>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </EuiCallOut>
+    );
+  } else if (valid && validButNotGuarantee) {
+    return (
+      <EuiCallOut color="warning">
+        <EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <EuiIcon type="help" />
+          </EuiFlexItem>
+          <EuiFlexItem>
+            {' '}
+            <EuiTextColor>
+              *Configruations aren't fully valid but Creating detector isn't blocked, data filter
+              currently returns no hits and is suggested to be fixed " + "either choose to continue
+              creation without validation and detector interval recommendation or try to fix
+              filter_query"
+            </EuiTextColor>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </EuiCallOut>
+    );
+  } else if (valid && !validButNotGuarantee) {
     return (
       <EuiCallOut>
         <EuiFlexGroup>
@@ -236,8 +331,8 @@ export function isValidatedOrStartedCallOut(context) {
   } else if (startedDetector) {
     return (
       <EuiCallOut
-        title={'Anomaly Detector ' + adConfigs.name + 'has been created and started'}
-        size="xl"
+        title={'Anomaly Detector ' + adConfigs.name + ' has been created and started'}
+        size="m"
         color="success"
       >
         <EuiFlexGroup>
@@ -269,7 +364,6 @@ export function isValidatedOrStartedCallOut(context) {
 }
 
 export function renderChangedDetectorIntervalCallOut(context) {
-  console.log('context: ', context);
   if (context.suggestedChanges.detectionIntervalReccomendation) {
     let intervalMinutes =
       Math.ceil(context.suggestedChanges.detectionIntervalReccomendation / 60000) + 1;
@@ -299,21 +393,44 @@ export function isInvalidName(name) {
 }
 
 export async function validateDetector(newValue, context) {
-  console.log('new value', JSON.stringify(newValue));
+  const search = {
+    searchType: 'graph',
+    timeField: newValue.time_field,
+    where: {
+      fieldName: newValue.where.fieldName === undefined ? [] : newValue.where.fieldName,
+      fieldRangeEnd: newValue.where.fieldRangeEnd === undefined ? 0 : newValue.where.fieldRangeEnd,
+      fieldRangeStart:
+        newValue.where.fieldRangeStart === undefined ? 0 : newValue.where.fieldRangeStart,
+      fieldValue: newValue.where.fieldValue === undefined ? '' : newValue.where.fieldValue,
+      operator: newValue.where.operator === undefined ? 'is' : newValue.where.operator,
+    },
+  };
+
+  let filterQuery = formikToWhereClause(search);
+  let adFilterQuery = '';
+  if (filterQuery) {
+    adFilterQuery = { bool: { filter: [filterQuery] } };
+  } else {
+    adFilterQuery = { match_all: { boost: 1.0 } };
+  }
+  context.adConfigs.filter_query = adFilterQuery;
   context.adConfigs.name = newValue.name;
   context.adConfigs.description = newValue.description;
   context.adConfigs.time_field = newValue.time_field;
   context.adConfigs.inidices = newValue.indices;
-  // context.adConfigs.detection_interval = newValue.detection_interval;
-  // context.window_delay = newValue.windowDelay
+  context.adConfigs.window_delay = { period: { interval: newValue.window_delay, unit: 'MINUTES' } };
+  context.adConfigs.detection_interval = {
+    period: { interval: newValue.detection_interval, unit: 'MINUTES' },
+  };
+  context.queriesForOverview.where = search.where;
+  context.queriesForOverview.filter_query = adFilterQuery;
   const configs = context.adConfigs;
   const httpClient = context.httpClient;
-  console.log('configs before second validate: ' + JSON.stringify(configs));
   try {
     const response = await httpClient.post('../api/alerting/detectors/_validate', {
       configs,
     });
-    console.log('response inside monitordetailssadsad: ' + JSON.stringify(response));
+    console.log('response from validate in createDetector: ' + JSON.stringify(response));
     let resp = _.get(response, 'data.response');
     const {
       data: {
@@ -323,7 +440,6 @@ export async function validateDetector(newValue, context) {
     } = response;
     console.log('validation resp: ' + JSON.stringify(resp));
     if (ok) {
-      console.log('went into okay');
       context.setFlyout(null);
       context.renderFlyout(configs, resp, context.queriesForOverview);
     }
@@ -344,324 +460,501 @@ const ConfigCell = (props) => {
   );
 };
 
-const FormCell = (props) => {
-  return (
-    <EuiFlexItem>
-      <FormikFieldText
-        name="name"
-        formRow
-        fieldProps={{ readOnly: true }}
-        rowProps={{
-          label: props.title,
-          style: { paddingLeft: '5px' },
-        }}
-      />
-      <EuiCallOut size="s" color="danger">
-        {props.failures.regex}
-      </EuiCallOut>
-    </EuiFlexItem>
-  );
-};
-
-export let isReadOnly = true;
-const useRefState = (initialValue) => {
-  const [state, setState] = useState(initialValue);
-  const stateRef = useRef(state);
-  useEffect(() => {
-    stateRef.current = state;
-  }, [state]);
-  return [stateRef, setState];
-};
-
-// Handle Customer Selection from Modal Component
-export const onSelectCustomerHandler = (data, setFieldValue) => {
-  setFieldValue('customerName', data.name);
-  setFieldValue('customerId', data.id);
-  toggleCustomerModal();
-};
-
-export const validationParser = (failures, suggestedChanges, field) => {
+const validationParser = (failures, suggestedChanges, field) => {
   let message;
   for (let [key, value] of Object.entries(failures)) {
-    console.log(value);
-    if (key === 'duplicate' && value[0] === field) {
+    if (key === 'duplicates' && field === 'name') {
       message = 'Detector name is a duplicate';
     } else if (key === 'missing' && value[0] === field) {
       message = 'This field is required';
-    } else if ((key === 'regex' && field === 'name') || key === 'format') {
+    } else if ((key === 'regex' && field === 'name') || (key === 'format' && field === 'name')) {
       message = 'Valid characters are a-z, A-Z, 0-9, -(hyphen) and _(underscore)';
     }
   }
   //loop for suggestedChanges later too
+  for (let [key, value] of Object.entries(suggestedChanges)) {
+    if (key === 'window_delay' && field === 'window_delay') {
+      message = 'Window delay should be at least ' + value[0] + ' minutes';
+    } else if (key === 'filter_query' && field === 'filter_query') {
+      message = value[0];
+    } else if (key === 'detectionIntervalMax' && field === 'detection_interval') {
+      message = value;
+    }
+  }
   if (message) {
-    return <EuiCallOut title={message} iconType="alert" size="s" color="danger"></EuiCallOut>;
+    return (
+      <EuiCallOut
+        style={{ paddingBottom: '2px' }}
+        title={message}
+        iconType="alert"
+        size="s"
+        color="danger"
+      ></EuiCallOut>
+    );
   }
   return null;
 };
-const createDetector = (context) => ({
-  flyoutProps: {
-    'aria-labelledby': 'createDetectorFlyout',
-    maxWidth: 800,
-    size: 'l',
-  },
-  headerProps: { hasBorder: true },
-  header: (
-    <EuiTitle size="m" style={{ fontSize: '25px' }}>
-      <h2>
-        <strong>Create Detector</strong>
-      </h2>
-    </EuiTitle>
-  ),
-  body: (
-    <EuiPageBody component="div">
-      <EuiFlyoutBody banner={isValidatedOrStartedCallOut(context)}>
-        <EuiSpacer size="l" />
-        {/* {context.suggestedChanges ? renderChangedDetectorIntervalCallOut(context) : null} */}
-        <ContentPanel title="Detector Configuration Preview" titleSize="s">
-          {!context.startedDetector ? (
-            <Formik
-              initialValues={{
-                name: context.adConfigs.name,
-                description: context.adConfigs.description,
-                time_field: context.adConfigs.time_field,
-                indices: context.adConfigs.indices,
-                detection_interval: extractIntervalReccomendation(context),
-                window_delay: toString(context.adConfigs.window_delay),
-              }}
-              onSubmit={(value) => validateDetector(value, context)}
-              validateOnChange={false}
-              render={({ handleSubmit, value }) => (
-                <Fragment>
-                  <Fragment>
-                    <EuiFlexGroup>
-                      <EuiFlexItem>
-                        <FormikFieldText
-                          name="name"
-                          formRow
-                          inputProps={{
-                            readOnly:
-                              validationParser(
-                                context.failures,
-                                context.suggestedChanges,
-                                'name'
-                              ) == null,
-                            prepend: (
-                              <EuiButtonIcon
-                                iconType="pencil"
-                                aria-label="Edit this"
-                                onClick={() => {}}
-                              />
-                            ),
-                          }}
-                          rowProps={{
-                            label: 'Name',
-                            style: { paddingLeft: '5px' },
-                          }}
-                        />
-                        <EuiSpacer size="xs" />
-                        {validationParser(context.failures, context.suggestedChanges, 'name')}
-                      </EuiFlexItem>
-                      <EuiFlexItem>
-                        <FormikFieldText
-                          name="description"
-                          formRow
-                          rowProps={{
-                            label: 'Description',
-                            style: { paddingLeft: '5px' },
-                          }}
-                          inputProps={{
-                            readOnly:
-                              validationParser(
-                                context.failures,
-                                context.suggestedChanges,
-                                'description'
-                              ) == null,
-                            prepend: <EuiButtonIcon iconType="pencil" aria-label="Edit this" />,
-                          }}
-                        />
-                      </EuiFlexItem>
-                    </EuiFlexGroup>
-                    <EuiFlexGroup>
-                      <EuiFlexItem>
-                        <FormikFieldText
-                          name="indices"
-                          formRow
-                          inputProps={{
-                            readOnly:
-                              validationParser(
-                                context.failures,
-                                context.suggestedChanges,
-                                'indices'
-                              ) == null,
-                            prepend: (
-                              <EuiButtonIcon
-                                iconType="pencil"
-                                aria-label="Edit this"
-                                onClick={() => {}}
-                              />
-                            ),
-                          }}
-                          rowProps={{
-                            label: 'Data source index',
-                            style: { paddingLeft: '5px' },
-                          }}
-                        />
-                        <EuiSpacer size="xs" />
-                      </EuiFlexItem>
-                      <EuiFlexItem>
-                        {/* <FormikFieldText
-                          name="window_delay"
-                          formRow
-                          rowProps={{
-                            label: "Window Delay",
-                            style: { paddingLeft: '5px' },
-                          }}
-                          inputProps={{
-                            readOnly: validationParser(context.failures, context.suggestedChanges, "window_delay") == null,
-                            append: <EuiButtonEmpty iconType="pencil" aria-label="Edit this" />
-                          }}
-                        /> */}
-                        <FormikFieldNumber
-                          name="window_delay"
-                          formRow
-                          fieldProps={{ validate: validatePositiveInteger }}
-                          rowProps={{
-                            label: 'Window Delay',
-                            isInvalid,
-                            error: hasError,
-                            style: { paddingLeft: '5px' },
-                          }}
-                          inputProps={{
-                            prepend: <EuiButtonIcon iconType="pencil" aria-label="Edit this" />,
-                            append: <EuiFormLabel htmlFor="textField19a">Minutes</EuiFormLabel>,
-                            //readOnly: validationParser(context.failures, context.suggestedChanges, "window_delay") == null,
-                          }}
-                        />
-                      </EuiFlexItem>
-                    </EuiFlexGroup>
-                    <EuiFlexGroup>
-                      {/* <FormikFieldText
-                          name="detection_interval"
-                          formRow
-                          fieldProps
-                          inputProps={{
-                            readOnly: validationParser(context.failures, context.suggestedChanges, "detection_interval") == null,
-                            append: <EuiButtonIcon iconType="pencil" aria-label="Edit this" onClick={() => { }} />
-                          }}
-                          rowProps={{
-                            label: "Detection Interval",
-                            style: { paddingLeft: '5px' },
-                          }}
-                        /> */}
 
-                      <EuiFlexItem>
-                        <FormikFieldNumber
-                          name="detection_interval"
-                          formRow
-                          fieldProps={{ validate: validatePositiveInteger }}
-                          rowProps={{
-                            label: 'Detector Interval',
-                            isInvalid,
-                            error: hasError,
-                            style: { paddingLeft: '5px' },
-                          }}
-                          inputProps={{
-                            prepend: <EuiButtonIcon iconType="pencil" aria-label="Edit this" />,
-                            append: <EuiFormLabel htmlFor="textField19a">Minutes</EuiFormLabel>,
-                          }}
-                        />
-                      </EuiFlexItem>
-                      <EuiSpacer size="xs" />
-                      <EuiFlexItem>
-                        <FormikFieldText
-                          name="filtetr"
-                          formRow
-                          rowProps={{
-                            label: 'FilterQuery',
-                            style: { paddingLeft: '5px' },
-                          }}
-                          inputProps={{
-                            readOnly:
-                              validationParser(
-                                context.failures,
-                                context.suggestedChanges,
-                                'window_delay'
-                              ) == null,
-                            prepend: <EuiButtonIcon iconType="pencil" aria-label="Edit this" />,
-                          }}
-                        />
+const createDetector = (context) => {
+  const [isReadOnlyName, setReadOnlyName] = useState(true);
+  const [isReadOnlyDescription, setReadOnlyDescription] = useState(true);
+  const [isReadOnlyDelay, setReadOnlyDelay] = useState(true);
+  const [isReadOnlyInterval, setReadOnlyInterval] = useState(true);
+  const [isFilterPopoverOpen, setFilterPopoverOpen] = useState(false);
+  const [dataTypes, setDataTypes] = useState({});
+  const [validButNotGuarantee, setValidButNotGuarantee] = useState(false);
+
+  const [filterValue, setFilterValue] = useState(context.queriesForOverview.filter_query);
+
+  // useEffect(() => {
+  //   if (Object.keys(context.failures).length == 0 && Object.keys(context.suggestedChanges).length == 1 && "filter_query" in context.suggestedChanges) {
+  //     console.log('validbutNotsdadasdas')
+  //     setValidButNotGuarantee(!validButNotGuarantee);
+  // }}, []);
+
+  useEffect(() => {
+    onQueryMappings();
+  }, []);
+
+  const handleFieldChange = (option, field, form) => {
+    form.setFieldValue(field.name, option);
+    // User can remove where condition
+    if (option.length === 0) {
+      form.setFieldError('where', undefined);
+    }
+  };
+
+  async function onQueryMappings() {
+    const index = context.adConfigs.indices;
+    try {
+      const mappings = await queryMappings(index);
+      const data = getPathsPerDataType(mappings);
+      setDataTypes(data);
+    } catch (err) {
+      console.error('There was an error getting mappings for query', err);
+    }
+  }
+  const handleChangeWrapper = (e, field) => {
+    field.onChange(e);
+  };
+
+  const helpTextInterval = (context) => {
+    if (
+      !context.valid &&
+      Object.keys(context.failures).length != 0 &&
+      toString(context.adConfigs.detection_interval) == '1'
+    ) {
+      return "*Detector interval hasn't been validated yet, please fix other failures first";
+    } else if (
+      Object.keys(context.failures).length == 0 &&
+      toString(context.adConfigs.detection_interval) == '1' &&
+      context.suggestedChanges.hasOwnProperty('filter_query')
+    ) {
+      //setValidButNotGuarantee(!validButNotGuarantee);
+      return (
+        "*Detector interval recommendation hasn't been made since query filter returns no hits, you can " +
+        'either choose to continue creation without validation or try to fix filter_query'
+      );
+    } else {
+      return '';
+    }
+  };
+
+  const renderBetweenAnd = (valuess) => {
+    const values = valuess;
+    return (
+      <EuiFlexGroup alignItems="center">
+        <EuiFlexItem>
+          <FormikFieldNumber
+            name="where.fieldRangeStart"
+            fieldProps={{
+              validate: (value) => validateRange(value, values.where),
+            }}
+            inputProps={{ onChange: handleChangeWrapper, isInvalid }}
+          />
+        </EuiFlexItem>
+        <EuiFlexItem grow={false}>
+          <EuiText textAlign="center">TO</EuiText>
+        </EuiFlexItem>
+        <EuiFlexItem>
+          <FormikFieldNumber
+            name="where.fieldRangeEnd"
+            fieldProps={{
+              validate: (value) => validateRange(value, values.where),
+            }}
+            inputProps={{ onChange: handleChangeWrapper, isInvalid }}
+          />
+        </EuiFlexItem>
+      </EuiFlexGroup>
+    );
+  };
+
+  const renderValueField = (fieldType, fieldOperator) => {
+    if (fieldType == DATA_TYPES.NUMBER) {
+      return isRangeOperator(fieldOperator) ? (
+        renderBetweenAnd()
+      ) : (
+        <FormikFieldNumber
+          name="where.fieldValue"
+          fieldProps={{ validate: required }}
+          inputProps={{ onChange: handleChangeWrapper, isInvalid }}
+        />
+      );
+    } else if (fieldType == DATA_TYPES.BOOLEAN) {
+      return (
+        <FormikSelect
+          name="where.fieldValue"
+          fieldProps={{ validate: required }}
+          inputProps={{
+            onChange: handleChangeWrapper,
+            options: WHERE_BOOLEAN_FILTERS,
+            isInvalid,
+          }}
+        />
+      );
+    } else {
+      return (
+        <FormikFieldText
+          name="where.fieldValue"
+          fieldProps={{ validate: required }}
+          inputProps={{ onChange: handleChangeWrapper, isInvalid }}
+        />
+      );
+    }
+  };
+
+  async function queryMappings(index) {
+    if (!index.length) {
+      return {};
+    }
+    try {
+      const response = await context.httpClient.post('../api/alerting/_mappings', { index });
+      if (response.data.ok) {
+        return response.data.resp;
+      }
+      return {};
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  const handleOperatorChange = (e, field) => {
+    field.onChange(e);
+  };
+
+  const indexFields = getIndexFields(dataTypes, ['number', 'text', 'keyword', 'boolean']);
+  // const fieldType = _.get(values, 'where.fieldName[0].type', 'number');
+  // const fieldOperator = _.get(values, 'where.operator', 'is');
+
+  const onAddFilterButton = () =>
+    setFilterPopoverOpen((isFilterPopoverOpen) => !isFilterPopoverOpen);
+  const closePopover = () => setFilterPopoverOpen(false);
+  return {
+    flyoutProps: {
+      'aria-labelledby': 'createDetectorFlyout',
+      maxWidth: 900,
+      size: 'l',
+    },
+    headerProps: { hasBorder: true },
+    header: (
+      <EuiTitle size="m" style={{ fontSize: '25px' }}>
+        <h2>
+          <strong>Create Detector</strong>
+        </h2>
+      </EuiTitle>
+    ),
+    body: (
+      <EuiPageBody component="div">
+        <EuiFlyoutBody
+          style={{ padding: '-12px' }}
+          banner={isValidatedOrStartedCallOut(context, validButNotGuarantee)}
+        >
+          <EuiSpacer size="l" />
+          {/* {context.suggestedChanges ? renderChangedDetectorIntervalCallOut(context) : null} */}
+          <ContentPanel
+            title="Detector Configuration Preview"
+            titleSize="s"
+            style={{ paddingBottom: '10px' }}
+          >
+            {console.log('all of context inside createDetector: ', context)}
+
+            {!context.startedDetector ? (
+              <Formik
+                initialValues={{
+                  name: context.adConfigs.name,
+                  description: context.adConfigs.description,
+                  time_field: context.adConfigs.time_field,
+                  indices: context.adConfigs.indices,
+                  detection_interval: toString(context.adConfigs.detection_interval),
+                  window_delay: toString(context.adConfigs.window_delay),
+                  searchType: 'graph',
+                  fieldValue: context.queriesForOverview.where.fieldValue,
+                  fieldName: context.queriesForOverview.where.fieldName.label,
+                  where: context.queriesForOverview.where,
+                }}
+                onSubmit={(value) => validateDetector(value, context)}
+                validateOnChange={false}
+                render={({ handleSubmit, values }) => (
+                  <Fragment>
+                    <Fragment>
+                      <EuiFlexGroup>
+                        <EuiFlexItem>
+                          <FormikFieldText
+                            name="name"
+                            formRow
+                            onChange={{}}
+                            inputProps={{}}
+                            rowProps={{
+                              label: 'Name',
+                              style: { paddingLeft: '5px' },
+                            }}
+                          />
+                          {validationParser(context.failures, context.suggestedChanges, 'name')}
+                        </EuiFlexItem>
+                        <EuiFlexItem>
+                          <FormikFieldText
+                            name="description"
+                            formRow
+                            rowProps={{
+                              label: 'Description',
+                              style: { paddingLeft: '5px' },
+                            }}
+                          />
+                        </EuiFlexItem>
+                      </EuiFlexGroup>
+                      <EuiFlexGroup>
+                        <EuiFlexItem>
+                          <FormikFieldText
+                            name="indices"
+                            formRow
+                            inputProps={{
+                              readOnly: true,
+                            }}
+                            rowProps={{
+                              label: 'Data source index *Read Only',
+                              style: { paddingLeft: '5px' },
+                            }}
+                          />
+                          <EuiSpacer size="xs" />
+                        </EuiFlexItem>
+                        <EuiFlexItem>
+                          <FormikFieldNumber
+                            name="window_delay"
+                            formRow
+                            fieldProps={{ validate: validatePositiveInteger }}
+                            rowProps={{
+                              label: 'Window Delay',
+                              isInvalid,
+                              error: hasError,
+                              style: { paddingLeft: '5px' },
+                            }}
+                            inputProps={{
+                              append: [<EuiFormLabel htmlFor="textField19a">Minutes</EuiFormLabel>],
+                            }}
+                          />
+                          {validationParser(
+                            context.failures,
+                            context.suggestedChanges,
+                            'window_delay'
+                          )}
+                        </EuiFlexItem>
+                      </EuiFlexGroup>
+                      <EuiFlexGroup>
+                        {/* <MonitorIndex httpClient={context.httpClient}/> */}
+                        <EuiFlexItem>
+                          <FormikFieldNumber
+                            name="detection_interval"
+                            formRow
+                            helpText="You can use a wildcard (*) in your index pattern"
+                            fieldProps={{
+                              validate: validatePositiveInteger,
+                            }}
+                            rowProps={{
+                              label: 'Detector Interval',
+                              isInvalid,
+                              error: hasError,
+                              style: { paddingLeft: '5px' },
+                              helpText: helpTextInterval(context),
+                            }}
+                            inputProps={{
+                              append: <EuiFormLabel htmlFor="textField19a">Minutes</EuiFormLabel>,
+                            }}
+                          />
+                        </EuiFlexItem>
+                        <EuiFlexItem>
+                          <EuiFlexItem grow={false}></EuiFlexItem>
+                          <EuiFormLabel>Data Filter</EuiFormLabel>
+                          <EuiFlexItem
+                            grow={false}
+                            style={{ paddingTop: '12px', paddingLeft: '4px' }}
+                          >
+                            <EuiPopover
+                              id="where-popover"
+                              name="filter"
+                              zIndex="200px"
+                              //style={{paddingLeft:'5px', paddingTop:'20px'}}
+                              button={
+                                <EuiExpression
+                                  color="primary"
+                                  name="Expressionfilter"
+                                  description="Filter"
+                                  value={displayText(values.where)}
+                                  isActive={isFilterPopoverOpen}
+                                  onClick={() => onAddFilterButton()}
+                                />
+                              }
+                              // {<EuiButtonEmpty iconSide="left" iconType="plusInCircle" onClick={() => onAddFilterButton()}>
+                              //    Add filter</EuiButtonEmpty>}
+
+                              isOpen={isFilterPopoverOpen}
+                              closePopover={closePopover}
+                              panelPaddingSize="none"
+                              ownFocus
+                              withTitle
+                              anchorPosition="downLeft"
+                            >
+                              <div style={POPOVER_STYLE}>
+                                <EuiFlexGroup style={{ ...EXPRESSION_STYLE }}>
+                                  <EuiFlexItem grow={false} style={{ width: 200 }}>
+                                    <FormikComboBox
+                                      name="where.fieldName"
+                                      inputProps={{
+                                        placeholder: 'Select a field',
+                                        options: indexFields,
+                                        onChange: handleFieldChange,
+                                        isClearable: false,
+                                        singleSelection: { asPlainText: true },
+                                      }}
+                                    />
+                                  </EuiFlexItem>
+                                  <EuiFlexItem grow={false}>
+                                    <FormikSelect
+                                      name="where.operator"
+                                      inputProps={{
+                                        onChange: handleOperatorChange,
+                                        options: getOperators(
+                                          _.get(values, 'where.fieldName[0].type', 'number')
+                                        ),
+                                      }}
+                                    />
+                                  </EuiFlexItem>
+                                  {!isNullOperator(_.get(values, 'where.operator', 'is')) && (
+                                    <EuiFlexItem>
+                                      {renderValueField(
+                                        _.get(values, 'where.fieldName[0].type', 'number'),
+                                        _.get(values, 'where.operator', 'is')
+                                      )}
+                                    </EuiFlexItem>
+                                  )}
+                                </EuiFlexGroup>
+                              </div>
+                            </EuiPopover>
+                          </EuiFlexItem>
+                          {validationParser(
+                            context.failures,
+                            context.suggestedChanges,
+                            'filter_query'
+                          )}
+                        </EuiFlexItem>
+                      </EuiFlexGroup>
+                    </Fragment>
+                    <EuiFlexGroup
+                      alignItems="center"
+                      justifyContent="flexEnd"
+                      style={{ paddingTop: '10px' }}
+                    >
+                      <EuiFlexItem grow={false}>
+                        <EuiButton color="secondary" onClick={handleSubmit}>
+                          Validate
+                        </EuiButton>
                       </EuiFlexItem>
                     </EuiFlexGroup>
                   </Fragment>
-                  <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
-                    <EuiFlexItem grow={false}>
-                      <EuiButton fill color="secondary" onClick={handleSubmit}>
-                        Validate
-                      </EuiButton>
-                    </EuiFlexItem>
-                  </EuiFlexGroup>
-                </Fragment>
-              )}
-            />
-          ) : (
-            <EuiFlexGrid columns={2} gutterSize="l" style={{ border: 'none' }}>
-              <EuiFlexItem>
-                <ConfigCell title="Name" description={context.adConfigs.name} />
-              </EuiFlexItem>
-              <EuiFlexItem>
-                <ConfigCell title="Description" description={context.adConfigs.description} />
-              </EuiFlexItem>
-              <EuiFlexItem>
-                <ConfigCell title="Data source index" description={context.adConfigs.indices} />
-              </EuiFlexItem>
-              <EuiFlexItem>
-                <ConfigCell
-                  title="Detector interval"
-                  description={extractIntervalReccomendation(context)}
-                />
-              </EuiFlexItem>
-              <EuiFlexItem>
-                <ConfigCell
-                  title="Window delay"
-                  description={toString(context.adConfigs.window_delay)}
-                />
-              </EuiFlexItem>
-              <EuiFlexItem>
-                <ConfigCell
-                  title="Data filter"
-                  description={context.queriesForOverview.filter_query}
-                />
-              </EuiFlexItem>
-            </EuiFlexGrid>
-          )}
+                )}
+              />
+            ) : (
+              <EuiFlexGrid columns={2} gutterSize="l" style={{ border: 'none' }}>
+                <EuiFlexItem>
+                  <ConfigCell title="Name" description={context.adConfigs.name} />
+                </EuiFlexItem>
+                <EuiFlexItem>
+                  <ConfigCell title="Description" description={context.adConfigs.description} />
+                </EuiFlexItem>
+                <EuiFlexItem>
+                  <ConfigCell title="Data source index" description={context.adConfigs.indices} />
+                </EuiFlexItem>
+                <EuiFlexItem>
+                  <ConfigCell
+                    title="Detector interval"
+                    description={extractIntervalReccomendation(context)}
+                  />
+                </EuiFlexItem>
+                <EuiFlexItem>
+                  <ConfigCell
+                    title="Window delay"
+                    description={toString(context.adConfigs.window_delay)}
+                  />
+                </EuiFlexItem>
+                <EuiFlexItem>
+                  {console.log('context after detector started: ', context)}
+                  <ConfigCell
+                    title="Data filter"
+                    description={displayText(context.queriesForOverview.where)}
+                  />
+                </EuiFlexItem>
+              </EuiFlexGrid>
+            )}
+            <EuiSpacer size="s" />
+          </ContentPanel>
           <EuiSpacer />
           <FeaturePreview featureAttributes={context.queriesForOverview.feature_attributes} />
-        </ContentPanel>
-      </EuiFlyoutBody>
-    </EuiPageBody>
-  ),
-  footerProps: {},
-  footer: (
-    <EuiFlyoutFooter>
-      {context.startedDetector ? null : (
-        <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
-          <EuiFlexItem grow={false}>
-            <EuiButtonEmpty onClick={() => context.setFlyout(null)}>Cancel</EuiButtonEmpty>
-          </EuiFlexItem>
-          <EuiFlexItem grow={false}>
-            <EuiButton
-              flush="right"
-              disabled={!context.valid}
-              onClick={() => createAndStartDetector(context)}
-              fill
-            >
-              Create Detector
-            </EuiButton>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      )}
-    </EuiFlyoutFooter>
-  ),
-});
+          <EuiSpacer />
+          {/* {context.startedDetector ?
+            <EuiFlexGroup alignItems="right" justifyContent="flexEnd">
+              <EuiFlexItem grow={false}>
+                <EuiButton onClick={() => context.setFlyout(null)}>Close</EuiButton>
+              </EuiFlexItem>
+              </EuiFlexGroup>
+              : null} */}
+        </EuiFlyoutBody>
+      </EuiPageBody>
+    ),
+    footerProps: {},
+    footer: (
+      <EuiFlyoutFooter>
+        {context.startedDetector ? null : (
+          <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
+            <EuiFlexItem grow={false}>
+              <EuiButtonEmpty onClick={() => context.setFlyout(null)}>Cancel</EuiButtonEmpty>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiButton
+                flush="right"
+                disabled={
+                  !context.successfulRec &&
+                  !context.maxInterval &&
+                  ((!context.valid &&
+                    !(
+                      Object.keys(context.failures).length == 0 &&
+                      Object.keys(context.suggestedChanges).length == 1 &&
+                      context.suggestedChanges.hasOwnProperty('filter_query')
+                    )) ||
+                    (Object.keys(context.failures).length == 0 &&
+                      Object.keys(context.suggestedChanges).length == 1 &&
+                      ('window_delay' in context.suggestedChanges ||
+                        'detection_interval' in context.suggestedChanges)))
+                }
+                onClick={() => createAndStartDetector(context)}
+                fill
+              >
+                Create Detector
+              </EuiButton>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        )}
+      </EuiFlyoutFooter>
+    ),
+  };
+};
 
 export default createDetector;
