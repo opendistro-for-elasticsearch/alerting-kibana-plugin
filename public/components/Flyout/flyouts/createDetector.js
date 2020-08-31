@@ -401,7 +401,6 @@ const validationErrorCallOut = (failures, suggestedChanges, field) => {
       message = 'Valid characters are a-z, A-Z, 0-9, -(hyphen) and _(underscore)';
     }
   }
-  //loop for suggestedChanges later too
   for (let [key, value] of Object.entries(suggestedChanges)) {
     if (key === 'window_delay' && field === 'window_delay') {
       message = 'Window delay should be at least ' + value[0] + ' minutes';

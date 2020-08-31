@@ -465,7 +465,6 @@ export default class MonitorDetails extends Component {
                 {monitor.name}
               </h1>
             </EuiTitle>
-
             {detector ? (
               <EuiFlexItem grow={false}>
                 <EuiText size="s">
