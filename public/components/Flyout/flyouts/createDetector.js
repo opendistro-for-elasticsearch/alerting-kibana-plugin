@@ -496,21 +496,9 @@ const validationParser = (failures, suggestedChanges, field) => {
 };
 
 const createDetector = (context) => {
-  const [isReadOnlyName, setReadOnlyName] = useState(true);
-  const [isReadOnlyDescription, setReadOnlyDescription] = useState(true);
-  const [isReadOnlyDelay, setReadOnlyDelay] = useState(true);
-  const [isReadOnlyInterval, setReadOnlyInterval] = useState(true);
   const [isFilterPopoverOpen, setFilterPopoverOpen] = useState(false);
   const [dataTypes, setDataTypes] = useState({});
   const [validButNotGuarantee, setValidButNotGuarantee] = useState(false);
-
-  const [filterValue, setFilterValue] = useState(context.queriesForOverview.filter_query);
-
-  // useEffect(() => {
-  //   if (Object.keys(context.failures).length == 0 && Object.keys(context.suggestedChanges).length == 1 && "filter_query" in context.suggestedChanges) {
-  //     console.log('validbutNotsdadasdas')
-  //     setValidButNotGuarantee(!validButNotGuarantee);
-  // }}, []);
 
   useEffect(() => {
     onQueryMappings();
@@ -677,7 +665,6 @@ const createDetector = (context) => {
             style={{ paddingBottom: '10px' }}
           >
             {console.log('all of context inside createDetector: ', context)}
-
             {!context.startedDetector ? (
               <Formik
                 initialValues={{
@@ -803,9 +790,6 @@ const createDetector = (context) => {
                                   onClick={() => onAddFilterButton()}
                                 />
                               }
-                              // {<EuiButtonEmpty iconSide="left" iconType="plusInCircle" onClick={() => onAddFilterButton()}>
-                              //    Add filter</EuiButtonEmpty>}
-
                               isOpen={isFilterPopoverOpen}
                               closePopover={closePopover}
                               panelPaddingSize="none"
@@ -909,13 +893,6 @@ const createDetector = (context) => {
           <EuiSpacer />
           <FeaturePreview featureAttributes={context.queriesForOverview.feature_attributes} />
           <EuiSpacer />
-          {/* {context.startedDetector ?
-            <EuiFlexGroup alignItems="right" justifyContent="flexEnd">
-              <EuiFlexItem grow={false}>
-                <EuiButton onClick={() => context.setFlyout(null)}>Close</EuiButton>
-              </EuiFlexItem>
-              </EuiFlexGroup>
-              : null} */}
         </EuiFlyoutBody>
       </EuiPageBody>
     ),
