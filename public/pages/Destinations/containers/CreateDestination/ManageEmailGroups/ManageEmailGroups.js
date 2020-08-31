@@ -109,7 +109,7 @@ export default class ManageEmailGroups extends React.Component {
       emails: emailGroup.emails.map((email) => ({ email: email.label })),
     };
     try {
-      await httpClient.post(`../api/alerting/email_groups`, body);
+      await httpClient.post(`../api/alerting/destinations/email_groups`, body);
     } catch (err) {
       console.error('Unable to create email group', err);
     }
@@ -124,7 +124,7 @@ export default class ManageEmailGroups extends React.Component {
     };
     try {
       await httpClient.put(
-        `../api/alerting/email_groups/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
+        `../api/alerting/destinations/email_groups/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         body
       );
     } catch (err) {
@@ -136,7 +136,7 @@ export default class ManageEmailGroups extends React.Component {
     const { httpClient } = this.props;
     const { id } = emailGroup;
     try {
-      await httpClient.delete(`../api/alerting/email_groups/${id}`);
+      await httpClient.delete(`../api/alerting/destinations/email_groups/${id}`);
     } catch (err) {
       console.err('Unable to delete email group', err);
     }

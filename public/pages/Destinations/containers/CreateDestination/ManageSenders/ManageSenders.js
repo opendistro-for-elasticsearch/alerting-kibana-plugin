@@ -97,7 +97,7 @@ export default class ManageSenders extends React.Component {
       method: sender.method,
     };
     try {
-      await httpClient.post(`../api/alerting/email_accounts`, body);
+      await httpClient.post(`../api/alerting/destinations/email_accounts`, body);
     } catch (err) {
       console.error('Unable to create sender', err);
     }
@@ -115,7 +115,7 @@ export default class ManageSenders extends React.Component {
     };
     try {
       await httpClient.put(
-        `../api/alerting/email_accounts/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
+        `../api/alerting/destinations/email_accounts/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         body
       );
     } catch (err) {
@@ -127,7 +127,7 @@ export default class ManageSenders extends React.Component {
     const { httpClient } = this.props;
     const { id } = sender;
     try {
-      await httpClient.delete(`../api/alerting/email_accounts/${id}`);
+      await httpClient.delete(`../api/alerting/destinations/email_accounts/${id}`);
     } catch (err) {
       console.error('Unable to delete sender', err);
     }

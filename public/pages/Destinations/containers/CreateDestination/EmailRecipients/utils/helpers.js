@@ -16,7 +16,7 @@
 export default async function getEmailGroups(httpClient, searchText = '') {
   try {
     const response = await httpClient.get(
-      `../api/alerting/email_groups?search=${searchText}&size=200`
+      `../api/alerting/destinations/email_groups?search=${searchText}&size=200`
     );
     if (response.data.ok) {
       return response.data.emailGroups;
