@@ -78,7 +78,7 @@ import {
 import { getPathsPerDataType } from '../../../pages/CreateMonitor/containers/DefineMonitor/utils/mappings';
 import { formikToWhereClause } from '../../../pages/CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
 
-export function toString(obj) {
+function toString(obj) {
   // render calls this method.  During different lifecylces, obj can be undefined
   if (typeof obj != 'undefined') {
     if (obj.hasOwnProperty('period')) {
@@ -178,7 +178,7 @@ export class FilterDisplay extends Component {
 }
 const FixedWidthRow = (props) => <EuiFormRow {...props} style={{ width: '150px' }} />;
 
-export function extractIntervalReccomendation(context) {
+function extractIntervalReccomendation(context) {
   if (context.suggestedChanges) {
     if (context.suggestedChanges.detectionIntervalReccomendation) {
       let intervalMinutes =
@@ -189,8 +189,7 @@ export function extractIntervalReccomendation(context) {
   return toString(context.adConfigs.detection_interval);
 }
 
-export async function createAndStartDetector(context) {
-  //const queriesForOverview = context.queriesForOverview;
+async function createAndStartDetector(context) {
   const configs = context.adConfigs;
   const httpClient = context.httpClient;
   try {
@@ -232,106 +231,68 @@ export async function createAndStartDetector(context) {
   }
 }
 
-export function isValidatedOrStartedCallOut(context, validButNotGuarantee) {
-  const valid = context.valid;
-  const startedDetector = context.startedDetector;
-  const adConfigs = context.adConfigs;
+function warningOrSubduedallOut(message, color, iconType) {
+  return (
+    <EuiCallOut color={color}>
+      <EuiFlexGroup>
+        <EuiFlexItem grow={false}>
+          <EuiIcon type={iconType} />
+        </EuiFlexItem>
+        <EuiFlexItem>
+          {' '}
+          <EuiTextColor>{message}</EuiTextColor>
+        </EuiFlexItem>
+      </EuiFlexGroup>
+    </EuiCallOut>
+  );
+}
+
+function triggerCorrectCallOut(context) {
+  if (context.startedDetector) {
+    return informationCallOut(context, calloutType);
+  }
+  let calloutType = 'notValid';
+  if (
+    Object.keys(context.failures).length == 0 &&
+    Object.keys(context.suggestedChanges).length == 0
+  ) {
+    calloutType = 'valid';
+  }
+  for (let [key, value] of Object.entries(context.suggestedChanges)) {
+    if (key === 'detection_interval') {
+      let intervalMinutes = Math.ceil(value[0] / 60000) + 1;
+      if (isNaN(intervalMinutes) || intervalMinutes > 10080) {
+        calloutType = 'maxInterval';
+        context.adConfigs.detection_interval = { period: { interval: 10080, unit: 'MINUTES' } };
+      } else {
+        context.adConfigs.detection_interval = {
+          period: { interval: intervalMinutes, unit: 'MINUTES' },
+        };
+        if (
+          Object.keys(context.failures).length == 0 &&
+          Object.keys(context.suggestedChanges).length == 1
+        ) {
+          calloutType = 'valid';
+        }
+      }
+    }
+    if (
+      key === 'filter_query' &&
+      Object.keys(context.failures).length == 0 &&
+      Object.keys(context.suggestedChanges).length == 1
+    ) {
+      calloutType = 'filterQueryTooSparse';
+    }
+  }
+  return informationCallOut(context, calloutType);
+}
+
+function informationCallOut(context, callOut) {
   const detectorID = context.detectorID;
-  if (context.filerQueryTooSparse) {
-    return (
-      <EuiCallOut color="warning">
-        <EuiFlexGroup>
-          <EuiFlexItem grow={false}>
-            <EuiIcon type="help" />
-          </EuiFlexItem>
-          <EuiFlexItem>
-            {' '}
-            <EuiTextColor>
-              "No Data is found with the current filter query used for the past 384 intervals, you
-              can try to manually change detector interval and still continue with validation
-              however the data is most likely too be too sparse"
-            </EuiTextColor>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiCallOut>
-    );
-  }
-  if (context.maxInterval) {
-    return (
-      <EuiCallOut color="warning">
-        <EuiFlexGroup>
-          <EuiFlexItem grow={false}>
-            <EuiIcon type="help" />
-          </EuiFlexItem>
-          <EuiFlexItem>
-            {' '}
-            <EuiTextColor>
-              "No optimal detector interval was found with the current data source, you can still
-              proceede with this detector creation however it will likely fail since the data is too
-              sparse"
-            </EuiTextColor>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiCallOut>
-    );
-  }
-  if (!valid && !validButNotGuarantee && !startedDetector) {
-    return (
-      <EuiCallOut color="warning">
-        <EuiFlexGroup>
-          <EuiFlexItem grow={false}>
-            <EuiIcon type="help" />
-          </EuiFlexItem>
-          <EuiFlexItem>
-            {' '}
-            <EuiTextColor>
-              "Please fix and validate any needed field in order to successfuly create an Anomaly
-              Detector. Anomaly detection creation requires configurations that lead to enough data"
-            </EuiTextColor>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiCallOut>
-    );
-  } else if (valid && validButNotGuarantee) {
-    return (
-      <EuiCallOut color="warning">
-        <EuiFlexGroup>
-          <EuiFlexItem grow={false}>
-            <EuiIcon type="help" />
-          </EuiFlexItem>
-          <EuiFlexItem>
-            {' '}
-            <EuiTextColor>
-              *Configruations aren't fully valid but Creating detector isn't blocked, data filter
-              currently returns no hits and is suggested to be fixed " + "either choose to continue
-              creation without validation and detector interval recommendation or try to fix
-              filter_query"
-            </EuiTextColor>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiCallOut>
-    );
-  } else if (valid && !validButNotGuarantee) {
-    return (
-      <EuiCallOut>
-        <EuiFlexGroup>
-          <EuiFlexItem grow={false}>
-            <EuiIcon type="check" />
-          </EuiFlexItem>
-          <EuiFlexItem>
-            {' '}
-            <EuiTextColor color="subdued">
-              Anomaly Detector configurations has been validated, click <i>create detector</i> to
-              confirm creation
-            </EuiTextColor>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiCallOut>
-    );
-  } else if (startedDetector) {
+  if (context.startedDetector) {
     return (
       <EuiCallOut
-        title={'Anomaly Detector ' + adConfigs.name + ' has been created and started'}
+        title={'Anomaly Detector ' + context.adConfigs.name + ' has been created and started'}
         size="m"
         color="success"
       >
@@ -358,41 +319,42 @@ export function isValidatedOrStartedCallOut(context, validButNotGuarantee) {
         </EuiFlexGroup>
       </EuiCallOut>
     );
-  } else {
-    return null;
   }
-}
-
-export function renderChangedDetectorIntervalCallOut(context) {
-  if (context.suggestedChanges.detectionIntervalReccomendation) {
-    let intervalMinutes =
-      Math.ceil(context.suggestedChanges.detectionIntervalReccomendation / 60000) + 1;
-    return (
-      <Fragment>
-        <EuiCallOut
-          title={
-            <span>
-              The optimal detector interval reccomended was set too
-              {' ' + intervalMinutes}.
-            </span>
-          }
-          iconType="alert"
-          size="s"
-        />
-        <EuiSpacer size="s" />
-      </Fragment>
+  if (callOut === 'filterQueryTooSparse') {
+    return warningOrSubduedallOut(
+      'No Data is found with the current filter query used for the past 384 intervals, you' +
+        'can try to manually change detector interval and still continue with validation' +
+        'however the data is most likely too be too sparse',
+      'warning',
+      'help'
+    );
+  }
+  if (callOut === 'maxInterval') {
+    return warningOrSubduedallOut(
+      'No optimal detector interval was found with the current data source, you can still' +
+        'proceede with this detector creation however it will likely fail since the data is too sparse',
+      'warning',
+      'help'
+    );
+  }
+  if (callOut === 'notValid') {
+    return warningOrSubduedallOut(
+      'Please fix and validate any needed field in order to successfuly create an Anomaly' +
+        'Detector. Anomaly detection creation requires configurations that lead to enough data',
+      'warning',
+      'help'
+    );
+  } else if (callOut === 'valid') {
+    return warningOrSubduedallOut(
+      'Anomaly Detector configurations has been validated, click create detector to confirm creation',
+      'primary',
+      'check'
     );
   }
   return null;
 }
 
-export function isInvalidName(name) {
-  if (!NAME_REGEX.test(name)) {
-    return 'Valid characters are a-z, A-Z, 0-9, -(hyphen) and _(underscore)';
-  }
-}
-
-export async function validateDetector(newValue, context) {
+async function validateDetector(newValue, context) {
   const search = {
     searchType: 'graph',
     timeField: newValue.time_field,
@@ -460,7 +422,7 @@ const ConfigCell = (props) => {
   );
 };
 
-const validationParser = (failures, suggestedChanges, field) => {
+const validationErrorCallOut = (failures, suggestedChanges, field) => {
   let message;
   for (let [key, value] of Object.entries(failures)) {
     if (key === 'duplicates' && field === 'name') {
@@ -498,7 +460,6 @@ const validationParser = (failures, suggestedChanges, field) => {
 const createDetector = (context) => {
   const [isFilterPopoverOpen, setFilterPopoverOpen] = useState(false);
   const [dataTypes, setDataTypes] = useState({});
-  const [validButNotGuarantee, setValidButNotGuarantee] = useState(false);
 
   useEffect(() => {
     onQueryMappings();
@@ -538,7 +499,6 @@ const createDetector = (context) => {
       toString(context.adConfigs.detection_interval) == '1' &&
       context.suggestedChanges.hasOwnProperty('filter_query')
     ) {
-      //setValidButNotGuarantee(!validButNotGuarantee);
       return (
         "*Detector interval recommendation hasn't been made since query filter returns no hits, you can " +
         'either choose to continue creation without validation or try to fix filter_query'
@@ -631,9 +591,6 @@ const createDetector = (context) => {
   };
 
   const indexFields = getIndexFields(dataTypes, ['number', 'text', 'keyword', 'boolean']);
-  // const fieldType = _.get(values, 'where.fieldName[0].type', 'number');
-  // const fieldOperator = _.get(values, 'where.operator', 'is');
-
   const onAddFilterButton = () =>
     setFilterPopoverOpen((isFilterPopoverOpen) => !isFilterPopoverOpen);
   const closePopover = () => setFilterPopoverOpen(false);
@@ -653,12 +610,8 @@ const createDetector = (context) => {
     ),
     body: (
       <EuiPageBody component="div">
-        <EuiFlyoutBody
-          style={{ padding: '-12px' }}
-          banner={isValidatedOrStartedCallOut(context, validButNotGuarantee)}
-        >
+        <EuiFlyoutBody style={{ padding: '-12px' }} banner={triggerCorrectCallOut(context)}>
           <EuiSpacer size="l" />
-          {/* {context.suggestedChanges ? renderChangedDetectorIntervalCallOut(context) : null} */}
           <ContentPanel
             title="Detector Configuration Preview"
             titleSize="s"
@@ -696,7 +649,11 @@ const createDetector = (context) => {
                               style: { paddingLeft: '5px' },
                             }}
                           />
-                          {validationParser(context.failures, context.suggestedChanges, 'name')}
+                          {validationErrorCallOut(
+                            context.failures,
+                            context.suggestedChanges,
+                            'name'
+                          )}
                         </EuiFlexItem>
                         <EuiFlexItem>
                           <FormikFieldText
@@ -739,7 +696,7 @@ const createDetector = (context) => {
                               append: [<EuiFormLabel htmlFor="textField19a">Minutes</EuiFormLabel>],
                             }}
                           />
-                          {validationParser(
+                          {validationErrorCallOut(
                             context.failures,
                             context.suggestedChanges,
                             'window_delay'
@@ -834,7 +791,7 @@ const createDetector = (context) => {
                               </div>
                             </EuiPopover>
                           </EuiFlexItem>
-                          {validationParser(
+                          {validationErrorCallOut(
                             context.failures,
                             context.suggestedChanges,
                             'filter_query'
@@ -907,20 +864,7 @@ const createDetector = (context) => {
             <EuiFlexItem grow={false}>
               <EuiButton
                 flush="right"
-                disabled={
-                  !context.successfulRec &&
-                  !context.maxInterval &&
-                  ((!context.valid &&
-                    !(
-                      Object.keys(context.failures).length == 0 &&
-                      Object.keys(context.suggestedChanges).length == 1 &&
-                      context.suggestedChanges.hasOwnProperty('filter_query')
-                    )) ||
-                    (Object.keys(context.failures).length == 0 &&
-                      Object.keys(context.suggestedChanges).length == 1 &&
-                      ('window_delay' in context.suggestedChanges ||
-                        'detection_interval' in context.suggestedChanges)))
-                }
+                disabled={Object.keys(context.failures).length != 0}
                 onClick={() => createAndStartDetector(context)}
                 fill
               >

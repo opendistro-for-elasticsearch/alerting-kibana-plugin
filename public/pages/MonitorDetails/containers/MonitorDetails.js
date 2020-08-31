@@ -50,7 +50,6 @@ import FORMIK_INITIAL_VALUES from '../../CreateMonitor/containers/CreateMonitor/
 import { formikToWhereClause } from '../../CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
 import { displayText } from '../../CreateMonitor/components/MonitorExpressions/expressions/utils/whereHelpers';
 import Flyout from '../../../components/Flyout';
-import DetectorFailureModal from '../components/DetectorFailureModal/DetectorFailureModal';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -67,9 +66,6 @@ export default class MonitorDetails extends Component {
       creatingDetector: false,
       error: null,
       triggerToEdit: null,
-      detectorCreated: false,
-      detectorID: '',
-      showFailureModal: false,
     };
   }
 
@@ -197,18 +193,8 @@ export default class MonitorDetails extends Component {
 
   convertToADConfigs = async (monitor) => {
     const uiMetadata = _.get(monitor, 'ui_metadata');
-    let nameInvalidRegex = false;
-    let autoChanges = [];
-
     let adName = monitor.name + '-Detector';
-    if (!NAME_REGEX.test(monitor.name)) {
-      nameInvalidRegex = true;
-    }
     let adTimeField = uiMetadata.search.timeField;
-    if (adTimeField == undefined || null || '') {
-      adTimeField = '';
-      //inputNeeded.push('timeField');
-    }
     let adIndices = monitor.inputs[0].search.indices;
     let adDetectorInterval = { period: { interval: 1, unit: 'MINUTES' } };
     const {
@@ -221,11 +207,7 @@ export default class MonitorDetails extends Component {
       timezone,
     } = _.get(uiMetadata, 'schedule', {});
     const search = _.get(uiMetadata, 'search');
-    if (frequency !== 'interval') {
-      autoChanges.push(
-        'detector interval cannot use cron expression so a period interval was chosen instead'
-      );
-    } else {
+    if (frequency === 'interval') {
       adDetectorInterval = { period: { unit: unit, interval: interval } };
     }
     let windowDelay = await this.getLatestTimeStamp(adTimeField, adIndices);
@@ -251,13 +233,9 @@ export default class MonitorDetails extends Component {
       adFeatures = {
         feature_name: 'feature-1',
         feature_enabled: true,
-        aggregation_query: {
-          aggregation_name: { [aggregationType]: { field: fieldName } },
-        },
+        aggregation_query: { aggregation_name: { [aggregationType]: { field: fieldName } } },
       };
     }
-    const where = _.get(search, 'where');
-
     let adConfigs = {
       name: adName,
       description: '',
@@ -268,23 +246,21 @@ export default class MonitorDetails extends Component {
       detection_interval: adDetectorInterval,
       window_delay: adWindowDelay,
     };
-    let validationResponse = await this.validateADConfigs(adConfigs);
     let queriesForOverview = {
-      filter_query:
-        displayText(_.get(search, 'where')) === 'all fields are included'
-          ? '-'
-          : displayText(_.get(search, 'where')),
+      filter_query: displayText(_.get(search, 'where')),
       feature_attributes: {
         feature_name: 'feature-1',
         aggregationType: aggregationType,
         fieldName: fieldName,
       },
-      where: where,
+      where: _.get(search, 'where'),
     };
+    let validationResponse = await this.validateADConfigs(adConfigs);
+    this.decideWhichFlyout(validationResponse, adConfigs, queriesForOverview);
+  };
+
+  decideWhichFlyout = (validationResponse, adConfigs, queriesForOverview) => {
     const setFlyout = this.props.setFlyout;
-
-    console.log('Validation Response', JSON.stringify(validationResponse));
-
     if (validationResponse.failures.others) {
       let message = '';
       for (let [key, value] of Object.entries(validationResponse.failures)) {
@@ -294,37 +270,12 @@ export default class MonitorDetails extends Component {
       }
       this.props.setFlyout({ type: 'detectorFailure', payload: { setFlyout, message } });
     } else {
-      if (nameInvalidRegex) {
-        validationResponse.failures.regex =
-          'Valid characters are a-z, A-Z, 0-9, -(hyphen) and _(underscore)';
-      }
       this.renderFlyout(adConfigs, validationResponse, queriesForOverview);
     }
   };
 
-  onClose = () => {
-    this.setFlyout(null);
-  };
-
-  showModal = () => {
-    this.setState({
-      showFailureModel: true,
-    });
-  };
-
-  closeModal() {
-    this.setState({
-      showCodeModel: false,
-    });
-  }
-
-  getModalVisibilityChange = () => {
-    return this.state.showCodeModel;
-  };
-
   renderStartedDetectorFlyout = (configs, detectorID, queries) => {
     const { httpClient } = this.props;
-    //console.log('went into renderstarted detector flyout');
     const setFlyout = this.props.setFlyout;
     let startedDetector = true;
     const adConfigs = configs;
@@ -343,52 +294,13 @@ export default class MonitorDetails extends Component {
   };
 
   renderFlyout = (adConfigs, validationResponse, queriesForOverview) => {
-    //console.log('render flyout');
     const { httpClient } = this.props;
     const setFlyout = this.props.setFlyout;
     const renderStartedDetectorFlyout = this.renderStartedDetectorFlyout;
     const renderFlyout = this.renderFlyout;
     const failures = Object.assign(validationResponse.failures);
     const suggestedChanges = Object.assign(validationResponse.suggestedChanges);
-    let valid = false;
-    let startedDetector = false;
-    if (Object.keys(failures).length == 0 && Object.keys(suggestedChanges).length == 0) {
-      valid = true;
-    }
-
-    let filerQueryTooSparse = false;
-    let maxInterval = false;
-    let successfulRec = false;
-
-    for (let [key, value] of Object.entries(suggestedChanges)) {
-      if (key === 'detection_interval') {
-        let intervalMinutes = Math.ceil(value[0] / 60000) + 1;
-        if (isNaN(intervalMinutes) || intervalMinutes > 10080) {
-          suggestedChanges.detectionIntervalMax =
-            'Detection interval was recommended at over 7 days, this likely means the data is too sparse';
-          maxInterval = true;
-          adConfigs.detection_interval = { period: { interval: 10080, unit: 'MINUTES' } };
-        } else {
-          // if (intervalMinutes > 50 && intervalMinutes < 100) {
-          //   intervalMinutes = 90;
-          // }
-          successfulRec = true;
-          adConfigs.detection_interval = { period: { interval: intervalMinutes, unit: 'MINUTES' } };
-          if (Object.keys(failures).length == 0 && Object.keys(suggestedChanges).length == 1) {
-            valid = true;
-          }
-        }
-      }
-      if (
-        key === 'filter_query' &&
-        Object.keys(failures).length == 0 &&
-        Object.keys(suggestedChanges).length == 1
-      ) {
-        filerQueryTooSparse = true;
-        //adConfigs.detection_interval = { period: { interval: 50, unit: 'MINUTES' } };
-      }
-    }
-
+    const startedDetector = false;
     this.props.setFlyout({
       type: 'createDetector',
       payload: {
@@ -400,65 +312,9 @@ export default class MonitorDetails extends Component {
         failures,
         suggestedChanges,
         renderFlyout,
-        valid,
         startedDetector,
-        filerQueryTooSparse,
-        maxInterval,
-        successfulRec,
       },
     });
-  };
-
-  renderDetectorCallOut = (id) => {
-    if (id) {
-      this.setState({
-        detectorCreated: true,
-        detectorID: id,
-      });
-    }
-  };
-
-  createAndStartDetector = async (adConfigs) => {
-    const { httpClient } = this.props;
-    try {
-      const response = await httpClient.post('../api/alerting/detectors', {
-        adConfigs,
-      });
-      console.log('response inside createdetector after call: ' + JSON.stringify(response));
-      let resp = _.get(response, 'data.response');
-    } catch (err) {
-      if (typeof err === 'string') throw err;
-      console.log('error from create and start: ' + err);
-      throw 'There was a problem validating the configurations';
-    }
-  };
-
-  detectorCreatedCallOut = () => {
-    if (this.state.detectorCreated) {
-      return (
-        <Fragment>
-          <EuiCallOut
-            title={
-              <span>
-                Anomaly detector has been created from the monitor and can be accessed{' '}
-                {
-                  <EuiLink
-                    style={{ textDecoration: 'underline' }}
-                    href={`${KIBANA_AD_PLUGIN}#/detectors/${this.state.detectorID}`}
-                    target="_blank"
-                  >
-                    {'here'} <EuiIcon size="s" type="popout" />
-                  </EuiLink>
-                }
-              </span>
-            }
-            iconType="alert"
-            size="s"
-          />
-          <EuiSpacer size="s" />
-        </Fragment>
-      );
-    }
   };
 
   validateADConfigs = async (configs) => {
@@ -467,12 +323,10 @@ export default class MonitorDetails extends Component {
       const response = await httpClient.post('../api/alerting/detectors/_validate', {
         configs,
       });
-      console.log('response inside monitordetails: ' + JSON.stringify(response));
       let resp = _.get(response, 'data.response');
       return resp;
     } catch (err) {
       if (typeof err === 'string') throw err;
-      console.log(err);
       throw 'There was a problem validating the configurations';
     }
   };
@@ -508,7 +362,6 @@ export default class MonitorDetails extends Component {
       return delayMinutes;
     } catch (err) {
       if (typeof err === 'string') throw err;
-      console.log(err);
       throw 'There was a problem getting the last historical data point';
     }
   };
@@ -551,7 +404,6 @@ export default class MonitorDetails extends Component {
       updating,
       loading,
       triggerToEdit,
-      showFailureModal,
     } = this.state;
     const {
       location,
@@ -602,22 +454,9 @@ export default class MonitorDetails extends Component {
       );
     }
 
-    if (showFailureModal) {
-      console.log('inside this check for modal');
-      return (
-        <DetectorFailureModal
-          title="Unable To Create Anomaly Detector From This Monitor"
-          subtitle={validationResponse.failures.others}
-          getModalVisibilityChange={this.getModalVisibilityChange}
-          closeModal={this.closeModal}
-        />
-      );
-    }
-
     console.log(this.state.monitor);
     return (
       <div style={{ padding: '25px 50px' }}>
-        {this.detectorCreatedCallOut()}
         {this.renderNoTriggersCallOut()}
         <EuiFlexGroup alignItems="center">
           <EuiFlexItem>
