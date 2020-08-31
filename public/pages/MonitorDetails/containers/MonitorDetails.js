@@ -36,7 +36,6 @@ import MonitorOverview from '../components/MonitorOverview';
 import MonitorHistory from './MonitorHistory';
 import Dashboard from '../../Dashboard/containers/Dashboard';
 import Triggers from './Triggers';
-import { NAME_REGEX } from './utils/helpers';
 import {
   MONITOR_ACTIONS,
   TRIGGER_ACTIONS,
@@ -44,12 +43,8 @@ import {
   MONITOR_INPUT_DETECTOR_ID,
 } from '../../../utils/constants';
 import { migrateTriggerMetadata } from './utils/helpers';
-import getScheduleFromMonitor from '../components/MonitorOverview/utils/getScheduleFromMonitor';
-import monitorToFormik from '../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
-import FORMIK_INITIAL_VALUES from '../../CreateMonitor/containers/CreateMonitor/utils/constants.js';
 import { formikToWhereClause } from '../../CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
 import { displayText } from '../../CreateMonitor/components/MonitorExpressions/expressions/utils/whereHelpers';
-import Flyout from '../../../components/Flyout';
 
 export default class MonitorDetails extends Component {
   constructor(props) {

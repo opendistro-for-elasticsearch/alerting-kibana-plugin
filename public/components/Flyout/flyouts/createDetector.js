@@ -14,18 +14,10 @@
  */
 
 import React, { Component, Fragment, useState, useEffect } from 'react';
-import { Field, Formik } from 'formik';
-import {
-  hasError,
-  isInvalid,
-  required,
-  validateDetectorName,
-  validatePositiveInteger,
-} from '../../../utils/validate';
-import { NAME_REGEX } from '../../../pages/MonitorDetails/containers/utils/helpers.js';
+import { Formik } from 'formik';
+import { hasError, isInvalid, required, validatePositiveInteger } from '../../../utils/validate';
 
 import {
-  EuiButtonIcon,
   EuiFlexItem,
   EuiText,
   EuiFormRow,
@@ -49,18 +41,13 @@ import {
   EuiExpression,
 } from '@elastic/eui';
 import ContentPanel from '../../ContentPanel';
-import { EuiFlyout } from '@elastic/eui';
 import {
   FormikFieldText,
   FormikFieldNumber,
   FormikComboBox,
   FormikSelect,
 } from '../../FormControls';
-import { Context } from 'mocha';
-import FrequencyPicker from '../../../pages/CreateMonitor/components/Schedule/Frequencies/FrequencyPicker';
-import Frequency from '../../../pages/CreateMonitor/components/Schedule/Frequencies/Frequency';
 import { KIBANA_AD_PLUGIN, DATA_TYPES } from '../../../utils/constants';
-import MonitorIndex from '../../../pages/CreateMonitor/containers/MonitorIndex';
 import { getIndexFields } from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/utils/dataTypes';
 import {
   getOperators,
@@ -69,7 +56,6 @@ import {
   validateRange,
   displayText,
 } from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/utils/whereHelpers';
-import { WhereExpression } from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/WhereExpression';
 import {
   POPOVER_STYLE,
   EXPRESSION_STYLE,
@@ -79,7 +65,6 @@ import { getPathsPerDataType } from '../../../pages/CreateMonitor/containers/Def
 import { formikToWhereClause } from '../../../pages/CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
 
 function toString(obj) {
-  // render calls this method.  During different lifecylces, obj can be undefined
   if (typeof obj != 'undefined') {
     if (obj.hasOwnProperty('period')) {
       let period = obj.period;
@@ -133,7 +118,6 @@ class FeaturePreview extends Component {
         name: 'State',
       },
     ];
-
     return (
       <EuiFlexGroup direction="column" gutterSize="s" style={{ paddingTop: '20px' }}>
         <EuiFlexItem>
@@ -178,17 +162,6 @@ export class FilterDisplay extends Component {
 }
 const FixedWidthRow = (props) => <EuiFormRow {...props} style={{ width: '150px' }} />;
 
-function extractIntervalReccomendation(context) {
-  if (context.suggestedChanges) {
-    if (context.suggestedChanges.detectionIntervalReccomendation) {
-      let intervalMinutes =
-        Math.ceil(context.suggestedChanges.detectionIntervalReccomendation / 60000) + 1;
-      return intervalMinutes;
-    }
-  }
-  return toString(context.adConfigs.detection_interval);
-}
-
 async function createAndStartDetector(context) {
   const configs = context.adConfigs;
   const httpClient = context.httpClient;
@@ -212,21 +185,17 @@ async function createAndStartDetector(context) {
             response: { _id },
           },
         } = response;
-        console.log('start detector response: ' + JSON.stringify(response));
         if (ok) {
           context.setFlyout(null);
           context.renderStartedDetectorFlyout(configs, _id, context.queriesForOverview);
         }
       } catch (err) {
-        console.log('error: ' + err);
         if (typeof err === 'string') throw err;
-        console.log('error from start: ' + JSON.stringify(err));
         throw 'There was a problem starting detector';
       }
     }
   } catch (err) {
     if (typeof err === 'string') throw err;
-    console.log('error from create: ' + err);
     throw 'There was a problem createing detector';
   }
 }
@@ -323,8 +292,8 @@ function informationCallOut(context, callOut) {
   if (callOut === 'filterQueryTooSparse') {
     return warningOrSubduedallOut(
       'No Data is found with the current filter query used for the past 384 intervals, you' +
-        'can try to manually change detector interval and still continue with validation' +
-        'however the data is most likely too be too sparse',
+        ' can try to manually change detector interval and still continue with validation' +
+        ' however the data is most likely too be too sparse',
       'warning',
       'help'
     );
@@ -332,7 +301,7 @@ function informationCallOut(context, callOut) {
   if (callOut === 'maxInterval') {
     return warningOrSubduedallOut(
       'No optimal detector interval was found with the current data source, you can still' +
-        'proceede with this detector creation however it will likely fail since the data is too sparse',
+        ' proceede with this detector creation however it will likely fail since the data is too sparse',
       'warning',
       'help'
     );
@@ -340,7 +309,7 @@ function informationCallOut(context, callOut) {
   if (callOut === 'notValid') {
     return warningOrSubduedallOut(
       'Please fix and validate any needed field in order to successfuly create an Anomaly' +
-        'Detector. Anomaly detection creation requires configurations that lead to enough data',
+        ' Detector. Anomaly detection creation requires configurations that lead to enough data',
       'warning',
       'help'
     );
@@ -367,7 +336,6 @@ async function validateDetector(newValue, context) {
       operator: newValue.where.operator === undefined ? 'is' : newValue.where.operator,
     },
   };
-
   let filterQuery = formikToWhereClause(search);
   let adFilterQuery = '';
   if (filterQuery) {
@@ -392,7 +360,6 @@ async function validateDetector(newValue, context) {
     const response = await httpClient.post('../api/alerting/detectors/_validate', {
       configs,
     });
-    console.log('response from validate in createDetector: ' + JSON.stringify(response));
     let resp = _.get(response, 'data.response');
     const {
       data: {
@@ -400,14 +367,12 @@ async function validateDetector(newValue, context) {
         response: { _id },
       },
     } = response;
-    console.log('validation resp: ' + JSON.stringify(resp));
     if (ok) {
       context.setFlyout(null);
       context.renderFlyout(configs, resp, context.queriesForOverview);
     }
   } catch (err) {
     if (typeof err === 'string') throw err;
-    console.log(err);
     throw 'There was a problem validating the configurations';
   }
 }
@@ -553,11 +518,7 @@ const createDetector = (context) => {
         <FormikSelect
           name="where.fieldValue"
           fieldProps={{ validate: required }}
-          inputProps={{
-            onChange: handleChangeWrapper,
-            options: WHERE_BOOLEAN_FILTERS,
-            isInvalid,
-          }}
+          inputProps={{ onChange: handleChangeWrapper, options: WHERE_BOOLEAN_FILTERS, isInvalid }}
         />
       );
     } else {
@@ -617,7 +578,6 @@ const createDetector = (context) => {
             titleSize="s"
             style={{ paddingBottom: '10px' }}
           >
-            {console.log('all of context inside createDetector: ', context)}
             {!context.startedDetector ? (
               <Formik
                 initialValues={{
@@ -627,9 +587,6 @@ const createDetector = (context) => {
                   indices: context.adConfigs.indices,
                   detection_interval: toString(context.adConfigs.detection_interval),
                   window_delay: toString(context.adConfigs.window_delay),
-                  searchType: 'graph',
-                  fieldValue: context.queriesForOverview.where.fieldValue,
-                  fieldName: context.queriesForOverview.where.fieldName.label,
                   where: context.queriesForOverview.where,
                 }}
                 onSubmit={(value) => validateDetector(value, context)}
@@ -642,8 +599,6 @@ const createDetector = (context) => {
                           <FormikFieldText
                             name="name"
                             formRow
-                            onChange={{}}
-                            inputProps={{}}
                             rowProps={{
                               label: 'Name',
                               style: { paddingLeft: '5px' },
@@ -704,7 +659,6 @@ const createDetector = (context) => {
                         </EuiFlexItem>
                       </EuiFlexGroup>
                       <EuiFlexGroup>
-                        {/* <MonitorIndex httpClient={context.httpClient}/> */}
                         <EuiFlexItem>
                           <FormikFieldNumber
                             name="detection_interval"
@@ -736,7 +690,6 @@ const createDetector = (context) => {
                               id="where-popover"
                               name="filter"
                               zIndex="200px"
-                              //style={{paddingLeft:'5px', paddingTop:'20px'}}
                               button={
                                 <EuiExpression
                                   color="primary"
@@ -827,7 +780,7 @@ const createDetector = (context) => {
                 <EuiFlexItem>
                   <ConfigCell
                     title="Detector interval"
-                    description={extractIntervalReccomendation(context)}
+                    description={toString(context.adConfigs.detection_interval)}
                   />
                 </EuiFlexItem>
                 <EuiFlexItem>
@@ -837,7 +790,6 @@ const createDetector = (context) => {
                   />
                 </EuiFlexItem>
                 <EuiFlexItem>
-                  {console.log('context after detector started: ', context)}
                   <ConfigCell
                     title="Data filter"
                     description={displayText(context.queriesForOverview.where)}
@@ -877,5 +829,4 @@ const createDetector = (context) => {
     ),
   };
 };
-
 export default createDetector;
