@@ -52,7 +52,7 @@ describe('AnomalyDetectors', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('should be able to select the detector', done => {
+  test('should be able to select the detector', (done) => {
     httpClientMock.post.mockResolvedValueOnce({
       data: {
         ok: true,
@@ -72,8 +72,8 @@ describe('AnomalyDetectors', () => {
         .find('[data-test-subj="comboBoxSearchInput"]')
         .hostNodes()
         .simulate('change', { target: { value: 'sample-detector' } })
-        .simulate('keyDown', { keyCode: 40 })
-        .simulate('keyDown', { keyCode: 13 });
+        .simulate('keyDown', { key: 'ArrowDown' })
+        .simulate('keyDown', { key: 'Enter' });
       expect(wrapper.instance().state.values.detectorId).toEqual('sample-id');
       done();
     });

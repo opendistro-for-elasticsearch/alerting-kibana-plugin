@@ -1,0 +1,91 @@
+name: Release workflow
+# This workflow is triggered on creating tags to master or an opendistro release branch
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build Alerting Kibana
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Alerting Kibana plugin
+        uses: actions/checkout@v2
+        with:
+          path: alerting-kibana-plugin
+      - name: Get Kibana version
+        id: kibana_version
+        run: |
+          echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/package.json').kibana.version).match(/[.0-9]+/)[0]")"
+      - name: Checkout Kibana
+        uses: actions/checkout@v2
+        with:
+          repository: opendistro-for-elasticsearch/kibana-oss
+          ref: ${{ steps.kibana_version.outputs.kibana_version }}
+          token: ${{ secrets.GITHUB_KIBANA_OSS }}
+          path: kibana
+      - name: Get node and yarn versions
+        id: versions
+        run: |
+          echo "::set-output name=node_version::$(node -p "(require('./kibana/package.json').engines.node).match(/[.0-9]+/)[0]")"
+          echo "::set-output name=yarn_version::$(node -p "(require('./kibana/package.json').engines.yarn).match(/[.0-9]+/)[0]")"
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.versions.outputs.node_version }}
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install correct yarn version for Kibana
+        run: |
+          npm uninstall -g yarn
+          echo "Installing yarn ${{ steps.versions_step.outputs.yarn_version }}"
+          npm i -g yarn@${{ steps.versions.outputs.yarn_version }}
+      - name: Bootstrap plugin/kibana
+        run: |
+          mkdir -p kibana/plugins
+          mv alerting-kibana-plugin kibana/plugins
+          cd kibana/plugins/alerting-kibana-plugin
+          yarn kbn bootstrap
+      - name: Build plugin
+        id: build_zip
+        run: |
+          cd kibana/plugins/alerting-kibana-plugin
+          yarn build
+          zip_path=`ls $(pwd)/build/*.zip`
+          echo "::set-output name=zip_path::$zip_path"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+      - name: Upload Artifacts to S3
+        run: |
+          s3_path=s3://artifacts.opendistroforelasticsearch.amazon.com/downloads
+          aws s3 cp ${{ steps.build_zip.outputs.zip_path }} $s3_path/kibana-plugins/opendistro-alerting/
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths '/downloads/*'
+      - name: Create Github Draft Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: false
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_name: opendistro_alerting_kibana.zip
+          asset_path: ${{ steps.build_zip.outputs.zip_path }}
+          asset_content_type: application/zip
+      - name: Upload Workflow Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: alerting-plugin
+          path: ${{ steps.build_zip.outputs.zip_path }}
+          

@@ -22,7 +22,7 @@ import MonitorIndex from './MonitorIndex';
 import * as helpers from './utils/helpers';
 import { httpClientMock } from '../../../../../test/mocks';
 
-helpers.createReasonableWait = jest.fn(cb => cb());
+helpers.createReasonableWait = jest.fn((cb) => cb());
 httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: [] } });
 
 function getMountWrapper(customProps = {}) {
@@ -77,7 +77,7 @@ describe('MonitorIndex', () => {
       .find('[data-test-subj="comboBoxSearchInput"]')
       .hostNodes()
       .simulate('change', { target: { value: ' ' } })
-      .simulate('keyDown', { keyCode: 13 });
+      .simulate('keyDown', { key: 'Enter' });
 
     expect(wrapper.find('.euiComboBoxPill')).toHaveLength(0);
   });
@@ -105,36 +105,16 @@ describe('MonitorIndex', () => {
   test('returns empty alias/index array for *:', async () => {
     const wrapper = getMountWrapper();
 
-    expect(
-      await wrapper
-        .find(MonitorIndex)
-        .instance()
-        .handleQueryAliases('*:')
-    ).toEqual([]);
-    expect(
-      await wrapper
-        .find(MonitorIndex)
-        .instance()
-        .handleQueryIndices('*:')
-    ).toEqual([]);
+    expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('*:')).toEqual([]);
+    expect(await wrapper.find(MonitorIndex).instance().handleQueryIndices('*:')).toEqual([]);
   });
 
   test('returns empty array for data.ok = false', async () => {
     httpClientMock.post.mockResolvedValue({ data: { ok: false } });
     const wrapper = getMountWrapper();
 
-    expect(
-      await wrapper
-        .find(MonitorIndex)
-        .instance()
-        .handleQueryAliases('random')
-    ).toEqual([]);
-    expect(
-      await wrapper
-        .find(MonitorIndex)
-        .instance()
-        .handleQueryIndices('random')
-    ).toEqual([]);
+    expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('random')).toEqual([]);
+    expect(await wrapper.find(MonitorIndex).instance().handleQueryIndices('random')).toEqual([]);
   });
   //
   test('returns indices/aliases', async () => {
@@ -146,18 +126,12 @@ describe('MonitorIndex', () => {
     });
     const wrapper = getMountWrapper();
 
-    expect(
-      await wrapper
-        .find(MonitorIndex)
-        .instance()
-        .handleQueryAliases('l')
-    ).toEqual([{ label: 'logstash', index: 'logstash-0' }]);
-    expect(
-      await wrapper
-        .find(MonitorIndex)
-        .instance()
-        .handleQueryIndices('l')
-    ).toEqual([{ health: 'green', status: 'open', label: 'logstash-0' }]);
+    expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('l')).toEqual([
+      { label: 'logstash', index: 'logstash-0' },
+    ]);
+    expect(await wrapper.find(MonitorIndex).instance().handleQueryIndices('l')).toEqual([
+      { health: 'green', status: 'open', label: 'logstash-0' },
+    ]);
   });
 
   test.skip('onBlur sets index to touched', () => {
@@ -195,8 +169,8 @@ describe('MonitorIndex', () => {
     wrapper
       .find('[data-test-subj="comboBoxInput"]')
       .hostNodes()
-      .simulate('keyDown', { keyCode: 40 })
-      .simulate('keyDown', { keyCode: 13 });
+      .simulate('keyDown', { key: 'ArrowDown' })
+      .simulate('keyDown', { key: 'Enter' });
 
     expect(wrapper.instance().state.values.index).toEqual([{ label: 'logstash-0' }]);
   });

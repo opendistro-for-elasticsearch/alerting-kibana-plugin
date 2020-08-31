@@ -17,12 +17,12 @@ Object {
     </h3>
     <ul>
       <li>
-        <ForwardRef
+        <EuiLink
           href="https://mustache.github.io/mustache.5.html"
           target="_blank"
         >
           HTML Templates with Mustache.js
-        </ForwardRef>
+        </EuiLink>
       </li>
     </ul>
   </EuiText>,

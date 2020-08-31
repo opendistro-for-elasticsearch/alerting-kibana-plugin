@@ -154,12 +154,11 @@ exports[`DashboardControls renders 1`] = `
     class="euiFlexItem euiFlexItem--flexGrowZero"
     style="justify-content:center"
   >
-    <div
+    <nav
       class="euiPagination"
-      role="group"
     >
       <button
-        aria-label="Previous page"
+        aria-label="Previous page, 1"
         class="euiButtonIcon euiButtonIcon--text"
         data-test-subj="pagination-button-previous"
         type="button"
@@ -168,38 +167,52 @@ exports[`DashboardControls renders 1`] = `
           EuiIconMock
         </div>
       </button>
-      <button
-        aria-label="Page 1 of 2"
-        class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton--hideOnMobile"
-        data-test-subj="pagination-button-0"
-        type="button"
+      <ul
+        class="euiPagination__list"
       >
-        <span
-          class="euiButtonEmpty__content"
+        <li
+          class="euiPagination__item"
         >
-          <span
-            class="euiButtonEmpty__text"
+          <button
+            aria-label="Page 1 of 2"
+            class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton--hideOnMobile"
+            data-test-subj="pagination-button-0"
+            type="button"
           >
-            1
-          </span>
-        </span>
-      </button>
-      <button
-        aria-label="Page 2 of 2"
-        class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
-        data-test-subj="pagination-button-1"
-        type="button"
-      >
-        <span
-          class="euiButtonEmpty__content"
+            <span
+              class="euiButtonEmpty__content"
+            >
+              <span
+                class="euiButtonEmpty__text"
+              >
+                1
+              </span>
+            </span>
+          </button>
+        </li>
+        <li
+          class="euiPagination__item"
         >
-          <span
-            class="euiButtonEmpty__text"
+          <button
+            aria-current="true"
+            aria-label="Page 2 of 2"
+            class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+            data-test-subj="pagination-button-1"
+            disabled=""
+            type="button"
           >
-            2
-          </span>
-        </span>
-      </button>
+            <span
+              class="euiButtonEmpty__content"
+            >
+              <span
+                class="euiButtonEmpty__text"
+              >
+                2
+              </span>
+            </span>
+          </button>
+        </li>
+      </ul>
       <button
         aria-label="Next page"
         class="euiButtonIcon euiButtonIcon--text"
@@ -211,7 +224,7 @@ exports[`DashboardControls renders 1`] = `
           EuiIconMock
         </div>
       </button>
-    </div>
+    </nav>
   </div>
 </div>
 `;

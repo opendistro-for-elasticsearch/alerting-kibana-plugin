@@ -33,7 +33,7 @@ const closeExpression = jest.fn();
 const getMountWrapper = (state = false) => (
   <Formik
     initialValues={FORMIK_INITIAL_VALUES}
-    render={props => (
+    render={(props) => (
       <WhereExpression
         formik={props}
         dataTypes={dataTypes}
@@ -73,8 +73,8 @@ describe('WhereExpression', () => {
       .find('[data-test-subj="comboBoxSearchInput"]')
       .hostNodes()
       .simulate('change', { target: { value: 'cityName' } })
-      .simulate('keyDown', { keyCode: 40 })
-      .simulate('keyDown', { keyCode: 13 })
+      .simulate('keyDown', { key: 'ArrowDown' })
+      .simulate('keyDown', { key: 'Enter' })
       .simulate('blur');
 
     wrapper.update();
