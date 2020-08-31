@@ -63,6 +63,7 @@ import {
 } from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/utils/constants';
 import { getPathsPerDataType } from '../../../pages/CreateMonitor/containers/DefineMonitor/utils/mappings';
 import { formikToWhereClause } from '../../../pages/CreateMonitor/containers/CreateMonitor/utils/formikToMonitor';
+import { MAX_INTERVAl_LENGTH_MINUTES } from '../../../pages/MonitorDetails/containers/utils/helpers';
 
 function toString(obj) {
   if (typeof obj != 'undefined') {
@@ -230,9 +231,11 @@ function triggerCorrectCallOut(context) {
   for (let [key, value] of Object.entries(context.suggestedChanges)) {
     if (key === 'detection_interval') {
       let intervalMinutes = Math.ceil(value[0] / 60000) + 1;
-      if (isNaN(intervalMinutes) || intervalMinutes > 10080) {
+      if (isNaN(intervalMinutes) || intervalMinutes > MAX_INTERVAl_LENGTH_MINUTES) {
         calloutType = 'maxInterval';
-        context.adConfigs.detection_interval = { period: { interval: 10080, unit: 'MINUTES' } };
+        context.adConfigs.detection_interval = {
+          period: { interval: MAX_INTERVAl_LENGTH_MINUTES, unit: 'MINUTES' },
+        };
       } else {
         context.adConfigs.detection_interval = {
           period: { interval: intervalMinutes, unit: 'MINUTES' },
@@ -454,7 +457,6 @@ const createDetector = (context) => {
 
   const helpTextInterval = (context) => {
     if (
-      !context.valid &&
       Object.keys(context.failures).length != 0 &&
       toString(context.adConfigs.detection_interval) == '1'
     ) {

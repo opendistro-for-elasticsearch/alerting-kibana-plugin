@@ -448,8 +448,6 @@ export default class MonitorDetails extends Component {
         />
       );
     }
-
-    console.log(this.state.monitor);
     return (
       <div style={{ padding: '25px 50px' }}>
         {this.renderNoTriggersCallOut()}

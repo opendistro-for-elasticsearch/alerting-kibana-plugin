@@ -13,6 +13,7 @@
  *   permissions and limitations under the License.
  */
 export const NAME_REGEX = RegExp('^[a-zA-Z0-9._-]+$');
+export const MAX_INTERVAl_LENGTH_MINUTES = 10080;
 import { get, isEmpty } from 'lodash';
 export const migrateTriggerMetadata = (monitor) => {
   const uiMetadata = get(monitor, 'ui_metadata', {});
