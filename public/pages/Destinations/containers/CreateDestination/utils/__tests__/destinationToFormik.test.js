@@ -15,6 +15,7 @@
 
 import { destinationToFormik } from '../destinationToFormik';
 import { DESTINATION_TYPE } from '../../../../utils/constants';
+import { httpClientMock } from '../../../../../../../test/mocks';
 
 describe('destinationToFormik', () => {
   const baseDestination = {
@@ -25,7 +26,7 @@ describe('destinationToFormik', () => {
   };
   test('should able to convert chime destination to Formik object', () => {
     expect(
-      destinationToFormik({
+      destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CHIME,
         [DESTINATION_TYPE.CHIME]: { url: 'https://chime.webhook' },
@@ -34,7 +35,7 @@ describe('destinationToFormik', () => {
   });
   test('should able to convert slack destination to Formik object', () => {
     expect(
-      destinationToFormik({
+      destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.SLACK,
         [DESTINATION_TYPE.SLACK]: { url: 'https://chime.webhook' },
@@ -43,7 +44,7 @@ describe('destinationToFormik', () => {
   });
   test('should able to convert custom destination to Formik object', () => {
     expect(
-      destinationToFormik({
+      destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CUSTOM_HOOK,
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
@@ -61,7 +62,7 @@ describe('destinationToFormik', () => {
   });
   test('should able to convert custom destination (with port) to Formik object', () => {
     expect(
-      destinationToFormik({
+      destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CUSTOM_HOOK,
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
@@ -79,7 +80,7 @@ describe('destinationToFormik', () => {
   });
   test('should able to convert custom destination (with custom attributes) to Formik object', () => {
     expect(
-      destinationToFormik({
+      destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CUSTOM_HOOK,
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
