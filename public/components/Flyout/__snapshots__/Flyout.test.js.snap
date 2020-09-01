@@ -31,7 +31,9 @@ exports[`Flyout renders 1`] = `
       </h2>
     </EuiTitle>
   </EuiFlyoutHeader>
-  <EuiFlyoutBody>
+  <EuiFlyoutBody
+    onClose={[MockFunction]}
+  >
     <EuiText
       style={
         Object {
