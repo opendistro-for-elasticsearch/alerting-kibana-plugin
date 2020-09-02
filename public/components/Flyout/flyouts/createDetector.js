@@ -47,7 +47,7 @@ import {
   FormikComboBox,
   FormikSelect,
 } from '../../FormControls';
-import { KIBANA_AD_PLUGIN, DATA_TYPES } from '../../../utils/constants';
+import { KIBANA_AD_PLUGIN, DATA_TYPES, DETECTOR_CREATION_CALLOUTS } from '../../../utils/constants';
 import { getIndexFields } from '../../../pages/CreateMonitor/components/MonitorExpressions/expressions/utils/dataTypes';
 import {
   getOperators,
@@ -197,11 +197,11 @@ async function createAndStartDetector(context) {
     }
   } catch (err) {
     if (typeof err === 'string') throw err;
-    throw 'There was a problem createing detector';
+    throw 'There was a problem creating detector';
   }
 }
 
-function warningOrSubduedallOut(message, color, iconType) {
+function warningCallOut(message, color, iconType) {
   return (
     <EuiCallOut color={color}>
       <EuiFlexGroup>
@@ -219,7 +219,7 @@ function warningOrSubduedallOut(message, color, iconType) {
 
 function triggerCorrectCallOut(context) {
   if (context.startedDetector) {
-    return informationCallOut(context, calloutType);
+    return detectorCreatedCallOut(context);
   }
   let calloutType = 'notValid';
   if (
@@ -256,72 +256,53 @@ function triggerCorrectCallOut(context) {
       calloutType = 'filterQueryTooSparse';
     }
   }
-  return informationCallOut(context, calloutType);
+  return informationCallOut(calloutType);
 }
 
-function informationCallOut(context, callOut) {
+function detectorCreatedCallOut(context) {
   const detectorID = context.detectorID;
-  if (context.startedDetector) {
-    return (
-      <EuiCallOut
-        title={'Anomaly Detector ' + context.adConfigs.name + ' has been created and started'}
-        size="m"
-        color="success"
-      >
-        <EuiFlexGroup>
-          <EuiFlexItem grow={false}>
-            <EuiIcon type="check" />
-          </EuiFlexItem>
-          <EuiFlexItem>
-            <EuiTextColor color="subdued">
-              <span>
-                Anomaly detector has been created from the monitor and can be accessed{' '}
-                {
-                  <EuiLink
-                    style={{ textDecoration: 'underline' }}
-                    href={`${KIBANA_AD_PLUGIN}#/detectors/${detectorID}`}
-                    target="_blank"
-                  >
-                    {'here'} <EuiIcon size="s" type="popout" />
-                  </EuiLink>
-                }
-              </span>
-            </EuiTextColor>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </EuiCallOut>
-    );
-  }
+  return (
+    <EuiCallOut
+      title={'Anomaly detector ' + context.adConfigs.name + ' has been created and started'}
+      size="m"
+      color="success"
+    >
+      <EuiFlexGroup>
+        <EuiFlexItem grow={false}>
+          <EuiIcon type="check" />
+        </EuiFlexItem>
+        <EuiFlexItem>
+          <EuiTextColor color="subdued">
+            <span>
+              Anomaly detector has been created from the monitor and can be accessed{' '}
+              {
+                <EuiLink
+                  style={{ textDecoration: 'underline' }}
+                  href={`${KIBANA_AD_PLUGIN}#/detectors/${detectorID}`}
+                  target="_blank"
+                >
+                  {'here'} <EuiIcon size="s" type="popout" />
+                </EuiLink>
+              }
+            </span>
+          </EuiTextColor>
+        </EuiFlexItem>
+      </EuiFlexGroup>
+    </EuiCallOut>
+  );
+}
+
+function informationCallOut(callOut) {
   if (callOut === 'filterQueryTooSparse') {
-    return warningOrSubduedallOut(
-      'No Data is found with the current filter query used for the past 384 intervals, you' +
-        ' can try to manually change detector interval and still continue with validation' +
-        ' however the data is most likely too be too sparse',
-      'warning',
-      'help'
-    );
+    return warningCallOut(DETECTOR_CREATION_CALLOUTS.FILTER_QUERY_NO_RESULTS, 'warning', 'help');
   }
   if (callOut === 'maxInterval') {
-    return warningOrSubduedallOut(
-      'No optimal detector interval was found with the current data source, you can still' +
-        ' proceede with this detector creation however it will likely fail since the data is too sparse',
-      'warning',
-      'help'
-    );
+    return warningCallOut(DETECTOR_CREATION_CALLOUTS.MAX_INTERVAL, 'warning', 'help');
   }
   if (callOut === 'notValid') {
-    return warningOrSubduedallOut(
-      'Please fix and validate any needed field in order to successfuly create an Anomaly' +
-        ' Detector. Anomaly detection creation requires configurations that lead to enough data',
-      'warning',
-      'help'
-    );
+    return warningCallOut(DETECTOR_CREATION_CALLOUTS.NOT_VALID, 'warning', 'help');
   } else if (callOut === 'valid') {
-    return warningOrSubduedallOut(
-      'Anomaly Detector configurations has been validated, click create detector to confirm creation',
-      'primary',
-      'check'
-    );
+    return warningCallOut(DETECTOR_CREATION_CALLOUTS.VALID, 'primary', 'check');
   }
   return null;
 }
@@ -459,14 +440,14 @@ const createDetector = (context) => {
       Object.keys(context.failures).length != 0 &&
       toString(context.adConfigs.detection_interval) == '1'
     ) {
-      return "*Detector interval hasn't been validated yet, please fix other failures first";
+      return "Detector interval hasn't been validated yet, please fix other failures first";
     } else if (
       Object.keys(context.failures).length == 0 &&
       toString(context.adConfigs.detection_interval) == '1' &&
       context.suggestedChanges.hasOwnProperty('filter_query')
     ) {
       return (
-        "*Detector interval recommendation hasn't been made since query filter returns no hits, you can " +
+        "Detector interval recommendation hasn't been made since query filter returns no hits, you can " +
         'either choose to continue creation without validation or try to fix filter_query'
       );
     } else {
