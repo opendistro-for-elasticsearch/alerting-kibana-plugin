@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -207,7 +207,7 @@ export default class MonitorDetails extends Component {
     }
     let windowDelay = await this.getLatestTimeStamp(adTimeField, adIndices);
     let adWindowDelay = { period: { interval: 10, unit: 'MINUTES' } };
-    if (adWindowDelay) {
+    if (windowDelay) {
       adWindowDelay = { period: { interval: windowDelay, unit: 'MINUTES' } };
     }
     let filterQuery = formikToWhereClause(search);
@@ -482,7 +482,7 @@ export default class MonitorDetails extends Component {
               content={
                 monitor.ui_metadata.search.searchType === 'graph'
                   ? ''
-                  : 'Anomaly detector can only be automatically created from monitor defintion type "visual editor"'
+                  : 'Anomaly detector can only be automatically created from monitor definition type "visual editor"'
               }
             >
               <EuiButton

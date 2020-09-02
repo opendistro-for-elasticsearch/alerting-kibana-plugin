@@ -166,9 +166,7 @@ class DefineMonitor extends Component {
 
   async onRunQuery() {
     const { httpClient, values } = this.props;
-    // console.log("http client: " + httpClient);
     const formikSnapshot = _.cloneDeep(values);
-    //console.log("formik snap: " + JSON.stringify(formikSnapshot));
     // If we are running a visual graph query, then we need to run two separate queries
     // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
     // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
@@ -176,7 +174,6 @@ class DefineMonitor extends Component {
     const searchRequests = [buildSearchRequest(values)];
     if (values.searchType === SEARCH_TYPE.GRAPH) {
       searchRequests.push(buildSearchRequest(values, false));
-      console.log('search requests: ' + JSON.stringify(searchRequests));
     }
 
     try {
@@ -192,14 +189,10 @@ class DefineMonitor extends Component {
       });
 
       const [queryResponse, optionalResponse] = await Promise.all(promises);
-      //console.log("promises: " + JSON.stringify(promises));
-
-      //console.log("query response: " + JSON.stringify(queryResponse));
 
       if (queryResponse.data.ok) {
         const response = _.get(queryResponse.data.resp, 'input_results.results[0]');
         // If there is an optionalResponse use it's results, otherwise use the original response
-        console.log(response);
         const performanceResponse = optionalResponse
           ? _.get(optionalResponse, 'data.resp.input_results.results[0]', null)
           : response;

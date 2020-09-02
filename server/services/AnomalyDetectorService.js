@@ -60,12 +60,6 @@ export default class DestinationsService {
   createDetector = async (req, h) => {
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
     const requestBody = { body: JSON.stringify(req.payload.configs) };
-    let params = {
-      detectorId: undefined,
-      ifSeqNo: undefined,
-      ifPrimaryTerm: undefined,
-      body: requestBody,
-    };
     try {
       const resp = await callWithRequest(req, 'alertingAD.createDetector', requestBody);
       return {
