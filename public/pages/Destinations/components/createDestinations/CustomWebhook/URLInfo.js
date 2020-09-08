@@ -135,7 +135,7 @@ const URLInfo = ({ type, values }) => {
             label: 'Schema',
             style: { paddingLeft: '10px' },
             helpText:
-              'The protocol that is used to access the server. Choose "HTTPS" when TLS-based encrypted communication is required by the server.',
+              'The protocol used to access the server. Choose the HTTPS option when TLS-based encrypted communication is required by the server.',
           }}
           inputProps={{
             disabled: isUrlEnabled,
@@ -151,7 +151,7 @@ const URLInfo = ({ type, values }) => {
           rowProps={{
             label: 'Host',
             style: { paddingLeft: '10px' },
-            helpText: 'The hostname or domain name where the server will be accessible.',
+            helpText: 'The host name or domain name where the server is accessible.',
             isInvalid,
             error: hasError,
           }}
@@ -171,7 +171,7 @@ const URLInfo = ({ type, values }) => {
             label: 'Port (optional)',
             style: { paddingLeft: '10px' },
             helpText:
-              'The TCP port number on which the server is listening. If no port is given, the default port is implied: 80 for HTTP, and 443 for HTTPS.',
+              'The TCP port number on which the server is listening. If you do not select a port number, the default port number is used: 80 for HTTP and 443 for HTTPS.',
             isInvalid,
             error: hasError,
           }}
