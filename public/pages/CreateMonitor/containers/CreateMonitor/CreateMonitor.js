@@ -90,6 +90,7 @@ export default class CreateMonitor extends Component {
         );
       } else {
         console.log('Failed to create:', resp.data);
+        this.backendErrorHandler('create', resp.data);
       }
     } catch (err) {
       console.error(err);
@@ -114,6 +115,7 @@ export default class CreateMonitor extends Component {
         this.props.history.push(`/monitors/${id}`);
       } else {
         console.log('Failed to update:', resp.data);
+        this.backendErrorHandler('update', resp.data);
       }
     } catch (err) {
       console.error(err);
@@ -127,6 +129,15 @@ export default class CreateMonitor extends Component {
     const monitor = formikToMonitor(values);
     if (edit) this.onUpdate(monitor, formikBag);
     else this.onCreate(monitor, formikBag);
+  }
+
+  backendErrorHandler(actionName, data) {
+    const errorMsg = data.resp;
+    toastNotifications.addDanger({
+      title: `Failed to ${actionName} the monitor`,
+      // remove the error type which locates before the first white space in 'errorMsg'
+      text: errorMsg.substr(errorMsg.indexOf(' ') + 1),
+    });
   }
 
   render() {
@@ -174,7 +185,7 @@ export default class CreateMonitor extends Component {
                 isValid={isValid}
                 onSubmitError={() =>
                   toastNotifications.addDanger({
-                    title: 'Failed to create the monitor.',
+                    title: `Failed to ${edit ? 'update' : 'create'} the monitor`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })
                 }
