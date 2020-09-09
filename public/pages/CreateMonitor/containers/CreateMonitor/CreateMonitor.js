@@ -132,12 +132,11 @@ export default class CreateMonitor extends Component {
   }
 
   backendErrorHandler(actionName, data) {
-    const errorMsg = data.resp;
     toastNotifications.addDanger({
       title: `Failed to ${actionName} the monitor`,
-      // remove the error type which locates before the first white space in 'errorMsg'
-      text: errorMsg.substr(errorMsg.indexOf(' ') + 1),
+      text: data.resp,
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   render() {
