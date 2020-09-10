@@ -19,7 +19,7 @@ import { useEffect } from 'react';
  2. auto scroll the page to the first field with error, and focus the field
  Reference: https://github.com/formium/formik/issues/1484 and https://github.com/formium/formik/issues/146 */
 export const SubmitErrorHandler = (props) => {
-  const errorKeys = Object.keys(props.errors);
+  const errorKeys = Object.keys(dotNotate(props.errors));
   const effect = () => {
     if (errorKeys.length > 0 && !props.isSubmitting && !props.isValid) {
       props.onSubmitError();
@@ -36,3 +36,18 @@ export const SubmitErrorHandler = (props) => {
   useEffect(effect, [props.isSubmitting]);
   return null;
 };
+
+// convert JSON object structure to dot notation
+function dotNotate(obj, target, prefix) {
+  (target = target || {}), (prefix = prefix || '');
+
+  Object.keys(obj).forEach(function (key) {
+    if (obj[key] !== null && typeof obj[key] === 'object') {
+      dotNotate(obj[key], target, prefix + key + '.');
+    } else {
+      return (target[prefix + key] = obj[key]);
+    }
+  });
+
+  return target;
+}
