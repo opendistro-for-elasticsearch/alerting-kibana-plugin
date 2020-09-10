@@ -18,10 +18,10 @@ import _ from 'lodash';
 import { EuiLink } from '@elastic/eui';
 import moment from 'moment';
 
-import { DEFAULT_EMPTY_DATA } from '../../../utils/constants';
+import { ALERT_STATE, DEFAULT_EMPTY_DATA } from '../../../utils/constants';
 import { PLUGIN_NAME } from '../../../../utils/constants';
 
-const renderTime = time => {
+const renderTime = (time) => {
   const momentTime = moment(time);
   if (time && momentTime.isValid()) return momentTime.format('MM/DD/YY h:mm a');
   return DEFAULT_EMPTY_DATA;
@@ -72,8 +72,11 @@ export const columns = [
     name: 'State',
     sortable: false,
     truncateText: false,
-    render: state =>
-      typeof state !== 'string' ? DEFAULT_EMPTY_DATA : _.capitalize(state.toLowerCase()),
+    render: (state, alert) => {
+      const stateText =
+        typeof state !== 'string' ? DEFAULT_EMPTY_DATA : _.capitalize(state.toLowerCase());
+      return state === ALERT_STATE.ERROR ? `${stateText}: ${alert.error_message}` : stateText;
+    },
   },
   {
     field: 'acknowledged_time',
