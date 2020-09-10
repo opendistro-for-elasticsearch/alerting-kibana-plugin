@@ -21,7 +21,7 @@ import {
   FormikFieldNumber,
   FormikFieldRadio,
 } from '../../../../../components/FormControls';
-import { hasError, isInvalid } from '../../../../../utils/validate';
+import { hasError, isInvalid, required } from '../../../../../utils/validate';
 import { validateUrl, validateHost } from './validate';
 import { URL_TYPE } from '../../../containers/CreateDestination/utils/constants';
 import { formikInitialValues } from '../../../containers/CreateDestination/utils/constants';
@@ -32,7 +32,10 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,
 };
-const protocolOptions = [{ value: 'HTTPS', text: 'HTTPS' }, { value: 'HTTP', text: 'HTTP' }];
+const protocolOptions = [
+  { value: 'HTTPS', text: 'HTTPS' },
+  { value: 'HTTP', text: 'HTTP' },
+];
 
 const URLInfo = ({ type, values }) => {
   const isUrlEnabled = values[type].urlType === URL_TYPE.FULL_URL;
@@ -78,7 +81,7 @@ const URLInfo = ({ type, values }) => {
         name={`${type}.url`}
         formRow
         fieldProps={{
-          validate: fieldValue => validateUrl(fieldValue, values),
+          validate: (fieldValue) => validateUrl(fieldValue, values),
         }}
         rowProps={{
           label: 'Webhook URL',
@@ -89,6 +92,11 @@ const URLInfo = ({ type, values }) => {
         inputProps={{
           disabled: !isUrlEnabled,
           isInvalid,
+          // 'validateUrl()' is only called onBlur, but we enable the basic 'required()' validation onChange
+          onChange: (e, field, form) => {
+            field.onChange(e);
+            form.setFieldError(`${type}.url`, required(e.target.value));
+          },
         }}
       />
       <FormikFieldRadio
@@ -126,7 +134,7 @@ const URLInfo = ({ type, values }) => {
         name={`${type}.host`}
         formRow
         fieldProps={{
-          validate: fieldValue => validateHost(fieldValue, values),
+          validate: (fieldValue) => validateHost(fieldValue, values),
         }}
         rowProps={{
           label: 'Host',
@@ -137,8 +145,10 @@ const URLInfo = ({ type, values }) => {
         inputProps={{
           disabled: isUrlEnabled,
           isInvalid,
-          onFocus: (e, field, form) => {
-            form.setFieldError(`${type}.host`, undefined);
+          // 'validateHost()' is only called onBlur, but we enable the basic 'required()' validation onChange
+          onChange: (e, field, form) => {
+            field.onChange(e);
+            form.setFieldError(`${type}.host`, required(e.target.value));
           },
         }}
       />
@@ -170,7 +180,11 @@ const URLInfo = ({ type, values }) => {
           isInvalid,
         }}
       />
-      <QueryParamsEditor type={type} queryParams={values[type].queryParams} isEnabled={!isUrlEnabled} />
+      <QueryParamsEditor
+        type={type}
+        queryParams={values[type].queryParams}
+        isEnabled={!isUrlEnabled}
+      />
     </Fragment>
   );
 };

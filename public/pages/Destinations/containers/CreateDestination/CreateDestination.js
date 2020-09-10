@@ -25,6 +25,7 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import { hasError, isInvalid, required } from '../../../../utils/validate';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
@@ -35,6 +36,7 @@ import { validateDestinationName } from './utils/validations';
 import { formikToDestination } from './utils/formikToDestination';
 import { destinationToFormik } from './utils/destinationToFormik';
 import { Webhook, CustomWebhook } from '../../components/createDestinations';
+import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 
 const destinationType = {
   [DESTINATION_TYPE.SLACK]: (props) => <Webhook {...props} />,
@@ -162,7 +164,7 @@ class CreateDestination extends React.Component {
           initialValues={initialValues}
           validateOnChange={false}
           onSubmit={this.handleSubmit}
-          render={({ values, handleSubmit, isSubmitting }) => (
+          render={({ values, handleSubmit, isSubmitting, errors, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Add'} destination</h1>
@@ -227,6 +229,17 @@ class CreateDestination extends React.Component {
                   </EuiButton>
                 </EuiFlexItem>
               </EuiFlexGroup>
+              <SubmitErrorHandler
+                errors={errors}
+                isSubmitting={isSubmitting}
+                isValid={isValid}
+                onSubmitError={() =>
+                  toastNotifications.addDanger({
+                    title: `Failed to ${edit ? 'update' : 'create'} the destination`,
+                    text: 'Fix all highlighted error(s) before continuing.',
+                  })
+                }
+              />
             </Fragment>
           )}
         />
