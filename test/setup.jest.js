@@ -33,6 +33,13 @@ jest.mock('@elastic/eui/lib/services/accessibility', () => ({
   accessibleClickKeys: require('@elastic/eui/lib/services/accessibility/accessible_click_keys'),
 }));
 
+jest.mock('ui/notify', () => ({
+  toastNotifications: {
+    addDanger: jest.fn().mockName('addDanger'),
+    addSuccess: jest.fn().mockName('addSuccess'),
+  },
+}));
+
 // https://github.com/facebook/jest/issues/5785
 // https://github.com/facebook/jest/pull/5267#issuecomment-356605468
 beforeEach(() => {
