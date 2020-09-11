@@ -26,6 +26,13 @@ jest.mock('@elastic/eui/lib/components/icon', () => ({
 
 jest.mock('@elastic/eui/lib/components/form/form_row/make_id', () => () => 'some_make_id');
 
+jest.mock('ui/notify', () => ({
+  toastNotifications: {
+    addDanger: jest.fn().mockName('addDanger'),
+    addSuccess: jest.fn().mockName('addSuccess'),
+  },
+}));
+
 // https://github.com/facebook/jest/issues/5785
 // https://github.com/facebook/jest/pull/5267#issuecomment-356605468
 beforeEach(() => {
