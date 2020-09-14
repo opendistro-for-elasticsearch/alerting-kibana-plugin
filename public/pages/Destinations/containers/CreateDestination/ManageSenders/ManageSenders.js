@@ -230,6 +230,11 @@ export default class ManageSenders extends React.Component {
     );
   };
 
+  hasSendersToProcess = (values) => {
+    const { sendersToDelete } = this.state;
+    return !_.isEmpty(values.senders) || !_.isEmpty(sendersToDelete);
+  };
+
   render() {
     const { isVisible, onClickCancel, onClickSave } = this.props;
     const { initialValues, loadingSenders } = this.state;
@@ -269,20 +274,23 @@ export default class ManageSenders extends React.Component {
                 />
               </EuiModalBody>
 
-              <EuiHorizontalRule margin="s" />
-
-              <EuiModalFooter>
-                <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
-                  <EuiFlexItem grow={false}>
-                    <EuiButtonEmpty onClick={onClickCancel}>Cancel</EuiButtonEmpty>
-                  </EuiFlexItem>
-                  <EuiFlexItem grow={false}>
-                    <EuiButton onClick={handleSubmit} isLoading={isSubmitting} fill>
-                      Save
-                    </EuiButton>
-                  </EuiFlexItem>
-                </EuiFlexGroup>
-              </EuiModalFooter>
+              {this.hasSendersToProcess(values) ? (
+                <div>
+                  <EuiHorizontalRule margin="s" />
+                  <EuiModalFooter>
+                    <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
+                      <EuiFlexItem grow={false}>
+                        <EuiButtonEmpty onClick={onClickCancel}>Cancel</EuiButtonEmpty>
+                      </EuiFlexItem>
+                      <EuiFlexItem grow={false}>
+                        <EuiButton onClick={handleSubmit} isLoading={isSubmitting} fill>
+                          Save
+                        </EuiButton>
+                      </EuiFlexItem>
+                    </EuiFlexGroup>
+                  </EuiModalFooter>
+                </div>
+              ) : null}
             </EuiModal>
           </EuiOverlayMask>
         )}

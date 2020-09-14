@@ -242,6 +242,11 @@ export default class ManageEmailGroups extends React.Component {
     );
   };
 
+  hasEmailGroupsToProcess = (values) => {
+    const { emailGroupsToDelete } = this.state;
+    return !_.isEmpty(values.emailGroups) || !_.isEmpty(emailGroupsToDelete);
+  };
+
   render() {
     const { isVisible, onClickCancel, onClickSave } = this.props;
     const { initialValues, loadingEmailGroups, emailGroupsToDelete } = this.state;
@@ -281,20 +286,23 @@ export default class ManageEmailGroups extends React.Component {
                 />
               </EuiModalBody>
 
-              <EuiHorizontalRule margin="s" />
-
-              <EuiModalFooter>
-                <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
-                  <EuiFlexItem grow={false}>
-                    <EuiButtonEmpty onClick={onClickCancel}>Cancel</EuiButtonEmpty>
-                  </EuiFlexItem>
-                  <EuiFlexItem grow={false}>
-                    <EuiButton onClick={handleSubmit} isLoading={isSubmitting} fill>
-                      Save
-                    </EuiButton>
-                  </EuiFlexItem>
-                </EuiFlexGroup>
-              </EuiModalFooter>
+              {this.hasEmailGroupsToProcess(values) ? (
+                <div>
+                  <EuiHorizontalRule margin="s" />
+                  <EuiModalFooter>
+                    <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
+                      <EuiFlexItem grow={false}>
+                        <EuiButtonEmpty onClick={onClickCancel}>Cancel</EuiButtonEmpty>
+                      </EuiFlexItem>
+                      <EuiFlexItem grow={false}>
+                        <EuiButton onClick={handleSubmit} isLoading={isSubmitting} fill>
+                          Save
+                        </EuiButton>
+                      </EuiFlexItem>
+                    </EuiFlexGroup>
+                  </EuiModalFooter>
+                </div>
+              ) : null}
             </EuiModal>
           </EuiOverlayMask>
         )}
