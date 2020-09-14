@@ -30,6 +30,7 @@ import {
   EuiOverlayMask,
   EuiSpacer,
 } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 import PropTypes from 'prop-types';
 
 import AddSenderButton from '../../../components/createDestinations/AddSenderButton/AddSenderButton';
@@ -58,6 +59,7 @@ export default class ManageSenders extends React.Component {
     this.state = {
       sendersToDelete: [],
       loadingSenders: true,
+      failedSenders: false,
     };
   }
 
@@ -97,9 +99,21 @@ export default class ManageSenders extends React.Component {
       method: sender.method,
     };
     try {
-      await httpClient.post(`../api/alerting/destinations/email_accounts`, body);
+      const response = await httpClient.post(`../api/alerting/destinations/email_accounts`, body);
+      if (!response.data.ok) {
+        this.setState({ failedSenders: true });
+        toastNotifications.addDanger({
+          title: `Failed to create sender: ${sender.name}`,
+          text: `Reason: ${response.data.resp}`,
+        });
+      }
     } catch (err) {
       console.error('Unable to create sender', err);
+      this.setState({ failedSenders: true });
+      toastNotifications.addDanger({
+        title: `Failed to create sender: ${sender.name}`,
+        text: `Reason: ${err}`,
+      });
     }
   };
 
@@ -114,12 +128,24 @@ export default class ManageSenders extends React.Component {
       method: updatedSender.method,
     };
     try {
-      await httpClient.put(
+      const response = await httpClient.put(
         `../api/alerting/destinations/email_accounts/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         body
       );
+      if (!response.data.ok) {
+        this.setState({ failedSenders: true });
+        toastNotifications.addDanger({
+          title: `Failed to update sender: ${updatedSender.name}`,
+          text: `Reason: ${response.data.resp}`,
+        });
+      }
     } catch (err) {
       console.error('Unable to update sender', err);
+      this.setState({ failedSenders: true });
+      toastNotifications.addDanger({
+        title: `Failed to update sender: ${updatedSender.name}`,
+        text: `Reason: ${err}`,
+      });
     }
   };
 
@@ -127,9 +153,21 @@ export default class ManageSenders extends React.Component {
     const { httpClient } = this.props;
     const { id } = sender;
     try {
-      await httpClient.delete(`../api/alerting/destinations/email_accounts/${id}`);
+      const response = await httpClient.delete(`../api/alerting/destinations/email_accounts/${id}`);
+      if (!response.data.ok) {
+        this.setState({ failedSenders: true });
+        toastNotifications.addDanger({
+          title: `Failed to delete sender: ${sender.name}`,
+          text: `Reason: ${response.data.resp}`,
+        });
+      }
     } catch (err) {
       console.error('Unable to delete sender', err);
+      this.setState({ failedSenders: true });
+      toastNotifications.addDanger({
+        title: `Failed to delete sender: ${sender.name}`,
+        text: `Reason: ${err}`,
+      });
     }
   };
 
@@ -151,6 +189,13 @@ export default class ManageSenders extends React.Component {
     for (const sender of sendersToDelete) {
       await this.deleteSender(sender);
     }
+
+    // If there were no failures, show a success toast
+    const { failedSenders } = this.state;
+    if (!failedSenders) {
+      toastNotifications.addSuccess('Successfully saved senders');
+    }
+    this.setState({ failedSenders: false });
   };
 
   renderSenders = ({ values, arrayHelpers }) => {

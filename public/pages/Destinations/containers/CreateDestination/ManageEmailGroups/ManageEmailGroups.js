@@ -30,6 +30,7 @@ import {
   EuiOverlayMask,
   EuiSpacer,
 } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 import PropTypes from 'prop-types';
 
 import AddEmailGroupButton from '../../../components/createDestinations/AddEmailGroupButton/AddEmailGroupButton';
@@ -73,6 +74,7 @@ export default class ManageEmailGroups extends React.Component {
     this.state = {
       emailGroupsToDelete: [],
       loadingEmailGroups: true,
+      failedEmailGroups: false,
     };
   }
 
@@ -109,9 +111,21 @@ export default class ManageEmailGroups extends React.Component {
       emails: emailGroup.emails.map((email) => ({ email: email.label })),
     };
     try {
-      await httpClient.post(`../api/alerting/destinations/email_groups`, body);
+      const response = await httpClient.post(`../api/alerting/destinations/email_groups`, body);
+      if (!response.data.ok) {
+        this.setState({ failedEmailGroups: true });
+        toastNotifications.addDanger({
+          title: `Failed to create email group: ${emailGroup.name}`,
+          text: `Reason: ${response.data.resp}`,
+        });
+      }
     } catch (err) {
       console.error('Unable to create email group', err);
+      this.setState({ failedEmailGroups: true });
+      toastNotifications.addDanger({
+        title: `Failed to create email group: ${emailGroup.name}`,
+        text: `Reason: ${err}`,
+      });
     }
   };
 
@@ -123,12 +137,24 @@ export default class ManageEmailGroups extends React.Component {
       emails: updatedEmailGroup.emails.map((email) => ({ email: email.label })),
     };
     try {
-      await httpClient.put(
+      const response = await httpClient.put(
         `../api/alerting/destinations/email_groups/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
         body
       );
+      if (!response.data.ok) {
+        this.setState({ failedEmailGroups: true });
+        toastNotifications.addDanger({
+          title: `Failed to update email group: ${updatedEmailGroup.name}`,
+          text: `Reason: ${response.data.resp}`,
+        });
+      }
     } catch (err) {
       console.error('Unable to update email group', err);
+      this.setState({ failedEmailGroups: true });
+      toastNotifications.addDanger({
+        title: `Failed to update email group: ${updatedEmailGroup.name}`,
+        text: `Reason: ${err}`,
+      });
     }
   };
 
@@ -136,9 +162,21 @@ export default class ManageEmailGroups extends React.Component {
     const { httpClient } = this.props;
     const { id } = emailGroup;
     try {
-      await httpClient.delete(`../api/alerting/destinations/email_groups/${id}`);
+      const response = await httpClient.delete(`../api/alerting/destinations/email_groups/${id}`);
+      if (!response.data.ok) {
+        this.setState({ failedEmailGroups: true });
+        toastNotifications.addDanger({
+          title: `Failed to delete email group: ${emailGroup.name}`,
+          text: `Reason: ${response.data.resp}`,
+        });
+      }
     } catch (err) {
       console.err('Unable to delete email group', err);
+      this.setState({ failedEmailGroups: true });
+      toastNotifications.addDanger({
+        title: `Failed to delete email group: ${emailGroup.name}`,
+        text: `Reason: ${err}`,
+      });
     }
   };
 
@@ -160,6 +198,13 @@ export default class ManageEmailGroups extends React.Component {
     for (const emailGroup of emailGroupsToDelete) {
       await this.deleteEmailGroup(emailGroup);
     }
+
+    // If there were no failures, show a success toast
+    const { failedEmailGroups } = this.state;
+    if (!failedEmailGroups) {
+      toastNotifications.addSuccess('Successfully saved email groups');
+    }
+    this.setState({ failedEmailGroups: false });
   };
 
   renderEmailGroups = ({ values, arrayHelpers }) => {
