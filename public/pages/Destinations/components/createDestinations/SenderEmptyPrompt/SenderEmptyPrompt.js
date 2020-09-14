@@ -21,10 +21,11 @@ const senderEmptyText =
   'A sender specifies the sender name, sender email, port, host, ' +
   'and encryption method for your destination(s). You can reuse the same sender across different destinations ' +
   'or create as many senders as needed.';
-const addSenderButton = arrayHelpers => <AddSenderButton arrayHelpers={arrayHelpers} />;
+const addSenderButton = (arrayHelpers) => <AddSenderButton arrayHelpers={arrayHelpers} />;
 
 const SenderEmptyPrompt = ({ arrayHelpers }) => (
   <EuiEmptyPrompt
+    style={{ maxWidth: '45em' }}
     body={
       <EuiText>
         <h1>You have no sender set up</h1>

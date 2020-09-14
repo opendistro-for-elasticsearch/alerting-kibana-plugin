@@ -21,10 +21,11 @@ const emailGroupEmptyText =
   'Use an email group to manage a list of email addresses you frequently send to at the same time. ' +
   'You can create as many email groups as needed and use them together with individual email addresses when ' +
   'specifying recipients.';
-const addEmailGroupButton = arrayHelpers => <AddEmailGroupButton arrayHelpers={arrayHelpers} />;
+const addEmailGroupButton = (arrayHelpers) => <AddEmailGroupButton arrayHelpers={arrayHelpers} />;
 
 const EmailGroupEmptyPrompt = ({ arrayHelpers }) => (
   <EuiEmptyPrompt
+    style={{ maxWidth: '45em' }}
     body={
       <EuiText>
         <h1>You have no email group set up</h1>
