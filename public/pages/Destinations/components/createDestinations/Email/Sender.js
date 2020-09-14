@@ -76,7 +76,11 @@ const Sender = ({ sender, arrayHelpers, context, index, onDelete }) => {
           isInvalid,
         }}
       />
-      <EuiFlexGroup alignItems="center" justifyContent="flexStart" style={{ padding: '10px 0px' }}>
+      <EuiFlexGroup
+        alignItems="baseline"
+        justifyContent="flexStart"
+        style={{ padding: '10px 0px' }}
+      >
         <EuiFlexItem grow={false}>
           <FormikFieldText
             name={`senders.${index}.email`}
