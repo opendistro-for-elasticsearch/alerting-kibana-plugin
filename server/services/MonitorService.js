@@ -25,9 +25,21 @@ export default class MonitorService {
 
   createMonitor = async (req, h) => {
     try {
-      const params = { body: JSON.stringify(req.payload) };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const createResponse = await callWithRequest(req, 'alerting.createMonitor', params);
+      const parameters = {
+        type: 'monitor',
+        name: req.payload.name,
+        enabled: req.payload.enabled,
+        schedule: req.payload.schedule,
+        inputs: req.payload.inputs,
+        triggers: req.payload.triggers,
+        ui_metadata: req.payload.ui_metadata,
+      };
+      const fetch = require('node-fetch');
+      const createResponse = await fetch('http://localhost:9200/_opendistro/_alerting/monitors', {
+        method: 'POST',
+        body: JSON.stringify(parameters),
+        headers: { 'Content-Type': 'application/json', 'User-Agent': 'Kibana' },
+      }).then((response) => response.json());
       return { ok: true, resp: createResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - createMonitor:', err);
@@ -39,9 +51,11 @@ export default class MonitorService {
     try {
       const { id } = req.params;
       const params = { monitorId: id };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const response = await callWithRequest(req, 'alerting.deleteMonitor', params);
-      return { ok: response.result === 'deleted' };
+      const fetch = require('node-fetch');
+      const resp = await fetch('http://localhost:9200/_opendistro/_alerting/monitors/' + id, {
+        method: 'DELETE',
+      }).then((response) => response.json());
+      return { ok: true };
     } catch (err) {
       console.error('Alerting - MonitorService - deleteMonitor:', err);
       return { ok: false, resp: err.message };
@@ -51,50 +65,62 @@ export default class MonitorService {
   getMonitor = async (req, h) => {
     try {
       const { id } = req.params;
-      const params = { monitorId: id };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const getResponse = await callWithRequest(req, 'alerting.getMonitor', params);
-      const monitor = _.get(getResponse, 'monitor', null);
-      const version = _.get(getResponse, '_version', null);
-      const ifSeqNo = _.get(getResponse, '_seq_no', null);
-      const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
+
+      const fetch = require('node-fetch');
+      const rep = await fetch('http://localhost:9200/_opendistro/_alerting/monitors/' + id, {
+        method: 'GET',
+        headers: { 'User-Agent': 'Kibana' },
+      }).then((response) => response.json());
+
+      const monitor = rep.monitor;
+      const version = rep.version;
+      const seqNo = rep.seqNo;
+      const primaryTerm = req.primaryTerm;
+
       if (monitor) {
-        const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-        const searchResponse = await callWithRequest(req, 'search', {
-          index: INDEX.ALL_ALERTS,
-          body: {
-            size: 0,
-            query: {
-              bool: {
-                must: {
-                  term: {
-                    monitor_id: id,
-                  },
-                },
-              },
-            },
-            aggs: {
-              active_count: {
-                terms: {
-                  field: 'state',
-                },
-              },
-              '24_hour_count': {
-                date_range: {
-                  field: 'start_time',
-                  ranges: [{ from: 'now-24h/h' }],
+        const searchParameters = {
+          size: 0,
+          query: {
+            bool: {
+              must: {
+                term: {
+                  monitor_id: id,
                 },
               },
             },
           },
-        });
-        const dayCount = _.get(searchResponse, 'aggregations.24_hour_count.buckets.0.doc_count', 0);
-        const activeBuckets = _.get(searchResponse, 'aggregations.active_count.buckets', []);
-        const activeCount = activeBuckets.reduce(
-          (acc, curr) => (curr.key === 'ACTIVE' ? curr.doc_count : acc),
+          aggs: {
+            active_count: {
+              terms: {
+                field: 'state',
+              },
+            },
+            '24_hour_count': {
+              date_range: {
+                field: 'start_time',
+                ranges: [{ from: 'now-24h/h' }],
+              },
+            },
+          },
+        };
+
+        const searchResponse = await fetch(
+          'http://localhost:9200/_opendistro/_alerting/monitors/_search',
+          {
+            method: 'POST',
+            body: JSON.stringify(searchParameters),
+            headers: { 'User-Agent': 'Kibana', 'Content-Type': 'application/json' },
+          }
+        ).then((response) => response.json());
+
+        const activeCount = _.get(
+          searchResponse,
+          'aggregations.24_hour_count.buckets.0.doc_count',
           0
         );
-        return { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm };
+        const dayCount = _.get(searchResponse, 'aggregations.24_hour_count.buckets.0.doc_count', 0);
+
+        return { ok: true, resp: monitor, activeCount, dayCount, version, seqNo, primaryTerm };
       } else {
         return { ok: false };
       }
@@ -107,10 +133,27 @@ export default class MonitorService {
   updateMonitor = async (req, h) => {
     try {
       const { id } = req.params;
-      const { ifSeqNo, ifPrimaryTerm } = req.query;
-      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.payload) };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const updateResponse = await callWithRequest(req, 'alerting.updateMonitor', params);
+
+      const parameters = {
+        type: 'monitor',
+        name: req.payload.name,
+        enabled: req.payload.enabled,
+        schedule: req.payload.schedule,
+        inputs: req.payload.inputs,
+        triggers: req.payload.triggers,
+        last_update_time: req.payload.last_update_time,
+        ui_metadata: req.payload.ui_metadata,
+      };
+
+      const fetch = require('node-fetch');
+      const updateResponse = await fetch(
+        'http://localhost:9200/_opendistro/_alerting/monitors/' + id,
+        {
+          method: 'PUT',
+          body: JSON.stringify(parameters),
+          headers: { 'Content-Type': 'application/json' },
+        }
+      ).then((response) => response.json());
       const { _version, _id } = updateResponse;
       return { ok: true, version: _version, id: _id };
     } catch (err) {
@@ -122,6 +165,7 @@ export default class MonitorService {
   getMonitors = async (req, h) => {
     try {
       const { from, size, search, sortDirection, sortField, state } = req.query;
+      const fetch = require('node-fetch');
 
       let must = { match_all: {} };
       if (search.trim()) {
@@ -132,10 +176,7 @@ export default class MonitorService {
           query_string: {
             default_field: 'monitor.name',
             default_operator: 'AND',
-            query: `*${search
-              .trim()
-              .split(' ')
-              .join('* *')}*`,
+            query: `*${search.trim().split(' ').join('* *')}*`,
           },
         };
       }
@@ -168,13 +209,17 @@ export default class MonitorService {
         }),
       };
 
-      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
-        CLUSTER.ALERTING
-      );
-      const getResponse = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
+      const getResponse = await fetch(
+        'http://localhost:9200/_opendistro/_alerting/monitors/_search',
+        {
+          method: 'POST',
+          body: params.body,
+          headers: { 'Content-Type': 'application/json', 'User-Agent': 'Kibana' },
+        }
+      ).then((response) => response.json());
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
-      const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map(result => {
+      const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map((result) => {
         const {
           _id: id,
           _version: version,
@@ -239,10 +284,20 @@ export default class MonitorService {
         },
       };
 
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const esAggsResponse = await callWithRequest(req, 'search', aggsParams);
+      const esAggsResponse = await fetch(
+        'http://localhost:9200/_opendistro/_alerting/monitors/_search',
+        {
+          method: 'POST',
+          body: JSON.stringify(aggsParams.body),
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Kibana',
+            Index: '.opendistro-alerting-alert*',
+          },
+        }
+      ).then((response) => response.json());
       const buckets = _.get(esAggsResponse, 'aggregations.uniq_monitor_ids.buckets', []).map(
-        bucket => {
+        (bucket) => {
           const {
             key: id,
             last_notification_time: { value: lastNotificationTime },
@@ -276,7 +331,7 @@ export default class MonitorService {
         }
       );
 
-      const unusedMonitors = [...monitorMap.values()].map(monitor => ({
+      const unusedMonitors = [...monitorMap.values()].map((monitor) => ({
         ...monitor,
         lastNotificationTime: null,
         ignored: 0,
@@ -313,9 +368,17 @@ export default class MonitorService {
         monitorId: id,
         body: JSON.stringify(req.payload),
       };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const acknowledgeResponse = await callWithRequest(req, 'alerting.acknowledgeAlerts', params);
-      return { ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse };
+
+      const fetch = require('node-fetch');
+      const result = await fetch(
+        'http://localhost:9200/_opendistro/_alerting/monitors/' + id + '/_acknowledge/alerts',
+        {
+          method: 'POST',
+          body: JSON.stringify(req.payload),
+          headers: { 'Content-Type': 'application/json' },
+        }
+      ).then((response) => response.json());
+      return { ok: !result.failed.length, resp: result };
     } catch (err) {
       console.error('Alerting - MonitorService - acknowledgeAlerts:', err);
       return { ok: false, resp: err.message };
@@ -324,13 +387,15 @@ export default class MonitorService {
 
   executeMonitor = async (req, h) => {
     try {
-      const { dryrun = 'true' } = req.query;
-      const params = {
-        body: JSON.stringify(req.payload),
-        dryrun,
-      };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const executeResponse = await callWithRequest(req, 'alerting.executeMonitor', params);
+      const fetch = require('node-fetch');
+      const result = await fetch(
+        'http://localhost:9200/_opendistro/_alerting/monitors/_execute?dryrun=true',
+        {
+          method: 'POST',
+          body: JSON.stringify(req.payload),
+          headers: { 'Content-Type': 'application/json' },
+        }
+      ).then((response) => response.json());
       return { ok: true, resp: executeResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - executeMonitor:', err);
