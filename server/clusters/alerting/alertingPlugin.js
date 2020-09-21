@@ -118,6 +118,26 @@ export default function alertingPlugin(Client, config, components) {
     method: 'POST',
   });
 
+  alerting.getDestination = ca({
+    url: {
+      fmt: `${DESTINATION_BASE_API}/<%=destinationId%>`,
+      req: {
+        destinationId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'GET',
+  });
+
+  alerting.searchDestinations = ca({
+    url: {
+      fmt: `${DESTINATION_BASE_API}/all`,
+    },
+    method: 'GET',
+  });
+
   alerting.createDestination = ca({
     url: {
       fmt: `${DESTINATION_BASE_API}?refresh=wait_for`,

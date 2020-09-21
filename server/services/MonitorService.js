@@ -25,64 +25,9 @@ export default class MonitorService {
 
   createMonitor = async (req, h) => {
     try {
-      const parameters = {
-        type: 'monitor',
-        name: req.payload.name,
-        enabled: req.payload.enabled,
-        schedule: req.payload.schedule,
-        inputs: req.payload.inputs,
-        triggers: req.payload.triggers,
-        ui_metadata: req.payload.ui_metadata,
-      };
-
-      const credentials = req.auth.credentials.credentials.authHeaderValue;
-      require('https').globalAgent.options.ca = require('ssl-root-cas/latest').create();
-      const https = require('https');
-      var sslRootCAs = require('ssl-root-cas/latest');
-      sslRootCAs.inject();
-
-      const options = {
-        method: 'POST',
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Kibana',
-          Authorization: credentials,
-        },
-      };
-
-      function createMonitor() {
-        return new Promise((resolve, reject) => {
-          const requestCreateMonitor = https.request(
-            'https://localhost:9200/_opendistro/_alerting/monitors',
-            options,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          requestCreateMonitor.write(JSON.stringify(parameters));
-          requestCreateMonitor.end();
-        });
-      }
-      const createResponse = await createMonitor().then((response) => response);
-
+      const params = { body: JSON.stringify(req.payload) };
+      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const createResponse = await callWithRequest(req, 'alerting.createMonitor', params);
       return { ok: true, resp: createResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - createMonitor:', err);
@@ -93,55 +38,10 @@ export default class MonitorService {
   deleteMonitor = async (req, h) => {
     try {
       const { id } = req.params;
-
-      const credentials = req.auth.credentials.credentials.authHeaderValue;
-      require('https').globalAgent.options.ca = require('ssl-root-cas/latest').create();
-      const https = require('https');
-      var sslRootCAs = require('ssl-root-cas/latest');
-      sslRootCAs.inject();
-
-      const options = {
-        method: 'DELETE',
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Kibana',
-          Authorization: credentials,
-        },
-      };
-
-      function deleteMonitor() {
-        return new Promise((resolve, reject) => {
-          const requestDeleteMonitor = https.request(
-            'https://localhost:9200/_opendistro/_alerting/monitors/' + id,
-            options,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          requestDeleteMonitor.end();
-        });
-      }
-      await deleteMonitor().then((response) => response);
-
-      return { ok: true };
+      const params = { monitorId: id };
+      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const response = await callWithRequest(req, 'alerting.deleteMonitor', params);
+      return { ok: response.result === 'deleted' };
     } catch (err) {
       console.error('Alerting - MonitorService - deleteMonitor:', err);
       return { ok: false, resp: err.message };
@@ -151,132 +51,50 @@ export default class MonitorService {
   getMonitor = async (req, h) => {
     try {
       const { id } = req.params;
-
-      const credentials = req.auth.credentials.credentials.authHeaderValue;
-      require('https').globalAgent.options.ca = require('ssl-root-cas/latest').create();
-      const https = require('https');
-      var sslRootCAs = require('ssl-root-cas/latest');
-      sslRootCAs.inject();
-
-      const options = {
-        method: 'GET',
-        rejectUnauthorized: false,
-        headers: { 'User-Agent': 'Kibana', Authorization: credentials },
-      };
-
-      function getMonitor() {
-        return new Promise((resolve, reject) => {
-          const requestGetMonitor = https.get(
-            'https://localhost:9200/_opendistro/_alerting/monitors/' + id,
-            options,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          requestGetMonitor.end();
-        });
-      }
-      const rep = await getMonitor().then((response) => response);
-
-      const monitor = rep.monitor;
-      const version = rep.version;
-      const seqNo = rep.seqNo;
-      const primaryTerm = req.primaryTerm;
-
+      const params = { monitorId: id };
+      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const getResponse = await callWithRequest(req, 'alerting.getMonitor', params);
+      const monitor = _.get(getResponse, 'monitor', null);
+      const version = _.get(getResponse, '_version', null);
+      const ifSeqNo = _.get(getResponse, '_seq_no', null);
+      const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (monitor) {
-        const searchParameters = {
-          size: 0,
-          query: {
-            bool: {
-              must: {
-                term: {
-                  monitor_id: id,
+        const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
+        const searchResponse = await callWithRequest(req, 'search', {
+          index: INDEX.ALL_ALERTS,
+          body: {
+            size: 0,
+            query: {
+              bool: {
+                must: {
+                  term: {
+                    monitor_id: id,
+                  },
+                },
+              },
+            },
+            aggs: {
+              active_count: {
+                terms: {
+                  field: 'state',
+                },
+              },
+              '24_hour_count': {
+                date_range: {
+                  field: 'start_time',
+                  ranges: [{ from: 'now-24h/h' }],
                 },
               },
             },
           },
-          aggs: {
-            active_count: {
-              terms: {
-                field: 'state',
-              },
-            },
-            '24_hour_count': {
-              date_range: {
-                field: 'start_time',
-                ranges: [{ from: 'now-24h/h' }],
-              },
-            },
-          },
-        };
-
-        const optionsSearch = {
-          method: 'POST',
-          rejectUnauthorized: false,
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'Kibana',
-            Authorization: credentials,
-          },
-        };
-
-        function searchMonitor() {
-          return new Promise((resolve, reject) => {
-            const requestSearchMonitor = https.request(
-              'https://localhost:9200/_opendistro/_alerting/monitors/_search',
-              optionsSearch,
-              (res) => {
-                let str = '';
-
-                res.on('data', (d) => {
-                  str += d;
-                });
-
-                res.on('end', (d) => {
-                  try {
-                    const payload = JSON.parse(str);
-                    resolve(payload);
-                  } catch (e) {
-                    reject(e.message);
-                  }
-                });
-
-                res.on('error', function (e) {
-                  console.log('problem with request ' + e.message);
-                });
-              }
-            );
-            requestSearchMonitor.write(JSON.stringify(searchParameters));
-            requestSearchMonitor.end();
-          });
-        }
-        const searchResponse = await searchMonitor().then((response) => response);
-
-        const activeCount = _.get(
-          searchResponse,
-          'aggregations.24_hour_count.buckets.0.doc_count',
+        });
+        const dayCount = _.get(searchResponse, 'aggregations.24_hour_count.buckets.0.doc_count', 0);
+        const activeBuckets = _.get(searchResponse, 'aggregations.active_count.buckets', []);
+        const activeCount = activeBuckets.reduce(
+          (acc, curr) => (curr.key === 'ACTIVE' ? curr.doc_count : acc),
           0
         );
-        const dayCount = _.get(searchResponse, 'aggregations.24_hour_count.buckets.0.doc_count', 0);
-
-        return { ok: true, resp: monitor, activeCount, dayCount, version, seqNo, primaryTerm };
+        return { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm };
       } else {
         return { ok: false };
       }
@@ -289,65 +107,10 @@ export default class MonitorService {
   updateMonitor = async (req, h) => {
     try {
       const { id } = req.params;
-
-      const parameters = {
-        type: 'monitor',
-        name: req.payload.name,
-        enabled: req.payload.enabled,
-        schedule: req.payload.schedule,
-        inputs: req.payload.inputs,
-        triggers: req.payload.triggers,
-        last_update_time: req.payload.last_update_time,
-        ui_metadata: req.payload.ui_metadata,
-      };
-
-      const credentials = req.auth.credentials.credentials.authHeaderValue;
-      require('https').globalAgent.options.ca = require('ssl-root-cas/latest').create();
-      const https = require('https');
-      var sslRootCAs = require('ssl-root-cas/latest');
-      sslRootCAs.inject();
-
-      const options = {
-        method: 'PUT',
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Kibana',
-          Authorization: credentials,
-        },
-      };
-
-      function updateMonitor() {
-        return new Promise((resolve, reject) => {
-          const requestUpdateMonitor = https.request(
-            'https://localhost:9200/_opendistro/_alerting/monitors/' + id,
-            options,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          requestUpdateMonitor.write(JSON.stringify(parameters));
-          requestUpdateMonitor.end();
-        });
-      }
-      const updateResponse = await updateMonitor().then((response) => response);
+      const { ifSeqNo, ifPrimaryTerm } = req.query;
+      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.payload) };
+      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const updateResponse = await callWithRequest(req, 'alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
       return { ok: true, version: _version, id: _id };
     } catch (err) {
@@ -359,12 +122,6 @@ export default class MonitorService {
   getMonitors = async (req, h) => {
     try {
       const { from, size, search, sortDirection, sortField, state } = req.query;
-      const credentials = req.auth.credentials.credentials.authHeaderValue;
-
-      require('https').globalAgent.options.ca = require('ssl-root-cas/latest').create();
-      const https = require('https');
-      var sslRootCAs = require('ssl-root-cas/latest');
-      sslRootCAs.inject();
 
       let must = { match_all: {} };
       if (search.trim()) {
@@ -394,59 +151,24 @@ export default class MonitorService {
         monitorSortPageData.from = _.defaultTo(from, 0);
       }
 
-      const monitorDataParameter = JSON.stringify({
-        seq_no_primary_term: true,
-        version: true,
-        ...monitorSortPageData,
-        query: {
-          bool: {
-            filter,
-            must,
+      const params = {
+        body: JSON.stringify({
+          seq_no_primary_term: true,
+          version: true,
+          ...monitorSortPageData,
+          query: {
+            bool: {
+              filter,
+              must,
+            },
           },
-        },
-      });
-
-      const options = {
-        method: 'POST',
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Kibana',
-          Authorization: credentials,
-        },
+        }),
       };
 
-      function getMonitorsData() {
-        return new Promise((resolve, reject) => {
-          const requestMonitorsData = https.request(
-            'https://localhost:9200/_opendistro/_alerting/monitors/_search',
-            options,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          requestMonitorsData.write(monitorDataParameter);
-          requestMonitorsData.end();
-        });
-      }
-      const getResponse = await getMonitorsData().then((response) => response);
+      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
+        CLUSTER.ALERTING
+      );
+      const getResponse = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
       const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map((result) => {
@@ -474,36 +196,38 @@ export default class MonitorService {
       if (aggsSorts[sortField]) {
         aggsOrderData.order = { [aggsSorts[sortField]]: sortDirection };
       }
-
-      const aggsParameters = {
-        size: 0,
-        query: { terms: { monitor_id: monitorIds } },
-        aggregations: {
-          uniq_monitor_ids: {
-            terms: {
-              field: 'monitor_id',
-              ...aggsOrderData,
-              size: from + size,
-            },
-            aggregations: {
-              active: { filter: { term: { state: 'ACTIVE' } } },
-              acknowledged: { filter: { term: { state: 'ACKNOWLEDGED' } } },
-              errors: { filter: { term: { state: 'ERROR' } } },
-              ignored: {
-                filter: {
-                  bool: {
-                    filter: { term: { state: 'COMPLETED' } },
-                    must_not: { exists: { field: 'acknowledged_time' } },
+      const aggsParams = {
+        index: INDEX.ALL_ALERTS,
+        body: {
+          size: 0,
+          query: { terms: { monitor_id: monitorIds } },
+          aggregations: {
+            uniq_monitor_ids: {
+              terms: {
+                field: 'monitor_id',
+                ...aggsOrderData,
+                size: from + size,
+              },
+              aggregations: {
+                active: { filter: { term: { state: 'ACTIVE' } } },
+                acknowledged: { filter: { term: { state: 'ACKNOWLEDGED' } } },
+                errors: { filter: { term: { state: 'ERROR' } } },
+                ignored: {
+                  filter: {
+                    bool: {
+                      filter: { term: { state: 'COMPLETED' } },
+                      must_not: { exists: { field: 'acknowledged_time' } },
+                    },
                   },
                 },
-              },
-              last_notification_time: { max: { field: 'last_notification_time' } },
-              latest_alert: {
-                top_hits: {
-                  size: 1,
-                  sort: [{ start_time: { order: 'desc' } }],
-                  _source: {
-                    includes: ['last_notification_time', 'trigger_name'],
+                last_notification_time: { max: { field: 'last_notification_time' } },
+                latest_alert: {
+                  top_hits: {
+                    size: 1,
+                    sort: [{ start_time: { order: 'desc' } }],
+                    _source: {
+                      includes: ['last_notification_time', 'trigger_name'],
+                    },
                   },
                 },
               },
@@ -512,49 +236,8 @@ export default class MonitorService {
         },
       };
 
-      const optionsAggs = {
-        method: 'POST',
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Kibana',
-          Authorization: credentials,
-          Index: '.opendistro-alerting-alert*',
-        },
-      };
-
-      function getAggsResponse() {
-        return new Promise((resolve, reject) => {
-          const aggsRequest = https.request(
-            'https://localhost:9200/_opendistro/_alerting/monitors/_search',
-            optionsAggs,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          aggsRequest.write(JSON.stringify(aggsParameters));
-          aggsRequest.end();
-        });
-      }
-      const esAggsResponse = await getAggsResponse().then((response) => response);
-
+      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
+      const esAggsResponse = await callWithRequest(req, 'search', aggsParams);
       const buckets = _.get(esAggsResponse, 'aggregations.uniq_monitor_ids.buckets', []).map(
         (bucket) => {
           const {
@@ -627,56 +310,9 @@ export default class MonitorService {
         monitorId: id,
         body: JSON.stringify(req.payload),
       };
-
-      const credentials = req.auth.credentials.credentials.authHeaderValue;
-      require('https').globalAgent.options.ca = require('ssl-root-cas/latest').create();
-      const https = require('https');
-      var sslRootCAs = require('ssl-root-cas/latest');
-      sslRootCAs.inject();
-
-      const options = {
-        method: 'POST',
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Kibana',
-          Authorization: credentials,
-        },
-      };
-
-      function ackAlert() {
-        return new Promise((resolve, reject) => {
-          const requestAckAlert = https.request(
-            'https://localhost:9200/_opendistro/_alerting/monitors/' + id + '/_acknowledge/alerts',
-            options,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          requestAckAlert.write(JSON.stringify(req.payload));
-          requestAckAlert.end();
-        });
-      }
-      const result = await ackAlert().then((response) => response);
-
-      return { ok: !result.failed.length, resp: result };
+      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const acknowledgeResponse = await callWithRequest(req, 'alerting.acknowledgeAlerts', params);
+      return { ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - acknowledgeAlerts:', err);
       return { ok: false, resp: err.message };
@@ -685,53 +321,13 @@ export default class MonitorService {
 
   executeMonitor = async (req, h) => {
     try {
-      const credentials = req.auth.credentials.credentials.authHeaderValue;
-      require('https').globalAgent.options.ca = require('ssl-root-cas/latest').create();
-      const https = require('https');
-      var sslRootCAs = require('ssl-root-cas/latest');
-      sslRootCAs.inject();
-
-      const options = {
-        method: 'POST',
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Kibana',
-          Authorization: credentials,
-        },
+      const { dryrun = 'true' } = req.query;
+      const params = {
+        body: JSON.stringify(req.payload),
+        dryrun,
       };
-
-      function executeMonitor() {
-        return new Promise((resolve, reject) => {
-          const requestExecuteMonitor = https.request(
-            'https://localhost:9200/_opendistro/_alerting/monitors/_execute?dryrun=true',
-            options,
-            (res) => {
-              let str = '';
-
-              res.on('data', (d) => {
-                str += d;
-              });
-
-              res.on('end', (d) => {
-                try {
-                  const payload = JSON.parse(str);
-                  resolve(payload);
-                } catch (e) {
-                  reject(e.message);
-                }
-              });
-
-              res.on('error', function (e) {
-                console.log('problem with request ' + e.message);
-              });
-            }
-          );
-          requestExecuteMonitor.write(JSON.stringify(req.payload));
-          requestExecuteMonitor.end();
-        });
-      }
-      const executeResponse = await executeMonitor().then((response) => response);
+      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const executeResponse = await callWithRequest(req, 'alerting.executeMonitor', params);
       return { ok: true, resp: executeResponse };
     } catch (err) {
       console.error('Alerting - MonitorService - executeMonitor:', err);
