@@ -58,5 +58,9 @@ export default function getOverviewStats(monitor, monitorId, monitorVersion, act
       header: 'Monitor version number',
       value: monitorVersion,
     },
+    {
+      header: 'Last updated by',
+      value: monitor.user.name,
+    },
   ];
 }
