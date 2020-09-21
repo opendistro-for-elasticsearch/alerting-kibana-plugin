@@ -19,7 +19,7 @@ import moment from 'moment';
 import { DEFAULT_EMPTY_DATA } from '../../../../../utils/constants';
 import { PLUGIN_NAME } from '../../../../../../utils/constants';
 
-const renderTime = time => {
+const renderTime = (time) => {
   const momentTime = moment(time);
   if (time && momentTime.isValid()) return momentTime.format('MM/DD/YY h:mm a');
   return DEFAULT_EMPTY_DATA;
@@ -36,6 +36,15 @@ export const columns = [
     render: (name, item) => <EuiLink href={`${PLUGIN_NAME}#/monitors/${item.id}`}>{name}</EuiLink>,
   },
   {
+    field: 'user',
+    name: 'Last updated by',
+    sortable: true,
+    truncateText: true,
+    textOnly: true,
+    width: '100px',
+    render: (_, item) => item.monitor.user.name,
+  },
+  {
     field: 'latestAlert',
     name: 'Latest alert',
     sortable: false,
@@ -49,7 +58,7 @@ export const columns = [
     sortable: false,
     truncateText: false,
     width: '100px',
-    render: enabled => (enabled ? 'Enabled' : 'Disabled'),
+    render: (enabled) => (enabled ? 'Enabled' : 'Disabled'),
   },
   {
     field: 'lastNotificationTime',
