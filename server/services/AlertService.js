@@ -57,10 +57,7 @@ export default class AlertService {
         query_string: {
           fields: ['monitor_name', 'trigger_name'],
           default_operator: 'AND',
-          query: `*${search
-            .trim()
-            .split(' ')
-            .join('* *')}*`,
+          query: `*${search.trim().split(' ').join('* *')}*`,
         },
       });
     } else {
@@ -111,17 +108,26 @@ export default class AlertService {
       },
     };
 
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
+    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
     try {
-      const resp = await callWithRequest(req, 'search', params);
-      const totalAlerts = resp.hits.total.value;
-      const alerts = resp.hits.hits.map(hit => {
-        const { _source: alert, _id: id, _version: version } = hit;
+      const p = {
+        sortString: req.query.sortField,
+        sortOrder: req.query.sortDirection,
+      };
+      const resp = await callWithRequest(req, 'alerting.getAlerts', p);
+
+      const alerts = resp.alerts.map((hit) => {
+        const alert = hit;
+        const id = hit.id;
+        const version = hit.version;
         return { id, ...alert, version };
       });
+      const totalAlerts = alerts.length;
+
       return { ok: true, alerts, totalAlerts };
     } catch (err) {
-      return { ok: false, resp };
+      console.log(err.message);
+      return { ok: false, err: err.message };
     }
   };
 }
