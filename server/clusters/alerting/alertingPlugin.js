@@ -99,6 +99,13 @@ export default function alertingPlugin(Client, config, components) {
     method: 'POST',
   });
 
+  alerting.getAlerts = ca({
+    url: {
+      fmt: `${MONITOR_BASE_API}/alerts`,
+    },
+    method: 'GET',
+  });
+
   alerting.executeMonitor = ca({
     url: {
       fmt: `${MONITOR_BASE_API}/_execute?dryrun=<%=dryrun%>`,
