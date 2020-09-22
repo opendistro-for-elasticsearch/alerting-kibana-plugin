@@ -135,6 +135,7 @@ export default class CreateMonitor extends Component {
     toastNotifications.addDanger({
       title: `Failed to ${actionName} the monitor`,
       text: data.resp,
+      toastLifeTimeMs: 30000,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
