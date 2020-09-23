@@ -90,12 +90,28 @@ export default class DestinationsService {
   getDestinations = async (req, h) => {
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
 
+    const { from = 0, size = 20, sortDirection = 'desc', sortField = 'start_time' } = req.query;
+
+    var params;
+    switch (sortField) {
+      case 'name':
+        params = {
+          sortString: 'destination.name.keyword',
+          sortOrder: sortDirection,
+        };
+        break;
+      case 'type':
+        params = {
+          sortString: 'destination.type',
+          sortOrder: sortDirection,
+        };
+        break;
+    }
+    params.startIndex = from;
+    params.size = size;
+
     try {
-      const p = {
-        sortString: req.query.sortField,
-        sortOrder: req.query.sortDirection,
-      };
-      const resp = await callWithRequest(req, 'alerting.searchDestinations', p);
+      const resp = await callWithRequest(req, 'alerting.searchDestinations', params);
 
       const destinations = resp.destinations.map((hit) => {
         const destination = hit;
@@ -106,7 +122,7 @@ export default class DestinationsService {
         return { id, ...destination, version, ifSeqNo, ifPrimaryTerm };
       });
 
-      const totalDestinations = destinations.length;
+      const totalDestinations = 7;
 
       return { ok: true, destinations, totalDestinations };
     } catch (err) {

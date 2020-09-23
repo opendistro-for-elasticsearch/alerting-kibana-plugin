@@ -25,7 +25,6 @@ export default class AlertService {
     const {
       from = 0,
       size = 20,
-      search = '',
       sortDirection = 'desc',
       sortField = 'start_time',
       severityLevel = 'ALL',
@@ -33,93 +32,52 @@ export default class AlertService {
       monitorIds = [],
     } = req.query;
 
-    const filterQueries = [];
-    const mustQueries = [];
-
-    if (alertState !== 'ALL') {
-      filterQueries.push({ term: { state: alertState } });
-    }
-
-    if (severityLevel !== 'ALL') {
-      filterQueries.push({ term: { severity: severityLevel } });
-    }
-    if (monitorIds) {
-      if (Array.isArray(monitorIds) && monitorIds.length) {
-        filterQueries.push({ terms: { monitor_id: monitorIds } });
-      }
-      if (typeof monitorIds === 'string') {
-        filterQueries.push({ term: { monitor_id: monitorIds } });
-      }
-    }
-
-    if (search.trim()) {
-      mustQueries.push({
-        query_string: {
-          fields: ['monitor_name', 'trigger_name'],
-          default_operator: 'AND',
-          query: `*${search.trim().split(' ').join('* *')}*`,
-        },
-      });
-    } else {
-      mustQueries.push({ match_all: {} });
-    }
-
-    const sortQueryMap = {
-      monitor_name: { [`${sortField}.keyword`]: sortDirection },
-      trigger_name: { [`${sortField}.keyword`]: sortDirection },
-      start_time: { [sortField]: sortDirection },
-      end_time: {
-        [sortField]: {
-          order: sortDirection,
+    var params;
+    switch (sortField) {
+      case 'monitor_name':
+        params = {
+          sortString: `${sortField}.keyword`,
+          sortOrder: sortDirection,
+        };
+        break;
+      case 'trigger_name':
+        params = {
+          sortString: `${sortField}.keyword`,
+          sortOrder: sortDirection,
+        };
+        break;
+      case 'start_time':
+        params = {
+          sortString: sortField,
+          sortOrder: sortDirection,
+        };
+        break;
+      case 'end_time':
+        params = {
+          sortString: sortField,
+          sortOrder: sortDirection,
           missing: sortDirection === 'asc' ? '_last' : '_first',
-        },
-      },
-      acknowledged_time: { [sortField]: { order: sortDirection, missing: '_last' } },
-    };
-
-    let sort = [];
-    const sortQuery = sortQueryMap[sortField];
-    if (sortQuery) sort = sortQuery;
-
-    let routing = undefined;
-    if (monitorIds) {
-      if (Array.isArray(monitorIds) && monitorIds.length) {
-        routing = monitorIds.join(',');
-      }
-      if (typeof monitorIds === 'string') {
-        routing = monitorIds;
-      }
+        };
+        break;
+      case 'acknowledged_time':
+        params = {
+          sortString: sortField,
+          sortOrder: sortDirection,
+          missing: '_last',
+        };
+        break;
     }
 
-    const params = {
-      index: INDEX.ALL_ALERTS,
-      version: true,
-      routing,
-      body: {
-        sort,
-        size,
-        from,
-        query: {
-          bool: {
-            filter: filterQueries,
-            must: mustQueries,
-          },
-        },
-      },
-    };
+    params.startIndex = from;
+    params.size = size;
 
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
     try {
-      const p = {
-        sortString: req.query.sortField,
-        sortOrder: req.query.sortDirection,
-      };
-      const resp = await callWithRequest(req, 'alerting.getAlerts', p);
-
+      const resp = await callWithRequest(req, 'alerting.getAlerts', params);
       const alerts = resp.alerts.map((hit) => {
         const alert = hit;
-        const id = hit.id;
-        const version = hit.version;
+        const id = hit.alert_id;
+        const version = hit.alert_version;
         return { id, ...alert, version };
       });
       const totalAlerts = alerts.length;
