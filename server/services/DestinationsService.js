@@ -92,7 +92,38 @@ export default class DestinationsService {
   getDestinations = async (req, h) => {
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
 
-    const { from = 0, size = 20, sortDirection = 'desc', sortField = 'start_time' } = req.query;
+    const {
+      from = 0,
+      size = 20,
+      search = '',
+      sortDirection = 'desc',
+      sortField = 'start_time',
+      type = 'ALL',
+    } = req.query;
+
+    const filterQueries = [];
+    // Index is being used with logical doc types, filtering only destinations
+    const mustQueries = [
+      {
+        exists: {
+          field: 'destination',
+        },
+      },
+    ];
+
+    if (type !== 'ALL') {
+      filterQueries.push({ term: { 'destination.type': type } });
+    }
+
+    if (search.trim()) {
+      mustQueries.push({
+        query_string: {
+          fields: ['destination.name', 'destination.type'],
+          default_operator: 'AND',
+          query: `*${search.trim().split(' ').join('* *')}*`,
+        },
+      });
+    }
 
     var params;
     switch (sortField) {
@@ -108,9 +139,14 @@ export default class DestinationsService {
           sortOrder: sortDirection,
         };
         break;
+      default:
+        params = {};
+        break;
     }
     params.startIndex = from;
     params.size = size;
+    params.searchString = search;
+    if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
 
     try {
       const resp = await callWithRequest(req, 'alerting.searchDestinations', params);
@@ -124,7 +160,7 @@ export default class DestinationsService {
         return { id, ...destination, version, ifSeqNo, ifPrimaryTerm };
       });
 
-      const totalDestinations = 7;
+      const totalDestinations = resp.totalDestinations;
 
       return { ok: true, destinations, totalDestinations };
     } catch (err) {

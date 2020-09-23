@@ -25,6 +25,7 @@ export default class AlertService {
     const {
       from = 0,
       size = 20,
+      search = '',
       sortDirection = 'desc',
       sortField = 'start_time',
       severityLevel = 'ALL',
@@ -70,6 +71,11 @@ export default class AlertService {
 
     params.startIndex = from;
     params.size = size;
+    params.severityLevel = severityLevel;
+    params.alertState = alertState;
+    params.monitorIds = monitorIds;
+    params.searchString = search;
+    if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
 
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
     try {
