@@ -42,7 +42,7 @@ export const validateEmailGroupEmails = (options) => {
     .map((option) => option.label)
     .filter((email) => !isValidEmail(email));
   if (invalidEmails.length > 0) {
-    return `Invalid emails: ${invalidEmails}`;
+    return `Invalid emails: ${invalidEmails.join(', ')}`;
   }
 };
 

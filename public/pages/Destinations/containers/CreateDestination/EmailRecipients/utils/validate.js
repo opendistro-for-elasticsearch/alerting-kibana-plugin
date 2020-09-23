@@ -27,5 +27,5 @@ export const validateEmailRecipients = (options) => {
     }
   }
 
-  if (invalidEmails.length > 0) return `Invalid emails: ${invalidEmails}`;
+  if (invalidEmails.length > 0) return `Invalid emails: ${invalidEmails.join(', ')}`;
 };
