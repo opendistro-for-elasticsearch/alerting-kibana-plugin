@@ -42,7 +42,8 @@ export const columns = [
     truncateText: true,
     textOnly: true,
     width: '100px',
-    render: (_, item) => item.monitor.user.name,
+    render: (_, item) =>
+      item.monitor.user && item.monitor.user.name ? item.monitor.user.name : 'N/A',
   },
   {
     field: 'latestAlert',

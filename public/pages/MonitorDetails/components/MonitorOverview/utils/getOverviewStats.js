@@ -60,7 +60,7 @@ export default function getOverviewStats(monitor, monitorId, monitorVersion, act
     },
     {
       header: 'Last updated by',
-      value: monitor.user.name,
+      value: monitor.user && monitor.user.name ? monitor.user.name : 'N/A',
     },
   ];
 }
