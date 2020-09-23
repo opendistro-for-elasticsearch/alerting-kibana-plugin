@@ -59,8 +59,8 @@ export default class MonitorService {
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (monitor) {
-        const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-        const searchResponse = await callWithRequest(req, 'search', {
+        const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+        const searchResponse = await callWithRequest(req, 'alerting.getMonitors', {
           index: INDEX.ALL_ALERTS,
           body: {
             size: 0,
@@ -236,8 +236,8 @@ export default class MonitorService {
         },
       };
 
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const esAggsResponse = await callWithRequest(req, 'search', aggsParams);
+      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+      const esAggsResponse = await callWithRequest(req, 'alerting.getMonitors', aggsParams);
       const buckets = _.get(esAggsResponse, 'aggregations.uniq_monitor_ids.buckets', []).map(
         (bucket) => {
           const {
