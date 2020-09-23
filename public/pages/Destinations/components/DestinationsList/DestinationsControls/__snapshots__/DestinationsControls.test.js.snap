@@ -68,9 +68,9 @@ exports[`<DestinationsControls /> should render DestinationsControls 1`] = `
             Custom webhook
           </option>
           <option
-            value="mail"
+            value="email"
           >
-            Mail
+            Email
           </option>
         </select>
         <div
