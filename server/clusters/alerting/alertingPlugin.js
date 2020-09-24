@@ -13,7 +13,12 @@
  *   permissions and limitations under the License.
  */
 
-import { MONITOR_BASE_API, DESTINATION_BASE_API } from '../../services/utils/constants';
+import {
+  MONITOR_BASE_API,
+  DESTINATION_BASE_API,
+  EMAIL_ACCOUNT_BASE_API,
+  EMAIL_GROUP_BASE_API,
+} from '../../services/utils/constants';
 
 export default function alertingPlugin(Client, config, components) {
   const ca = components.clientAction.factory;
@@ -148,6 +153,134 @@ export default function alertingPlugin(Client, config, components) {
       fmt: `${DESTINATION_BASE_API}/<%=destinationId%>`,
       req: {
         destinationId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'DELETE',
+  });
+
+  alerting.getEmailAccount = ca({
+    url: {
+      fmt: `${EMAIL_ACCOUNT_BASE_API}/<%=emailAccountId%>`,
+      req: {
+        emailAccountId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'GET',
+  });
+
+  alerting.getEmailAccounts = ca({
+    url: {
+      fmt: `${EMAIL_ACCOUNT_BASE_API}/_search`,
+    },
+    needBody: true,
+    method: 'POST',
+  });
+
+  alerting.createEmailAccount = ca({
+    url: {
+      fmt: `${EMAIL_ACCOUNT_BASE_API}?refresh=wait_for`,
+    },
+    needBody: true,
+    method: 'POST',
+  });
+
+  alerting.updateEmailAccount = ca({
+    url: {
+      fmt: `${EMAIL_ACCOUNT_BASE_API}/<%=emailAccountId%>?if_seq_no=<%=ifSeqNo%>&if_primary_term=<%=ifPrimaryTerm%>&refresh=wait_for`,
+      req: {
+        emailAccountId: {
+          type: 'string',
+          required: true,
+        },
+        ifSeqNo: {
+          type: 'string',
+          required: true,
+        },
+        ifPrimaryTerm: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    needBody: true,
+    method: 'PUT',
+  });
+
+  alerting.deleteEmailAccount = ca({
+    url: {
+      fmt: `${EMAIL_ACCOUNT_BASE_API}/<%=emailAccountId%>`,
+      req: {
+        emailAccountId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'DELETE',
+  });
+
+  alerting.getEmailGroup = ca({
+    url: {
+      fmt: `${EMAIL_GROUP_BASE_API}/<%=emailGroupId%>`,
+      req: {
+        emailGroupId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'GET',
+  });
+
+  alerting.getEmailGroups = ca({
+    url: {
+      fmt: `${EMAIL_GROUP_BASE_API}/_search`,
+    },
+    needBody: true,
+    method: 'POST',
+  });
+
+  alerting.createEmailGroup = ca({
+    url: {
+      fmt: `${EMAIL_GROUP_BASE_API}?refresh=wait_for`,
+    },
+    needBody: true,
+    method: 'POST',
+  });
+
+  alerting.updateEmailGroup = ca({
+    url: {
+      fmt: `${EMAIL_GROUP_BASE_API}/<%=emailGroupId%>?if_seq_no=<%=ifSeqNo%>&if_primary_term=<%=ifPrimaryTerm%>&refresh=wait_for`,
+      req: {
+        emailGroupId: {
+          type: 'string',
+          required: true,
+        },
+        ifSeqNo: {
+          type: 'string',
+          required: true,
+        },
+        ifPrimaryTerm: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    needBody: true,
+    method: 'PUT',
+  });
+
+  alerting.deleteEmailGroup = ca({
+    url: {
+      fmt: `${EMAIL_GROUP_BASE_API}/<%=emailGroupId%>`,
+      req: {
+        emailGroupId: {
           type: 'string',
           required: true,
         },

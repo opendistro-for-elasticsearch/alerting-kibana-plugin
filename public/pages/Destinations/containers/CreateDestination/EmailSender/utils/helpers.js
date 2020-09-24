@@ -13,24 +13,19 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import Message from '../actions/index';
-
-export const ActionsMap = {
-  slack: {
-    label: 'Slack notification',
-    component: props => <Message {...props} />,
-  },
-  chime: {
-    label: 'Amazon Chime notification',
-    component: props => <Message {...props} />,
-  },
-  custom_webhook: {
-    label: 'Custom webhook',
-    component: props => <Message isSubjectDisabled {...props} />,
-  },
-  email: {
-    label: 'Email notification',
-    component: props => <Message {...props} />,
-  },
-};
+export default async function getSenders(httpClient, searchText = '') {
+  try {
+    const response = await httpClient.get(
+      `../api/alerting/destinations/email_accounts?search=${searchText}&size=200`
+    );
+    if (response.data.ok) {
+      return response.data.emailAccounts;
+    } else {
+      console.log('Unable to get email accounts', response.data.err);
+      return [];
+    }
+  } catch (err) {
+    console.log('Unable to get email accounts', err);
+    return [];
+  }
+}

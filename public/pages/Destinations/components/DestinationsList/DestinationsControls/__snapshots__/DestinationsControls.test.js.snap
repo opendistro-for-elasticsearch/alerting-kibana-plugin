@@ -67,6 +67,11 @@ exports[`<DestinationsControls /> should render DestinationsControls 1`] = `
           >
             Custom webhook
           </option>
+          <option
+            value="email"
+          >
+            Email
+          </option>
         </select>
         <div
           class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"

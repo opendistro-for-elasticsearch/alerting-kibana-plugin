@@ -30,13 +30,17 @@ import { getURLQueryParams } from './utils/helpers';
 import { isDeleteAllowedQuery } from './utils/deleteHelpers';
 import { INDEX } from '../../../../../utils/constants';
 import { DESTINATION_ACTIONS } from '../../../../utils/constants';
+import ManageSenders from '../CreateDestination/ManageSenders';
+import ManageEmailGroups from '../CreateDestination/ManageEmailGroups';
 
 class DestinationsList extends React.Component {
   constructor(props) {
     super(props);
+
     const { from, size, search, sortField, sortDirection, type } = getURLQueryParams(
       props.location
     );
+
     this.state = {
       showDeleteConfirmation: false,
       isDestinationLoading: true,
@@ -52,7 +56,10 @@ class DestinationsList extends React.Component {
         type,
       },
       selectedItems: [],
+      showManageSenders: false,
+      showManageEmailGroups: false,
     };
+
     this.columns = [
       ...staticColumns,
       {
@@ -99,7 +106,7 @@ class DestinationsList extends React.Component {
     return total === 0;
   };
 
-  handleDeleteAction = async destinationToDelete => {
+  handleDeleteAction = async (destinationToDelete) => {
     const { id, type } = destinationToDelete;
     const allowDelete = await this.isDeleteAllowed(type, id);
     if (allowDelete) {
@@ -141,7 +148,7 @@ class DestinationsList extends React.Component {
     }
   };
 
-  handleEditDestination = destinationToEdit => {
+  handleEditDestination = (destinationToEdit) => {
     this.props.history.push({
       pathname: `destinations/${destinationToEdit.id}`,
       search: `?action=${DESTINATION_ACTIONS.UPDATE_DESTINATION}`,
@@ -149,17 +156,17 @@ class DestinationsList extends React.Component {
     });
   };
 
-  handleSearchChange = e => {
+  handleSearchChange = (e) => {
     const searchText = e.target.value;
-    this.setState(state => ({
+    this.setState((state) => ({
       page: 0,
       queryParams: { ...state.queryParams, search: searchText },
     }));
   };
 
-  handleTypeChange = e => {
+  handleTypeChange = (e) => {
     const type = e.target.value;
-    this.setState(state => {
+    this.setState((state) => {
       return {
         page: 0,
         queryParams: { ...state.queryParams, type },
@@ -199,7 +206,7 @@ class DestinationsList extends React.Component {
     const { index: page, size } = tablePage;
     const { field: sortField, direction: sortDirection } = sort;
 
-    this.setState(state => ({
+    this.setState((state) => ({
       page,
       queryParams: {
         ...state.queryParams,
@@ -210,12 +217,12 @@ class DestinationsList extends React.Component {
     }));
   };
 
-  handlePageClick = page => {
+  handlePageClick = (page) => {
     this.setState({ page });
   };
 
   handleResetFilter = () => {
-    this.setState(state => ({
+    this.setState((state) => ({
       ...state,
       queryParams: {
         ...state.queryParams,
@@ -223,6 +230,14 @@ class DestinationsList extends React.Component {
         type: 'ALL',
       },
     }));
+  };
+
+  hideManageSendersModal = () => {
+    this.setState({ showManageSenders: false });
+  };
+
+  hideManageEmailGroupsModal = () => {
+    this.setState({ showManageEmailGroups: false });
   };
 
   render() {
@@ -251,9 +266,7 @@ class DestinationsList extends React.Component {
       <React.Fragment>
         {destinationConsumedByOthers ? (
           <EuiCallOut
-            title={`Couldn't delete destination ${
-              destinationToDelete.name
-            }. One or more monitors uses this destination.`}
+            title={`Couldn't delete destination ${destinationToDelete.name}. One or more monitors uses this destination.`}
             iconType="cross"
             color="danger"
           />
@@ -261,7 +274,16 @@ class DestinationsList extends React.Component {
         <ContentPanel
           bodyStyles={{ padding: 'initial' }}
           title="Destinations"
-          actions={<DestinationsActions />}
+          actions={
+            <DestinationsActions
+              onClickManageSenders={() => {
+                this.setState({ showManageSenders: true });
+              }}
+              onClickManageEmailGroups={() => {
+                this.setState({ showManageEmailGroups: true });
+              }}
+            />
+          }
         >
           <DeleteConfirmation
             isVisible={this.state.showDeleteConfirmation}
@@ -269,6 +291,20 @@ class DestinationsList extends React.Component {
               this.setState({ showDeleteConfirmation: false });
             }}
             onConfirm={this.handleDeleteDestination}
+          />
+
+          <ManageSenders
+            httpClient={this.props.httpClient}
+            isVisible={this.state.showManageSenders}
+            onClickCancel={this.hideManageSendersModal}
+            onClickSave={this.hideManageSendersModal}
+          />
+
+          <ManageEmailGroups
+            httpClient={this.props.httpClient}
+            isVisible={this.state.showManageEmailGroups}
+            onClickCancel={this.hideManageEmailGroupsModal}
+            onClickSave={this.hideManageEmailGroupsModal}
           />
 
           <DestinationsControls

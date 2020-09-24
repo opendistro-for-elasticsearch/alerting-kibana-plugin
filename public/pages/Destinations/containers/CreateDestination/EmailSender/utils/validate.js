@@ -13,24 +13,13 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import Message from '../actions/index';
+import _ from 'lodash';
 
-export const ActionsMap = {
-  slack: {
-    label: 'Slack notification',
-    component: props => <Message {...props} />,
-  },
-  chime: {
-    label: 'Amazon Chime notification',
-    component: props => <Message {...props} />,
-  },
-  custom_webhook: {
-    label: 'Custom webhook',
-    component: props => <Message isSubjectDisabled {...props} />,
-  },
-  email: {
-    label: 'Email notification',
-    component: props => <Message {...props} />,
-  },
+export const validateEmailSender = senders => value => {
+  if (_.isEmpty(value)) return 'Required';
+  // In case existing sender (email account) doesn't exist in list, invalidate the field
+  const senderMatches = senders.filter(sender => sender.value === value[0].value);
+  if (senderMatches.length === 0) {
+    return 'Matching sender required';
+  }
 };
