@@ -14,23 +14,22 @@
  */
 
 import React from 'react';
-import Message from '../actions/index';
+import PropTypes from 'prop-types';
+import { EuiSpacer } from '@elastic/eui';
+import EmailSender from '../../../containers/CreateDestination/EmailSender';
+import EmailRecipients from '../../../containers/CreateDestination/EmailRecipients';
 
-export const ActionsMap = {
-  slack: {
-    label: 'Slack notification',
-    component: props => <Message {...props} />,
-  },
-  chime: {
-    label: 'Amazon Chime notification',
-    component: props => <Message {...props} />,
-  },
-  custom_webhook: {
-    label: 'Custom webhook',
-    component: props => <Message isSubjectDisabled {...props} />,
-  },
-  email: {
-    label: 'Email notification',
-    component: props => <Message {...props} />,
-  },
+const propTypes = {
+  type: PropTypes.string.isRequired,
 };
+const Email = ({ httpClient, type, values }) => (
+  <div>
+    <EmailSender httpClient={httpClient} type={type} />
+    <EuiSpacer size="m" />
+    <EmailRecipients httpClient={httpClient} type={type} />
+  </div>
+);
+
+Email.propTypes = propTypes;
+
+export default Email;

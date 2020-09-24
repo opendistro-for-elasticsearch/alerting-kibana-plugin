@@ -14,23 +14,15 @@
  */
 
 import React from 'react';
-import Message from '../actions/index';
+import _ from 'lodash';
+import { EuiButton } from '@elastic/eui';
 
-export const ActionsMap = {
-  slack: {
-    label: 'Slack notification',
-    component: props => <Message {...props} />,
-  },
-  chime: {
-    label: 'Amazon Chime notification',
-    component: props => <Message {...props} />,
-  },
-  custom_webhook: {
-    label: 'Custom webhook',
-    component: props => <Message isSubjectDisabled {...props} />,
-  },
-  email: {
-    label: 'Email notification',
-    component: props => <Message {...props} />,
-  },
-};
+import { FORMIK_INITIAL_EMAIL_GROUP_VALUES } from '../Email/utils/constants';
+
+const AddEmailGroupButton = ({ arrayHelpers }) => (
+  <EuiButton onClick={() => arrayHelpers.unshift(_.cloneDeep(FORMIK_INITIAL_EMAIL_GROUP_VALUES))}>
+    Add email group
+  </EuiButton>
+);
+
+export default AddEmailGroupButton;

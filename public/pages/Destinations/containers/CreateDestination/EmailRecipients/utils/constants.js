@@ -13,24 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import Message from '../actions/index';
-
-export const ActionsMap = {
-  slack: {
-    label: 'Slack notification',
-    component: props => <Message {...props} />,
-  },
-  chime: {
-    label: 'Amazon Chime notification',
-    component: props => <Message {...props} />,
-  },
-  custom_webhook: {
-    label: 'Custom webhook',
-    component: props => <Message isSubjectDisabled {...props} />,
-  },
-  email: {
-    label: 'Email notification',
-    component: props => <Message {...props} />,
-  },
+export const RECIPIENT_TYPE = {
+  EMAIL: 'email',
+  EMAIL_GROUP: 'email_group',
 };

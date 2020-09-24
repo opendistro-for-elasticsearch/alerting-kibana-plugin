@@ -15,6 +15,7 @@
 
 import { destinationToFormik } from '../destinationToFormik';
 import { DESTINATION_TYPE } from '../../../../utils/constants';
+import { httpClientMock } from '../../../../../../../test/mocks';
 
 describe('destinationToFormik', () => {
   const baseDestination = {
@@ -23,27 +24,27 @@ describe('destinationToFormik', () => {
     last_update_time: 1548708549982,
     version: 2,
   };
-  test('should able to convert chime destination to Formik object', () => {
+  test('should able to convert chime destination to Formik object', async () => {
     expect(
-      destinationToFormik({
+      await destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CHIME,
         [DESTINATION_TYPE.CHIME]: { url: 'https://chime.webhook' },
       })
     ).toMatchSnapshot();
   });
-  test('should able to convert slack destination to Formik object', () => {
+  test('should able to convert slack destination to Formik object', async () => {
     expect(
-      destinationToFormik({
+      await destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.SLACK,
         [DESTINATION_TYPE.SLACK]: { url: 'https://chime.webhook' },
       })
     ).toMatchSnapshot();
   });
-  test('should able to convert custom destination to Formik object', () => {
+  test('should able to convert custom destination to Formik object', async () => {
     expect(
-      destinationToFormik({
+      await destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CUSTOM_HOOK,
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
@@ -59,9 +60,9 @@ describe('destinationToFormik', () => {
       })
     ).toMatchSnapshot();
   });
-  test('should able to convert custom destination (with port) to Formik object', () => {
+  test('should able to convert custom destination (with port) to Formik object', async () => {
     expect(
-      destinationToFormik({
+      await destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CUSTOM_HOOK,
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
@@ -77,9 +78,9 @@ describe('destinationToFormik', () => {
       })
     ).toMatchSnapshot();
   });
-  test('should able to convert custom destination (with custom attributes) to Formik object', () => {
+  test('should able to convert custom destination (with custom attributes) to Formik object', async () => {
     expect(
-      destinationToFormik({
+      await destinationToFormik(httpClientMock, {
         ...baseDestination,
         type: DESTINATION_TYPE.CUSTOM_HOOK,
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
