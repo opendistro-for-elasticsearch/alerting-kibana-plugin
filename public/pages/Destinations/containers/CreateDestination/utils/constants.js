@@ -50,4 +50,8 @@ export const formikInitialValues = {
       },
     ],
   },
+  [DESTINATION_TYPE.EMAIL]: {
+    emailSender: [],
+    emailRecipients: [],
+  },
 };

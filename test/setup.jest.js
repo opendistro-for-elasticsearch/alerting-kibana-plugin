@@ -12,7 +12,9 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 import React from 'react';
+import { toastNotifications } from 'ui/notify';
 
 // https://github.com/elastic/eui/issues/2530
 jest.mock('@elastic/eui/lib/components/icon', () => ({
