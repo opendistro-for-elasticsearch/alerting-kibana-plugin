@@ -44,6 +44,15 @@ exports[`Monitors renders 1`] = `
           "width": "150px",
         },
         Object {
+          "field": "user",
+          "name": "Last updated by",
+          "render": [Function],
+          "sortable": true,
+          "textOnly": true,
+          "truncateText": true,
+          "width": "100px",
+        },
+        Object {
           "field": "latestAlert",
           "name": "Latest alert",
           "sortable": false,

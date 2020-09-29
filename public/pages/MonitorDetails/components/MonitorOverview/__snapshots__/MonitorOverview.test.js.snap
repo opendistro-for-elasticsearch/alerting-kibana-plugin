@@ -135,6 +135,20 @@ exports[`MonitorOverview renders 1`] = `
           </div>
         </div>
       </div>
+      <div
+        class="euiFlexItem"
+      >
+        <div
+          class="euiText euiText--extraSmall"
+        >
+          <strong>
+            Last updated by
+          </strong>
+          <div>
+            N/A
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
