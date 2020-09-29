@@ -18,7 +18,7 @@ import _ from 'lodash';
 export const validateSenderName = (senders) => (value) => {
   if (!value) return 'Required';
 
-  if (!/^[A-Z0-9_-]+$/i.test(value)) return 'Invalid sender name';
+  if (!/^[A-Z0-9_]+$/i.test(value)) return 'Invalid sender name';
 
   const matches = senders.filter((sender) => sender.name === value);
   if (matches.length > 1) return 'Sender name is already being used';
