@@ -62,13 +62,13 @@ const Sender = ({ sender, arrayHelpers, context, index, onDelete }) => {
           label: 'Sender name',
           helpText:
             'A unique and descriptive name that is easy to search. ' +
-            'Valid characters are upper and lowercase a-z, 0-9, _ (underscore) and - (hyphen).',
+            'Valid characters are upper and lowercase a-z, 0-9, and _ (underscore).',
           style: { padding: '10px 0px' },
           isInvalid,
           error: hasError,
         }}
         inputProps={{
-          placeholder: 'my-sender',
+          placeholder: 'my_sender',
           onChange: (e, field, form) => {
             field.onChange(e);
             onSenderChange(index, sender, arrayHelpers);

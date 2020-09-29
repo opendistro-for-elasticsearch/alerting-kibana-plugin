@@ -19,6 +19,8 @@ import { mount } from 'enzyme';
 import ManageEmailGroups from './ManageEmailGroups';
 import { httpClientMock } from '../../../../../../test/mocks';
 
+const runAllPromises = () => new Promise(setImmediate);
+
 const onClickCancel = jest.fn();
 const onClickSave = jest.fn();
 
@@ -49,5 +51,73 @@ describe('ManageEmailGroups', () => {
       />
     );
     expect(wrapper).toMatchSnapshot();
+  });
+
+  test('loadInitialValues', async () => {
+    const mockEmailGroup = {
+      id: 'id',
+      name: 'test_group',
+      emails: [{ email: 'test@email.com' }],
+    };
+
+    // Mock return in getEmailGroups function
+    httpClientMock.get.mockResolvedValue({
+      data: { ok: true, emailGroups: [mockEmailGroup] },
+    });
+
+    const wrapper = mount(
+      <ManageEmailGroups
+        httpClient={httpClientMock}
+        isVisible={true}
+        onClickCancel={onClickCancel}
+        onClickSave={onClickSave}
+      />
+    );
+
+    await runAllPromises();
+    expect(wrapper.instance().state.initialValues.emailGroups.length).toBe(1);
+    expect(wrapper.instance().state.initialValues.emailGroups[0].emails).toEqual([
+      { label: 'test@email.com' },
+    ]);
+  });
+
+  test('getEmailGroups logs resp.data.err when ok:false', async () => {
+    const log = jest.spyOn(global.console, 'log');
+    // Mock return in getEmailGroups function
+    httpClientMock.get.mockResolvedValue({
+      data: { ok: false, err: 'test' },
+    });
+
+    const wrapper = mount(
+      <ManageEmailGroups
+        httpClient={httpClientMock}
+        isVisible={true}
+        onClickCancel={onClickCancel}
+        onClickSave={onClickSave}
+      />
+    );
+
+    await runAllPromises();
+    expect(log).toHaveBeenCalled();
+    expect(log).toHaveBeenCalledWith('Unable to get email groups', 'test');
+  });
+
+  test('loads empty list of email groups when ok:false', async () => {
+    // Mock return in getEmailGroups function
+    httpClientMock.get.mockResolvedValue({
+      data: { ok: false, err: 'test' },
+    });
+
+    const wrapper = mount(
+      <ManageEmailGroups
+        httpClient={httpClientMock}
+        isVisible={true}
+        onClickCancel={onClickCancel}
+        onClickSave={onClickSave}
+      />
+    );
+
+    await runAllPromises();
+    expect(wrapper.instance().state.initialValues.emailGroups).toEqual([]);
   });
 });
