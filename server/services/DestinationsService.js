@@ -101,30 +101,6 @@ export default class DestinationsService {
       type = 'ALL',
     } = req.query;
 
-    const filterQueries = [];
-    // Index is being used with logical doc types, filtering only destinations
-    const mustQueries = [
-      {
-        exists: {
-          field: 'destination',
-        },
-      },
-    ];
-
-    if (type !== 'ALL') {
-      filterQueries.push({ term: { 'destination.type': type } });
-    }
-
-    if (search.trim()) {
-      mustQueries.push({
-        query_string: {
-          fields: ['destination.name', 'destination.type'],
-          default_operator: 'AND',
-          query: `*${search.trim().split(' ').join('* *')}*`,
-        },
-      });
-    }
-
     var params;
     switch (sortField) {
       case 'name':

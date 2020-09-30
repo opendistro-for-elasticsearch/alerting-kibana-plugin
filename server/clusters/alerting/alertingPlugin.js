@@ -140,7 +140,7 @@ export default function alertingPlugin(Client, config, components) {
 
   alerting.searchDestinations = ca({
     url: {
-      fmt: `${DESTINATION_BASE_API}/all`,
+      fmt: `${DESTINATION_BASE_API}`,
     },
     method: 'GET',
   });
