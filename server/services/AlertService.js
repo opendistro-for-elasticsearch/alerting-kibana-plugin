@@ -73,9 +73,9 @@ export default class AlertService {
     params.size = size;
     params.severityLevel = severityLevel;
     params.alertState = alertState;
-    params.monitorIds = monitorIds;
     params.searchString = search;
     if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
+    if (monitorIds.length > 0) params.monitorId = monitorId[0];
 
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
     try {
@@ -86,7 +86,7 @@ export default class AlertService {
         const version = hit.alert_version;
         return { id, ...alert, version };
       });
-      const totalAlerts = alerts.length;
+      const totalAlerts = resp.totalAlerts;
 
       return { ok: true, alerts, totalAlerts };
     } catch (err) {
