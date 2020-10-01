@@ -70,14 +70,19 @@ export default class DestinationsService {
 
   getDestination = async (req, h) => {
     const { destinationId } = req.params;
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
+    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
     try {
-      const resp = await callWithRequest(req, 'get', {
-        index: INDEX.SCHEDULED_JOBS,
-        id: destinationId,
-      });
-      const { _source, _seq_no: ifSeqNo, _primary_term: ifPrimaryTerm, _version: version } = resp;
-      return { ok: true, destination: _source.destination, version, ifSeqNo, ifPrimaryTerm };
+      const params = {
+        destinationId,
+      };
+      const resp = await callWithRequest(req, 'alerting.getDestination', params);
+
+      const destination = resp.destinations[0];
+      const version = destination.schema_version;
+      const ifSeqNo = destination.seq_no;
+      const ifPrimaryTerm = destination.primary_term;
+
+      return { ok: true, destination, version, ifSeqNo, ifPrimaryTerm };
     } catch (err) {
       console.error('Alerting - DestinationService - getDestination:', err);
       return { ok: false, resp: err.message };
@@ -85,79 +90,54 @@ export default class DestinationsService {
   };
 
   getDestinations = async (req, h) => {
+    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+
     const {
       from = 0,
       size = 20,
       search = '',
       sortDirection = 'desc',
-      sortField = 'name',
+      sortField = 'start_time',
       type = 'ALL',
     } = req.query;
 
-    const filterQueries = [];
-    // Index is being used with logical doc types, filtering only destinations
-    const mustQueries = [
-      {
-        exists: {
-          field: 'destination',
-        },
-      },
-    ];
-
-    if (type !== 'ALL') {
-      filterQueries.push({ term: { 'destination.type': type } });
+    var params;
+    switch (sortField) {
+      case 'name':
+        params = {
+          sortString: 'destination.name.keyword',
+          sortOrder: sortDirection,
+        };
+        break;
+      case 'type':
+        params = {
+          sortString: 'destination.type',
+          sortOrder: sortDirection,
+        };
+        break;
+      default:
+        params = {};
+        break;
     }
+    params.startIndex = from;
+    params.size = size;
+    params.searchString = search;
+    if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
 
-    if (search.trim()) {
-      mustQueries.push({
-        query_string: {
-          fields: ['destination.name', 'destination.type'],
-          default_operator: 'AND',
-          query: `*${search.trim().split(' ').join('* *')}*`,
-        },
-      });
-    }
-
-    const sortQueryMap = {
-      name: { 'destination.name.keyword': sortDirection },
-      type: { 'destination.type': sortDirection },
-    };
-
-    let sort = [];
-    const sortQuery = sortQueryMap[sortField];
-    if (sortQuery) sort = sortQuery;
-
-    const params = {
-      index: INDEX.SCHEDULED_JOBS,
-      version: true,
-      seq_no_primary_term: true,
-      body: {
-        sort,
-        size,
-        from,
-        query: {
-          bool: {
-            filter: filterQueries,
-            must: mustQueries,
-          },
-        },
-      },
-    };
-
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
     try {
-      const resp = await callWithRequest(req, 'search', params);
-      const totalDestinations = resp.hits.total.value;
-      const destinations = resp.hits.hits.map((hit) => {
-        const {
-          _source: destination,
-          _id: id,
-          _version: version,
-          _seq_no: ifSeqNo,
-          _primary_term: ifPrimaryTerm,
-        } = hit;
-        return { id, ...destination.destination, version, ifSeqNo, ifPrimaryTerm };
+      const resp = await callWithRequest(req, 'alerting.searchDestinations', params);
+
+      const destinations = resp.destinations.map((hit) => {
+        const destination = hit;
+        const id = destination.id;
+        const version = destination.schema_version;
+        const ifSeqNo = destination.seq_no;
+        const ifPrimaryTerm = destination.primary_term;
+        return { id, ...destination, version, ifSeqNo, ifPrimaryTerm };
       });
+
+      const totalDestinations = resp.totalDestinations;
+
       return { ok: true, destinations, totalDestinations };
     } catch (err) {
       return { ok: false, err: err.message };
