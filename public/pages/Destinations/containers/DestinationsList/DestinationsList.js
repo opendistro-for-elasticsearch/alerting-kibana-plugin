@@ -185,17 +185,21 @@ class DestinationsList extends React.Component {
         ...this.props.location,
         search: queryParms,
       });
-      const resp = await httpClient.get(`../api/alerting/destinations?${queryParms}`);
-      if (resp.data.ok) {
-        this.setState({
-          isDestinationLoading: false,
-          destinations: resp.data.destinations,
-          totalDestinations: resp.data.totalDestinations,
-        });
-      } else {
-        this.setState({
-          isDestinationLoading: false,
-        });
+      try {
+        const resp = await httpClient.get(`../api/alerting/destinations?${queryParms}`);
+        if (resp.data.ok) {
+          this.setState({
+            isDestinationLoading: false,
+            destinations: resp.data.destinations,
+            totalDestinations: resp.data.totalDestinations,
+          });
+        } else {
+          this.setState({
+            isDestinationLoading: false,
+          });
+        }
+      } catch (err) {
+        console.error('Unable to get destinations', err);
       }
     },
     500,

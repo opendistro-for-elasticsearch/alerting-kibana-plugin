@@ -104,6 +104,13 @@ export default function alertingPlugin(Client, config, components) {
     method: 'POST',
   });
 
+  alerting.getAlerts = ca({
+    url: {
+      fmt: `${MONITOR_BASE_API}/alerts`,
+    },
+    method: 'GET',
+  });
+
   alerting.executeMonitor = ca({
     url: {
       fmt: `${MONITOR_BASE_API}/_execute?dryrun=<%=dryrun%>`,
@@ -116,6 +123,26 @@ export default function alertingPlugin(Client, config, components) {
     },
     needBody: true,
     method: 'POST',
+  });
+
+  alerting.getDestination = ca({
+    url: {
+      fmt: `${DESTINATION_BASE_API}/<%=destinationId%>`,
+      req: {
+        destinationId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'GET',
+  });
+
+  alerting.searchDestinations = ca({
+    url: {
+      fmt: `${DESTINATION_BASE_API}`,
+    },
+    method: 'GET',
   });
 
   alerting.createDestination = ca({
