@@ -58,5 +58,15 @@ export default function getOverviewStats(monitor, monitorId, monitorVersion, act
       header: 'Monitor version number',
       value: monitorVersion,
     },
+    {
+      /* There are 3 cases:
+      1. Monitors created by older versions and never updated.
+         These monitors won’t have User details in the monitor object. `monitor.user` will be null.
+      2. Monitors are created when security plugin is disabled, these will have empty User object.
+         (`monitor.user.name`, `monitor.user.roles` are empty )
+      3. Monitors are created when security plugin is enabled, these will have an User object. */
+      header: 'Last updated by',
+      value: monitor.user && monitor.user.name ? monitor.user.name : 'N/A',
+    },
   ];
 }

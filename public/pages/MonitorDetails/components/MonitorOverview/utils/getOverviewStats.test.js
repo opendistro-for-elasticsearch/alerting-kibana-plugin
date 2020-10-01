@@ -20,6 +20,9 @@ describe('getOverviewStats', () => {
   test('can get stats', () => {
     const monitor = {
       enabled: true,
+      user: {
+        name: 'John Doe',
+      },
     };
     const monitorId = 'sdfifsjeifjseif';
     const monitorVersion = 7;
@@ -52,6 +55,10 @@ describe('getOverviewStats', () => {
       {
         header: 'Monitor version number',
         value: monitorVersion,
+      },
+      {
+        header: 'Last updated by',
+        value: monitor.user.name,
       },
     ]);
   });
