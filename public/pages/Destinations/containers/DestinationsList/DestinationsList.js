@@ -32,6 +32,8 @@ import { INDEX } from '../../../../../utils/constants';
 import { DESTINATION_ACTIONS } from '../../../../utils/constants';
 import ManageSenders from '../CreateDestination/ManageSenders';
 import ManageEmailGroups from '../CreateDestination/ManageEmailGroups';
+import { getAllowList } from '../../utils/helpers';
+import { DESTINATION_TYPE } from '../../utils/constants';
 
 class DestinationsList extends React.Component {
   constructor(props) {
@@ -56,6 +58,7 @@ class DestinationsList extends React.Component {
         type,
       },
       selectedItems: [],
+      allowList: [],
       showManageSenders: false,
       showManageEmailGroups: false,
     };
@@ -80,6 +83,7 @@ class DestinationsList extends React.Component {
       },
     ];
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       !_.isEqual(
@@ -91,10 +95,20 @@ class DestinationsList extends React.Component {
       this.getDestinations(page * queryParams.size, queryParams);
     }
   }
-  componentDidMount() {
+
+  async componentDidMount() {
+    const { httpClient } = this.props;
+    const allowList = await getAllowList(httpClient);
+    this.setState({ allowList });
+
     const { page, queryParams } = this.state;
     this.getDestinations(page * queryParams.size, queryParams);
   }
+
+  isEmailAllowed = () => {
+    const { allowList } = this.state;
+    return allowList.includes(DESTINATION_TYPE.EMAIL);
+  };
 
   isDeleteAllowed = async (type, id) => {
     const { httpClient } = this.props;
@@ -149,11 +163,16 @@ class DestinationsList extends React.Component {
   };
 
   handleEditDestination = (destinationToEdit) => {
-    this.props.history.push({
-      pathname: `destinations/${destinationToEdit.id}`,
-      search: `?action=${DESTINATION_ACTIONS.UPDATE_DESTINATION}`,
-      state: { destinationToEdit },
-    });
+    const { allowList } = this.state;
+    // Prevent editing disallowed Destination types since dependent API (like in the case of Email)
+    // may be blocked in this case, not making it possible to load the Edit page
+    if (allowList.includes(destinationToEdit.type)) {
+      this.props.history.push({
+        pathname: `destinations/${destinationToEdit.id}`,
+        search: `?action=${DESTINATION_ACTIONS.UPDATE_DESTINATION}`,
+        state: { destinationToEdit },
+      });
+    }
   };
 
   handleSearchChange = (e) => {
@@ -280,6 +299,7 @@ class DestinationsList extends React.Component {
           title="Destinations"
           actions={
             <DestinationsActions
+              isEmailAllowed={this.isEmailAllowed()}
               onClickManageSenders={() => {
                 this.setState({ showManageSenders: true });
               }}
