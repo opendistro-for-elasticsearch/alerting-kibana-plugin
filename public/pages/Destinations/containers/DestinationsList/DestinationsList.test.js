@@ -18,6 +18,7 @@ import { mount } from 'enzyme';
 
 import DestinationsList from './DestinationsList';
 import { historyMock, httpClientMock } from '../../../../../test/mocks';
+import { DESTINATION_TYPE } from '../../utils/constants';
 
 const location = {
   hash: '',
@@ -32,14 +33,86 @@ describe('DestinationsList', () => {
     jest.clearAllMocks();
   });
 
-  test('renders', () => {
+  test('renders', async () => {
+    const mockSettings = {
+      defaults: {
+        opendistro: {
+          alerting: {
+            destination: {
+              allow_list: Object.values(DESTINATION_TYPE),
+            },
+          },
+        },
+      },
+    };
+
+    httpClientMock.get
+      .mockResolvedValueOnce({
+        // Mock getAllowList
+        data: { ok: true, resp: mockSettings },
+      })
+      .mockResolvedValue({
+        // Mock return in getDestinations function
+        data: { ok: true, destinations: [], totalDestinations: 0 },
+      });
+
     const wrapper = mount(
       <DestinationsList httpClient={httpClientMock} history={historyMock} location={location} />
     );
+
+    await runAllPromises();
+    wrapper.update();
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  test('renders when email is disallowed', async () => {
+    const mockAllowList = ['chime', 'slack', 'custom_webhook'];
+    const mockSettings = {
+      defaults: {
+        opendistro: {
+          alerting: {
+            destination: {
+              allow_list: mockAllowList,
+            },
+          },
+        },
+      },
+    };
+
+    httpClientMock.get
+      .mockResolvedValueOnce({
+        // Mock getAllowList
+        data: { ok: true, resp: mockSettings },
+      })
+      .mockResolvedValue({
+        // Mock return in getDestinations function
+        data: { ok: true, destinations: [], totalDestinations: 0 },
+      });
+
+    const wrapper = mount(
+      <DestinationsList httpClient={httpClientMock} history={historyMock} location={location} />
+    );
+
+    await runAllPromises();
+    wrapper.update();
+
+    expect(wrapper.instance().state.allowList).toEqual(mockAllowList);
     expect(wrapper).toMatchSnapshot();
   });
 
   test('getDestinations', async () => {
+    const mockSettings = {
+      defaults: {
+        opendistro: {
+          alerting: {
+            destination: {
+              allow_list: Object.values(DESTINATION_TYPE),
+            },
+          },
+        },
+      },
+    };
+
     const mockDestination = {
       id: 'id',
       type: 'test_action',
@@ -50,10 +123,15 @@ describe('DestinationsList', () => {
       test_action: 'dummy',
     };
 
-    // Mock return in getDestinations function
-    httpClientMock.get.mockResolvedValue({
-      data: { ok: true, destinations: [mockDestination], totalDestinations: 1 },
-    });
+    httpClientMock.get
+      .mockResolvedValueOnce({
+        // Mock getAllowList
+        data: { ok: true, resp: mockSettings },
+      })
+      .mockResolvedValue({
+        // Mock return in getDestinations function
+        data: { ok: true, destinations: [mockDestination], totalDestinations: 1 },
+      });
 
     const wrapper = mount(
       <DestinationsList httpClient={httpClientMock} history={historyMock} location={location} />
