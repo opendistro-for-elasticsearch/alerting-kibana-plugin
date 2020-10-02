@@ -37,7 +37,6 @@ export async function getAllowList(httpClient) {
         allowList = _.get(response.data.resp, `defaults.${ALLOW_LIST_SETTING_PATH}`, []);
       }
 
-      console.log(allowList);
       return allowList;
     } else {
       console.log('Unable to get destination allow_list', response.data.resp);

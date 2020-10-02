@@ -72,6 +72,7 @@ class DestinationsList extends React.Component {
           {
             name: 'Edit',
             description: 'Edit this destination.',
+            enabled: this.isEditEnabled,
             onClick: this.handleEditDestination,
           },
           {
@@ -162,17 +163,19 @@ class DestinationsList extends React.Component {
     }
   };
 
-  handleEditDestination = (destinationToEdit) => {
+  isEditEnabled = (destination) => {
     const { allowList } = this.state;
     // Prevent editing disallowed Destination types since dependent API (like in the case of Email)
     // may be blocked in this case, not making it possible to load the Edit page
-    if (allowList.includes(destinationToEdit.type)) {
-      this.props.history.push({
-        pathname: `destinations/${destinationToEdit.id}`,
-        search: `?action=${DESTINATION_ACTIONS.UPDATE_DESTINATION}`,
-        state: { destinationToEdit },
-      });
-    }
+    return allowList.includes(destination.type);
+  };
+
+  handleEditDestination = (destinationToEdit) => {
+    this.props.history.push({
+      pathname: `destinations/${destinationToEdit.id}`,
+      search: `?action=${DESTINATION_ACTIONS.UPDATE_DESTINATION}`,
+      state: { destinationToEdit },
+    });
   };
 
   handleSearchChange = (e) => {
@@ -319,6 +322,7 @@ class DestinationsList extends React.Component {
 
           <ManageSenders
             httpClient={this.props.httpClient}
+            isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageSenders}
             onClickCancel={this.hideManageSendersModal}
             onClickSave={this.hideManageSendersModal}
@@ -326,6 +330,7 @@ class DestinationsList extends React.Component {
 
           <ManageEmailGroups
             httpClient={this.props.httpClient}
+            isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageEmailGroups}
             onClickCancel={this.hideManageEmailGroupsModal}
             onClickSave={this.hideManageEmailGroupsModal}
