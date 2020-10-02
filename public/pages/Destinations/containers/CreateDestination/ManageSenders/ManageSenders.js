@@ -240,7 +240,7 @@ export default class ManageSenders extends React.Component {
   };
 
   render() {
-    const { isVisible, onClickCancel, onClickSave } = this.props;
+    const { isEmailAllowed, isVisible, onClickCancel, onClickSave } = this.props;
     const { initialValues, loadingSenders } = this.state;
     return isVisible ? (
       <Formik
@@ -267,9 +267,9 @@ export default class ManageSenders extends React.Component {
                   name="senders"
                   validateOnChange={true}
                   render={(arrayHelpers) =>
-                    loadingSenders ? (
+                    !isEmailAllowed || loadingSenders ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        Loading Senders...
+                        {isEmailAllowed ? 'Loading Senders...' : 'Email is disallowed'}
                       </div>
                     ) : (
                       this.renderSenders({ values, arrayHelpers })

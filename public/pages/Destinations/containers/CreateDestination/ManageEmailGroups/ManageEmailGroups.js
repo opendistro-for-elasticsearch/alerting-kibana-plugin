@@ -252,7 +252,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   render() {
-    const { isVisible, onClickCancel, onClickSave } = this.props;
+    const { isEmailAllowed, isVisible, onClickCancel, onClickSave } = this.props;
     const { initialValues, loadingEmailGroups, emailGroupsToDelete } = this.state;
     return isVisible ? (
       <Formik
@@ -279,9 +279,9 @@ export default class ManageEmailGroups extends React.Component {
                   name="emailGroups"
                   validateOnChange={true}
                   render={(arrayHelpers) =>
-                    loadingEmailGroups ? (
+                    !isEmailAllowed || loadingEmailGroups ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        Loading Email Groups...
+                        {isEmailAllowed ? 'Loading Email Groups...' : 'Email is disallowed'}
                       </div>
                     ) : (
                       this.renderEmailGroups({ values, arrayHelpers })
