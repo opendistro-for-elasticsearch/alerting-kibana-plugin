@@ -31,7 +31,7 @@ import { FormikFieldText, FormikSelect } from '../../../../components/FormContro
 import SubHeader from '../../../../components/SubHeader';
 import { formikInitialValues } from './utils/constants';
 import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../utils/constants';
-import { validateDestinationName } from './utils/validations';
+import { validateDestinationName, validateDestinationType } from './utils/validations';
 import { formikToDestination } from './utils/formikToDestination';
 import { destinationToFormik } from './utils/destinationToFormik';
 import { Webhook, CustomWebhook, Email } from '../../components/createDestinations';
@@ -211,13 +211,19 @@ class CreateDestination extends React.Component {
                   <FormikSelect
                     name="type"
                     formRow
+                    fieldProps={{
+                      validate: validateDestinationType(httpClient),
+                    }}
                     rowProps={{
                       label: 'Type',
                       style: { paddingLeft: '10px' },
+                      isInvalid,
+                      error: hasError,
                     }}
                     inputProps={{
                       disabled: edit,
                       options: this.getAllowedDestinationOptions(),
+                      isInvalid,
                     }}
                   />
                   <EuiSpacer size="m" />
