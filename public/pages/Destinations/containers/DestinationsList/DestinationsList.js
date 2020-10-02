@@ -274,6 +274,7 @@ class DestinationsList extends React.Component {
       totalDestinations,
       isDestinationLoading,
       destinationConsumedByOthers,
+      allowList,
     } = this.state;
     const isFilterApplied = !!search || type !== 'ALL';
     const pagination = {
@@ -344,6 +345,7 @@ class DestinationsList extends React.Component {
             onSearchChange={this.handleSearchChange}
             onTypeChange={this.handleTypeChange}
             onPageClick={this.handlePageClick}
+            allowList={allowList}
           />
           <EuiHorizontalRule margin="xs" />
           <EuiBasicTable
