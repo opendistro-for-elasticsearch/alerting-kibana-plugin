@@ -25,6 +25,7 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 
 import ConfigureMonitor from '../ConfigureMonitor';
 import DefineMonitor from '../DefineMonitor';
@@ -34,6 +35,7 @@ import { formikToMonitor } from './utils/formikToMonitor';
 import { DefineSchedule } from '../DefineSchedule';
 import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
 import { initializeFromQueryParams } from './utils/monitorQueryParams';
+import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -88,6 +90,7 @@ export default class CreateMonitor extends Component {
         );
       } else {
         console.log('Failed to create:', resp.data);
+        this.backendErrorHandler('create', resp.data);
       }
     } catch (err) {
       console.error(err);
@@ -112,6 +115,7 @@ export default class CreateMonitor extends Component {
         this.props.history.push(`/monitors/${id}`);
       } else {
         console.log('Failed to update:', resp.data);
+        this.backendErrorHandler('update', resp.data);
       }
     } catch (err) {
       console.error(err);
@@ -127,6 +131,15 @@ export default class CreateMonitor extends Component {
     else this.onCreate(monitor, formikBag);
   }
 
+  backendErrorHandler(actionName, data) {
+    toastNotifications.addDanger({
+      title: `Failed to ${actionName} the monitor`,
+      text: data.resp,
+      toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   render() {
     const { initialValues } = this.state;
     const { edit, httpClient, monitorToEdit } = this.props;
@@ -136,7 +149,7 @@ export default class CreateMonitor extends Component {
           initialValues={initialValues}
           onSubmit={this.onSubmit}
           validateOnChange={false}
-          render={({ values, errors, handleSubmit, isSubmitting }) => (
+          render={({ values, errors, handleSubmit, isSubmitting, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
@@ -166,6 +179,17 @@ export default class CreateMonitor extends Component {
                   </EuiButton>
                 </EuiFlexItem>
               </EuiFlexGroup>
+              <SubmitErrorHandler
+                errors={errors}
+                isSubmitting={isSubmitting}
+                isValid={isValid}
+                onSubmitError={() =>
+                  toastNotifications.addDanger({
+                    title: `Failed to ${edit ? 'update' : 'create'} the monitor`,
+                    text: 'Fix all highlighted error(s) before continuing.',
+                  })
+                }
+              />
             </Fragment>
           )}
         />

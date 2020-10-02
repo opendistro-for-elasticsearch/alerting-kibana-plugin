@@ -18,7 +18,7 @@ import { EuiSpacer } from '@elastic/eui';
 
 import ContentPanel from '../../../../components/ContentPanel';
 import MonitorState from '../../components/MonitorState';
-import { hasError, isInvalid, validateMonitorName } from '../../../../utils/validate';
+import { hasError, isInvalid, required, validateMonitorName } from '../../../../utils/validate';
 import FormikFieldText from '../../../../components/FormControls/FormikFieldText';
 
 const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
@@ -35,8 +35,12 @@ const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
       }}
       inputProps={{
         isInvalid,
-        onFocus: (e, field, form) => {
-          form.setFieldError('name', undefined);
+        /* To reduce the frequency of search request,
+        the comprehensive 'validationMonitorName()' is only called onBlur,
+        but we enable the basic 'required()' validation onChange for good user experience.*/
+        onChange: (e, field, form) => {
+          field.onChange(e);
+          form.setFieldError('name', required(e.target.value));
         },
       }}
     />
