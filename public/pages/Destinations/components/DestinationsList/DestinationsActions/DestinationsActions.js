@@ -59,7 +59,7 @@ export default class DestinationsActions extends Component {
   };
 
   onClickActions = () => {
-    this.setState(prevState => ({ isActionsOpen: !prevState.isActionsOpen }));
+    this.setState((prevState) => ({ isActionsOpen: !prevState.isActionsOpen }));
   };
 
   render() {
