@@ -79,7 +79,11 @@ export default class ManageEmailGroups extends React.Component {
   }
 
   componentDidMount() {
-    this.loadInitialValues();
+    const { isEmailAllowed } = this.props;
+    // Don't load initial values if Email is disallowed since the API will be blocked
+    if (isEmailAllowed) {
+      this.loadInitialValues();
+    }
   }
 
   // Reload initial values when modal is no longer visible so changes
@@ -313,11 +317,13 @@ export default class ManageEmailGroups extends React.Component {
 
 ManageEmailGroups.propTypes = {
   httpClient: PropTypes.func.isRequired,
+  isEmailAllowed: PropTypes.bool,
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
 };
 
 ManageEmailGroups.defaultProps = {
+  isEmailAllowed: false,
   isVisible: false,
 };
