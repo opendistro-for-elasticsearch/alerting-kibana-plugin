@@ -41,7 +41,6 @@ export const validateDestinationType = (httpClient) => async (value) => {
   // Check if Destination type is allowed to notify users in the cases
   // where a Destination type has been disallowed during form editing
   const allowList = await getAllowList(httpClient);
-  console.log(value);
   if (!allowList.includes(value)) {
     return `Destination type [${value}] is disallowed`;
   }

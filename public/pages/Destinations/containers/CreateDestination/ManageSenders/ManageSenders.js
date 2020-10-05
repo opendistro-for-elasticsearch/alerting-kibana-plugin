@@ -71,10 +71,13 @@ export default class ManageSenders extends React.Component {
     }
   }
 
-  // Reload initial values when modal is no longer visible so changes
-  // are reflected the next time it is opened
+  // Reload initial values when modal is no longer visible
+  // or when email availability is updated
   componentDidUpdate(prevProps) {
-    if (prevProps.isVisible && !this.props.isVisible) {
+    if (
+      (prevProps.isVisible && !this.props.isVisible) ||
+      prevProps.isEmailAllowed !== this.props.isEmailAllowed
+    ) {
       this.loadInitialValues();
     }
   }
