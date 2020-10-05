@@ -14,7 +14,7 @@
  */
 
 // A helper function that wraps an event handler and filters out ESCAPE keys
-export const ignoreEscape = eventHandler => event => {
+export const ignoreEscape = (eventHandler) => (event) => {
   if (!(event.keyCode === 27)) {
     eventHandler();
   }

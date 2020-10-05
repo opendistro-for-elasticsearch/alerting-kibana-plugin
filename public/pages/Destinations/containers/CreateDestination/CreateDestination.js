@@ -25,8 +25,9 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
-import { hasError, isInvalid } from '../../../../utils/validate';
+import { hasError, isInvalid, required } from '../../../../utils/validate';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
 import SubHeader from '../../../../components/SubHeader';
 import { formikInitialValues } from './utils/constants';
@@ -35,6 +36,7 @@ import { validateDestinationName, validateDestinationType } from './utils/valida
 import { formikToDestination } from './utils/formikToDestination';
 import { destinationToFormik } from './utils/destinationToFormik';
 import { Webhook, CustomWebhook, Email } from '../../components/createDestinations';
+import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { getAllowList } from '../../utils/helpers';
 
 const destinationType = {
@@ -180,7 +182,7 @@ class CreateDestination extends React.Component {
           enableReinitialize={true}
           validateOnChange={false}
           onSubmit={this.handleSubmit}
-          render={({ values, handleSubmit, isSubmitting }) => (
+          render={({ values, handleSubmit, isSubmitting, errors, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Add'} destination</h1>
@@ -206,6 +208,13 @@ class CreateDestination extends React.Component {
                     }}
                     inputProps={{
                       isInvalid,
+                      /* To reduce the frequency of search request,
+                      the comprehension 'validateDestinationName()' is only called onBlur,
+                      but we enable the basic 'required()' validation onChange for good user experience.*/
+                      onChange: (e, field, form) => {
+                        field.onChange(e);
+                        form.setFieldError('name', required(e.target.value));
+                      },
                     }}
                   />
                   <FormikSelect
@@ -244,6 +253,17 @@ class CreateDestination extends React.Component {
                   </EuiButton>
                 </EuiFlexItem>
               </EuiFlexGroup>
+              <SubmitErrorHandler
+                errors={errors}
+                isSubmitting={isSubmitting}
+                isValid={isValid}
+                onSubmitError={() =>
+                  toastNotifications.addDanger({
+                    title: `Failed to ${edit ? 'update' : 'create'} the destination`,
+                    text: 'Fix all highlighted error(s) before continuing.',
+                  })
+                }
+              />
             </Fragment>
           )}
         />

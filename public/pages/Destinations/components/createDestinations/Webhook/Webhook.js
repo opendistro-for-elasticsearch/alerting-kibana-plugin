@@ -16,10 +16,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormikFieldText } from '../../../../../components/FormControls';
-import { hasError, isInvalid } from '../../../../../utils/validate';
+import { hasError, isInvalid, required } from '../../../../../utils/validate';
 
 //TODO:: verify the Regex for all the cases based on what backend support
-const validateURL = value => {
+const validateURL = (value) => {
   if (!value) return 'Required';
   const isValidUrl = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(
     value
@@ -41,8 +41,10 @@ const Webhook = ({ type }) => {
       }}
       inputProps={{
         isInvalid,
-        onFocus: (e, field, form) => {
-          form.setFieldError(`${type}.url`, undefined);
+        // 'validateURL()' is only called onBlur, but we enable the basic 'required()' validation onChange
+        onChange: (e, field, form) => {
+          field.onChange(e);
+          form.setFieldError('name', required(e.target.value));
         },
       }}
     />

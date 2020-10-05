@@ -27,7 +27,7 @@ export function emailGroupToFormik(emailGroup) {
     ifSeqNo,
     ifPrimaryTerm,
     name,
-    emails: emails.map(e => ({ label: e.email })),
+    emails: emails.map((e) => ({ label: e.email })),
     state: STATE.NO_OP,
   };
 }
