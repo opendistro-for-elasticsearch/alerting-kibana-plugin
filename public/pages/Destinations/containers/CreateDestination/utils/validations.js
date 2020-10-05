@@ -15,8 +15,9 @@
 
 import _ from 'lodash';
 import { INDEX } from '../../../../../../utils/constants';
+import { getAllowList } from '../../../utils/helpers';
 
-export const validateDestinationName = (httpClient, destinationToEdit) => async value => {
+export const validateDestinationName = (httpClient, destinationToEdit) => async (value) => {
   try {
     if (!value) throw 'Required';
     const options = {
@@ -33,5 +34,14 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
   } catch (err) {
     if (typeof err === 'string') throw err;
     throw 'There was a problem validating destination name. Please try again.';
+  }
+};
+
+export const validateDestinationType = (httpClient) => async (value) => {
+  // Check if Destination type is allowed to notify users in the cases
+  // where a Destination type has been disallowed during form editing
+  const allowList = await getAllowList(httpClient);
+  if (!allowList.includes(value)) {
+    return `Destination type [${value}] is disallowed`;
   }
 };

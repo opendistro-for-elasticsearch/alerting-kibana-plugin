@@ -80,6 +80,7 @@ export default class ElasticsearchService {
       return { ok: false, resp: err.message };
     }
   };
+
   getPlugins = async (req, h) => {
     try {
       const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
@@ -90,6 +91,19 @@ export default class ElasticsearchService {
       return { ok: true, resp: plugins };
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getPlugins:', err);
+      return { ok: false, resp: err.message };
+    }
+  };
+
+  getSettings = async (req, h) => {
+    try {
+      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
+      const settings = await callWithRequest(req, 'cluster.getSettings', {
+        include_defaults: 'true',
+      });
+      return { ok: true, resp: settings };
+    } catch (err) {
+      console.error('Alerting - ElasticsearchService - getSettings:', err);
       return { ok: false, resp: err.message };
     }
   };

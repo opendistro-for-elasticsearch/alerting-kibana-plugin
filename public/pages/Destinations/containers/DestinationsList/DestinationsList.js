@@ -32,6 +32,8 @@ import { INDEX } from '../../../../../utils/constants';
 import { DESTINATION_ACTIONS } from '../../../../utils/constants';
 import ManageSenders from '../CreateDestination/ManageSenders';
 import ManageEmailGroups from '../CreateDestination/ManageEmailGroups';
+import { getAllowList } from '../../utils/helpers';
+import { DESTINATION_TYPE } from '../../utils/constants';
 
 class DestinationsList extends React.Component {
   constructor(props) {
@@ -56,6 +58,7 @@ class DestinationsList extends React.Component {
         type,
       },
       selectedItems: [],
+      allowList: [],
       showManageSenders: false,
       showManageEmailGroups: false,
     };
@@ -69,6 +72,7 @@ class DestinationsList extends React.Component {
           {
             name: 'Edit',
             description: 'Edit this destination.',
+            enabled: this.isEditEnabled,
             onClick: this.handleEditDestination,
           },
           {
@@ -80,6 +84,7 @@ class DestinationsList extends React.Component {
       },
     ];
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       !_.isEqual(
@@ -91,10 +96,20 @@ class DestinationsList extends React.Component {
       this.getDestinations(page * queryParams.size, queryParams);
     }
   }
-  componentDidMount() {
+
+  async componentDidMount() {
+    const { httpClient } = this.props;
+    const allowList = await getAllowList(httpClient);
+    this.setState({ allowList });
+
     const { page, queryParams } = this.state;
     this.getDestinations(page * queryParams.size, queryParams);
   }
+
+  isEmailAllowed = () => {
+    const { allowList } = this.state;
+    return allowList.includes(DESTINATION_TYPE.EMAIL);
+  };
 
   isDeleteAllowed = async (type, id) => {
     const { httpClient } = this.props;
@@ -146,6 +161,13 @@ class DestinationsList extends React.Component {
     } catch (e) {
       console.log('unable to delete destination', e);
     }
+  };
+
+  isEditEnabled = (destination) => {
+    const { allowList } = this.state;
+    // Prevent editing disallowed Destination types since dependent API (like in the case of Email)
+    // may be blocked in this case, not making it possible to load the Edit page
+    return allowList.includes(destination.type);
   };
 
   handleEditDestination = (destinationToEdit) => {
@@ -252,6 +274,7 @@ class DestinationsList extends React.Component {
       totalDestinations,
       isDestinationLoading,
       destinationConsumedByOthers,
+      allowList,
     } = this.state;
     const isFilterApplied = !!search || type !== 'ALL';
     const pagination = {
@@ -280,6 +303,7 @@ class DestinationsList extends React.Component {
           title="Destinations"
           actions={
             <DestinationsActions
+              isEmailAllowed={this.isEmailAllowed()}
               onClickManageSenders={() => {
                 this.setState({ showManageSenders: true });
               }}
@@ -299,6 +323,7 @@ class DestinationsList extends React.Component {
 
           <ManageSenders
             httpClient={this.props.httpClient}
+            isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageSenders}
             onClickCancel={this.hideManageSendersModal}
             onClickSave={this.hideManageSendersModal}
@@ -306,6 +331,7 @@ class DestinationsList extends React.Component {
 
           <ManageEmailGroups
             httpClient={this.props.httpClient}
+            isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageEmailGroups}
             onClickCancel={this.hideManageEmailGroupsModal}
             onClickSave={this.hideManageEmailGroupsModal}
@@ -319,6 +345,7 @@ class DestinationsList extends React.Component {
             onSearchChange={this.handleSearchChange}
             onTypeChange={this.handleTypeChange}
             onPageClick={this.handlePageClick}
+            allowList={allowList}
           />
           <EuiHorizontalRule margin="xs" />
           <EuiBasicTable

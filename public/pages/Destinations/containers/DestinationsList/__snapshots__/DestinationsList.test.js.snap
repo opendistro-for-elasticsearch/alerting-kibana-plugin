@@ -48,7 +48,13 @@ exports[`DestinationsList renders 1`] = `
   }
 >
   <ContentPanel
-    actions={<DestinationsActions />}
+    actions={
+      <DestinationsActions
+        isEmailAllowed={true}
+        onClickManageEmailGroups={[Function]}
+        onClickManageSenders={[Function]}
+      />
+    }
     bodyStyles={
       Object {
         "padding": "initial",
@@ -122,7 +128,1281 @@ exports[`DestinationsList renders 1`] = `
                       <div
                         className="euiFlexItem"
                       >
-                        <DestinationsActions>
+                        <DestinationsActions
+                          isEmailAllowed={true}
+                          onClickManageEmailGroups={[Function]}
+                          onClickManageSenders={[Function]}
+                        >
+                          <EuiFlexGroup
+                            alignItems="center"
+                            justifyContent="spaceBetween"
+                          >
+                            <div
+                              className="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
+                            >
+                              <EuiFlexItem>
+                                <div
+                                  className="euiFlexItem"
+                                >
+                                  <EuiPopover
+                                    anchorPosition="downLeft"
+                                    button={
+                                      <EuiButton
+                                        iconSide="right"
+                                        iconType="arrowDown"
+                                        onClick={[Function]}
+                                      >
+                                        Actions
+                                      </EuiButton>
+                                    }
+                                    closePopover={[Function]}
+                                    display="inlineBlock"
+                                    hasArrow={true}
+                                    id="destinationActionsPopover"
+                                    isOpen={false}
+                                    ownFocus={false}
+                                    panelPaddingSize="none"
+                                  >
+                                    <EuiOutsideClickDetector
+                                      isDisabled={true}
+                                      onOutsideClick={[Function]}
+                                    >
+                                      <div
+                                        className="euiPopover euiPopover--anchorDownLeft"
+                                        id="destinationActionsPopover"
+                                        onKeyDown={[Function]}
+                                        onMouseDown={[Function]}
+                                        onMouseUp={[Function]}
+                                        onTouchEnd={[Function]}
+                                        onTouchStart={[Function]}
+                                      >
+                                        <div
+                                          className="euiPopover__anchor"
+                                        >
+                                          <EuiButton
+                                            iconSide="right"
+                                            iconType="arrowDown"
+                                            onClick={[Function]}
+                                          >
+                                            <button
+                                              className="euiButton euiButton--primary euiButton--iconRight"
+                                              onClick={[Function]}
+                                              type="button"
+                                            >
+                                              <span
+                                                className="euiButton__content"
+                                              >
+                                                <EuiIcon
+                                                  aria-hidden="true"
+                                                  className="euiButton__icon"
+                                                  size="m"
+                                                  type="arrowDown"
+                                                >
+                                                  <div>
+                                                    EuiIconMock
+                                                  </div>
+                                                </EuiIcon>
+                                                <span
+                                                  className="euiButton__text"
+                                                >
+                                                  Actions
+                                                </span>
+                                              </span>
+                                            </button>
+                                          </EuiButton>
+                                        </div>
+                                      </div>
+                                    </EuiOutsideClickDetector>
+                                  </EuiPopover>
+                                </div>
+                              </EuiFlexItem>
+                              <EuiFlexItem
+                                grow={false}
+                              >
+                                <div
+                                  className="euiFlexItem euiFlexItem--flexGrowZero"
+                                >
+                                  <EuiButton
+                                    fill={true}
+                                    href="opendistro-alerting#/create-destination"
+                                  >
+                                    <a
+                                      className="euiButton euiButton--primary euiButton--fill"
+                                      href="opendistro-alerting#/create-destination"
+                                      rel="noreferrer"
+                                    >
+                                      <span
+                                        className="euiButton__content"
+                                      >
+                                        <span
+                                          className="euiButton__text"
+                                        >
+                                          Add destination
+                                        </span>
+                                      </span>
+                                    </a>
+                                  </EuiButton>
+                                </div>
+                              </EuiFlexItem>
+                            </div>
+                          </EuiFlexGroup>
+                        </DestinationsActions>
+                      </div>
+                    </EuiFlexItem>
+                  </div>
+                </EuiFlexGroup>
+              </div>
+            </EuiFlexItem>
+          </div>
+        </EuiFlexGroup>
+        <EuiHorizontalRule
+          className=""
+          margin="xs"
+        >
+          <hr
+            className="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginXSmall"
+          />
+        </EuiHorizontalRule>
+        <div
+          style={
+            Object {
+              "padding": "initial",
+            }
+          }
+        >
+          <DeleteConfirmation
+            isVisible={false}
+            onCancel={[Function]}
+            onConfirm={[Function]}
+          />
+          <ManageSenders
+            httpClient={[MockFunction]}
+            isEmailAllowed={true}
+            isVisible={false}
+            onClickCancel={[Function]}
+            onClickSave={[Function]}
+          />
+          <ManageEmailGroups
+            httpClient={[MockFunction]}
+            isEmailAllowed={true}
+            isVisible={false}
+            onClickCancel={[Function]}
+            onClickSave={[Function]}
+          />
+          <DestinationsControls
+            activePage={0}
+            allowList={
+              Array [
+                "chime",
+                "slack",
+                "custom_webhook",
+                "email",
+              ]
+            }
+            onPageClick={[Function]}
+            onSearchChange={[Function]}
+            onTypeChange={[Function]}
+            pageCount={1}
+            search=""
+            type="ALL"
+          >
+            <EuiFlexGroup
+              style={
+                Object {
+                  "padding": "0px 5px",
+                }
+              }
+            >
+              <div
+                className="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
+                style={
+                  Object {
+                    "padding": "0px 5px",
+                  }
+                }
+              >
+                <EuiFlexItem>
+                  <div
+                    className="euiFlexItem"
+                  >
+                    <EuiFieldSearch
+                      compressed={false}
+                      fullWidth={true}
+                      incremental={false}
+                      isClearable={true}
+                      isLoading={false}
+                      onChange={[Function]}
+                      placeholder="Search"
+                      value=""
+                    >
+                      <EuiFormControlLayout
+                        compressed={false}
+                        fullWidth={true}
+                        icon="search"
+                        isLoading={false}
+                      >
+                        <div
+                          className="euiFormControlLayout euiFormControlLayout--fullWidth"
+                        >
+                          <div
+                            className="euiFormControlLayout__childrenWrapper"
+                          >
+                            <EuiValidatableControl>
+                              <input
+                                className="euiFieldSearch euiFieldSearch--fullWidth"
+                                onChange={[Function]}
+                                onKeyUp={[Function]}
+                                placeholder="Search"
+                                type="search"
+                                value=""
+                              />
+                            </EuiValidatableControl>
+                            <EuiFormControlLayoutIcons
+                              icon="search"
+                              isLoading={false}
+                            >
+                              <div
+                                className="euiFormControlLayoutIcons"
+                              >
+                                <EuiFormControlLayoutCustomIcon
+                                  type="search"
+                                >
+                                  <span
+                                    className="euiFormControlLayoutCustomIcon"
+                                  >
+                                    <EuiIcon
+                                      aria-hidden="true"
+                                      className="euiFormControlLayoutCustomIcon__icon"
+                                      type="search"
+                                    >
+                                      <div>
+                                        EuiIconMock
+                                      </div>
+                                    </EuiIcon>
+                                  </span>
+                                </EuiFormControlLayoutCustomIcon>
+                              </div>
+                            </EuiFormControlLayoutIcons>
+                          </div>
+                        </div>
+                      </EuiFormControlLayout>
+                    </EuiFieldSearch>
+                  </div>
+                </EuiFlexItem>
+                <EuiFlexItem
+                  grow={false}
+                >
+                  <div
+                    className="euiFlexItem euiFlexItem--flexGrowZero"
+                  >
+                    <EuiSelect
+                      onChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "text": "All type",
+                            "value": "ALL",
+                          },
+                          Object {
+                            "text": "Amazon Chime",
+                            "value": "chime",
+                          },
+                          Object {
+                            "text": "Slack",
+                            "value": "slack",
+                          },
+                          Object {
+                            "text": "Custom webhook",
+                            "value": "custom_webhook",
+                          },
+                          Object {
+                            "text": "Email",
+                            "value": "email",
+                          },
+                        ]
+                      }
+                      value="ALL"
+                    >
+                      <EuiFormControlLayout
+                        compressed={false}
+                        fullWidth={false}
+                        icon={
+                          Object {
+                            "side": "right",
+                            "type": "arrowDown",
+                          }
+                        }
+                        isLoading={false}
+                      >
+                        <div
+                          className="euiFormControlLayout"
+                        >
+                          <div
+                            className="euiFormControlLayout__childrenWrapper"
+                          >
+                            <EuiValidatableControl>
+                              <select
+                                className="euiSelect"
+                                onChange={[Function]}
+                                onMouseUp={[Function]}
+                                value="ALL"
+                              >
+                                <option
+                                  key="0"
+                                  value="ALL"
+                                >
+                                  All type
+                                </option>
+                                <option
+                                  key="1"
+                                  value="chime"
+                                >
+                                  Amazon Chime
+                                </option>
+                                <option
+                                  key="2"
+                                  value="slack"
+                                >
+                                  Slack
+                                </option>
+                                <option
+                                  key="3"
+                                  value="custom_webhook"
+                                >
+                                  Custom webhook
+                                </option>
+                                <option
+                                  key="4"
+                                  value="email"
+                                >
+                                  Email
+                                </option>
+                              </select>
+                            </EuiValidatableControl>
+                            <EuiFormControlLayoutIcons
+                              icon={
+                                Object {
+                                  "side": "right",
+                                  "type": "arrowDown",
+                                }
+                              }
+                              isLoading={false}
+                            >
+                              <div
+                                className="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+                              >
+                                <EuiFormControlLayoutCustomIcon
+                                  type="arrowDown"
+                                >
+                                  <span
+                                    className="euiFormControlLayoutCustomIcon"
+                                  >
+                                    <EuiIcon
+                                      aria-hidden="true"
+                                      className="euiFormControlLayoutCustomIcon__icon"
+                                      type="arrowDown"
+                                    >
+                                      <div>
+                                        EuiIconMock
+                                      </div>
+                                    </EuiIcon>
+                                  </span>
+                                </EuiFormControlLayoutCustomIcon>
+                              </div>
+                            </EuiFormControlLayoutIcons>
+                          </div>
+                        </div>
+                      </EuiFormControlLayout>
+                    </EuiSelect>
+                  </div>
+                </EuiFlexItem>
+                <EuiFlexItem
+                  grow={false}
+                  style={
+                    Object {
+                      "justifyContent": "center",
+                    }
+                  }
+                >
+                  <div
+                    className="euiFlexItem euiFlexItem--flexGrowZero"
+                    style={
+                      Object {
+                        "justifyContent": "center",
+                      }
+                    }
+                  >
+                    <EuiPagination
+                      activePage={0}
+                      onPageClick={[Function]}
+                      pageCount={1}
+                    >
+                      <nav
+                        className="euiPagination"
+                      >
+                        <EuiI18n
+                          default="Previous page, {page}"
+                          token="euiPagination.previousPage"
+                          values={
+                            Object {
+                              "page": 0,
+                            }
+                          }
+                        >
+                          <EuiI18n
+                            default="Previous page"
+                            token="euiPagination.disabledPreviousPage"
+                          >
+                            <EuiButtonIcon
+                              aria-label="Previous page"
+                              color="text"
+                              data-test-subj="pagination-button-previous"
+                              disabled={true}
+                              iconType="arrowLeft"
+                              onClick={[Function]}
+                            >
+                              <button
+                                aria-label="Previous page"
+                                className="euiButtonIcon euiButtonIcon--text"
+                                data-test-subj="pagination-button-previous"
+                                disabled={true}
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <EuiIcon
+                                  aria-hidden="true"
+                                  className="euiButtonIcon__icon"
+                                  size="m"
+                                  type="arrowLeft"
+                                >
+                                  <div>
+                                    EuiIconMock
+                                  </div>
+                                </EuiIcon>
+                              </button>
+                            </EuiButtonIcon>
+                          </EuiI18n>
+                        </EuiI18n>
+                        <ul
+                          className="euiPagination__list"
+                        >
+                          <PaginationButton
+                            key="0"
+                            pageIndex={0}
+                          >
+                            <li
+                              className="euiPagination__item"
+                            >
+                              <EuiPaginationButton
+                                hideOnMobile={true}
+                                isActive={true}
+                                onClick={[Function]}
+                                pageIndex={0}
+                                totalPages={1}
+                              >
+                                <EuiI18n
+                                  default="Page {page} of {totalPages}"
+                                  token="euiPaginationButton.longPageString"
+                                  values={
+                                    Object {
+                                      "page": 1,
+                                      "totalPages": 1,
+                                    }
+                                  }
+                                >
+                                  <EuiI18n
+                                    default="Page {page}"
+                                    token="euiPaginationButton.shortPageString"
+                                    values={
+                                      Object {
+                                        "page": 1,
+                                      }
+                                    }
+                                  >
+                                    <EuiButtonEmpty
+                                      aria-current={true}
+                                      aria-label="Page 1 of 1"
+                                      className="euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+                                      color="text"
+                                      data-test-subj="pagination-button-0"
+                                      isDisabled={true}
+                                      onClick={[Function]}
+                                      size="xs"
+                                    >
+                                      <button
+                                        aria-current={true}
+                                        aria-label="Page 1 of 1"
+                                        className="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+                                        data-test-subj="pagination-button-0"
+                                        disabled={true}
+                                        onClick={[Function]}
+                                        type="button"
+                                      >
+                                        <span
+                                          className="euiButtonEmpty__content"
+                                        >
+                                          <span
+                                            className="euiButtonEmpty__text"
+                                          >
+                                            1
+                                          </span>
+                                        </span>
+                                      </button>
+                                    </EuiButtonEmpty>
+                                  </EuiI18n>
+                                </EuiI18n>
+                              </EuiPaginationButton>
+                            </li>
+                          </PaginationButton>
+                        </ul>
+                        <EuiI18n
+                          default="Next page, {page}"
+                          token="euiPagination.nextPage"
+                          values={
+                            Object {
+                              "page": 2,
+                            }
+                          }
+                        >
+                          <EuiI18n
+                            default="Next page"
+                            token="euiPagination.disabledNextPage"
+                          >
+                            <EuiButtonIcon
+                              aria-label="Next page"
+                              color="text"
+                              data-test-subj="pagination-button-next"
+                              disabled={true}
+                              iconType="arrowRight"
+                              onClick={[Function]}
+                            >
+                              <button
+                                aria-label="Next page"
+                                className="euiButtonIcon euiButtonIcon--text"
+                                data-test-subj="pagination-button-next"
+                                disabled={true}
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <EuiIcon
+                                  aria-hidden="true"
+                                  className="euiButtonIcon__icon"
+                                  size="m"
+                                  type="arrowRight"
+                                >
+                                  <div>
+                                    EuiIconMock
+                                  </div>
+                                </EuiIcon>
+                              </button>
+                            </EuiButtonIcon>
+                          </EuiI18n>
+                        </EuiI18n>
+                      </nav>
+                    </EuiPagination>
+                  </div>
+                </EuiFlexItem>
+              </div>
+            </EuiFlexGroup>
+          </DestinationsControls>
+          <EuiHorizontalRule
+            margin="xs"
+          >
+            <hr
+              className="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginXSmall"
+            />
+          </EuiHorizontalRule>
+          <EuiBasicTable
+            columns={
+              Array [
+                Object {
+                  "field": "name",
+                  "name": "Destination name",
+                  "sortable": true,
+                  "textOnly": true,
+                  "truncateText": true,
+                  "width": "100px",
+                },
+                Object {
+                  "field": "type",
+                  "name": "Destination type",
+                  "render": [Function],
+                  "sortable": true,
+                  "textOnly": true,
+                  "truncateText": true,
+                  "width": "100px",
+                },
+                Object {
+                  "actions": Array [
+                    Object {
+                      "description": "Edit this destination.",
+                      "enabled": [Function],
+                      "name": "Edit",
+                      "onClick": [Function],
+                    },
+                    Object {
+                      "description": "Delete this destination.",
+                      "name": "Delete",
+                      "onClick": [Function],
+                    },
+                  ],
+                  "name": "Actions",
+                  "width": "35px",
+                },
+              ]
+            }
+            hasActions={true}
+            isSelectable={true}
+            items={Array []}
+            noItemsMessage={
+              <EmptyDestinations
+                isFilterApplied={false}
+                onResetFilters={[Function]}
+              />
+            }
+            onChange={[Function]}
+            pagination={
+              Object {
+                "pageIndex": 0,
+                "pageSize": 20,
+                "pageSizeOptions": Array [
+                  5,
+                  10,
+                  20,
+                  50,
+                ],
+                "totalItemCount": 0,
+              }
+            }
+            responsive={true}
+            sorting={
+              Object {
+                "sort": Object {
+                  "direction": "desc",
+                  "field": "name",
+                },
+              }
+            }
+            tableLayout="fixed"
+          >
+            <div
+              className="euiBasicTable"
+            >
+              <div>
+                <EuiTableHeaderMobile>
+                  <div
+                    className="euiTableHeaderMobile"
+                  >
+                    <EuiFlexGroup
+                      alignItems="baseline"
+                      justifyContent="spaceBetween"
+                      responsive={false}
+                    >
+                      <div
+                        className="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsBaseline euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow"
+                      >
+                        <EuiFlexItem
+                          grow={false}
+                        >
+                          <div
+                            className="euiFlexItem euiFlexItem--flexGrowZero"
+                          />
+                        </EuiFlexItem>
+                        <EuiFlexItem
+                          grow={false}
+                        >
+                          <div
+                            className="euiFlexItem euiFlexItem--flexGrowZero"
+                          >
+                            <EuiTableSortMobile
+                              items={
+                                Array [
+                                  Object {
+                                    "isSortAscending": false,
+                                    "isSorted": true,
+                                    "key": "_data_s_name_0",
+                                    "name": "Destination name",
+                                    "onSort": [Function],
+                                  },
+                                  Object {
+                                    "isSortAscending": undefined,
+                                    "isSorted": false,
+                                    "key": "_data_s_type_1",
+                                    "name": "Destination type",
+                                    "onSort": [Function],
+                                  },
+                                ]
+                              }
+                            >
+                              <div
+                                className="euiTableSortMobile"
+                              >
+                                <EuiPopover
+                                  anchorPosition="downRight"
+                                  button={
+                                    <EuiButtonEmpty
+                                      flush="right"
+                                      iconSide="right"
+                                      iconType="arrowDown"
+                                      onClick={[Function]}
+                                      size="xs"
+                                    >
+                                      <EuiI18n
+                                        default="Sorting"
+                                        token="euiTableSortMobile.sorting"
+                                      />
+                                    </EuiButtonEmpty>
+                                  }
+                                  closePopover={[Function]}
+                                  display="inlineBlock"
+                                  hasArrow={true}
+                                  isOpen={false}
+                                  ownFocus={true}
+                                  panelPaddingSize="none"
+                                >
+                                  <EuiOutsideClickDetector
+                                    isDisabled={true}
+                                    onOutsideClick={[Function]}
+                                  >
+                                    <div
+                                      className="euiPopover euiPopover--anchorDownRight"
+                                      onKeyDown={[Function]}
+                                      onMouseDown={[Function]}
+                                      onMouseUp={[Function]}
+                                      onTouchEnd={[Function]}
+                                      onTouchStart={[Function]}
+                                    >
+                                      <div
+                                        className="euiPopover__anchor"
+                                      >
+                                        <EuiButtonEmpty
+                                          flush="right"
+                                          iconSide="right"
+                                          iconType="arrowDown"
+                                          onClick={[Function]}
+                                          size="xs"
+                                        >
+                                          <button
+                                            className="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--xSmall euiButtonEmpty--iconRight euiButtonEmpty--flushRight"
+                                            onClick={[Function]}
+                                            type="button"
+                                          >
+                                            <span
+                                              className="euiButtonEmpty__content"
+                                            >
+                                              <EuiIcon
+                                                aria-hidden="true"
+                                                className="euiButtonEmpty__icon"
+                                                size="m"
+                                                type="arrowDown"
+                                              >
+                                                <div>
+                                                  EuiIconMock
+                                                </div>
+                                              </EuiIcon>
+                                              <span
+                                                className="euiButtonEmpty__text"
+                                              >
+                                                <EuiI18n
+                                                  default="Sorting"
+                                                  token="euiTableSortMobile.sorting"
+                                                >
+                                                  Sorting
+                                                </EuiI18n>
+                                              </span>
+                                            </span>
+                                          </button>
+                                        </EuiButtonEmpty>
+                                      </div>
+                                    </div>
+                                  </EuiOutsideClickDetector>
+                                </EuiPopover>
+                              </div>
+                            </EuiTableSortMobile>
+                          </div>
+                        </EuiFlexItem>
+                      </div>
+                    </EuiFlexGroup>
+                  </div>
+                </EuiTableHeaderMobile>
+                <EuiTable
+                  id="generated-id"
+                  responsive={true}
+                  tableLayout="fixed"
+                >
+                  <table
+                    className="euiTable euiTable--responsive"
+                    id="generated-id"
+                    tabIndex={-1}
+                  >
+                    <EuiScreenReaderOnly>
+                      <caption
+                        className="euiScreenReaderOnly euiTableCaption"
+                      >
+                        <EuiDelayRender
+                          delay={500}
+                        />
+                      </caption>
+                    </EuiScreenReaderOnly>
+                    <EuiTableHeader>
+                      <thead>
+                        <tr>
+                          <EuiTableHeaderCell
+                            align="left"
+                            data-test-subj="tableHeaderCell_name_0"
+                            isSortAscending={false}
+                            isSorted={true}
+                            key="_data_h_name_0"
+                            onSort={[Function]}
+                            width="100px"
+                          >
+                            <th
+                              aria-live="polite"
+                              aria-sort="descending"
+                              className="euiTableHeaderCell"
+                              data-test-subj="tableHeaderCell_name_0"
+                              role="columnheader"
+                              scope="col"
+                              style={
+                                Object {
+                                  "width": "100px",
+                                }
+                              }
+                            >
+                              <button
+                                className="euiTableHeaderButton euiTableHeaderButton-isSorted"
+                                data-test-subj="tableHeaderSortButton"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <span
+                                  className="euiTableCellContent"
+                                >
+                                  <EuiInnerText>
+                                    <EuiI18n
+                                      default="{innerText}; Sorted in {ariaSortValue} order"
+                                      token="euiTableHeaderCell.titleTextWithSort"
+                                      values={
+                                        Object {
+                                          "ariaSortValue": "descending",
+                                          "innerText": "Destination name",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="euiTableCellContent__text"
+                                        title="Destination name; Sorted in descending order"
+                                      >
+                                        Destination name
+                                      </span>
+                                    </EuiI18n>
+                                  </EuiInnerText>
+                                  <EuiI18n
+                                    default="Sorted in {ariaSortValue} order"
+                                    token="euiTableHeaderCell.sortedAriaLabel"
+                                    values={
+                                      Object {
+                                        "ariaSortValue": "descending",
+                                      }
+                                    }
+                                  >
+                                    <EuiIcon
+                                      aria-label="Sorted in descending order"
+                                      className="euiTableSortIcon"
+                                      size="m"
+                                      type="sortDown"
+                                    >
+                                      <div>
+                                        EuiIconMock
+                                      </div>
+                                    </EuiIcon>
+                                  </EuiI18n>
+                                  <EuiScreenReaderOnly>
+                                    <span
+                                      className="euiScreenReaderOnly"
+                                    >
+                                      <EuiI18n
+                                        default="Click to sort in ascending order"
+                                        token="euiTableHeaderCell.clickForAscending"
+                                      >
+                                        Click to sort in ascending order
+                                      </EuiI18n>
+                                    </span>
+                                  </EuiScreenReaderOnly>
+                                </span>
+                              </button>
+                            </th>
+                          </EuiTableHeaderCell>
+                          <EuiTableHeaderCell
+                            align="left"
+                            data-test-subj="tableHeaderCell_type_1"
+                            isSorted={false}
+                            key="_data_h_type_1"
+                            onSort={[Function]}
+                            width="100px"
+                          >
+                            <th
+                              aria-live="polite"
+                              aria-sort="none"
+                              className="euiTableHeaderCell"
+                              data-test-subj="tableHeaderCell_type_1"
+                              role="columnheader"
+                              scope="col"
+                              style={
+                                Object {
+                                  "width": "100px",
+                                }
+                              }
+                            >
+                              <button
+                                className="euiTableHeaderButton"
+                                data-test-subj="tableHeaderSortButton"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <span
+                                  className="euiTableCellContent"
+                                >
+                                  <EuiInnerText>
+                                    <EuiI18n
+                                      default="{innerText}; Sorted in {ariaSortValue} order"
+                                      token="euiTableHeaderCell.titleTextWithSort"
+                                      values={
+                                        Object {
+                                          "ariaSortValue": "none",
+                                          "innerText": "Destination type",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="euiTableCellContent__text"
+                                        title="Destination type"
+                                      >
+                                        Destination type
+                                      </span>
+                                    </EuiI18n>
+                                  </EuiInnerText>
+                                  <EuiScreenReaderOnly>
+                                    <span
+                                      className="euiScreenReaderOnly"
+                                    >
+                                      <EuiI18n
+                                        default="Click to sort in ascending order"
+                                        token="euiTableHeaderCell.clickForAscending"
+                                      >
+                                        Click to sort in ascending order
+                                      </EuiI18n>
+                                    </span>
+                                  </EuiScreenReaderOnly>
+                                </span>
+                              </button>
+                            </th>
+                          </EuiTableHeaderCell>
+                          <EuiTableHeaderCell
+                            align="right"
+                            key="_actions_h_2"
+                            width="35px"
+                          >
+                            <th
+                              className="euiTableHeaderCell"
+                              role="columnheader"
+                              scope="col"
+                              style={
+                                Object {
+                                  "width": "35px",
+                                }
+                              }
+                            >
+                              <div
+                                className="euiTableCellContent euiTableCellContent--alignRight"
+                              >
+                                <EuiInnerText>
+                                  <span
+                                    className="euiTableCellContent__text"
+                                    title="Actions"
+                                  >
+                                    Actions
+                                  </span>
+                                </EuiInnerText>
+                              </div>
+                            </th>
+                          </EuiTableHeaderCell>
+                        </tr>
+                      </thead>
+                    </EuiTableHeader>
+                    <EuiTableBody>
+                      <tbody>
+                        <EuiTableRow>
+                          <tr
+                            className="euiTableRow"
+                          >
+                            <EuiTableRowCell
+                              align="center"
+                              colSpan={3}
+                              isMobileFullWidth={true}
+                            >
+                              <td
+                                className="euiTableRowCell euiTableRowCell--isMobileFullWidth"
+                                colSpan={3}
+                                style={
+                                  Object {
+                                    "width": undefined,
+                                  }
+                                }
+                              >
+                                <div
+                                  className="euiTableCellContent euiTableCellContent--alignCenter"
+                                >
+                                  <span
+                                    className="euiTableCellContent__text"
+                                  >
+                                    <EmptyDestinations
+                                      isFilterApplied={false}
+                                      onResetFilters={[Function]}
+                                    >
+                                      <EuiEmptyPrompt
+                                        actions={
+                                          <EuiButton
+                                            fill={true}
+                                            href="opendistro-alerting#/create-destination"
+                                          >
+                                            Add destination
+                                          </EuiButton>
+                                        }
+                                        body={
+                                          <EuiText>
+                                            <p>
+                                              There are no existing destinations. Add a destination.
+                                            </p>
+                                          </EuiText>
+                                        }
+                                        style={
+                                          Object {
+                                            "maxWidth": "45em",
+                                          }
+                                        }
+                                      >
+                                        <div
+                                          className="euiEmptyPrompt"
+                                          style={
+                                            Object {
+                                              "maxWidth": "45em",
+                                            }
+                                          }
+                                        >
+                                          <EuiTextColor
+                                            color="subdued"
+                                          >
+                                            <span
+                                              className="euiTextColor euiTextColor--subdued"
+                                            >
+                                              <EuiText>
+                                                <div
+                                                  className="euiText euiText--medium"
+                                                >
+                                                  <EuiText>
+                                                    <div
+                                                      className="euiText euiText--medium"
+                                                    >
+                                                      <p>
+                                                        There are no existing destinations. Add a destination.
+                                                      </p>
+                                                    </div>
+                                                  </EuiText>
+                                                </div>
+                                              </EuiText>
+                                            </span>
+                                          </EuiTextColor>
+                                          <EuiSpacer
+                                            size="l"
+                                          >
+                                            <div
+                                              className="euiSpacer euiSpacer--l"
+                                            />
+                                          </EuiSpacer>
+                                          <EuiSpacer
+                                            size="s"
+                                          >
+                                            <div
+                                              className="euiSpacer euiSpacer--s"
+                                            />
+                                          </EuiSpacer>
+                                          <EuiButton
+                                            fill={true}
+                                            href="opendistro-alerting#/create-destination"
+                                          >
+                                            <a
+                                              className="euiButton euiButton--primary euiButton--fill"
+                                              href="opendistro-alerting#/create-destination"
+                                              rel="noreferrer"
+                                            >
+                                              <span
+                                                className="euiButton__content"
+                                              >
+                                                <span
+                                                  className="euiButton__text"
+                                                >
+                                                  Add destination
+                                                </span>
+                                              </span>
+                                            </a>
+                                          </EuiButton>
+                                        </div>
+                                      </EuiEmptyPrompt>
+                                    </EmptyDestinations>
+                                  </span>
+                                </div>
+                              </td>
+                            </EuiTableRowCell>
+                          </tr>
+                        </EuiTableRow>
+                      </tbody>
+                    </EuiTableBody>
+                  </table>
+                </EuiTable>
+              </div>
+            </div>
+          </EuiBasicTable>
+        </div>
+      </div>
+    </EuiPanel>
+  </ContentPanel>
+</DestinationsList>
+`;
+
+exports[`DestinationsList renders when email is disallowed 1`] = `
+<DestinationsList
+  history={
+    Object {
+      "action": "REPLACE",
+      "block": [MockFunction],
+      "createHref": [MockFunction],
+      "go": [MockFunction],
+      "goBack": [MockFunction],
+      "goForward": [MockFunction],
+      "length": 0,
+      "listen": [MockFunction],
+      "location": Object {
+        "hash": "",
+        "pathname": "",
+        "search": "",
+        "state": undefined,
+      },
+      "push": [MockFunction],
+      "replace": [MockFunction] {
+        "calls": Array [
+          Array [
+            Object {
+              "hash": "",
+              "search": "from=0&search=&size=20&sortDirection=desc&sortField=name&type=ALL",
+              "state": undefined,
+            },
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+    }
+  }
+  httpClient={[MockFunction]}
+  location={
+    Object {
+      "hash": "",
+      "search": "",
+      "state": undefined,
+    }
+  }
+>
+  <ContentPanel
+    actions={
+      <DestinationsActions
+        isEmailAllowed={false}
+        onClickManageEmailGroups={[Function]}
+        onClickManageSenders={[Function]}
+      />
+    }
+    bodyStyles={
+      Object {
+        "padding": "initial",
+      }
+    }
+    title="Destinations"
+  >
+    <EuiPanel
+      style={
+        Object {
+          "paddingLeft": "0px",
+          "paddingRight": "0px",
+        }
+      }
+    >
+      <div
+        className="euiPanel euiPanel--paddingMedium"
+        style={
+          Object {
+            "paddingLeft": "0px",
+            "paddingRight": "0px",
+          }
+        }
+      >
+        <EuiFlexGroup
+          alignItems="center"
+          justifyContent="spaceBetween"
+          style={
+            Object {
+              "padding": "0px 10px",
+            }
+          }
+        >
+          <div
+            className="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
+            style={
+              Object {
+                "padding": "0px 10px",
+              }
+            }
+          >
+            <EuiFlexItem>
+              <div
+                className="euiFlexItem"
+              >
+                <EuiTitle
+                  size="l"
+                >
+                  <h3
+                    className="euiTitle euiTitle--large"
+                  >
+                    Destinations
+                  </h3>
+                </EuiTitle>
+              </div>
+            </EuiFlexItem>
+            <EuiFlexItem
+              grow={false}
+            >
+              <div
+                className="euiFlexItem euiFlexItem--flexGrowZero"
+              >
+                <EuiFlexGroup
+                  alignItems="center"
+                  justifyContent="spaceBetween"
+                >
+                  <div
+                    className="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow euiFlexGroup--responsive"
+                  >
+                    <EuiFlexItem>
+                      <div
+                        className="euiFlexItem"
+                      >
+                        <DestinationsActions
+                          isEmailAllowed={false}
+                          onClickManageEmailGroups={[Function]}
+                          onClickManageSenders={[Function]}
+                        >
                           <EuiFlexGroup
                             alignItems="center"
                             justifyContent="spaceBetween"
@@ -189,8 +1469,29 @@ exports[`DestinationsList renders 1`] = `
             onCancel={[Function]}
             onConfirm={[Function]}
           />
+          <ManageSenders
+            httpClient={[MockFunction]}
+            isEmailAllowed={false}
+            isVisible={false}
+            onClickCancel={[Function]}
+            onClickSave={[Function]}
+          />
+          <ManageEmailGroups
+            httpClient={[MockFunction]}
+            isEmailAllowed={false}
+            isVisible={false}
+            onClickCancel={[Function]}
+            onClickSave={[Function]}
+          />
           <DestinationsControls
             activePage={0}
+            allowList={
+              Array [
+                "chime",
+                "slack",
+                "custom_webhook",
+              ]
+            }
             onPageClick={[Function]}
             onSearchChange={[Function]}
             onTypeChange={[Function]}
@@ -419,123 +1720,168 @@ exports[`DestinationsList renders 1`] = `
                       onPageClick={[Function]}
                       pageCount={1}
                     >
-                      <div
+                      <nav
                         className="euiPagination"
-                        role="group"
                       >
                         <EuiI18n
-                          default="Previous page"
+                          default="Previous page, {page}"
                           token="euiPagination.previousPage"
-                        >
-                          <EuiButtonIcon
-                            aria-label="Previous page"
-                            color="text"
-                            data-test-subj="pagination-button-previous"
-                            disabled={true}
-                            iconType="arrowLeft"
-                            onClick={[Function]}
-                          >
-                            <button
-                              aria-label="Previous page"
-                              className="euiButtonIcon euiButtonIcon--text"
-                              data-test-subj="pagination-button-previous"
-                              disabled={true}
-                              onClick={[Function]}
-                              type="button"
-                            >
-                              <EuiIcon
-                                aria-hidden="true"
-                                className="euiButtonIcon__icon"
-                                size="m"
-                                type="arrowLeft"
-                              >
-                                <div>
-                                  EuiIconMock
-                                </div>
-                              </EuiIcon>
-                            </button>
-                          </EuiButtonIcon>
-                        </EuiI18n>
-                        <EuiI18n
-                          default="Page {page} of {total}"
-                          key="0"
-                          token="euiPagination.pageOfTotal"
                           values={
                             Object {
-                              "page": 1,
-                              "total": 1,
+                              "page": 0,
                             }
                           }
                         >
-                          <EuiPaginationButton
-                            aria-label="Page 1 of 1"
-                            data-test-subj="pagination-button-0"
-                            hideOnMobile={true}
-                            isActive={true}
-                            onClick={[Function]}
+                          <EuiI18n
+                            default="Previous page"
+                            token="euiPagination.disabledPreviousPage"
                           >
-                            <EuiButtonEmpty
-                              aria-label="Page 1 of 1"
-                              className="euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+                            <EuiButtonIcon
+                              aria-label="Previous page"
                               color="text"
-                              data-test-subj="pagination-button-0"
+                              data-test-subj="pagination-button-previous"
+                              disabled={true}
+                              iconType="arrowLeft"
                               onClick={[Function]}
-                              size="xs"
                             >
                               <button
-                                aria-label="Page 1 of 1"
-                                className="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
-                                data-test-subj="pagination-button-0"
+                                aria-label="Previous page"
+                                className="euiButtonIcon euiButtonIcon--text"
+                                data-test-subj="pagination-button-previous"
+                                disabled={true}
                                 onClick={[Function]}
                                 type="button"
                               >
-                                <span
-                                  className="euiButtonEmpty__content"
+                                <EuiIcon
+                                  aria-hidden="true"
+                                  className="euiButtonIcon__icon"
+                                  size="m"
+                                  type="arrowLeft"
                                 >
-                                  <span
-                                    className="euiButtonEmpty__text"
-                                  >
-                                    1
-                                  </span>
-                                </span>
+                                  <div>
+                                    EuiIconMock
+                                  </div>
+                                </EuiIcon>
                               </button>
-                            </EuiButtonEmpty>
-                          </EuiPaginationButton>
+                            </EuiButtonIcon>
+                          </EuiI18n>
                         </EuiI18n>
-                        <EuiI18n
-                          default="Next page"
-                          token="euiPagination.nextPage"
+                        <ul
+                          className="euiPagination__list"
                         >
-                          <EuiButtonIcon
-                            aria-label="Next page"
-                            color="text"
-                            data-test-subj="pagination-button-next"
-                            disabled={true}
-                            iconType="arrowRight"
-                            onClick={[Function]}
+                          <PaginationButton
+                            key="0"
+                            pageIndex={0}
                           >
-                            <button
+                            <li
+                              className="euiPagination__item"
+                            >
+                              <EuiPaginationButton
+                                hideOnMobile={true}
+                                isActive={true}
+                                onClick={[Function]}
+                                pageIndex={0}
+                                totalPages={1}
+                              >
+                                <EuiI18n
+                                  default="Page {page} of {totalPages}"
+                                  token="euiPaginationButton.longPageString"
+                                  values={
+                                    Object {
+                                      "page": 1,
+                                      "totalPages": 1,
+                                    }
+                                  }
+                                >
+                                  <EuiI18n
+                                    default="Page {page}"
+                                    token="euiPaginationButton.shortPageString"
+                                    values={
+                                      Object {
+                                        "page": 1,
+                                      }
+                                    }
+                                  >
+                                    <EuiButtonEmpty
+                                      aria-current={true}
+                                      aria-label="Page 1 of 1"
+                                      className="euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+                                      color="text"
+                                      data-test-subj="pagination-button-0"
+                                      isDisabled={true}
+                                      onClick={[Function]}
+                                      size="xs"
+                                    >
+                                      <button
+                                        aria-current={true}
+                                        aria-label="Page 1 of 1"
+                                        className="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+                                        data-test-subj="pagination-button-0"
+                                        disabled={true}
+                                        onClick={[Function]}
+                                        type="button"
+                                      >
+                                        <span
+                                          className="euiButtonEmpty__content"
+                                        >
+                                          <span
+                                            className="euiButtonEmpty__text"
+                                          >
+                                            1
+                                          </span>
+                                        </span>
+                                      </button>
+                                    </EuiButtonEmpty>
+                                  </EuiI18n>
+                                </EuiI18n>
+                              </EuiPaginationButton>
+                            </li>
+                          </PaginationButton>
+                        </ul>
+                        <EuiI18n
+                          default="Next page, {page}"
+                          token="euiPagination.nextPage"
+                          values={
+                            Object {
+                              "page": 2,
+                            }
+                          }
+                        >
+                          <EuiI18n
+                            default="Next page"
+                            token="euiPagination.disabledNextPage"
+                          >
+                            <EuiButtonIcon
                               aria-label="Next page"
-                              className="euiButtonIcon euiButtonIcon--text"
+                              color="text"
                               data-test-subj="pagination-button-next"
                               disabled={true}
+                              iconType="arrowRight"
                               onClick={[Function]}
-                              type="button"
                             >
-                              <EuiIcon
-                                aria-hidden="true"
-                                className="euiButtonIcon__icon"
-                                size="m"
-                                type="arrowRight"
+                              <button
+                                aria-label="Next page"
+                                className="euiButtonIcon euiButtonIcon--text"
+                                data-test-subj="pagination-button-next"
+                                disabled={true}
+                                onClick={[Function]}
+                                type="button"
                               >
-                                <div>
-                                  EuiIconMock
-                                </div>
-                              </EuiIcon>
-                            </button>
-                          </EuiButtonIcon>
+                                <EuiIcon
+                                  aria-hidden="true"
+                                  className="euiButtonIcon__icon"
+                                  size="m"
+                                  type="arrowRight"
+                                >
+                                  <div>
+                                    EuiIconMock
+                                  </div>
+                                </EuiIcon>
+                              </button>
+                            </EuiButtonIcon>
+                          </EuiI18n>
                         </EuiI18n>
-                      </div>
+                      </nav>
                     </EuiPagination>
                   </div>
                 </EuiFlexItem>
@@ -573,6 +1919,7 @@ exports[`DestinationsList renders 1`] = `
                   "actions": Array [
                     Object {
                       "description": "Edit this destination.",
+                      "enabled": [Function],
                       "name": "Edit",
                       "onClick": [Function],
                     },
@@ -590,7 +1937,12 @@ exports[`DestinationsList renders 1`] = `
             hasActions={true}
             isSelectable={true}
             items={Array []}
-            noItemsMessage="Loading destinations..."
+            noItemsMessage={
+              <EmptyDestinations
+                isFilterApplied={false}
+                onResetFilters={[Function]}
+              />
+            }
             onChange={[Function]}
             pagination={
               Object {
@@ -757,11 +2109,14 @@ exports[`DestinationsList renders 1`] = `
                   </div>
                 </EuiTableHeaderMobile>
                 <EuiTable
+                  id="generated-id"
                   responsive={true}
                   tableLayout="fixed"
                 >
                   <table
                     className="euiTable euiTable--responsive"
+                    id="generated-id"
+                    tabIndex={-1}
                   >
                     <EuiScreenReaderOnly>
                       <caption
@@ -984,7 +2339,100 @@ exports[`DestinationsList renders 1`] = `
                                   <span
                                     className="euiTableCellContent__text"
                                   >
-                                    Loading destinations...
+                                    <EmptyDestinations
+                                      isFilterApplied={false}
+                                      onResetFilters={[Function]}
+                                    >
+                                      <EuiEmptyPrompt
+                                        actions={
+                                          <EuiButton
+                                            fill={true}
+                                            href="opendistro-alerting#/create-destination"
+                                          >
+                                            Add destination
+                                          </EuiButton>
+                                        }
+                                        body={
+                                          <EuiText>
+                                            <p>
+                                              There are no existing destinations. Add a destination.
+                                            </p>
+                                          </EuiText>
+                                        }
+                                        style={
+                                          Object {
+                                            "maxWidth": "45em",
+                                          }
+                                        }
+                                      >
+                                        <div
+                                          className="euiEmptyPrompt"
+                                          style={
+                                            Object {
+                                              "maxWidth": "45em",
+                                            }
+                                          }
+                                        >
+                                          <EuiTextColor
+                                            color="subdued"
+                                          >
+                                            <span
+                                              className="euiTextColor euiTextColor--subdued"
+                                            >
+                                              <EuiText>
+                                                <div
+                                                  className="euiText euiText--medium"
+                                                >
+                                                  <EuiText>
+                                                    <div
+                                                      className="euiText euiText--medium"
+                                                    >
+                                                      <p>
+                                                        There are no existing destinations. Add a destination.
+                                                      </p>
+                                                    </div>
+                                                  </EuiText>
+                                                </div>
+                                              </EuiText>
+                                            </span>
+                                          </EuiTextColor>
+                                          <EuiSpacer
+                                            size="l"
+                                          >
+                                            <div
+                                              className="euiSpacer euiSpacer--l"
+                                            />
+                                          </EuiSpacer>
+                                          <EuiSpacer
+                                            size="s"
+                                          >
+                                            <div
+                                              className="euiSpacer euiSpacer--s"
+                                            />
+                                          </EuiSpacer>
+                                          <EuiButton
+                                            fill={true}
+                                            href="opendistro-alerting#/create-destination"
+                                          >
+                                            <a
+                                              className="euiButton euiButton--primary euiButton--fill"
+                                              href="opendistro-alerting#/create-destination"
+                                              rel="noreferrer"
+                                            >
+                                              <span
+                                                className="euiButton__content"
+                                              >
+                                                <span
+                                                  className="euiButton__text"
+                                                >
+                                                  Add destination
+                                                </span>
+                                              </span>
+                                            </a>
+                                          </EuiButton>
+                                        </div>
+                                      </EuiEmptyPrompt>
+                                    </EmptyDestinations>
                                   </span>
                                 </div>
                               </td>

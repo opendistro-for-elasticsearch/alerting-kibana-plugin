@@ -75,7 +75,7 @@ export default class AlertService {
     params.alertState = alertState;
     params.searchString = search;
     if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
-    if (monitorIds.length > 0) params.monitorId = monitorId[0];
+    if (monitorIds.length > 0) params.monitorId = monitorIds[0];
 
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
     try {
