@@ -33,6 +33,7 @@ describe('ManageSenders', () => {
     const wrapper = mount(
       <ManageSenders
         httpClient={httpClientMock}
+        isEmailAllowed={true}
         isVisible={false}
         onClickCancel={onClickCancel}
         onClickSave={onClickSave}
@@ -45,6 +46,20 @@ describe('ManageSenders', () => {
     const wrapper = mount(
       <ManageSenders
         httpClient={httpClientMock}
+        isEmailAllowed={true}
+        isVisible={true}
+        onClickCancel={onClickCancel}
+        onClickSave={onClickSave}
+      />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  test('renders when email is disallowed', () => {
+    const wrapper = mount(
+      <ManageSenders
+        httpClient={httpClientMock}
+        isEmailAllowed={false}
         isVisible={true}
         onClickCancel={onClickCancel}
         onClickSave={onClickSave}
@@ -71,6 +86,7 @@ describe('ManageSenders', () => {
     const wrapper = mount(
       <ManageSenders
         httpClient={httpClientMock}
+        isEmailAllowed={true}
         isVisible={true}
         onClickCancel={onClickCancel}
         onClickSave={onClickSave}
@@ -92,6 +108,7 @@ describe('ManageSenders', () => {
     const wrapper = mount(
       <ManageSenders
         httpClient={httpClientMock}
+        isEmailAllowed={true}
         isVisible={true}
         onClickCancel={onClickCancel}
         onClickSave={onClickSave}
@@ -112,6 +129,7 @@ describe('ManageSenders', () => {
     const wrapper = mount(
       <ManageSenders
         httpClient={httpClientMock}
+        isEmailAllowed={true}
         isVisible={true}
         onClickCancel={onClickCancel}
         onClickSave={onClickSave}

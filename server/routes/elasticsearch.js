@@ -13,7 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-export default function(server, services) {
+export default function (server, services) {
   const { elasticsearchService } = services;
 
   server.route({
@@ -39,9 +39,16 @@ export default function(server, services) {
     method: 'POST',
     handler: elasticsearchService.getMappings,
   });
+
   server.route({
     path: '/api/alerting/_plugins',
     method: 'GET',
     handler: elasticsearchService.getPlugins,
+  });
+
+  server.route({
+    path: '/api/alerting/_settings',
+    method: 'GET',
+    handler: elasticsearchService.getSettings,
   });
 }

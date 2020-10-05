@@ -19,7 +19,7 @@ import DestinationsActions from './DestinationsActions';
 
 describe('<DestinationsActions />', () => {
   test('should render DestinationsActions', () => {
-    const wrapper = render(<DestinationsActions />);
+    const wrapper = render(<DestinationsActions isEmailAllowed={true} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

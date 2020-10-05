@@ -64,13 +64,20 @@ export default class ManageSenders extends React.Component {
   }
 
   componentDidMount() {
-    this.loadInitialValues();
+    const { isEmailAllowed } = this.props;
+    // Don't load initial values if Email is disallowed since the API will be blocked
+    if (isEmailAllowed) {
+      this.loadInitialValues();
+    }
   }
 
-  // Reload initial values when modal is no longer visible so changes
-  // are reflected the next time it is opened
+  // Reload initial values when modal is no longer visible
+  // or when email availability is updated
   componentDidUpdate(prevProps) {
-    if (prevProps.isVisible && !this.props.isVisible) {
+    if (
+      (prevProps.isVisible && !this.props.isVisible) ||
+      prevProps.isEmailAllowed !== this.props.isEmailAllowed
+    ) {
       this.loadInitialValues();
     }
   }
@@ -236,7 +243,7 @@ export default class ManageSenders extends React.Component {
   };
 
   render() {
-    const { isVisible, onClickCancel, onClickSave } = this.props;
+    const { isEmailAllowed, isVisible, onClickCancel, onClickSave } = this.props;
     const { initialValues, loadingSenders } = this.state;
     return isVisible ? (
       <Formik
@@ -263,9 +270,9 @@ export default class ManageSenders extends React.Component {
                   name="senders"
                   validateOnChange={true}
                   render={(arrayHelpers) =>
-                    loadingSenders ? (
+                    !isEmailAllowed || loadingSenders ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        Loading Senders...
+                        {isEmailAllowed ? 'Loading Senders...' : 'Email is disallowed'}
                       </div>
                     ) : (
                       this.renderSenders({ values, arrayHelpers })
@@ -301,11 +308,13 @@ export default class ManageSenders extends React.Component {
 
 ManageSenders.propTypes = {
   httpClient: PropTypes.func.isRequired,
+  isEmailAllowed: PropTypes.bool,
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
 };
 
 ManageSenders.defaultProps = {
+  isEmailAllowed: false,
   isVisible: false,
 };

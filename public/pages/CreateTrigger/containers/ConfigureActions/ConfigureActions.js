@@ -21,6 +21,7 @@ import AddActionButton from '../../components/AddActionButton';
 import ContentPanel from '../../../../components/ContentPanel';
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
 import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../../Destinations/utils/constants';
+import { getAllowList } from '../../../Destinations/utils/helpers';
 
 const createActionContext = (context, action) => ({
   ctx: {
@@ -34,20 +35,26 @@ class ConfigureActions extends React.Component {
     super(props);
     this.state = {
       destinations: [],
+      allowList: [],
       loadingDestinations: true,
       actionDeleted: false,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { httpClient } = this.props;
+
+    const allowList = await getAllowList(httpClient);
+    this.setState({ allowList });
+
     this.loadDestinations();
   }
 
   loadDestinations = async (searchText = '') => {
     const { httpClient, values, arrayHelpers } = this.props;
-    const { actionDeleted } = this.state;
+    const { allowList, actionDeleted } = this.state;
     this.setState({ loadingDestinations: true });
-    const getDestinationLabel = destination => {
+    const getDestinationLabel = (destination) => {
       const foundDestination = DESTINATION_OPTIONS.find(({ value }) => value === destination.type);
       if (foundDestination) return foundDestination.text;
       return destination.type;
@@ -57,12 +64,12 @@ class ConfigureActions extends React.Component {
         `../api/alerting/destinations?search=${searchText}&size=200`
       );
       const destinations = response.data.destinations
-        .map(destination => ({
+        .map((destination) => ({
           label: `${destination.name} - (${getDestinationLabel(destination)})`,
           value: destination.id,
           type: destination.type,
         }))
-        .filter(({ type }) => Object.values(DESTINATION_TYPE).includes(type));
+        .filter(({ type }) => allowList.includes(type));
       this.setState({ destinations, loadingDestinations: false });
       // If actions is not defined  If user choose to delete actions, it will not override customer's preferences.
       if (destinations.length > 0 && !values.actions && !actionDeleted) {
@@ -74,7 +81,7 @@ class ConfigureActions extends React.Component {
     }
   };
 
-  sendTestMessage = async index => {
+  sendTestMessage = async (index) => {
     const {
       context: { monitor, trigger },
       httpClient,
@@ -95,7 +102,7 @@ class ConfigureActions extends React.Component {
     }
   };
 
-  renderActions = arrayHelpers => {
+  renderActions = (arrayHelpers) => {
     const { context, setFlyout, values } = this.props;
     const { destinations } = this.state;
     const hasDestinations = !_.isEmpty(destinations);

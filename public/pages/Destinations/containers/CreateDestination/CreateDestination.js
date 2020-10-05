@@ -32,11 +32,12 @@ import { FormikFieldText, FormikSelect } from '../../../../components/FormContro
 import SubHeader from '../../../../components/SubHeader';
 import { formikInitialValues } from './utils/constants';
 import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../utils/constants';
-import { validateDestinationName } from './utils/validations';
+import { validateDestinationName, validateDestinationType } from './utils/validations';
 import { formikToDestination } from './utils/formikToDestination';
 import { destinationToFormik } from './utils/destinationToFormik';
 import { Webhook, CustomWebhook, Email } from '../../components/createDestinations';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
+import { getAllowList } from '../../utils/helpers';
 
 const destinationType = {
   [DESTINATION_TYPE.SLACK]: (props) => <Webhook {...props} />,
@@ -50,11 +51,16 @@ class CreateDestination extends React.Component {
     super(props);
     this.state = {
       initialValues: formikInitialValues,
+      allowList: [],
     };
   }
 
   async componentDidMount() {
     const { httpClient, location, edit, history } = this.props;
+
+    const allowList = await getAllowList(httpClient);
+    this.setState({ allowList });
+
     let ifSeqNo, ifPrimaryTerm;
     if (edit) {
       // In case user is refreshing in edit mode , redirect them to the destination page.
@@ -73,6 +79,11 @@ class CreateDestination extends React.Component {
         history.push('/destinations');
       }
     }
+  }
+
+  getAllowedDestinationOptions() {
+    const { allowList } = this.state;
+    return DESTINATION_OPTIONS.filter((option) => allowList.includes(option.value));
   }
 
   getDestination = async (destinationId) => {
@@ -159,6 +170,7 @@ class CreateDestination extends React.Component {
       history.push('/destinations');
     }
   };
+
   render() {
     const { edit, httpClient, location } = this.props;
     const { initialValues } = this.state;
@@ -208,13 +220,19 @@ class CreateDestination extends React.Component {
                   <FormikSelect
                     name="type"
                     formRow
+                    fieldProps={{
+                      validate: validateDestinationType(httpClient),
+                    }}
                     rowProps={{
                       label: 'Type',
                       style: { paddingLeft: '10px' },
+                      isInvalid,
+                      error: hasError,
                     }}
                     inputProps={{
                       disabled: edit,
-                      options: DESTINATION_OPTIONS,
+                      options: this.getAllowedDestinationOptions(),
+                      isInvalid,
                     }}
                   />
                   <EuiSpacer size="m" />

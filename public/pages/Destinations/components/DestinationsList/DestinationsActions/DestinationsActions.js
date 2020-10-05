@@ -63,25 +63,28 @@ export default class DestinationsActions extends Component {
   };
 
   render() {
+    const { isEmailAllowed } = this.props;
     const { isActionsOpen } = this.state;
     return (
       <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
-        <EuiFlexItem>
-          <EuiPopover
-            id="destinationActionsPopover"
-            button={
-              <EuiButton onClick={this.onClickActions} iconType="arrowDown" iconSide="right">
-                Actions
-              </EuiButton>
-            }
-            isOpen={isActionsOpen}
-            closePopover={this.onCloseActions}
-            panelPaddingSize="none"
-            anchorPosition="downLeft"
-          >
-            <EuiContextMenuPanel items={this.getActions()} />
-          </EuiPopover>
-        </EuiFlexItem>
+        {isEmailAllowed ? (
+          <EuiFlexItem>
+            <EuiPopover
+              id="destinationActionsPopover"
+              button={
+                <EuiButton onClick={this.onClickActions} iconType="arrowDown" iconSide="right">
+                  Actions
+                </EuiButton>
+              }
+              isOpen={isActionsOpen}
+              closePopover={this.onCloseActions}
+              panelPaddingSize="none"
+              anchorPosition="downLeft"
+            >
+              <EuiContextMenuPanel items={this.getActions()} />
+            </EuiPopover>
+          </EuiFlexItem>
+        ) : null}
         <EuiFlexItem grow={false}>
           <EuiButton fill href={`${PLUGIN_NAME}#${APP_PATH.CREATE_DESTINATION}`}>
             Add destination

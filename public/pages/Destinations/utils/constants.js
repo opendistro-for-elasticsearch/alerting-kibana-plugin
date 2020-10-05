@@ -26,3 +26,5 @@ export const DESTINATION_OPTIONS = [
   { value: DESTINATION_TYPE.CUSTOM_HOOK, text: 'Custom webhook' },
   { value: DESTINATION_TYPE.EMAIL, text: 'Email' },
 ];
+
+export const ALLOW_LIST_SETTING_PATH = 'opendistro.alerting.destination.allow_list';

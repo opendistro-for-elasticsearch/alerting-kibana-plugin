@@ -79,13 +79,20 @@ export default class ManageEmailGroups extends React.Component {
   }
 
   componentDidMount() {
-    this.loadInitialValues();
+    const { isEmailAllowed } = this.props;
+    // Don't load initial values if Email is disallowed since the API will be blocked
+    if (isEmailAllowed) {
+      this.loadInitialValues();
+    }
   }
 
-  // Reload initial values when modal is no longer visible so changes
-  // are reflected the next time it is opened
+  // Reload initial values when modal is no longer visible
+  // or when email availability is updated
   componentDidUpdate(prevProps) {
-    if (prevProps.isVisible && !this.props.isVisible) {
+    if (
+      (prevProps.isVisible && !this.props.isVisible) ||
+      prevProps.isEmailAllowed !== this.props.isEmailAllowed
+    ) {
       this.loadInitialValues(this.props.emailGroups);
     }
   }
@@ -248,7 +255,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   render() {
-    const { isVisible, onClickCancel, onClickSave } = this.props;
+    const { isEmailAllowed, isVisible, onClickCancel, onClickSave } = this.props;
     const { initialValues, loadingEmailGroups, emailGroupsToDelete } = this.state;
     return isVisible ? (
       <Formik
@@ -275,9 +282,9 @@ export default class ManageEmailGroups extends React.Component {
                   name="emailGroups"
                   validateOnChange={true}
                   render={(arrayHelpers) =>
-                    loadingEmailGroups ? (
+                    !isEmailAllowed || loadingEmailGroups ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        Loading Email Groups...
+                        {isEmailAllowed ? 'Loading Email Groups...' : 'Email is disallowed'}
                       </div>
                     ) : (
                       this.renderEmailGroups({ values, arrayHelpers })
@@ -313,11 +320,13 @@ export default class ManageEmailGroups extends React.Component {
 
 ManageEmailGroups.propTypes = {
   httpClient: PropTypes.func.isRequired,
+  isEmailAllowed: PropTypes.bool,
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
 };
 
 ManageEmailGroups.defaultProps = {
+  isEmailAllowed: false,
   isVisible: false,
 };

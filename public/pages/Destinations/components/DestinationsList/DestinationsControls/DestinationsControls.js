@@ -28,6 +28,7 @@ const propTypes = {
   onSearchChange: PropTypes.func.isRequired,
   onTypeChange: PropTypes.func.isRequired,
   onPageClick: PropTypes.func.isRequired,
+  allowList: PropTypes.array.isRequired,
 };
 
 const defaultProps = {
@@ -43,24 +44,29 @@ const DestinationsControls = ({
   onSearchChange,
   onTypeChange,
   onPageClick,
-}) => (
-  <EuiFlexGroup style={{ padding: '0px 5px' }}>
-    <EuiFlexItem>
-      <EuiFieldSearch
-        fullWidth={true}
-        value={search}
-        placeholder="Search"
-        onChange={onSearchChange}
-      />
-    </EuiFlexItem>
-    <EuiFlexItem grow={false}>
-      <EuiSelect options={filterTypes} value={type} onChange={onTypeChange} />
-    </EuiFlexItem>
-    <EuiFlexItem grow={false} style={{ justifyContent: 'center' }}>
-      <EuiPagination pageCount={pageCount} activePage={activePage} onPageClick={onPageClick} />
-    </EuiFlexItem>
-  </EuiFlexGroup>
-);
+  allowList,
+}) => {
+  const allowedOptions = DESTINATION_OPTIONS.filter((option) => allowList.includes(option.value));
+  const filterTypes = [{ value: 'ALL', text: 'All type' }, ...allowedOptions];
+  return (
+    <EuiFlexGroup style={{ padding: '0px 5px' }}>
+      <EuiFlexItem>
+        <EuiFieldSearch
+          fullWidth={true}
+          value={search}
+          placeholder="Search"
+          onChange={onSearchChange}
+        />
+      </EuiFlexItem>
+      <EuiFlexItem grow={false}>
+        <EuiSelect options={filterTypes} value={type} onChange={onTypeChange} />
+      </EuiFlexItem>
+      <EuiFlexItem grow={false} style={{ justifyContent: 'center' }}>
+        <EuiPagination pageCount={pageCount} activePage={activePage} onPageClick={onPageClick} />
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  );
+};
 
 DestinationsControls.propTypes = propTypes;
 
