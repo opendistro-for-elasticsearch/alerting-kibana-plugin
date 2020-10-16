@@ -36,6 +36,7 @@ export default function (kibana) {
         main: `plugins/${PLUGIN_NAME}/app`,
         icon: `plugins/${PLUGIN_NAME}/images/alerting_icon.svg`,
         category: DEFAULT_APP_CATEGORIES.kibana,
+        order: 8020,
       },
 
       hacks: [`plugins/${PLUGIN_NAME}/hack`],
