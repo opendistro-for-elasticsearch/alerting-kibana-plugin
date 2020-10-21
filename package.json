@@ -1,6 +1,6 @@
 {
   "name": "opendistro-alerting",
-  "version": "1.11.0.0",
+  "version": "1.11.0.1",
   "description": "Kibana Alerting Plugin",
   "main": "index.js",
   "license": "Apache-2.0",
