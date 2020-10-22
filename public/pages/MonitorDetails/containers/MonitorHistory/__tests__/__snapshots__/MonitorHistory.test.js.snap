@@ -1,10 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<MonitorHistory/> should create appropriate alerts data 1`] = `Object {}`;
+exports[`<MonitorHistory/> should create appropriate alerts data 1`] = `
+Object {
+  "1": Array [
+    Object {
+      "meta": Object {
+        "endTime": 1539619200000,
+        "startTime": 1539615600000,
+      },
+      "state": "NO_ALERTS",
+      "x": 1539619200000,
+      "x0": 1539615600000,
+    },
+  ],
+  "2": Array [
+    Object {
+      "meta": Object {
+        "endTime": 1539619200000,
+        "startTime": 1539615600000,
+      },
+      "state": "NO_ALERTS",
+      "x": 1539619200000,
+      "x0": 1539615600000,
+    },
+  ],
+}
+`;
 
 exports[`<MonitorHistory/> should fetch new data on timeSeriesWindow change  1`] = `
 Object {
-  "endTime": 1539619200000,
-  "startTime": 1539615600000,
+  "endTime": 1539532800000,
+  "startTime": 1539532800000,
 }
 `;

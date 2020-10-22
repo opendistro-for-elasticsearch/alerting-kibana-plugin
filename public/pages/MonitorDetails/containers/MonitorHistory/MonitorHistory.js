@@ -243,16 +243,14 @@ class MonitorHistory extends PureComponent {
         monitorIds: monitorId,
       };
 
-      var alerts = await httpClient
-        .get(`../api/alerting/alerts?${queryString.stringify(params)}`)
-        .then((resp) => {
-          if (resp.data.ok) {
-            return resp.data.alerts;
-          } else {
-            console.log('error getting alerts:', resp);
-            return [];
-          }
-        });
+      const resp = await httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`);
+      var alerts;
+      if (resp.data.ok) {
+        alerts = resp.data.alerts;
+      } else {
+        console.log('error getting alerts:', resp);
+        alerts = [];
+      }
 
       const triggerTemp = {};
       alerts.forEach((alert) => {

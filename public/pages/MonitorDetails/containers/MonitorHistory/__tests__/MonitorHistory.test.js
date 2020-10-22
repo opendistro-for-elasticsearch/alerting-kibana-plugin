@@ -36,6 +36,7 @@ describe('<MonitorHistory/>', () => {
   ];
   const httpClient = {
     post: jest.fn(),
+    get: jest.fn(),
   };
   beforeEach(() => {
     jest.resetAllMocks();
@@ -59,6 +60,12 @@ describe('<MonitorHistory/>', () => {
   test('should execute getPOIData, getAlerts on componentDidMount', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
     httpClient.post.mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -76,34 +83,29 @@ describe('<MonitorHistory/>', () => {
         }))
       );
       expect(httpClient.post).toHaveBeenCalledTimes(1);
+      expect(httpClient.get).toHaveBeenCalledTimes(1);
       expect(wrapper.state().maxAlerts).toBe(poiResponse.data.resp.aggregations.max_alerts.value);
+      const triggersData = wrapper.state().triggersData;
+      const triggersDataKeys = Object.keys(triggersData);
+      expect(triggersDataKeys.length).toBe(2);
+      // Validate Ids
+      expect(triggersDataKeys[0]).toBe('1');
+      expect(triggersDataKeys[1]).toBe('2');
+      // Should be not alerting state
+      expect(triggersData[triggersDataKeys[0]].length).toBe(1);
+      expect(triggersData[triggersDataKeys[1]].length).toBe(1);
       done();
     });
   });
   test('should get 60 mins highlight windowSize', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
-    httpClient.post
-      .mockResolvedValueOnce(poiResponse)
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: [],
-            },
-          },
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: [],
-            },
-          },
-        },
-      });
+    httpClient.post.mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -133,28 +135,13 @@ describe('<MonitorHistory/>', () => {
         moment('2018-10-15T09:00:00').subtract(1, 'h')
       ),
     ]);
-    httpClient.post
-      .mockResolvedValueOnce(poiResponse)
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: alerts[0],
-            },
-          },
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: alerts[1],
-            },
-          },
-        },
-      });
+    httpClient.post.mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: alerts,
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -175,6 +162,12 @@ describe('<MonitorHistory/>', () => {
     const poiResponse = getPOIResponse(initialStartTime);
     Date.now = jest.fn(() => 1539619200000);
     httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -199,7 +192,7 @@ describe('<MonitorHistory/>', () => {
       });
       wrapper.update();
       expect(wrapper.state().timeSeriesWindow).toMatchSnapshot();
-      expect(getAlertsSpy).toHaveBeenCalledTimes(0);
+      expect(getAlertsSpy).toHaveBeenCalledTimes(1);
       done();
     });
   });
@@ -209,6 +202,12 @@ describe('<MonitorHistory/>', () => {
 
     Date.now = jest.fn(() => 1539619200000);
     httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
