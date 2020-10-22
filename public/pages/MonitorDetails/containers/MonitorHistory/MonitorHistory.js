@@ -33,11 +33,11 @@ import DateRangePicker from './DateRangePicker';
 import {
   generateFirstDataPoints,
   dataPointsGenerator,
-  getTimeSeriesSearchRequest,
   getPOISearchQuery,
 } from './utils/chartHelpers';
 import * as HistoryConstants from './utils/constants';
 import { INDEX } from '../../../../../utils/constants';
+import queryString from 'query-string';
 
 class MonitorHistory extends PureComponent {
   constructor(props) {
@@ -85,7 +85,7 @@ class MonitorHistory extends PureComponent {
       x: plotting ends,
       meta: Any meta data
   */
-  generatePlotData = alertsData => {
+  generatePlotData = (alertsData) => {
     const {
       timeSeriesWindow: { startTime: windowStartTime, endTime: windowEndTime },
     } = this.state;
@@ -204,7 +204,7 @@ class MonitorHistory extends PureComponent {
       });
       if (resp.data.ok) {
         const poiData = get(resp, 'data.resp.aggregations.alerts_over_time.buckets', []).map(
-          item => ({
+          (item) => ({
             x: item.key,
             y: item.doc_count,
           })
@@ -235,32 +235,40 @@ class MonitorHistory extends PureComponent {
     });
     const { timeSeriesWindow } = this.state;
     const { httpClient, triggers, monitorId } = this.props;
-    // Shall we convert this into single call and get all the data ?
-    const promises = triggers.map(trigger =>
-      httpClient.post('../api/alerting/_search', {
-        query: getTimeSeriesSearchRequest(
-          monitorId,
-          trigger.id,
-          timeSeriesWindow.startTime,
-          timeSeriesWindow.endTime
-        ),
-        index: INDEX.ALL_ALERTS,
-        size: HistoryConstants.MAX_DOC_COUNT_FOR_ALERTS,
-      })
-    );
     try {
-      //TODO:: If anyone of the call fails, this will Promise will reject automatically.
-      // Should we handle each trigger individually and then plot it if we get data ?
-      const triggersResponse = await Promise.all(promises);
-      const triggersData = triggersResponse.reduce((acc, triggerData, index) => {
-        const trigger = triggers[index];
-        if (triggerData.data.ok) {
-          return {
-            ...acc,
-            [trigger.id]: this.generatePlotData(get(triggerData, 'data.resp.hits.hits', [])),
-          };
+      const params = {
+        size: HistoryConstants.MAX_DOC_COUNT_FOR_ALERTS,
+        sortField: 'start_time',
+        sortDirection: 'asc',
+        monitorIds: monitorId,
+      };
+
+      const resp = await httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`);
+      var alerts;
+      if (resp.data.ok) {
+        alerts = resp.data.alerts;
+      } else {
+        console.log('error getting alerts:', resp);
+        alerts = [];
+      }
+
+      const triggerTemp = {};
+      alerts.forEach((alert) => {
+        if (
+          alert.start_time <= timeSeriesWindow.endTime &&
+          (alert.end_time == null || alert.end_time >= timeSeriesWindow.startTime)
+        ) {
+          if (!(alert.trigger_id in triggerTemp)) {
+            triggerTemp[alert.trigger_id] = [];
+          }
+          triggerTemp[alert.trigger_id].push({ _source: alert });
         }
-      }, {});
+      });
+
+      const triggersData = {};
+      triggers.forEach((trigger) => {
+        triggersData[trigger.id] = this.generatePlotData(get(triggerTemp, trigger.id, []));
+      });
 
       this.setState({
         isLoading: false,
@@ -273,7 +281,7 @@ class MonitorHistory extends PureComponent {
     }
   };
 
-  handleDragEnd = area => {
+  handleDragEnd = (area) => {
     const { timeSeriesWindow } = this.state;
     if ((area && area.left.getTime() === timeSeriesWindow.startTime) || this.state.isLoading)
       return;

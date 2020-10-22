@@ -36,11 +36,12 @@ describe('<MonitorHistory/>', () => {
   ];
   const httpClient = {
     post: jest.fn(),
+    get: jest.fn(),
   };
   beforeEach(() => {
     jest.resetAllMocks();
   });
-  test('should show <EmptyHistory/> if no triggers found', done => {
+  test('should show <EmptyHistory/> if no triggers found', (done) => {
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -56,30 +57,15 @@ describe('<MonitorHistory/>', () => {
       done();
     });
   });
-  test('should execute getPOIData, getAlerts on componentDidMount', done => {
+  test('should execute getPOIData, getAlerts on componentDidMount', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
-    httpClient.post
-      .mockResolvedValueOnce(poiResponse)
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: [],
-            },
-          },
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: [],
-            },
-          },
-        },
-      });
+    httpClient.post.mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -91,12 +77,13 @@ describe('<MonitorHistory/>', () => {
     process.nextTick(() => {
       wrapper.update();
       expect(wrapper.state().poiData).toEqual(
-        poiResponse.data.resp.aggregations.alerts_over_time.buckets.map(item => ({
+        poiResponse.data.resp.aggregations.alerts_over_time.buckets.map((item) => ({
           x: item.key,
           y: item.doc_count,
         }))
       );
-      expect(httpClient.post).toHaveBeenCalledTimes(3);
+      expect(httpClient.post).toHaveBeenCalledTimes(1);
+      expect(httpClient.get).toHaveBeenCalledTimes(1);
       expect(wrapper.state().maxAlerts).toBe(poiResponse.data.resp.aggregations.max_alerts.value);
       const triggersData = wrapper.state().triggersData;
       const triggersDataKeys = Object.keys(triggersData);
@@ -110,30 +97,15 @@ describe('<MonitorHistory/>', () => {
       done();
     });
   });
-  test('should get 60 mins highlight windowSize', done => {
+  test('should get 60 mins highlight windowSize', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
-    httpClient.post
-      .mockResolvedValueOnce(poiResponse)
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: [],
-            },
-          },
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: [],
-            },
-          },
-        },
-      });
+    httpClient.post.mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -151,10 +123,10 @@ describe('<MonitorHistory/>', () => {
       done();
     });
   });
-  test('should create appropriate alerts data', done => {
+  test('should create appropriate alerts data', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
     Date.now = jest.fn(() => 1539619200000);
-    const alerts = triggers.map(trigger => [
+    const alerts = triggers.map((trigger) => [
       getAlertsResponse(
         trigger.id,
         trigger.name,
@@ -163,28 +135,13 @@ describe('<MonitorHistory/>', () => {
         moment('2018-10-15T09:00:00').subtract(1, 'h')
       ),
     ]);
-    httpClient.post
-      .mockResolvedValueOnce(poiResponse)
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: alerts[0],
-            },
-          },
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          ok: true,
-          resp: {
-            hits: {
-              hits: alerts[1],
-            },
-          },
-        },
-      });
+    httpClient.post.mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: alerts,
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -201,10 +158,16 @@ describe('<MonitorHistory/>', () => {
       done();
     });
   });
-  test('should fetch new data on timeSeriesWindow change ', done => {
+  test('should fetch new data on timeSeriesWindow change ', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
     Date.now = jest.fn(() => 1539619200000);
     httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}
@@ -233,12 +196,18 @@ describe('<MonitorHistory/>', () => {
       done();
     });
   });
-  test('should fall back to max scale if the max alerts are lower than threshold ', done => {
+  test('should fall back to max scale if the max alerts are lower than threshold ', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
     set(poiResponse, 'data.resp.aggregations.max_alerts.value', 3);
 
     Date.now = jest.fn(() => 1539619200000);
     httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.get.mockResolvedValue({
+      data: {
+        ok: true,
+        alerts: [],
+      },
+    });
     const wrapper = mount(
       <MonitorHistory
         httpClient={httpClient}

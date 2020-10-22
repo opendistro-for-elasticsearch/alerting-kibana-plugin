@@ -14,12 +14,7 @@
  */
 
 import moment from 'moment-timezone';
-import {
-  generateFirstDataPoints,
-  dataPointsGenerator,
-  getPOISearchQuery,
-  getTimeSeriesSearchRequest,
-} from '../chartHelpers';
+import { generateFirstDataPoints, dataPointsGenerator, getPOISearchQuery } from '../chartHelpers';
 
 moment.tz.setDefault('America/Los_Angeles');
 
@@ -31,15 +26,6 @@ describe('Chart Helpers', () => {
       const intervalDuration = moment.duration(10, 'm');
       expect(
         getPOISearchQuery('monitorId', startTime, endTime, intervalDuration)
-      ).toMatchSnapshot();
-    });
-  });
-  describe('getPOISearchQuery', () => {
-    it('Generates getTimeSeriesSearchRequest for Alerts', () => {
-      const startTime = moment('2018-10-29T09:00:00').valueOf();
-      const endTime = moment('2018-10-29T10:00:00').valueOf();
-      expect(
-        getTimeSeriesSearchRequest('monitorId', 'triggerId', startTime, endTime)
       ).toMatchSnapshot();
     });
   });
