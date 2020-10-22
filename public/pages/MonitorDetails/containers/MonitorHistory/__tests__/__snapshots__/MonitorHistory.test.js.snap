@@ -5,65 +5,23 @@ Object {
   "1": Array [
     Object {
       "meta": Object {
-        "endTime": 1539615900000,
+        "endTime": 1539619200000,
         "startTime": 1539615600000,
       },
       "state": "NO_ALERTS",
-      "x": 1539615900000,
-      "x0": 1539615600000,
-    },
-    Object {
-      "meta": Object {
-        "acknowledgedTime": undefined,
-        "endTime": 1539616080000,
-        "errorsCount": 0,
-        "startTime": 1539615900000,
-        "state": "COMPLETED",
-      },
-      "state": "TRIGGERED",
-      "x": 1539616080000,
-      "x0": 1539615900000,
-    },
-    Object {
-      "meta": Object {
-        "endTime": 1539619200000,
-        "startTime": 1539616080000,
-      },
-      "state": "NO_ALERTS",
       "x": 1539619200000,
-      "x0": 1539616080000,
+      "x0": 1539615600000,
     },
   ],
   "2": Array [
     Object {
       "meta": Object {
-        "endTime": 1539615900000,
+        "endTime": 1539619200000,
         "startTime": 1539615600000,
       },
       "state": "NO_ALERTS",
-      "x": 1539615900000,
-      "x0": 1539615600000,
-    },
-    Object {
-      "meta": Object {
-        "acknowledgedTime": undefined,
-        "endTime": 1539616080000,
-        "errorsCount": 0,
-        "startTime": 1539615900000,
-        "state": "COMPLETED",
-      },
-      "state": "TRIGGERED",
-      "x": 1539616080000,
-      "x0": 1539615900000,
-    },
-    Object {
-      "meta": Object {
-        "endTime": 1539619200000,
-        "startTime": 1539616080000,
-      },
-      "state": "NO_ALERTS",
       "x": 1539619200000,
-      "x0": 1539616080000,
+      "x0": 1539615600000,
     },
   ],
 }

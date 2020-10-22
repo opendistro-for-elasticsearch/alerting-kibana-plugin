@@ -1,4 +1,4 @@
-## Version 1.11.0.0 20-10-19
+## Version 1.11.0.1 2020-10-21
 
 Compatible with Kibana 7.9.1
 
