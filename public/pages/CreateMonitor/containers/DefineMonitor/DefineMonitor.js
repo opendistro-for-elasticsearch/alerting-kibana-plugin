@@ -18,6 +18,7 @@ import _ from 'lodash';
 import chrome from 'ui/chrome';
 import PropTypes from 'prop-types';
 import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
@@ -128,7 +129,7 @@ class DefineMonitor extends Component {
     try {
       const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
       if (pluginsResponse.data.ok) {
-        this.setState({ plugins: pluginsResponse.data.resp.map(plugin => plugin.component) });
+        this.setState({ plugins: pluginsResponse.data.resp.map((plugin) => plugin.component) });
       } else {
         console.error('There was a problem getting plugins list');
       }
@@ -178,7 +179,7 @@ class DefineMonitor extends Component {
     }
 
     try {
-      const promises = searchRequests.map(searchRequest => {
+      const promises = searchRequests.map((searchRequest) => {
         // Fill in monitor name in case it's empty (in create workflow)
         // Set triggers to empty array so they are not executed (if in edit workflow)
         // Set input search to query/graph query and then use execute API to fill in period_start/period_end
@@ -200,6 +201,7 @@ class DefineMonitor extends Component {
         this.setState({ response, formikSnapshot, performanceResponse });
       } else {
         console.error('There was an error running the query', queryResponse.data.resp);
+        this.backendErrorHandler('run', queryResponse.data);
         this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
       }
     } catch (err) {
@@ -331,6 +333,15 @@ class DefineMonitor extends Component {
     const { values } = this.props;
     const { plugins } = this.state;
     return values.searchType == SEARCH_TYPE.AD && plugins.indexOf(ES_AD_PLUGIN) == -1;
+  }
+
+  backendErrorHandler(actionName, data) {
+    toastNotifications.addDanger({
+      title: `Failed to ${actionName} the query`,
+      text: data.resp,
+      toastLifeTimeMs: 20000,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   render() {
