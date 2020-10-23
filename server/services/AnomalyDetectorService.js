@@ -44,7 +44,7 @@ export default class DestinationsService {
 
   getDetectors = async (req, h) => {
     const searchRequest = {
-      query: { match_all: {} },
+      query: { bool: {} },
       size: MAX_DETECTOR_COUNT,
     };
     const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
@@ -54,7 +54,7 @@ export default class DestinationsService {
       });
 
       const totalDetectors = resp.hits.total.value;
-      const detectors = resp.hits.hits.map(hit => {
+      const detectors = resp.hits.hits.map((hit) => {
         const {
           _source: detector,
           _id: id,
@@ -126,7 +126,7 @@ export default class DestinationsService {
         const anomaliesResponse = await callWithRequest(req, 'alertingAD.searchResults', {
           body: requestBody,
         });
-        const transformedKeys = get(anomaliesResponse, 'hits.hits', []).map(result =>
+        const transformedKeys = get(anomaliesResponse, 'hits.hits', []).map((result) =>
           mapKeysDeep(result._source, toCamel)
         );
         return {
