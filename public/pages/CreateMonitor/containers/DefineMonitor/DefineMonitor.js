@@ -128,7 +128,7 @@ class DefineMonitor extends Component {
     try {
       const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
       if (pluginsResponse.data.ok) {
-        this.setState({ plugins: pluginsResponse.data.resp.map(plugin => plugin.component) });
+        this.setState({ plugins: pluginsResponse.data.resp.map((plugin) => plugin.component) });
       } else {
         console.error('There was a problem getting plugins list');
       }
@@ -167,7 +167,6 @@ class DefineMonitor extends Component {
   async onRunQuery() {
     const { httpClient, values } = this.props;
     const formikSnapshot = _.cloneDeep(values);
-
     // If we are running a visual graph query, then we need to run two separate queries
     // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
     // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
@@ -178,7 +177,7 @@ class DefineMonitor extends Component {
     }
 
     try {
-      const promises = searchRequests.map(searchRequest => {
+      const promises = searchRequests.map((searchRequest) => {
         // Fill in monitor name in case it's empty (in create workflow)
         // Set triggers to empty array so they are not executed (if in edit workflow)
         // Set input search to query/graph query and then use execute API to fill in period_start/period_end

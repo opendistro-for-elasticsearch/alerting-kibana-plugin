@@ -49,7 +49,6 @@ const propTypes = {
 class MonitorIndex extends React.Component {
   constructor(props) {
     super(props);
-
     this.lastQuery = null;
     this.state = {
       isLoading: false,
@@ -63,7 +62,6 @@ class MonitorIndex extends React.Component {
       partialMatchedAliases: [],
       exactMatchedAliases: [],
     };
-
     this.onCreateOption = this.onCreateOption.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.handleQueryIndices = this.handleQueryIndices.bind(this);
@@ -258,5 +256,4 @@ class MonitorIndex extends React.Component {
 }
 
 MonitorIndex.propTypes = propTypes;
-
 export default MonitorIndex;

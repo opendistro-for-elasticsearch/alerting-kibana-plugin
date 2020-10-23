@@ -34,11 +34,39 @@ export default function alertingADPlugin(Client, config, components) {
     method: 'GET',
   });
 
+  alertingAD.createDetector = ca({
+    url: {
+      fmt: `${AD_BASE_API}`,
+    },
+    needBody: true,
+    method: 'POST',
+  });
+
+  alertingAD.validateDetector = ca({
+    url: {
+      fmt: `${AD_BASE_API}/_validate`,
+    },
+    method: 'POST',
+  });
+
   alertingAD.searchDetectors = ca({
     url: {
       fmt: `${AD_BASE_API}/_search`,
     },
     needBody: true,
+    method: 'POST',
+  });
+
+  alertingAD.startDetector = ca({
+    url: {
+      fmt: `${AD_BASE_API}/<%=detectorId%>/_start`,
+      req: {
+        detectorId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
     method: 'POST',
   });
   alertingAD.previewDetector = ca({

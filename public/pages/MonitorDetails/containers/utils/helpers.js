@@ -12,9 +12,10 @@
  *   express or implied. See the License for the specific language governing
  *   permissions and limitations under the License.
  */
-
+export const NAME_REGEX = RegExp('^[a-zA-Z0-9._-]+$');
+export const MAX_INTERVAl_LENGTH_MINUTES = 10080;
 import { get, isEmpty } from 'lodash';
-export const migrateTriggerMetadata = monitor => {
+export const migrateTriggerMetadata = (monitor) => {
   const uiMetadata = get(monitor, 'ui_metadata', {});
   if (isEmpty(uiMetadata)) return monitor;
   // Already migrated no need to perform any action
