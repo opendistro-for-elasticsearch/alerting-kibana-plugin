@@ -28,6 +28,7 @@ import {
   EuiSpacer,
   EuiTitle,
 } from '@elastic/eui';
+import { toastNotifications } from 'ui/notify';
 import 'brace/theme/github';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
@@ -41,6 +42,7 @@ import { formikToTrigger, formikToTriggerUiMetadata } from './utils/formikToTrig
 import { triggerToFormik } from './utils/triggerToFormik';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
+import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 
 export default class CreateTrigger extends Component {
   constructor(props) {
@@ -76,13 +78,16 @@ export default class CreateTrigger extends Component {
       triggers: { ...uiMetadata.triggers, ...triggerMetadata },
     };
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
-      .then(res => {
+      .then((res) => {
         setSubmitting(false);
         if (res.data.ok) {
           onCloseTrigger();
+        } else {
+          console.log('Failed to create the trigger:', res.data);
+          this.backendErrorHandler('create', res.data);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setSubmitting(false);
         // TODO: setErrors
@@ -103,13 +108,16 @@ export default class CreateTrigger extends Component {
     const updatedTriggers = triggers.slice();
     updatedTriggers.splice(indexToUpdate, 1, trigger);
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
-      .then(res => {
+      .then((res) => {
         setSubmitting(false);
         if (res.data.ok) {
           onCloseTrigger();
+        } else {
+          console.log('Failed to update the trigger:', res.data);
+          this.backendErrorHandler('update', res.data);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setSubmitting(false);
         // TODO: setErrors
@@ -127,15 +135,16 @@ export default class CreateTrigger extends Component {
     }
     httpClient
       .post('../api/alerting/monitors/_execute', monitorToExecute)
-      .then(resp => {
+      .then((resp) => {
         if (resp.data.ok) {
           this.setState({ executeResponse: resp.data.resp });
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
+          this.backendErrorHandler('run', resp.data);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err:', err);
       });
   };
@@ -180,12 +189,21 @@ export default class CreateTrigger extends Component {
   getTriggerContext = (executeResponse, monitor, values) => ({
     periodStart: moment.utc(_.get(executeResponse, 'period_start', Date.now())).format(),
     periodEnd: moment.utc(_.get(executeResponse, 'period_end', Date.now())).format(),
-    results: [_.get(executeResponse, 'input_results.results[0]')].filter(result => !!result),
+    results: [_.get(executeResponse, 'input_results.results[0]')].filter((result) => !!result),
     trigger: formikToTrigger(values, _.get(this.props.monitor, 'ui_metadata', {})),
     alert: null,
     error: null,
     monitor: monitor,
   });
+
+  backendErrorHandler(actionName, data) {
+    toastNotifications.addDanger({
+      title: `Failed to ${actionName} the trigger`,
+      text: data.resp,
+      toastLifeTimeMs: 20000,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient } = this.props;
@@ -197,7 +215,7 @@ export default class CreateTrigger extends Component {
           initialValues={initialValues}
           onSubmit={this.onSubmit}
           validateOnChange={false}
-          render={({ values, handleSubmit, isSubmitting }) => (
+          render={({ values, handleSubmit, isSubmitting, errors, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} trigger</h1>
@@ -217,7 +235,7 @@ export default class CreateTrigger extends Component {
               <FieldArray
                 name="actions"
                 validateOnChange={true}
-                render={arrayHelpers => (
+                render={(arrayHelpers) => (
                   <ConfigureActions
                     arrayHelpers={arrayHelpers}
                     context={this.getTriggerContext(executeResponse, monitor, values)}
@@ -238,6 +256,17 @@ export default class CreateTrigger extends Component {
                   </EuiButton>
                 </EuiFlexItem>
               </EuiFlexGroup>
+              <SubmitErrorHandler
+                errors={errors}
+                isSubmitting={isSubmitting}
+                isValid={isValid}
+                onSubmitError={() =>
+                  toastNotifications.addDanger({
+                    title: `Failed to ${edit ? 'update' : 'create'} the trigger`,
+                    text: 'Fix all highlighted error(s) before continuing.',
+                  })
+                }
+              />
             </Fragment>
           )}
         />
