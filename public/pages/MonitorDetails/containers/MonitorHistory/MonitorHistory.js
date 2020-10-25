@@ -193,7 +193,7 @@ class MonitorHistory extends PureComponent {
     );
 
     try {
-      const resp = await httpClient.post('../api/alerting/_search', {
+      const resp = await httpClient.post('../api/alerting/monitors/_search', {
         query: getPOISearchQuery(
           monitorId,
           poiTimeWindow.startTime.valueOf(),

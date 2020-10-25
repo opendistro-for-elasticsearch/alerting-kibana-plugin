@@ -24,7 +24,7 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
       index: INDEX.SCHEDULED_JOBS,
       query: { query: { term: { 'destination.name.keyword': value } } },
     };
-    const response = await httpClient.post('../api/alerting/_search', options);
+    const response = await httpClient.post('../api/alerting/monitors/_search', options);
     if (_.get(response, 'data.resp.hits.total.value', 0)) {
       if (!destinationToEdit) throw 'Destination name is already used';
       if (destinationToEdit && destinationToEdit.name !== value) {

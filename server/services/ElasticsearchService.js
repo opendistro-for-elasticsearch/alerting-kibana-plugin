@@ -19,6 +19,8 @@ export default class ElasticsearchService {
     this.esDriver = esDriver;
   }
 
+  // TODO: This will be deprecated as we do not want to support accessing alerting indices directly
+  //  and that is what this is used for
   search = async (req, h) => {
     try {
       const { query, index, size } = req.payload;
