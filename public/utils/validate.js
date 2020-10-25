@@ -24,13 +24,13 @@ export const isInvalid = (name, form) =>
 
 export const hasError = (name, form) => _.get(form.errors, name);
 
-export const validateActionName = trigger => value => {
+export const validateActionName = (trigger) => (value) => {
   if (!value) return 'Required';
-  const matches = trigger.actions.filter(action => action.name === value);
+  const matches = trigger.actions.filter((action) => action.name === value);
   if (matches.length > 1) return 'Action name is already used';
 };
 
-export const isInvalidActionThrottle = action => {
+export const isInvalidActionThrottle = (action) => {
   if (_.get(action, 'throttle_enabled')) {
     var value = _.get(action, 'throttle.value');
     if (!value || value < 1 || value > MAX_THROTTLE_VALUE) {
@@ -40,24 +40,24 @@ export const isInvalidActionThrottle = action => {
   return false;
 };
 
-export const validateActionThrottle = action => value => {
+export const validateActionThrottle = (action) => (value) => {
   if (isInvalidActionThrottle(action)) {
     return WRONG_THROTTLE_WARNING;
   }
 };
 
-export const required = value => {
+export const required = (value) => {
   if (!value) return 'Required';
 };
 
-export const validateMonitorName = (httpClient, monitorToEdit) => async value => {
+export const validateMonitorName = (httpClient, monitorToEdit) => async (value) => {
   try {
     if (!value) throw 'Required';
     const options = {
       index: INDEX.SCHEDULED_JOBS,
       query: { query: { term: { 'monitor.name.keyword': value } } },
     };
-    const response = await httpClient.post('../api/alerting/_search', options);
+    const response = await httpClient.post('../api/alerting/monitors/_search', options);
     if (_.get(response, 'data.resp.hits.total.value', 0)) {
       if (!monitorToEdit) throw 'Monitor name is already used';
       if (monitorToEdit && monitorToEdit.name !== value) {
@@ -70,20 +70,20 @@ export const validateMonitorName = (httpClient, monitorToEdit) => async value =>
   }
 };
 
-export const validateTimezone = value => {
+export const validateTimezone = (value) => {
   if (!Array.isArray(value)) return 'Required';
   if (!value.length) return 'Required';
 };
 
-export const validatePositiveInteger = value => {
+export const validatePositiveInteger = (value) => {
   if (!Number.isInteger(value) || value < 1) return 'Must be a positive integer';
 };
 
-export const validateUnit = value => {
+export const validateUnit = (value) => {
   if (!['MINUTES', 'HOURS', 'DAYS'].includes(value)) return 'Must be one of minutes, hours, days';
 };
 
-export const validateMonthlyDay = value => {
+export const validateMonthlyDay = (value) => {
   if (!Number.isInteger(value) || value < 1 || value > 31)
     return 'Must be a positive integer between 1-31';
 };
@@ -96,7 +96,7 @@ export const validateDetector = (detectorId, selectedDetector) => {
     return 'Must choose detector which has features';
 };
 
-export const validateIndex = options => {
+export const validateIndex = (options) => {
   if (!Array.isArray(options)) return 'Must specify an index';
   if (!options.length) return 'Must specify an index';
 
@@ -116,7 +116,7 @@ export function isIndexPatternQueryValid(pattern, illegalCharacters) {
     return false;
   }
 
-  return !illegalCharacters.some(char => pattern.includes(char));
+  return !illegalCharacters.some((char) => pattern.includes(char));
 }
 
 export function validateExtractionQuery(value) {

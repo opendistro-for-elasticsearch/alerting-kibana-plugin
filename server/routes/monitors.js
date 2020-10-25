@@ -13,13 +13,19 @@
  *   permissions and limitations under the License.
  */
 
-export default function(server, services) {
+export default function (server, services) {
   const { monitorService } = services;
 
   server.route({
     path: '/api/alerting/monitors',
     method: 'GET',
     handler: monitorService.getMonitors,
+  });
+
+  server.route({
+    path: '/api/alerting/monitors/_search',
+    method: 'POST',
+    handler: monitorService.searchMonitors,
   });
 
   server.route({

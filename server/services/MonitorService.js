@@ -334,4 +334,21 @@ export default class MonitorService {
       return { ok: false, resp: err.message };
     }
   };
+
+  //TODO: This is temporarily a pass through call which needs to be deprecated
+  searchMonitors = async (req, h) => {
+    try {
+      const { query, index, size } = req.payload;
+      const params = { index, size, body: query };
+
+      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
+        CLUSTER.ALERTING
+      );
+      const results = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
+      return { ok: true, resp: results };
+    } catch (err) {
+      console.error('Alerting - MonitorService - searchMonitor:', err);
+      return { ok: false, resp: err.message };
+    }
+  };
 }
