@@ -113,7 +113,7 @@ class DestinationsList extends React.Component {
 
   isDeleteAllowed = async (type, id) => {
     const { httpClient } = this.props;
-    const resp = await httpClient.post('../api/alerting/_search', {
+    const resp = await httpClient.post('../api/alerting/monitors/_search', {
       query: isDeleteAllowedQuery(type, id),
       index: INDEX.SCHEDULED_JOBS,
     });
