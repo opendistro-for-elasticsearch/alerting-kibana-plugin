@@ -22,6 +22,8 @@ import { validateEmailSender } from './utils/validate';
 import { isInvalid, hasError } from '../../../../../utils/validate';
 import ManageSenders from '../ManageSenders';
 import getSenders from './utils/helpers';
+import { getAllowList } from '../../../utils/helpers';
+import { DESTINATION_TYPE } from '../../../utils/constants';
 
 export default class EmailSender extends React.Component {
   constructor(props) {
@@ -31,6 +33,7 @@ export default class EmailSender extends React.Component {
       senderOptions: [],
       loadingSenders: true,
       showManageSendersModal: false,
+      allowList: [],
     };
 
     this.onClickManageSenders = this.onClickManageSenders.bind(this);
@@ -38,7 +41,11 @@ export default class EmailSender extends React.Component {
     this.onClickSave = this.onClickSave.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { httpClient } = this.props;
+    const allowList = await getAllowList(httpClient);
+    this.setState({ allowList });
+
     this.loadSenders();
   }
 
@@ -70,6 +77,11 @@ export default class EmailSender extends React.Component {
       senderOptions,
       loadingSenders: false,
     });
+  };
+
+  isEmailAllowed = () => {
+    const { allowList } = this.state;
+    return allowList.includes(DESTINATION_TYPE.EMAIL);
   };
 
   render() {
@@ -121,6 +133,7 @@ export default class EmailSender extends React.Component {
 
         <ManageSenders
           httpClient={httpClient}
+          isEmailAllowed={this.isEmailAllowed()}
           isVisible={showManageSendersModal}
           onClickCancel={this.onClickCancel}
           onClickSave={this.onClickSave}
