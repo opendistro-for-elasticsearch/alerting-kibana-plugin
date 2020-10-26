@@ -1,8 +1,9 @@
-## Version 1.11.0.1 2020-10-21
+## Version 1.11.0.2, 2020-10-23
 
 Compatible with Kibana 7.9.1
 
 ### Enhancements
+  * Add toast message when error occurs in running a monitor or creating/updating a trigger ([#201](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/201))
   * Get alerts, destinations, and monitors using Rest APIs ([#190](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/190))
   * Show alerts error messages in dashboard ([#182](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/182))
   * Show name of the user who last updated the monitor in Monitor Dashboard and Detail page ([#187](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/187))
