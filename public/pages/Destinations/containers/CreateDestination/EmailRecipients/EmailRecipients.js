@@ -23,6 +23,8 @@ import ManageEmailGroups from '../ManageEmailGroups';
 import { validateEmailRecipients } from './utils/validate';
 import { RECIPIENT_TYPE } from './utils/constants';
 import getEmailGroups from './utils/helpers';
+import { getAllowList } from '../../../utils/helpers';
+import { DESTINATION_TYPE } from '../../../utils/constants';
 
 export default class EmailRecipients extends React.Component {
   constructor(props) {
@@ -33,13 +35,18 @@ export default class EmailRecipients extends React.Component {
       recipientOptions: [],
       isLoading: true,
       showManageEmailGroupsModal: false,
+      allowList: [],
     };
 
     this.onClickManageEmailGroups = this.onClickManageEmailGroups.bind(this);
     this.onClickCancel = this.onClickCancel.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { httpClient } = this.props;
+    const allowList = await getAllowList(httpClient);
+    this.setState({ allowList });
+
     this.loadData();
   }
 
@@ -86,6 +93,11 @@ export default class EmailRecipients extends React.Component {
       recipientOptions: emailGroupOptions,
       isLoading: false,
     });
+  };
+
+  isEmailAllowed = () => {
+    const { allowList } = this.state;
+    return allowList.includes(DESTINATION_TYPE.EMAIL);
   };
 
   render() {
@@ -143,6 +155,7 @@ export default class EmailRecipients extends React.Component {
 
         <ManageEmailGroups
           httpClient={httpClient}
+          isEmailAllowed={this.isEmailAllowed()}
           isVisible={showManageEmailGroupsModal}
           onClickCancel={this.onClickCancel}
           onClickSave={this.onClickSave}
