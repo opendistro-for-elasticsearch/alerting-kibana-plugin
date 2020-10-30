@@ -40,6 +40,7 @@ import {
   required,
 } from '../../../../../utils/validate';
 import { URL, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../../../../../utils/constants';
+import { adjustMessageForPreview } from '../../../utils/AdjustActionMessage';
 
 const messageHelpText = (index, sendTestMessage) => (
   <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
@@ -73,7 +74,7 @@ const Message = ({
 }) => {
   let preview = '';
   try {
-    preview = Mustache.render(action.message_template.source, context);
+    preview = Mustache.render(adjustMessageForPreview(action.message_template.source), context);
   } catch (err) {
     preview = err.message;
     console.error('There was an error rendering mustache template', err);

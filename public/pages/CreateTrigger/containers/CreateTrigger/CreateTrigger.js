@@ -43,6 +43,7 @@ import { triggerToFormik } from './utils/triggerToFormik';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
+import { adjustMessageByTrigger } from '../../utils/AdjustActionMessage';
 
 export default class CreateTrigger extends Component {
   constructor(props) {
@@ -182,6 +183,7 @@ export default class CreateTrigger extends Component {
     const monitorUiMetadata = _.get(this.props.monitor, 'ui_metadata', {});
     const trigger = formikToTrigger(values, monitorUiMetadata);
     const triggerMetadata = formikToTriggerUiMetadata(values, monitorUiMetadata);
+    adjustMessageByTrigger(trigger); // Pre-process the message template in the action
     if (this.props.edit) this.onEdit(trigger, triggerMetadata, formikBag);
     else this.onCreate(trigger, triggerMetadata, formikBag);
   };

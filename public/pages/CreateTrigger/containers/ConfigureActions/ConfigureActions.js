@@ -22,6 +22,7 @@ import ContentPanel from '../../../../components/ContentPanel';
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
 import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../../Destinations/utils/constants';
 import { getAllowList } from '../../../Destinations/utils/helpers';
+import { adjustMessageByAction } from '../../utils/AdjustActionMessage';
 
 const createActionContext = (context, action) => ({
   ctx: {
@@ -89,6 +90,7 @@ class ConfigureActions extends React.Component {
     const action = trigger.actions[index];
     const condition = { script: { lang: 'painless', source: 'return true' } };
     const testMonitor = { ...monitor, triggers: [{ ...trigger, actions: [action], condition }] };
+    adjustMessageByAction(action); // Pre-process the message template in the action
     try {
       const response = await httpClient.post(
         '../api/alerting/monitors/_execute?dryrun=false',
