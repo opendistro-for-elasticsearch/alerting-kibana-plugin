@@ -341,7 +341,6 @@ class DefineMonitor extends Component {
       text: data.resp,
       toastLifeTimeMs: 20000,
     });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   render() {
