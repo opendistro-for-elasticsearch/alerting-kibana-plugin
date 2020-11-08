@@ -13,48 +13,104 @@
  *   permissions and limitations under the License.
  */
 
-export default function(server, services) {
+export default function (server, services) {
   const { monitorService } = services;
 
-  server.route({
-    path: '/api/alerting/monitors',
-    method: 'GET',
-    handler: monitorService.getMonitors,
-  });
+  // server.route({
+  //   path: '/api/alerting/monitors',
+  //   method: 'GET',
+  //   handler: monitorService.getMonitors,
+  // });
 
-  server.route({
-    path: '/api/alerting/monitors',
-    method: 'POST',
-    handler: monitorService.createMonitor,
-  });
+  router.get(
+    {
+      path: '/api/alerting/monitors',
+      validate: false,
+    },
+    monitorService.getMonitors
+  );
 
-  server.route({
-    path: '/api/alerting/monitors/_execute',
-    method: 'POST',
-    handler: monitorService.executeMonitor,
-  });
+  // server.route({
+  //   path: '/api/alerting/monitors',
+  //   method: 'POST',
+  //   handler: monitorService.createMonitor,
+  // });
 
-  server.route({
-    path: '/api/alerting/monitors/{id}',
-    method: 'GET',
-    handler: monitorService.getMonitor,
-  });
+  router.post(
+    {
+      path: '/api/alerting/monitors',
+      validate: false,
+    },
+    monitorService.createMonitor
+  );
 
-  server.route({
-    path: '/api/alerting/monitors/{id}',
-    method: 'PUT',
-    handler: monitorService.updateMonitor,
-  });
+  // server.route({
+  //   path: '/api/alerting/monitors/_execute',
+  //   method: 'POST',
+  //   handler: monitorService.executeMonitor,
+  // });
 
-  server.route({
-    path: '/api/alerting/monitors/{id}',
-    method: 'DELETE',
-    handler: monitorService.deleteMonitor,
-  });
+  router.post(
+    {
+      path: '/api/alerting/monitors/_execute',
+      validate: false,
+    },
+    monitorService.executeMonitor
+  );
 
-  server.route({
-    path: '/api/alerting/monitors/{id}/_acknowledge/alerts',
-    method: 'POST',
-    handler: monitorService.acknowledgeAlerts,
-  });
+  // server.route({
+  //   path: '/api/alerting/monitors/{id}',
+  //   method: 'GET',
+  //   handler: monitorService.getMonitor,
+  // });
+
+  router.get(
+    {
+      path: '/api/alerting/monitors/{id}',
+      validate: false,
+    },
+    monitorService.getMonitor
+  );
+
+  // server.route({
+  //   path: '/api/alerting/monitors/{id}',
+  //   method: 'PUT',
+  //   handler: monitorService.updateMonitor,
+  // });
+
+  router.put(
+    {
+      path: '/api/alerting/monitors/{id}',
+      validate: false,
+    },
+    monitorService.updateMonitor
+  );
+
+  // server.route({
+  //   path: '/api/alerting/monitors/{id}',
+  //   method: 'DELETE',
+  //   handler: monitorService.deleteMonitor,
+  // });
+
+  router.delete(
+    {
+      path: '/api/alerting/monitors/{id}',
+      validate: false,
+    },
+    monitorService.deleteMonitor
+  );
+
+  // server.route({
+  //   path: '/api/alerting/monitors/{id}/_acknowledge/alerts',
+  //   method: 'POST',
+  //   handler: monitorService.acknowledgeAlerts,
+  // });
+
+  router.post(
+    {
+      path: '/api/alerting/monitors/{id}/_acknowledge/alerts',
+      validate: false,
+    },
+    monitorService.acknowledgeAlerts
+  );
 }

@@ -13,12 +13,20 @@
  *   permissions and limitations under the License.
  */
 
-export default function(server, services) {
+export default function (services, router) {
   const { alertService } = services;
 
-  server.route({
-    path: '/api/alerting/alerts',
-    method: 'GET',
-    handler: alertService.getAlerts,
-  });
+  // server.route({
+  //   path: '/api/alerting/alerts',
+  //   method: 'GET',
+  //   handler: alertService.getAlerts,
+  // });
+
+  router.get(
+    {
+      path: '/api/alerting/alerts',
+      validate: false,
+    },
+    alertService.getAlerts
+  );
 }

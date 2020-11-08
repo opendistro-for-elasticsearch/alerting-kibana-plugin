@@ -13,24 +13,48 @@
  *   permissions and limitations under the License.
  */
 
-export default function(server, services) {
+export default function (server, services) {
   const { anomalyDetectorService } = services;
 
-  server.route({
-    path: '/api/alerting/detectors/{detectorId}',
-    method: 'GET',
-    handler: anomalyDetectorService.getDetector,
-  });
+  // server.route({
+  //   path: '/api/alerting/detectors/{detectorId}',
+  //   method: 'GET',
+  //   handler: anomalyDetectorService.getDetector,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/detectors/_search',
+  //   method: 'POST',
+  //   handler: anomalyDetectorService.getDetectors,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/detectors/{detectorId}/results',
+  //   method: 'GET',
+  //   handler: anomalyDetectorService.getDetectorResults,
+  // });
 
-  server.route({
-    path: '/api/alerting/detectors/_search',
-    method: 'POST',
-    handler: anomalyDetectorService.getDetectors,
-  });
+  router.get(
+    {
+      path: '/api/alerting/detectors/{detectorId}',
+      validate: false,
+    },
+    anomalyDetectorService.getDetector
+  );
 
-  server.route({
-    path: '/api/alerting/detectors/{detectorId}/results',
-    method: 'GET',
-    handler: anomalyDetectorService.getDetectorResults,
-  });
+  router.post(
+    {
+      path: '/api/alerting/detectors/_search',
+      validate: false,
+    },
+    anomalyDetectorService.getDetectors
+  );
+
+  router.get(
+    {
+      path: '/api/alerting/detectors/{detectorId}/results',
+      validate: false,
+    },
+    anomalyDetectorService.getDetectorResults
+  );
 }

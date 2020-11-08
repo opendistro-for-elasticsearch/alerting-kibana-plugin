@@ -16,39 +16,87 @@
 export default function (server, services) {
   const { elasticsearchService } = services;
 
-  server.route({
-    path: '/api/alerting/_search',
-    method: 'POST',
-    handler: elasticsearchService.search,
-  });
+  // server.route({
+  //   path: '/api/alerting/_search',
+  //   method: 'POST',
+  //   handler: elasticsearchService.search,
+  // });
 
-  server.route({
-    path: '/api/alerting/_indices',
-    method: 'POST',
-    handler: elasticsearchService.getIndices,
-  });
+  router.post(
+    {
+      path: '/api/alerting/_search',
+      validate: false,
+    },
+    elasticsearchService.search
+  );
 
-  server.route({
-    path: '/api/alerting/_aliases',
-    method: 'POST',
-    handler: elasticsearchService.getAliases,
-  });
+  // server.route({
+  //   path: '/api/alerting/_indices',
+  //   method: 'POST',
+  //   handler: elasticsearchService.getIndices,
+  // });
 
-  server.route({
-    path: '/api/alerting/_mappings',
-    method: 'POST',
-    handler: elasticsearchService.getMappings,
-  });
+  router.post(
+    {
+      path: '/api/alerting/_indices',
+      validate: false,
+    },
+    elasticsearchService.getIndices
+  );
 
-  server.route({
-    path: '/api/alerting/_plugins',
-    method: 'GET',
-    handler: elasticsearchService.getPlugins,
-  });
+  // server.route({
+  //   path: '/api/alerting/_aliases',
+  //   method: 'POST',
+  //   handler: elasticsearchService.getAliases,
+  // });
 
-  server.route({
-    path: '/api/alerting/_settings',
-    method: 'GET',
-    handler: elasticsearchService.getSettings,
-  });
+  router.post(
+    {
+      path: '/api/alerting/_aliases',
+      validate: false,
+    },
+    elasticsearchService.getAliases
+  );
+
+  // server.route({
+  //   path: '/api/alerting/_mappings',
+  //   method: 'POST',
+  //   handler: elasticsearchService.getMappings,
+  // });
+
+  router.post(
+    {
+      path: '/api/alerting/_mappings',
+      validate: false,
+    },
+    elasticsearchService.getMappings
+  );
+
+  // server.route({
+  //   path: '/api/alerting/_plugins',
+  //   method: 'GET',
+  //   handler: elasticsearchService.getPlugins,
+  // });
+
+  router.get(
+    {
+      path: '/api/alerting/_plugins',
+      validate: false,
+    },
+    elasticsearchService.getPlugins
+  );
+
+  // server.route({
+  //   path: '/api/alerting/_settings',
+  //   method: 'GET',
+  //   handler: elasticsearchService.getSettings,
+  // });
+
+  router.get(
+    {
+      path: '/api/alerting/_settings',
+      validate: false,
+    },
+    elasticsearchService.getSettings
+  );
 }

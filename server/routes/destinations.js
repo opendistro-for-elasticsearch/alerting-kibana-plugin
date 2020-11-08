@@ -16,93 +16,93 @@
 export default function (server, services) {
   const { destinationsService } = services;
 
-  server.route({
-    path: '/api/alerting/destinations',
-    method: 'GET',
-    handler: destinationsService.getDestinations,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/{destinationId}',
-    method: 'GET',
-    handler: destinationsService.getDestination,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations',
-    method: 'POST',
-    handler: destinationsService.createDestination,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/{destinationId}',
-    method: 'PUT',
-    handler: destinationsService.updateDestination,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/{destinationId}',
-    method: 'DELETE',
-    handler: destinationsService.deleteDestination,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_accounts',
-    method: 'GET',
-    handler: destinationsService.getEmailAccounts,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_accounts',
-    method: 'POST',
-    handler: destinationsService.createEmailAccount,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_accounts/{id}',
-    method: 'GET',
-    handler: destinationsService.getEmailAccount,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_accounts/{id}',
-    method: 'PUT',
-    handler: destinationsService.updateEmailAccount,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_accounts/{id}',
-    method: 'DELETE',
-    handler: destinationsService.deleteEmailAccount,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_groups',
-    method: 'GET',
-    handler: destinationsService.getEmailGroups,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_groups',
-    method: 'POST',
-    handler: destinationsService.createEmailGroup,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_groups/{id}',
-    method: 'GET',
-    handler: destinationsService.getEmailGroup,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_groups/{id}',
-    method: 'PUT',
-    handler: destinationsService.updateEmailGroup,
-  });
-
-  server.route({
-    path: '/api/alerting/destinations/email_groups/{id}',
-    method: 'DELETE',
-    handler: destinationsService.deleteEmailGroup,
-  });
+  // server.route({
+  //   path: '/api/alerting/destinations',
+  //   method: 'GET',
+  //   handler: destinationsService.getDestinations,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/{destinationId}',
+  //   method: 'GET',
+  //   handler: destinationsService.getDestination,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations',
+  //   method: 'POST',
+  //   handler: destinationsService.createDestination,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/{destinationId}',
+  //   method: 'PUT',
+  //   handler: destinationsService.updateDestination,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/{destinationId}',
+  //   method: 'DELETE',
+  //   handler: destinationsService.deleteDestination,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_accounts',
+  //   method: 'GET',
+  //   handler: destinationsService.getEmailAccounts,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_accounts',
+  //   method: 'POST',
+  //   handler: destinationsService.createEmailAccount,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_accounts/{id}',
+  //   method: 'GET',
+  //   handler: destinationsService.getEmailAccount,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_accounts/{id}',
+  //   method: 'PUT',
+  //   handler: destinationsService.updateEmailAccount,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_accounts/{id}',
+  //   method: 'DELETE',
+  //   handler: destinationsService.deleteEmailAccount,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_groups',
+  //   method: 'GET',
+  //   handler: destinationsService.getEmailGroups,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_groups',
+  //   method: 'POST',
+  //   handler: destinationsService.createEmailGroup,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_groups/{id}',
+  //   method: 'GET',
+  //   handler: destinationsService.getEmailGroup,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_groups/{id}',
+  //   method: 'PUT',
+  //   handler: destinationsService.updateEmailGroup,
+  // });
+  //
+  // server.route({
+  //   path: '/api/alerting/destinations/email_groups/{id}',
+  //   method: 'DELETE',
+  //   handler: destinationsService.deleteEmailGroup,
+  // });
 }
