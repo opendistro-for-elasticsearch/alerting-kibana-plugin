@@ -30,7 +30,7 @@ import {
   EuiOverlayMask,
   EuiSpacer,
 } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
+// import { toastNotifications } from 'ui/notify';
 import PropTypes from 'prop-types';
 
 import AddSenderButton from '../../../components/createDestinations/AddSenderButton/AddSenderButton';
@@ -109,7 +109,7 @@ export default class ManageSenders extends React.Component {
       const response = await httpClient.post(`../api/alerting/destinations/email_accounts`, body);
       if (!response.data.ok) {
         this.setState({ failedSenders: true });
-        toastNotifications.addDanger({
+        this.props.core.toastNotifications.addDanger({
           title: `Failed to create sender: ${sender.name}`,
           text: `Reason: ${response.data.resp}`,
         });
@@ -117,7 +117,7 @@ export default class ManageSenders extends React.Component {
     } catch (err) {
       console.error('Unable to create sender', err);
       this.setState({ failedSenders: true });
-      toastNotifications.addDanger({
+      this.props.core.toastNotifications.addDanger({
         title: `Failed to create sender: ${sender.name}`,
         text: `Reason: ${err}`,
       });
@@ -141,7 +141,7 @@ export default class ManageSenders extends React.Component {
       );
       if (!response.data.ok) {
         this.setState({ failedSenders: true });
-        toastNotifications.addDanger({
+        this.props.core.toastNotifications.addDanger({
           title: `Failed to update sender: ${updatedSender.name}`,
           text: `Reason: ${response.data.resp}`,
         });
@@ -149,7 +149,7 @@ export default class ManageSenders extends React.Component {
     } catch (err) {
       console.error('Unable to update sender', err);
       this.setState({ failedSenders: true });
-      toastNotifications.addDanger({
+      this.props.core.toastNotifications.addDanger({
         title: `Failed to update sender: ${updatedSender.name}`,
         text: `Reason: ${err}`,
       });
@@ -163,7 +163,7 @@ export default class ManageSenders extends React.Component {
       const response = await httpClient.delete(`../api/alerting/destinations/email_accounts/${id}`);
       if (!response.data.ok) {
         this.setState({ failedSenders: true });
-        toastNotifications.addDanger({
+        this.props.core.toastNotifications.addDanger({
           title: `Failed to delete sender: ${sender.name}`,
           text: `Reason: ${response.data.resp}`,
         });
@@ -171,7 +171,7 @@ export default class ManageSenders extends React.Component {
     } catch (err) {
       console.error('Unable to delete sender', err);
       this.setState({ failedSenders: true });
-      toastNotifications.addDanger({
+      this.props.core.toastNotifications.addDanger({
         title: `Failed to delete sender: ${sender.name}`,
         text: `Reason: ${err}`,
       });

@@ -25,7 +25,7 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
+// import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import { hasError, isInvalid, required } from '../../../../utils/validate';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
@@ -258,7 +258,7 @@ class CreateDestination extends React.Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  toastNotifications.addDanger({
+                  this.props.core.toastNotifications.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the destination`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

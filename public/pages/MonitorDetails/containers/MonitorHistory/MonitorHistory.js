@@ -16,7 +16,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get, isEqual } from 'lodash';
-import chrome from 'ui/chrome';
+// import chrome from 'ui/chrome';
 import { EuiHorizontalRule } from '@elastic/eui';
 import moment from 'moment';
 
@@ -60,7 +60,7 @@ class MonitorHistory extends PureComponent {
         endTime: this.initialEndTime,
       },
     };
-    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
+    this.isDarkMode = this.props.core.chrome.uiSettings.get('theme:darkMode') || false;
   }
   async componentDidMount() {
     const { triggers } = this.props;

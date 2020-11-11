@@ -15,6 +15,7 @@
 
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { CoreServicesConsumer } from '../../utils/CoreServices';
 
 import Home from '../Home';
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -28,7 +29,7 @@ class Main extends Component {
   state = { flyout: null };
 
   // TODO: Want to move this to redux store so we don't have to pass down setFlyout through components
-  setFlyout = flyout => {
+  setFlyout = (flyout) => {
     const { flyout: currentFlyout } = this.state;
     // If current flyout and new flyout are same type, set to null to mimic closing flyout when clicking on same button
     if (currentFlyout && flyout && currentFlyout.type === flyout.type) {
@@ -42,49 +43,73 @@ class Main extends Component {
     const { flyout } = this.state;
     const { httpClient, history, ...rest } = this.props;
     return (
-      <div style={{ padding: '15px 0px' }}>
-        <Breadcrumbs history={history} httpClient={httpClient} {...rest} />
-        <Flyout
-          flyout={flyout}
-          onClose={() => {
-            this.setFlyout(null);
-          }}
-        />
-        <Switch>
-          <Route
-            path={APP_PATH.CREATE_MONITOR}
-            render={props => (
-              <CreateMonitor httpClient={httpClient} setFlyout={this.setFlyout} {...props} />
-            )}
-          />
-          <Route
-            path={APP_PATH.CREATE_DESTINATION}
-            render={props => (
-              <CreateDestination httpClient={httpClient} setFlyout={this.setFlyout} {...props} />
-            )}
-          />
-          <Route
-            path="/destinations/:destinationId"
-            render={props => (
-              <CreateDestination
-                httpClient={httpClient}
-                setFlyout={this.setFlyout}
-                {...props}
-                edit
+      <CoreServicesConsumer>
+        {(core) =>
+          core && (
+            <div style={{ padding: '15px 0px' }}>
+              <Breadcrumbs history={history} httpClient={httpClient} {...rest} />
+              <Flyout
+                flyout={flyout}
+                onClose={() => {
+                  this.setFlyout(null);
+                }}
               />
-            )}
-          />
-          <Route
-            path="/monitors/:monitorId"
-            render={props => (
-              <MonitorDetails httpClient={httpClient} setFlyout={this.setFlyout} {...props} />
-            )}
-          />
-          <Route
-            render={props => <Home httpClient={httpClient} {...props} setFlyout={this.setFlyout} />}
-          />
-        </Switch>
-      </div>
+              <Switch>
+                <Route
+                  path={APP_PATH.CREATE_MONITOR}
+                  render={(props) => (
+                    <CreateMonitor
+                      httpClient={httpClient}
+                      setFlyout={this.setFlyout}
+                      core={core}
+                      {...props}
+                    />
+                  )}
+                />
+                <Route
+                  path={APP_PATH.CREATE_DESTINATION}
+                  render={(props) => (
+                    <CreateDestination
+                      httpClient={httpClient}
+                      setFlyout={this.setFlyout}
+                      core={core}
+                      {...props}
+                    />
+                  )}
+                />
+                <Route
+                  path="/destinations/:destinationId"
+                  render={(props) => (
+                    <CreateDestination
+                      httpClient={httpClient}
+                      setFlyout={this.setFlyout}
+                      core={core}
+                      {...props}
+                      edit
+                    />
+                  )}
+                />
+                <Route
+                  path="/monitors/:monitorId"
+                  render={(props) => (
+                    <MonitorDetails
+                      httpClient={httpClient}
+                      setFlyout={this.setFlyout}
+                      core={core}
+                      {...props}
+                    />
+                  )}
+                />
+                <Route
+                  render={(props) => (
+                    <Home httpClient={httpClient} {...props} setFlyout={this.setFlyout} />
+                  )}
+                />
+              </Switch>
+            </div>
+          )
+        }
+      </CoreServicesConsumer>
     );
   }
 }

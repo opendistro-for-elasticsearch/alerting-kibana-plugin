@@ -15,10 +15,10 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-import chrome from 'ui/chrome';
+// import chrome from 'ui/chrome';
 import PropTypes from 'prop-types';
 import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
+// import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
@@ -77,7 +77,7 @@ class DefineMonitor extends Component {
     this.getMonitorContent = this.getMonitorContent.bind(this);
     this.getPlugins = this.getPlugins.bind(this);
     this.showPluginWarning = this.showPluginWarning.bind(this);
-    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
+    this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -336,7 +336,7 @@ class DefineMonitor extends Component {
   }
 
   backendErrorHandler(actionName, data) {
-    toastNotifications.addDanger({
+    this.props.core.toastNotifications.addDanger({
       title: `Failed to ${actionName} the query`,
       text: data.resp,
       toastLifeTimeMs: 20000,

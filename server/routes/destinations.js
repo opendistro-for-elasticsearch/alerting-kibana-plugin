@@ -13,7 +13,7 @@
  *   permissions and limitations under the License.
  */
 
-export default function (server, services) {
+export default function (services, router) {
   const { destinationsService } = services;
 
   // server.route({

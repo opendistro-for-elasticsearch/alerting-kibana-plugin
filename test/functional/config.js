@@ -19,13 +19,13 @@ import { AlertingPageProvider } from './pageObjects';
 
 // the default export of config files must be a config provider
 // that returns an object with the projects config values
-export default async function({ readConfigFile }) {
+export default async function ({ readConfigFile }) {
   // read the Kibana config file so that we can utilize some of
   // its services and PageObjects
   const kibanaConfig = await readConfigFile(resolveKibanaPath('test/functional/config.js'));
   return {
     // list paths to the files that contain your plugins tests
-    testFiles: [resolve(__dirname, './tests/index.js')],
+    testFiles: [resolve(__dirname, './tests/index_old.js')],
 
     // define the name and providers for services that should be
     // available to your tests. If you don't specify anything here

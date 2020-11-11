@@ -18,5 +18,5 @@ For example, this template plugin shows how a third party plugin might provide S
 To create a translation plugin using this template, follow these steps:
   1. Generate the plugin using the generator
   2. Add your translations files to <plugin_name>/translations directory. Remove/Overwrite the existing translation file (i.e. 'es.json').
-  3. Edit <plugin_name>/index.js, updating the 'translations' item as per your plugin translations.
+  3. Edit <plugin_name>/index_old.js, updating the 'translations' item as per your plugin translations.
   4. Restart the Kibana server to publish your plugin translations.

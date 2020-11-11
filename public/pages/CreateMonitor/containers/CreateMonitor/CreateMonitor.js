@@ -25,7 +25,7 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
+//import { toastNotifications } from 'ui/notify';
 
 import ConfigureMonitor from '../ConfigureMonitor';
 import DefineMonitor from '../DefineMonitor';
@@ -184,7 +184,7 @@ export default class CreateMonitor extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  toastNotifications.addDanger({
+                  this.props.core.toastNotifications.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the monitor`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

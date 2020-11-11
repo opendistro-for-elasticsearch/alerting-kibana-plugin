@@ -1,8 +1,8 @@
 {
-  "name": "opendistro-alerting",
+  "name": "opendistro_alerting",
   "version": "1.11.0.2",
   "description": "Kibana Alerting Plugin",
-  "main": "index.js",
+  "main": "target/plugins/opendistro-alerting",
   "license": "Apache-2.0",
   "homepage": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin",
   "kibana": {
@@ -16,11 +16,7 @@
   "scripts": {
     "kbn": "node ../../scripts/kbn",
     "lint": "../../node_modules/.bin/eslint '**/*.js' -c .eslintrc",
-    "start": "plugin-helpers start",
-    "test:server": "plugin-helpers test:server",
-    "test:browser": "plugin-helpers test:browser",
-    "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js",
-    "build": "plugin-helpers build"
+    "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js"
   },
   "husky": {
     "hooks": {

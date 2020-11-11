@@ -15,7 +15,7 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-import chrome from 'ui/chrome';
+// import chrome from 'ui/chrome';
 import moment from 'moment';
 import { Formik, FieldArray } from 'formik';
 import {
@@ -28,7 +28,7 @@ import {
   EuiSpacer,
   EuiTitle,
 } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
+// import { toastNotifications } from 'ui/notify';
 import 'brace/theme/github';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
@@ -58,7 +58,7 @@ export default class CreateTrigger extends Component {
       executeResponse: null,
       initialValues,
     };
-    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
+    this.isDarkMode = this.props.core.chrome.uiSettings.get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -197,7 +197,7 @@ export default class CreateTrigger extends Component {
   });
 
   backendErrorHandler(actionName, data) {
-    toastNotifications.addDanger({
+    this.props.core.toastNotifications.addDanger({
       title: `Failed to ${actionName} the trigger`,
       text: data.resp,
       toastLifeTimeMs: 20000,
@@ -261,7 +261,7 @@ export default class CreateTrigger extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  toastNotifications.addDanger({
+                  this.props.core.toastNotifications.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the trigger`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

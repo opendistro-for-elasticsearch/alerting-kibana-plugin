@@ -24,32 +24,45 @@ export default class DestinationsService {
     this.esDriver = esDriver;
   }
 
-  getDetector = async (req, h) => {
+  getDetector = async (context, request, response) => {
     const { detectorId } = req.params;
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+    // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+    const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
     try {
-      const resp = await callWithRequest(req, 'alertingAD.getDetector', { detectorId });
+      // const resp = await callWithRequest(req, 'alertingAD.getDetector', { detectorId });
+      const resp = await callWithRequest('alertingAD.getDetector', { detectorId });
       const {
         anomaly_detector,
         _seq_no: seqNo,
         _primary_term: primaryTerm,
         _version: version,
-      } = resp;
+      } = getDetectorResponse;
       return { ok: true, detector: anomaly_detector, version, seqNo, primaryTerm };
     } catch (err) {
       console.error('Alerting - AnomalyDetectorService - getDetector:', err);
-      return { ok: false, resp: err.message };
+      // return { ok: false, resp: err.message };
+      return response.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getDetectors = async (req, h) => {
+  getDetectors = async (context, request, response) => {
     const searchRequest = {
       query: { bool: {} },
       size: MAX_DETECTOR_COUNT,
     };
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+    // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+    const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
     try {
-      const resp = await callWithRequest(req, 'alertingAD.searchDetectors', {
+      // const resp = await callWithRequest(req, 'alertingAD.searchDetectors', {
+      //   body: searchRequest,
+      // });
+      const resp = await callWithRequest('alertingAD.searchDetectors', {
         body: searchRequest,
       });
 
@@ -64,10 +77,25 @@ export default class DestinationsService {
         } = hit;
         return { id, ...detector, version, seqNo, primaryTerm };
       });
-      return { ok: true, detectors: mapKeysDeep(detectors, toCamel), totalDetectors };
+      // return { ok: true, detectors: mapKeysDeep(detectors, toCamel), totalDetectors };
+      return response.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          detectors: mapKeysDeep(detectors, toCamel),
+          totalDetectors,
+        },
+      });
     } catch (err) {
       console.error('Alerting - AnomalyDetectorService - searchDetectors:', err);
-      return { ok: false, resp: err.message };
+      // return { ok: false, resp: err.message };
+      return response.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
@@ -75,13 +103,18 @@ export default class DestinationsService {
     try {
       const { startTime = 0, endTime = 20, preview = 'false' } = req.query;
       const { detectorId } = req.params;
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+      // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.AD_ALERTING);
+      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
       if (preview == 'true') {
         const requestBody = {
           period_start: startTime,
           period_end: endTime,
         };
-        const previewResponse = await callWithRequest(req, 'alertingAD.previewDetector', {
+        // const previewResponse = await callWithRequest(req, 'alertingAD.previewDetector', {
+        //   detectorId,
+        //   body: requestBody,
+        // });
+        const previewResponse = await callWithRequest('alertingAD.previewDetector', {
           detectorId,
           body: requestBody,
         });
@@ -129,17 +162,34 @@ export default class DestinationsService {
         const transformedKeys = get(anomaliesResponse, 'hits.hits', []).map((result) =>
           mapKeysDeep(result._source, toCamel)
         );
-        return {
-          ok: true,
-          response: {
-            detector: mapKeysDeep(get(detectorResponse, 'anomaly_detector', {}), toCamel),
-            anomalyResult: anomalyResultMapper(transformedKeys),
+        // return {
+        //   ok: true,
+        //   response: {
+        //     detector: mapKeysDeep(get(detectorResponse, 'anomaly_detector', {}), toCamel),
+        //     anomalyResult: anomalyResultMapper(transformedKeys),
+        //   },
+        // };
+        return response.custom({
+          statusCode: 200,
+          body: {
+            ok: true,
+            response: {
+              detector: mapKeysDeep(get(detectorResponse, 'anomaly_detector', {}), toCamel),
+              anomalyResult: anomalyResultMapper(transformedKeys),
+            },
           },
-        };
+        });
       }
     } catch (err) {
       console.log('Alerting - AnomalyDetectorService - getDetectorResults', err);
-      return { ok: false, error: err.message };
+      // return { ok: false, error: err.message };
+      return response.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 }

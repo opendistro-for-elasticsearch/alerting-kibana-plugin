@@ -1,3 +1,27 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
+import { AppContext } from './utils/AppContext';
+import Main from './pages/Main';
+import { CoreServicesContext } from './utils/CoreServices';
+
+export function renderApp(coreStart, params) {
+  const http = coreStart.http;
+  const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false;
+
+  // render react to DOM
+  ReactDOM.render(
+    <Router>
+      <AppContext.Provider value={{ httpClient: http, isDarkMode }}>
+        <CoreServicesContext.Provider value={coreStart}>
+          <Route render={(props) => <Main title="Alerting" httpClient={http} {...props} />} />
+        </CoreServicesContext.Provider>
+      </AppContext.Provider>
+    </Router>,
+    params.element
+  );
+}
+
 /*
  *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13,54 +37,55 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import chrome from 'ui/chrome';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { uiModules } from 'ui/modules';
-import { HashRouter as Router, Route } from 'react-router-dom';
-
-import 'react-vis/dist/style.css';
-import './less/main.less';
-import Main from './pages/Main';
-import { AppContext } from './utils/AppContext';
-
-const app = uiModules.get('apps/alerting');
-const darkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
-
-//Load Chart's dark mode CSS
-if (darkMode) {
-  require('@elastic/charts/dist/theme_only_dark.css');
-} else {
-  require('@elastic/charts/dist/theme_only_light.css');
-}
-
-app.config(($locationProvider) => {
-  $locationProvider.html5Mode({
-    enabled: false,
-    requireBase: false,
-    rewriteLinks: false,
-  });
-});
-
-app.config((stateManagementConfigProvider) => stateManagementConfigProvider.disable());
-
-function RootController($scope, $element, $http) {
-  const domNode = $element[0];
-
-  // render react to DOM
-  render(
-    <Router>
-      <AppContext.Provider value={{ httpClient: $http, darkMode }}>
-        <Route render={(props) => <Main title="Alerting" httpClient={$http} {...props} />} />
-      </AppContext.Provider>
-    </Router>,
-    domNode
-  );
-
-  // unmount react on controller destroy
-  $scope.$on('$destroy', () => {
-    unmountComponentAtNode(domNode);
-  });
-}
-
-chrome.setRootController('alerting', RootController);
+// import React from 'react';
+// import chrome from 'ui/chrome';
+// import { render, unmountComponentAtNode } from 'react-dom';
+// import { uiModules } from 'ui/modules';
+// import { HashRouter as Router, Route } from 'react-router-dom';
+//
+// import 'react-vis/dist/style.css';
+// import './less/main.less';
+// import Main from './pages/Main';
+// import { AppContext } from './utils/AppContext';
+//
+// const app = uiModules.get('apps/alerting');
+// // const darkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
+// const isDarkMode = coreStart.uiSettings.get("theme:darkMode") || false;
+//
+// //Load Chart's dark mode CSS
+// if (darkMode) {
+//   require('@elastic/charts/dist/theme_only_dark.css');
+// } else {
+//   require('@elastic/charts/dist/theme_only_light.css');
+// }
+//
+// app.config(($locationProvider) => {
+//   $locationProvider.html5Mode({
+//     enabled: false,
+//     requireBase: false,
+//     rewriteLinks: false,
+//   });
+// });
+//
+// app.config((stateManagementConfigProvider) => stateManagementConfigProvider.disable());
+//
+// function RootController($scope, $element, $http) {
+//   const domNode = $element[0];
+//
+//   // render react to DOM
+//   render(
+//     <Router>
+//       <AppContext.Provider value={{ httpClient: $http, darkMode }}>
+//         <Route render={(props) => <Main title="Alerting" httpClient={$http} {...props} />} />
+//       </AppContext.Provider>
+//     </Router>,
+//     domNode
+//   );
+//
+//   // unmount react on controller destroy
+//   $scope.$on('$destroy', () => {
+//     unmountComponentAtNode(domNode);
+//   });
+// }
+//
+// chrome.setRootController('alerting', RootController);

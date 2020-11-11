@@ -23,19 +23,32 @@ export default class DestinationsService {
     this.esDriver = esDriver;
   }
 
-  createDestination = async (req, h) => {
+  createDestination = async (ctx, req, resp) => {
     try {
       const params = { body: JSON.stringify(req.payload) };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const createResponse = await callWithRequest(req, 'alerting.createDestination', params);
-      return { ok: true, resp: createResponse };
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const createResponse = await callWithRequest('alerting.createDestination', params);
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          resp: createResponse,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - createDestination:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  updateDestination = async (req, h) => {
+  updateDestination = async (ctx, req, resp) => {
     try {
       const { destinationId } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
@@ -45,52 +58,99 @@ export default class DestinationsService {
         ifSeqNo,
         ifPrimaryTerm,
       };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const updateResponse = await callWithRequest(req, 'alerting.updateDestination', params);
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const updateResponse = await callWithRequest('alerting.updateDestination', params);
       const { _version, _id } = updateResponse;
-      return { ok: true, version: _version, id: _id };
+      // return { ok: true, version: _version, id: _id };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          version: _version,
+          id: _id,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - updateDestination:', err);
-      return { ok: false, resp: err.message };
+      // return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  deleteDestination = async (req, h) => {
+  deleteDestination = async (ctx, req, resp) => {
     try {
       const { destinationId } = req.params;
       const params = { destinationId };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const response = await callWithRequest(req, 'alerting.deleteDestination', params);
-      return { ok: response.result === 'deleted' };
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const response = await callWithRequest('alerting.deleteDestination', params);
+      // return { ok: response.result === 'deleted' };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: response.result === 'deleted',
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - deleteDestination:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getDestination = async (req, h) => {
+  getDestination = async (ctx, req, resp) => {
     const { destinationId } = req.params;
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+    // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+    const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
     try {
       const params = {
         destinationId,
       };
-      const resp = await callWithRequest(req, 'alerting.getDestination', params);
+      const resp = await callWithRequest('alerting.getDestination', params);
 
       const destination = resp.destinations[0];
       const version = destination.schema_version;
       const ifSeqNo = destination.seq_no;
       const ifPrimaryTerm = destination.primary_term;
 
-      return { ok: true, destination, version, ifSeqNo, ifPrimaryTerm };
+      // return { ok: true, destination, version, ifSeqNo, ifPrimaryTerm };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          destination,
+          version,
+          ifSeqNo,
+          ifPrimaryTerm,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - getDestination:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getDestinations = async (req, h) => {
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+  getDestinations = async (ctx, req, resp) => {
+    // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+    const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
 
     const {
       from = 0,
@@ -125,7 +185,7 @@ export default class DestinationsService {
     if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
 
     try {
-      const resp = await callWithRequest(req, 'alerting.searchDestinations', params);
+      const resp = await callWithRequest('alerting.searchDestinations', params);
 
       const destinations = resp.destinations.map((hit) => {
         const destination = hit;
@@ -138,9 +198,23 @@ export default class DestinationsService {
 
       const totalDestinations = resp.totalDestinations;
 
-      return { ok: true, destinations, totalDestinations };
+      // return { ok: true, destinations, totalDestinations };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          destinations,
+          totalDestinations,
+        },
+      });
     } catch (err) {
-      return { ok: false, err: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
@@ -150,19 +224,33 @@ export default class DestinationsService {
    *  -----------------------------------------------------
    */
 
-  createEmailAccount = async (req, h) => {
+  createEmailAccount = async (ctx, req, resp) => {
     try {
       const params = { body: JSON.stringify(req.payload) };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const createResponse = await callWithRequest(req, 'alerting.createEmailAccount', params);
-      return { ok: true, resp: createResponse };
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const createResponse = await callWithRequest('alerting.createEmailAccount', params);
+      // return { ok: true, resp: createResponse };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          resp: createResponse,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - createEmailAccount:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  updateEmailAccount = async (req, h) => {
+  updateEmailAccount = async (ctx, req, resp) => {
     try {
       const { id } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
@@ -172,50 +260,99 @@ export default class DestinationsService {
         ifPrimaryTerm,
         body: JSON.stringify(req.payload),
       };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const updateResponse = await callWithRequest(req, 'alerting.updateEmailAccount', params);
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const updateResponse = await callWithRequest('alerting.updateEmailAccount', params);
       const { _id } = updateResponse;
-      return { ok: true, id: _id };
+      // return { ok: true, id: _id };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          id: _id,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - updateEmailAccount:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  deleteEmailAccount = async (req, h) => {
+  deleteEmailAccount = async (ctx, req, resp) => {
     try {
       const { id } = req.params;
       const params = { emailAccountId: id };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const deleteResponse = await callWithRequest(req, 'alerting.deleteEmailAccount', params);
-      return { ok: deleteResponse.result === 'deleted' };
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const deleteResponse = await callWithRequest('alerting.deleteEmailAccount', params);
+      // return { ok: deleteResponse.result === 'deleted' };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: deleteResponse.result === 'deleted',
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - deleteEmailAccount:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getEmailAccount = async (req, h) => {
+  getEmailAccount = async (ctx, req, resp) => {
     try {
       const { id } = req.params;
       const params = { emailAccountId: id };
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
-      const getResponse = await callWithRequest(req, 'alerting.getEmailAccount', params);
+      // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
+      const getResponse = await callWithRequest('alerting.getEmailAccount', params);
       const emailAccount = _.get(getResponse, 'email_account', null);
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (emailAccount) {
-        return { ok: true, resp: emailAccount, ifSeqNo, ifPrimaryTerm };
+        // return { ok: true, resp: emailAccount, ifSeqNo, ifPrimaryTerm };
+        return resp.custom({
+          statusCode: 200,
+          body: {
+            ok: true,
+            resp: emailAccount,
+            ifSeqNo,
+            ifPrimaryTerm,
+          },
+        });
       } else {
-        return { ok: false };
+        // return { ok: false };
+        return resp.custom({
+          statusCode: 200,
+          body: {
+            ok: false,
+          },
+        });
       }
     } catch (err) {
       console.error('Alerting - DestinationService - getEmailAccount:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getEmailAccounts = async (req, h) => {
+  getEmailAccounts = async (ctx, req, resp) => {
     try {
       const {
         from = 0,
@@ -255,8 +392,9 @@ export default class DestinationsService {
         },
       };
 
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const getResponse = await callWithRequest(req, 'alerting.getEmailAccounts', params);
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const getResponse = await callWithRequest('alerting.getEmailAccounts', params);
 
       const totalEmailAccounts = _.get(getResponse, 'hits.total.value', 0);
       const emailAccounts = _.get(getResponse, 'hits.hits', []).map((result) => {
@@ -268,10 +406,24 @@ export default class DestinationsService {
         } = result;
         return { id, ...emailAccount, ifSeqNo, ifPrimaryTerm };
       });
-      return { ok: true, emailAccounts, totalEmailAccounts };
+      // return { ok: true, emailAccounts, totalEmailAccounts };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          emailAccounts,
+          totalEmailAccounts,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - getEmailAccounts:', err);
-      return { ok: false, err: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
@@ -281,19 +433,33 @@ export default class DestinationsService {
    *  -----------------------------------------------------
    */
 
-  createEmailGroup = async (req, h) => {
+  createEmailGroup = async (ctx, req, resp) => {
     try {
       const params = { body: JSON.stringify(req.payload) };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const createResponse = await callWithRequest(req, 'alerting.createEmailGroup', params);
-      return { ok: true, resp: createResponse };
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const createResponse = await callWithRequest('alerting.createEmailGroup', params);
+      // return { ok: true, resp: createResponse };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          resp: createResponse,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - createEmailGroup:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  updateEmailGroup = async (req, h) => {
+  updateEmailGroup = async (ctx, req, resp) => {
     try {
       const { id } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
@@ -303,50 +469,99 @@ export default class DestinationsService {
         ifPrimaryTerm,
         body: JSON.stringify(req.payload),
       };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const updateResponse = await callWithRequest(req, 'alerting.updateEmailGroup', params);
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const updateResponse = await callWithRequest('alerting.updateEmailGroup', params);
       const { _id } = updateResponse;
-      return { ok: true, id: _id };
+      // return { ok: true, id: _id };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          id: _id,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - updateEmailGroup:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  deleteEmailGroup = async (req, h) => {
+  deleteEmailGroup = async (ctx, req, resp) => {
     try {
       const { id } = req.params;
       const params = { emailGroupId: id };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const deleteResponse = await callWithRequest(req, 'alerting.deleteEmailGroup', params);
-      return { ok: deleteResponse.result === 'deleted' };
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const deleteResponse = await callWithRequest('alerting.deleteEmailGroup', params);
+      // return { ok: deleteResponse.result === 'deleted' };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: deleteResponse.result === 'deleted',
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - deleteEmailGroup:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getEmailGroup = async (req, h) => {
+  getEmailGroup = async (ctx, req, resp) => {
     try {
       const { id } = req.params;
       const params = { emailGroupId: id };
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
-      const getResponse = await callWithRequest(req, 'alerting.getEmailGroup', params);
+      // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
+      const getResponse = await callWithRequest('alerting.getEmailGroup', params);
       const emailGroup = _.get(getResponse, 'email_group', null);
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (emailGroup) {
-        return { ok: true, resp: emailGroup, ifSeqNo, ifPrimaryTerm };
+        // return { ok: true, resp: emailGroup, ifSeqNo, ifPrimaryTerm };
+        return resp.custom({
+          statusCode: 200,
+          body: {
+            ok: true,
+            resp: emailGroup,
+            ifSeqNo,
+            ifPrimaryTerm,
+          },
+        });
       } else {
-        return { ok: false };
+        // return { ok: false };
+        return resp.custom({
+          statusCode: 200,
+          body: {
+            ok: false,
+          },
+        });
       }
     } catch (err) {
       console.error('Alerting - DestinationService - getEmailGroup:', err);
-      return { ok: false, resp: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getEmailGroups = async (req, h) => {
+  getEmailGroups = async (ctx, req, resp) => {
     try {
       const {
         from = 0,
@@ -386,8 +601,9 @@ export default class DestinationsService {
         },
       };
 
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const getResponse = await callWithRequest(req, 'alerting.getEmailGroups', params);
+      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
+      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
+      const getResponse = await callWithRequest('alerting.getEmailGroups', params);
 
       const totalEmailGroups = _.get(getResponse, 'hits.total.value', 0);
       const emailGroups = _.get(getResponse, 'hits.hits', []).map((result) => {
@@ -399,10 +615,24 @@ export default class DestinationsService {
         } = result;
         return { id, ...emailGroup, ifSeqNo, ifPrimaryTerm };
       });
-      return { ok: true, emailGroups, totalEmailGroups };
+      // return { ok: true, emailGroups, totalEmailGroups };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: true,
+          emailGroups,
+          totalEmailGroups,
+        },
+      });
     } catch (err) {
       console.error('Alerting - DestinationService - getEmailGroups:', err);
-      return { ok: false, err: err.message };
+      return resp.custom({
+        statusCode: 200,
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 }

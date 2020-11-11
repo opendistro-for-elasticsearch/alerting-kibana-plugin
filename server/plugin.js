@@ -1,7 +1,7 @@
-import { AlertingPluginSetup, AlertingPluginStart } from ".";
-import { Plugin, CoreSetup, CoreStart, ILegacyClusterClient } from "../../../src/core/server";
-import alertingPlugin from "./clusters/alerting/alertingPlugin";
-import adPlugin from "./clusters/alerting/adPlugin";
+import { AlertingPluginSetup, AlertingPluginStart } from '.';
+import { Plugin, CoreSetup, CoreStart, ILegacyClusterClient } from '../../../src/core/server';
+import alertingPlugin from './clusters/alerting/alertingPlugin';
+import adPlugin from './clusters/alerting/adPlugin';
 import {
   AlertService,
   DestinationsService,
@@ -39,10 +39,10 @@ import { alerts, destinations, elasticsearch, monitors, detectors } from '../ser
 //   detectors(server, services);
 // }
 
-export class AlertingPlugin implements Plugin<AlertingPluginSetup, AlertingPluginStart> {
-  public async setup(core: CoreSetup) {
+export class AlertingPlugin {
+  async setup(core) {
     // create Elasticsearch client that aware of ISM API endpoints
-    const esDriver: ILegacyClusterClient = core.elasticsearch.legacy.createClient("opendistro_alerting", {
+    const esDriver = core.elasticsearch.legacy.createClient('alerting', {
       plugins: [alertingPlugin, adPlugin],
     });
 
@@ -72,7 +72,7 @@ export class AlertingPlugin implements Plugin<AlertingPluginSetup, AlertingPlugi
     return {};
   }
 
-  public async start(core: CoreStart) {
+  async start(core) {
     return {};
   }
 }
