@@ -307,7 +307,7 @@ export default class ManageSenders extends React.Component {
 }
 
 ManageSenders.propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   isEmailAllowed: PropTypes.bool,
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,

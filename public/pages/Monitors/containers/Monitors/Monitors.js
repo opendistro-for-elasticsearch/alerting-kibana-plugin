@@ -178,10 +178,9 @@ export default class Monitors extends Component {
     const { httpClient } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm, monitor } = item;
     return httpClient
-      .put('../api/alerting/monitors', {
-        params: { id },
+      .put(`../api/alerting/monitors/${id}`, {
         query: { ifSeqNo, ifPrimaryTerm },
-        body: { ...monitor, ...update },
+        body: JSON.stringify({ ...monitor, ...update }),
       })
       .then((resp) => resp)
       .catch((err) => err);
@@ -191,7 +190,7 @@ export default class Monitors extends Component {
     const { httpClient } = this.props;
     const { id, version } = item;
     return httpClient
-      .delete(`../api/alerting/monitors/${id}?version=${version}`)
+      .delete(`../api/alerting/monitors/${id}`, { query: { version } })
       .then((resp) => resp)
       .catch((err) => err);
   }
@@ -236,7 +235,9 @@ export default class Monitors extends Component {
 
     const promises = Object.entries(monitorAlerts).map(([monitorId, alerts]) =>
       httpClient
-        .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, { alerts })
+        .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, {
+          body: JSON.stringify(alerts),
+        })
         .catch((error) => error)
     );
 
@@ -301,11 +302,9 @@ export default class Monitors extends Component {
 
     const { httpClient } = this.props;
 
-    const response = await httpClient.get(
-      `../api/alerting/alerts?${queryString.stringify(params)}`
-    );
+    const response = await httpClient.get('../api/alerting/alerts', { query: params });
 
-    if (response.data.ok) {
+    if (response.ok) {
       const {
         data: { alerts, totalAlerts },
       } = response;

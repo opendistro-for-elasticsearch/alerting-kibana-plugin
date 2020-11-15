@@ -60,10 +60,10 @@ class ConfigureActions extends React.Component {
       return destination.type;
     };
     try {
-      const response = await httpClient.get(
-        `../api/alerting/destinations?search=${searchText}&size=200`
-      );
-      const destinations = response.data.destinations
+      const response = await httpClient.get('../api/alerting/destinations', {
+        query: { search: searchText, size: 200 },
+      });
+      const destinations = response.destinations
         .map((destination) => ({
           label: `${destination.name} - (${getDestinationLabel(destination)})`,
           value: destination.id,
@@ -90,12 +90,12 @@ class ConfigureActions extends React.Component {
     const condition = { script: { lang: 'painless', source: 'return true' } };
     const testMonitor = { ...monitor, triggers: [{ ...trigger, actions: [action], condition }] };
     try {
-      const response = await httpClient.post(
-        '../api/alerting/monitors/_execute?dryrun=false',
-        testMonitor
-      );
-      if (!response.data.ok) {
-        console.error('There was an error trying to send test message', response.data.resp);
+      const response = await httpClient.post('../api/alerting/monitors/_execute', {
+        query: { dryrun: false },
+        body: JSON.stringify(testMonitor),
+      });
+      if (!response.ok) {
+        console.error('There was an error trying to send test message', response.resp);
       }
     } catch (err) {
       console.error('There was an error trying to send test message', err);

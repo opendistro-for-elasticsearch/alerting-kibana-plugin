@@ -112,7 +112,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   createEmailGroup = async (emailGroup) => {
-    const { httpClient } = this.props;
+    const { httpClient, core } = this.props;
     const body = {
       name: emailGroup.name,
       emails: emailGroup.emails.map((email) => ({ email: email.label })),
@@ -121,7 +121,7 @@ export default class ManageEmailGroups extends React.Component {
       const response = await httpClient.post(`../api/alerting/destinations/email_groups`, body);
       if (!response.data.ok) {
         this.setState({ failedEmailGroups: true });
-        this.props.core.toastNotifications.addDanger({
+        core.notifications.toasts.addDanger({
           title: `Failed to create email group: ${emailGroup.name}`,
           text: `Reason: ${response.data.resp}`,
         });
@@ -129,7 +129,7 @@ export default class ManageEmailGroups extends React.Component {
     } catch (err) {
       console.error('Unable to create email group', err);
       this.setState({ failedEmailGroups: true });
-      this.props.core.toastNotifications.addDanger({
+      core.notifications.toasts.addDanger({
         title: `Failed to create email group: ${emailGroup.name}`,
         text: `Reason: ${err}`,
       });
@@ -319,7 +319,7 @@ export default class ManageEmailGroups extends React.Component {
 }
 
 ManageEmailGroups.propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   isEmailAllowed: PropTypes.bool,
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,

@@ -43,7 +43,7 @@ const CustomOption = ({ option, searchValue, contentClassName }) => {
 };
 
 const propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
 };
 
 class MonitorIndex extends React.Component {

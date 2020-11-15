@@ -26,8 +26,6 @@ export default class MonitorService {
 
   createMonitor = async (context, req, res) => {
     try {
-      this.logger.info('createMonitor handler');
-      this.logger.info(req);
       const params = { body: JSON.stringify(req.body) };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
@@ -73,19 +71,18 @@ export default class MonitorService {
   };
 
   getMonitor = async (context, req, res) => {
-    this.logger.info('enter getMonitor handler');
     try {
       const { id } = req.params;
       const params = { monitorId: id };
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const getResponse = await callWithRequest('alerting.getMonitor', params);
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const getResponse = await callAsCurrentUser('alerting.getMonitor', params);
       const monitor = _.get(getResponse, 'monitor', null);
       const version = _.get(getResponse, '_version', null);
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (monitor) {
-        const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
-        const searchResponse = await callWithRequest('alerting.getMonitors', {
+        const { callAsCurrentUser } = this.esDriver.asScoped(req);
+        const searchResponse = await callAsCurrentUser('alerting.getMonitors', {
           index: INDEX.ALL_ALERTS,
           body: {
             size: 0,
@@ -124,7 +121,7 @@ export default class MonitorService {
           body: { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm },
         });
       } else {
-        return resp.ok({
+        return res.ok({
           body: {
             ok: false,
           },
@@ -146,8 +143,8 @@ export default class MonitorService {
       const { id } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
       const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.body) };
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const updateResponse = await callWithRequest('alerting.updateMonitor', params);
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const updateResponse = await callAsCurrentUser('alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
       // return { ok: true, version: _version, id: _id };
       return res.ok({
@@ -217,8 +214,8 @@ export default class MonitorService {
       // const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
       //   CLUSTER.ALERTING
       // );
-      const { callAsCurrentUser: alertingCallWithRequest } = await this.esDriver.asScoped(req);
-      const getResponse = await alertingCallWithRequest('alerting.getMonitors', params);
+      const { callAsCurrentUser: alertingCallAsCurrentUser } = await this.esDriver.asScoped(req);
+      const getResponse = await alertingCallAsCurrentUser('alerting.getMonitors', params);
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
       const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map((result) => {
@@ -287,8 +284,8 @@ export default class MonitorService {
       };
 
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
-      const esAggsResponse = await callWithRequest('alerting.getMonitors', aggsParams);
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const esAggsResponse = await callAsCurrentUser('alerting.getMonitors', aggsParams);
       const buckets = _.get(esAggsResponse, 'aggregations.uniq_monitor_ids.buckets', []).map(
         (bucket) => {
           const {
@@ -374,8 +371,8 @@ export default class MonitorService {
         body: JSON.stringify(req.body),
       };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
-      const acknowledgeResponse = await callWithRequest('alerting.acknowledgeAlerts', params);
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const acknowledgeResponse = await callAsCurrentUser('alerting.acknowledgeAlerts', params);
       // return { ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse };
       return res.ok({
         body: {

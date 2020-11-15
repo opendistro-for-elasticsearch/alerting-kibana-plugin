@@ -144,16 +144,11 @@ export default class MonitorDetails extends Component {
       httpClient,
     } = this.props;
     const { monitor, ifSeqNo, ifPrimaryTerm } = this.state;
-    const requestQuery = {
-      ifSeqNo: ifSeqNo,
-      ifPrimaryTerm: ifPrimaryTerm,
-    };
-    const requestBody = { ...monitor, ...update };
     this.setState({ updating: true });
     return httpClient
       .put(`../api/alerting/monitors/${monitorId}`, {
-        query: requestQuery,
-        body: JSON.stringify(requestBody),
+        query: { ifSeqNo, ifPrimaryTerm },
+        body: JSON.stringify({ ...monitor, ...update }),
       })
       .then((resp) => {
         const { version: monitorVersion } = resp;
@@ -272,7 +267,7 @@ export default class MonitorDetails extends Component {
           onCloseTrigger={this.onCloseTrigger}
           onMonitorFieldChange={() => {}}
           updateMonitor={this.updateMonitor}
-          core={core}
+          core={this.props.core}
         />
       );
     }

@@ -376,7 +376,7 @@ class DestinationsList extends React.Component {
 }
 
 DestinationsList.propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
 };
 export default DestinationsList;

@@ -274,7 +274,7 @@ class CreateDestination extends React.Component {
 
 CreateDestination.propTypes = {
   edit: PropTypes.bool,
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 };

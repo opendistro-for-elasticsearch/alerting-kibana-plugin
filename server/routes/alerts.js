@@ -29,8 +29,8 @@ export default function (services, router) {
       path: '/api/alerting/alerts',
       validate: {
         query: schema.object({
-          from: schema.maybe(schema.string()),
-          size: schema.string(),
+          from: schema.maybe(schema.number()),
+          size: schema.number(),
           search: schema.maybe(schema.string()),
           sortField: schema.string(),
           sortDirection: schema.string(),

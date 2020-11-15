@@ -134,7 +134,7 @@ export default class CreateTrigger extends Component {
       _.set(monitorToExecute, 'inputs[0].search', searchRequest);
     }
     httpClient
-      .post('../api/alerting/monitors/_execute', monitorToExecute)
+      .post('../api/alerting/monitors/_execute', { body: JSON.stringify(monitorToExecute) })
       .then((resp) => {
         if (resp.ok) {
           this.setState({ executeResponse: resp.resp });
@@ -197,7 +197,7 @@ export default class CreateTrigger extends Component {
   });
 
   backendErrorHandler(actionName, resp) {
-    this.props.core.toastNotifications.addDanger({
+    this.props.core.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the trigger`,
       text: resp,
       toastLifeTimeMs: 20000,
@@ -261,7 +261,7 @@ export default class CreateTrigger extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  this.props.core.toastNotifications.addDanger({
+                  this.props.core.notifications.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the trigger`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

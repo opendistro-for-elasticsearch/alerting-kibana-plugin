@@ -29,8 +29,8 @@ export default function (services, router) {
       path: '/api/alerting/monitors',
       validate: {
         query: schema.object({
-          from: schema.string(),
-          size: schema.string(),
+          from: schema.number(),
+          size: schema.number(),
           search: schema.string(),
           sortField: schema.string(),
           sortDirection: schema.string(),
@@ -67,6 +67,7 @@ export default function (services, router) {
     {
       path: '/api/alerting/monitors/_execute',
       validate: {
+        query: schema.object({ dryrun: schema.maybe(schema.string()) }),
         body: schema.any(),
       },
     },
@@ -126,6 +127,9 @@ export default function (services, router) {
       validate: {
         params: schema.object({
           id: schema.string(),
+        }),
+        query: schema.object({
+          version: schema.number(),
         }),
       },
     },

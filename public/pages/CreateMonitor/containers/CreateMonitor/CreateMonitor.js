@@ -130,7 +130,7 @@ export default class CreateMonitor extends Component {
   }
 
   backendErrorHandler(actionName, resp) {
-    this.props.core.toastNotifications.addDanger({
+    this.props.core.notification.toasts.addDanger({
       title: `Failed to ${actionName} the monitor`,
       text: resp,
       toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
@@ -183,7 +183,7 @@ export default class CreateMonitor extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  this.props.core.toastNotifications.addDanger({
+                  this.props.core.notification.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the monitor`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

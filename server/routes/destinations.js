@@ -28,7 +28,14 @@ export default function (services, router) {
     {
       path: '/api/alerting/destinations',
       validate: {
-        query: schema.any(),
+        query: schema.object({
+          from: schema.maybe(schema.number()),
+          size: schema.number(),
+          search: schema.string(),
+          sortField: schema.maybe(schema.string()),
+          sortDirection: schema.maybe(schema.string()),
+          type: schema.maybe(schema.string()),
+        }),
       },
     },
     destinationsService.getDestinations
@@ -43,7 +50,11 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/destinations/{destinationId}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          destinationId: schema.string(),
+        }),
+      },
     },
     destinationsService.getDestination
   );

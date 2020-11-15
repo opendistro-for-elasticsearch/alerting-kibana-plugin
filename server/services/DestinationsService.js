@@ -23,14 +23,13 @@ export default class DestinationsService {
     this.esDriver = esDriver;
   }
 
-  createDestination = async (ctx, req, resp) => {
+  createDestination = async (context, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.payload) };
+      const params = { body: JSON.stringify(req.body) };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const createResponse = await callWithRequest('alerting.createDestination', params);
-      return resp.custom({
-        statusCode: 200,
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const createResponse = await callAsCurrentUser('alerting.createDestination', params);
+      return res.ok({
         body: {
           ok: true,
           resp: createResponse,
@@ -38,8 +37,7 @@ export default class DestinationsService {
       });
     } catch (err) {
       console.error('Alerting - DestinationService - createDestination:', err);
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -48,23 +46,22 @@ export default class DestinationsService {
     }
   };
 
-  updateDestination = async (ctx, req, resp) => {
+  updateDestination = async (context, req, res) => {
     try {
       const { destinationId } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
       const params = {
-        body: JSON.stringify(req.payload),
+        body: JSON.stringify(req.body),
         destinationId,
         ifSeqNo,
         ifPrimaryTerm,
       };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const updateResponse = await callWithRequest('alerting.updateDestination', params);
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const updateResponse = await callAsCurrentUser('alerting.updateDestination', params);
       const { _version, _id } = updateResponse;
       // return { ok: true, version: _version, id: _id };
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           version: _version,
@@ -74,8 +71,7 @@ export default class DestinationsService {
     } catch (err) {
       console.error('Alerting - DestinationService - updateDestination:', err);
       // return { ok: false, resp: err.message };
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -84,24 +80,22 @@ export default class DestinationsService {
     }
   };
 
-  deleteDestination = async (ctx, req, resp) => {
+  deleteDestination = async (context, req, res) => {
     try {
       const { destinationId } = req.params;
       const params = { destinationId };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const response = await callWithRequest('alerting.deleteDestination', params);
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const response = await callAsCurrentUser('alerting.deleteDestination', params);
       // return { ok: response.result === 'deleted' };
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: response.result === 'deleted',
         },
       });
     } catch (err) {
       console.error('Alerting - DestinationService - deleteDestination:', err);
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -110,15 +104,15 @@ export default class DestinationsService {
     }
   };
 
-  getDestination = async (ctx, req, resp) => {
+  getDestination = async (context, req, res) => {
     const { destinationId } = req.params;
     // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
-    const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
+    const { callAsCurrentUser } = this.esDriver.asScoped(req);
     try {
       const params = {
         destinationId,
       };
-      const resp = await callWithRequest('alerting.getDestination', params);
+      const resp = await callAsCurrentUser('alerting.getDestination', params);
 
       const destination = resp.destinations[0];
       const version = destination.schema_version;
@@ -126,8 +120,7 @@ export default class DestinationsService {
       const ifPrimaryTerm = destination.primary_term;
 
       // return { ok: true, destination, version, ifSeqNo, ifPrimaryTerm };
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           destination,
@@ -138,8 +131,7 @@ export default class DestinationsService {
       });
     } catch (err) {
       console.error('Alerting - DestinationService - getDestination:', err);
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -148,9 +140,9 @@ export default class DestinationsService {
     }
   };
 
-  getDestinations = async (ctx, req, resp) => {
+  getDestinations = async (context, req, res) => {
     // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
-    const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
+    const { callAsCurrentUser } = this.esDriver.asScoped(req);
 
     const {
       from = 0,
@@ -185,7 +177,7 @@ export default class DestinationsService {
     if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
 
     try {
-      const resp = await callWithRequest('alerting.searchDestinations', params);
+      const resp = await callAsCurrentUser('alerting.searchDestinations', params);
 
       const destinations = resp.destinations.map((hit) => {
         const destination = hit;
@@ -199,8 +191,7 @@ export default class DestinationsService {
       const totalDestinations = resp.totalDestinations;
 
       // return { ok: true, destinations, totalDestinations };
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           destinations,
@@ -208,8 +199,7 @@ export default class DestinationsService {
         },
       });
     } catch (err) {
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,

@@ -22,8 +22,6 @@ export default class ElasticsearchService {
 
   search = async (context, req, res) => {
     try {
-      this.logger.info('enter ES handler');
-      this.logger.info(req);
       const { query, index, size } = req.body;
       const params = { index, size, body: query };
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);

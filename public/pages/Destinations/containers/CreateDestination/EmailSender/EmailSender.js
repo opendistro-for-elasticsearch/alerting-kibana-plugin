@@ -131,6 +131,6 @@ export default class EmailSender extends React.Component {
 }
 
 EmailSender.propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
 };
