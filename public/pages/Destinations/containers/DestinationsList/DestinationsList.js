@@ -208,12 +208,14 @@ class DestinationsList extends React.Component {
         search: queryParms,
       });
       try {
-        const resp = await httpClient.get(`../api/alerting/destinations?${queryParms}`);
-        if (resp.data.ok) {
+        const resp = await httpClient.get('../api/alerting/destinations', {
+          query: { from, ...params },
+        });
+        if (resp.ok) {
           this.setState({
             isDestinationLoading: false,
-            destinations: resp.data.destinations,
-            totalDestinations: resp.data.totalDestinations,
+            destinations: resp.destinations,
+            totalDestinations: resp.totalDestinations,
           });
         } else {
           this.setState({

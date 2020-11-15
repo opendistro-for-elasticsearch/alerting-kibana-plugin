@@ -128,8 +128,8 @@ class DefineMonitor extends Component {
     const { httpClient } = this.props;
     try {
       const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
-      if (pluginsResponse.data.ok) {
-        this.setState({ plugins: pluginsResponse.data.resp.map((plugin) => plugin.component) });
+      if (pluginsResponse.ok) {
+        this.setState({ plugins: pluginsResponse.resp.map((plugin) => plugin.component) });
       } else {
         console.error('There was a problem getting plugins list');
       }
@@ -192,16 +192,16 @@ class DefineMonitor extends Component {
 
       const [queryResponse, optionalResponse] = await Promise.all(promises);
 
-      if (queryResponse.data.ok) {
-        const response = _.get(queryResponse.data.resp, 'input_results.results[0]');
+      if (queryResponse.ok) {
+        const response = _.get(queryResponse.resp, 'input_results.results[0]');
         // If there is an optionalResponse use it's results, otherwise use the original response
         const performanceResponse = optionalResponse
-          ? _.get(optionalResponse, 'data.resp.input_results.results[0]', null)
+          ? _.get(optionalResponse, 'resp.input_results.results[0]', null)
           : response;
         this.setState({ response, formikSnapshot, performanceResponse });
       } else {
-        console.error('There was an error running the query', queryResponse.data.resp);
-        this.backendErrorHandler('run', queryResponse.data);
+        console.error('There was an error running the query', queryResponse.resp);
+        this.backendErrorHandler('run', queryResponse.resp);
         this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
       }
     } catch (err) {
@@ -231,8 +231,8 @@ class DefineMonitor extends Component {
 
     try {
       const response = await this.props.httpClient.post('../api/alerting/_mappings', { index });
-      if (response.data.ok) {
-        return response.data.resp;
+      if (response.ok) {
+        return response.resp;
       }
       return {};
     } catch (err) {
@@ -335,10 +335,10 @@ class DefineMonitor extends Component {
     return values.searchType == SEARCH_TYPE.AD && plugins.indexOf(ES_AD_PLUGIN) == -1;
   }
 
-  backendErrorHandler(actionName, data) {
+  backendErrorHandler(actionName, resp) {
     this.props.core.toastNotifications.addDanger({
       title: `Failed to ${actionName} the query`,
-      text: data.resp,
+      text: resp,
       toastLifeTimeMs: 20000,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });

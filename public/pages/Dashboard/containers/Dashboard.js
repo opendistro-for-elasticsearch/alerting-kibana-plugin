@@ -180,17 +180,18 @@ export default class Dashboard extends Component {
         monitorIds,
       };
       const queryParamsString = queryString.stringify(params);
-      const { httpClient, history } = this.props;
+      location.search;
+      const { httpClient, history, core } = this.props;
       history.replace({ ...this.props.location, search: queryParamsString });
-      httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`).then(resp => {
-        if (resp.data.ok) {
-          const {
-            data: { alerts, totalAlerts },
-          } = resp;
+      httpClient.get('../api/alerting/alerts', { query: params }).then((resp) => {
+        // httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`).then(resp => {
+        if (resp.ok) {
+          const { alerts, totalAlerts } = resp;
           this.setState({
             alerts,
             totalAlerts,
           });
+          console.log('succeeded to get alerts');
         } else {
           console.log('error getting alerts:', resp);
         }
@@ -217,7 +218,7 @@ export default class Dashboard extends Component {
     const promises = Object.entries(monitorAlerts).map(([monitorId, alerts]) =>
       httpClient
         .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, { alerts })
-        .catch(error => error)
+        .catch((error) => error)
     );
 
     const values = await Promise.all(promises);
@@ -259,23 +260,23 @@ export default class Dashboard extends Component {
     });
   };
 
-  onSeverityLevelChange = e => {
+  onSeverityLevelChange = (e) => {
     this.setState({ page: 0, severityLevel: e.target.value });
   };
 
-  onAlertStateChange = e => {
+  onAlertStateChange = (e) => {
     this.setState({ page: 0, alertState: e.target.value });
   };
 
-  onSelectionChange = selectedItems => {
+  onSelectionChange = (selectedItems) => {
     this.setState({ selectedItems });
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     this.setState({ page: 0, search: e.target.value });
   };
 
-  onPageClick = page => {
+  onPageClick = (page) => {
     this.setState({ page });
   };
 
@@ -309,8 +310,8 @@ export default class Dashboard extends Component {
 
     const selection = {
       onSelectionChange: this.onSelectionChange,
-      selectable: item => item.state === 'ACTIVE',
-      selectableMessage: selectable =>
+      selectable: (item) => item.state === 'ACTIVE',
+      selectableMessage: (selectable) =>
         selectable ? undefined : 'Only Active Alerts are Acknowledgeable',
     };
 
@@ -354,7 +355,7 @@ export default class Dashboard extends Component {
            * because the next getAlerts have the same id
            * $id-$version will correctly remove selected items
            * */
-          itemId={item => `${item.id}-${item.version}`}
+          itemId={(item) => `${item.id}-${item.version}`}
           columns={columns}
           pagination={pagination}
           sorting={sorting}

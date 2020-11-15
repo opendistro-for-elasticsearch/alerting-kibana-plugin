@@ -16,5 +16,5 @@ export const config = {
 
 // entry point
 export function plugin(initializerContext) {
-  return new AlertingPlugin();
+  return new AlertingPlugin(initializerContext);
 }

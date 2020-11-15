@@ -58,7 +58,7 @@ export default class CreateTrigger extends Component {
       executeResponse: null,
       initialValues,
     };
-    this.isDarkMode = this.props.core.chrome.uiSettings.get('theme:darkMode') || false;
+    this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
   }
 
   componentDidMount() {

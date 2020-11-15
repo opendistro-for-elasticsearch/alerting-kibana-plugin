@@ -60,7 +60,7 @@ class MonitorHistory extends PureComponent {
         endTime: this.initialEndTime,
       },
     };
-    this.isDarkMode = this.props.core.chrome.uiSettings.get('theme:darkMode') || false;
+    this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
   }
   async componentDidMount() {
     const { triggers } = this.props;
@@ -194,15 +194,17 @@ class MonitorHistory extends PureComponent {
 
     try {
       const resp = await httpClient.post('../api/alerting/_search', {
-        query: getPOISearchQuery(
-          monitorId,
-          poiTimeWindow.startTime.valueOf(),
-          poiTimeWindow.endTime.valueOf(),
-          intervalDuration
-        ),
-        index: INDEX.ALL_ALERTS,
+        body: JSON.stringify({
+          query: getPOISearchQuery(
+            monitorId,
+            poiTimeWindow.startTime.valueOf(),
+            poiTimeWindow.endTime.valueOf(),
+            intervalDuration
+          ),
+          index: INDEX.ALL_ALERTS,
+        }),
       });
-      if (resp.data.ok) {
+      if (resp.ok) {
         const poiData = get(resp, 'data.resp.aggregations.alerts_over_time.buckets', []).map(
           (item) => ({
             x: item.key,
@@ -220,7 +222,7 @@ class MonitorHistory extends PureComponent {
           () => this.getAlerts()
         );
       } else {
-        const parsedError = JSON.parse(resp.data.resp.response);
+        const parsedError = JSON.parse(resp.resp.response);
         this.setState({ queryResponse: parsedError });
       }
     } catch (err) {
@@ -243,10 +245,10 @@ class MonitorHistory extends PureComponent {
         monitorIds: monitorId,
       };
 
-      const resp = await httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`);
+      const resp = await httpClient.get('../api/alerting/alerts', { query: params });
       var alerts;
-      if (resp.data.ok) {
-        alerts = resp.data.alerts;
+      if (resp.ok) {
+        alerts = resp.alerts;
       } else {
         console.log('error getting alerts:', resp);
         alerts = [];

@@ -13,6 +13,8 @@
  *   permissions and limitations under the License.
  */
 
+import { schema } from '@kbn/config-schema';
+
 export default function (services, router) {
   const { anomalyDetectorService } = services;
 
@@ -37,7 +39,11 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/detectors/{detectorId}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     anomalyDetectorService.getDetector
   );
@@ -45,7 +51,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/detectors/_search',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     anomalyDetectorService.getDetectors
   );
@@ -53,7 +61,11 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/detectors/{detectorId}/results',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     anomalyDetectorService.getDetectorResults
   );

@@ -27,7 +27,7 @@ import {
 
 const propTypes = {
   history: PropTypes.object.isRequired,
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
 };
@@ -64,7 +64,9 @@ export default class Breadcrumbs extends Component {
       location: { state: routeState },
     } = this.props;
     const rawBreadcrumbs = await getBreadcrumbs(window.location.hash, routeState, httpClient);
-    const breadcrumbs = rawBreadcrumbs.map(breadcrumb => createEuiBreadcrumb(breadcrumb, history));
+    const breadcrumbs = rawBreadcrumbs.map((breadcrumb) =>
+      createEuiBreadcrumb(breadcrumb, history)
+    );
     this.setState({ breadcrumbs });
   }
 
@@ -88,7 +90,7 @@ export function createEuiBreadcrumb(breadcrumb, history) {
   return {
     text,
     href: `#${href}`,
-    onClick: e => {
+    onClick: (e) => {
       e.preventDefault();
       history.push(href);
     },
@@ -98,14 +100,14 @@ export function createEuiBreadcrumb(breadcrumb, history) {
 export async function getBreadcrumbs(hash, routeState, httpClient) {
   const routes = parseLocationHash(hash);
   const asyncBreadcrumbs = await Promise.all(
-    routes.map(route => getBreadcrumb(route, routeState, httpClient))
+    routes.map((route) => getBreadcrumb(route, routeState, httpClient))
   );
-  const breadcrumbs = _.flatten(asyncBreadcrumbs).filter(breadcrumb => !!breadcrumb);
+  const breadcrumbs = _.flatten(asyncBreadcrumbs).filter((breadcrumb) => !!breadcrumb);
   return breadcrumbs;
 }
 
 export function parseLocationHash(hash) {
-  return hash.split('/').filter(route => !!route);
+  return hash.split('/').filter((route) => !!route);
 }
 
 export async function getBreadcrumb(route, routeState, httpClient) {
@@ -128,8 +130,8 @@ export async function getBreadcrumb(route, routeState, httpClient) {
         let monitorName = base;
         try {
           const response = await httpClient.get(`../api/alerting/monitors/${base}`);
-          if (response.data.ok) {
-            monitorName = response.data.resp.name;
+          if (response.ok) {
+            monitorName = response.resp.name;
           }
         } catch (err) {
           console.error(err);

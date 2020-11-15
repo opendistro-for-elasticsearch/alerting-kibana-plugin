@@ -13,6 +13,8 @@
  *   permissions and limitations under the License.
  */
 
+import { schema } from '@kbn/config-schema';
+
 export default function (services, router) {
   const { monitorService } = services;
 
@@ -25,7 +27,16 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/monitors',
-      validate: false,
+      validate: {
+        query: schema.object({
+          from: schema.string(),
+          size: schema.string(),
+          search: schema.string(),
+          sortField: schema.string(),
+          sortDirection: schema.string(),
+          state: schema.string(),
+        }),
+      },
     },
     monitorService.getMonitors
   );
@@ -39,7 +50,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/monitors',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     monitorService.createMonitor
   );
@@ -53,7 +66,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/monitors/_execute',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     monitorService.executeMonitor
   );
@@ -67,7 +82,11 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/monitors/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     monitorService.getMonitor
   );
@@ -81,7 +100,11 @@ export default function (services, router) {
   router.put(
     {
       path: '/api/alerting/monitors/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     monitorService.updateMonitor
   );
@@ -95,7 +118,11 @@ export default function (services, router) {
   router.delete(
     {
       path: '/api/alerting/monitors/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     monitorService.deleteMonitor
   );
@@ -109,7 +136,11 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/monitors/{id}/_acknowledge/alerts',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     monitorService.acknowledgeAlerts
   );

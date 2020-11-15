@@ -1,5 +1,5 @@
 {
-  "name": "opendistro_alerting",
+  "name": "opendistro-alerting",
   "version": "1.11.0.2",
   "description": "Kibana Alerting Plugin",
   "main": "target/plugins/opendistro-alerting",

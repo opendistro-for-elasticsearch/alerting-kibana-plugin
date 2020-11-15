@@ -76,21 +76,21 @@ export default class CreateMonitor extends Component {
   async onCreate(monitor, { setSubmitting, setErrors }) {
     const { httpClient } = this.props;
     try {
-      const resp = await httpClient.post('../api/alerting/monitors', monitor);
+      const resp = await httpClient.post('../api/alerting/monitors', {
+        body: JSON.stringify(monitor),
+      });
       setSubmitting(false);
       const {
-        data: {
-          ok,
-          resp: { _id },
-        },
+        ok,
+        resp: { _id },
       } = resp;
       if (ok) {
         this.props.history.push(
           `/monitors/${_id}?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}&success=true`
         );
       } else {
-        console.log('Failed to create:', resp.data);
-        this.backendErrorHandler('create', resp.data);
+        console.log('Failed to create:', resp);
+        this.backendErrorHandler('create', resp);
       }
     } catch (err) {
       console.error(err);
@@ -108,14 +108,12 @@ export default class CreateMonitor extends Component {
     try {
       const resp = await updateMonitor(updatedMonitor);
       setSubmitting(false);
-      const {
-        data: { ok, id },
-      } = resp;
+      const { ok, id } = resp;
       if (ok) {
         this.props.history.push(`/monitors/${id}`);
       } else {
-        console.log('Failed to update:', resp.data);
-        this.backendErrorHandler('update', resp.data);
+        console.log('Failed to update:', resp);
+        this.backendErrorHandler('update', resp);
       }
     } catch (err) {
       console.error(err);
@@ -131,10 +129,10 @@ export default class CreateMonitor extends Component {
     else this.onCreate(monitor, formikBag);
   }
 
-  backendErrorHandler(actionName, data) {
-    toastNotifications.addDanger({
+  backendErrorHandler(actionName, resp) {
+    this.props.core.toastNotifications.addDanger({
       title: `Failed to ${actionName} the monitor`,
-      text: data.resp,
+      text: resp,
       toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -162,6 +160,7 @@ export default class CreateMonitor extends Component {
                 errors={errors}
                 httpClient={httpClient}
                 detectorId={this.props.detectorId}
+                core={this.props.core}
               />
               <Fragment>
                 <EuiSpacer />

@@ -310,10 +310,15 @@
             return AlertingPlugin;
           }
         );
-        /* harmony import */ var _utils_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-          /*! ./utils/constants */ './public/utils/constants.js'
+        /* harmony import */ var _src_core_public__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+          /*! ../../../src/core/public */ 'entry/core/public'
         );
-        // import { DEFAULT_APP_CATEGORIES } from '../../src/core';
+        /* harmony import */ var _src_core_public__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+          _src_core_public__WEBPACK_IMPORTED_MODULE_0__
+        );
+        /* harmony import */ var _utils_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+          /*! ../utils/constants */ './utils/constants.js'
+        );
 
         class AlertingPlugin {
           constructor(initializerContext) {
@@ -322,19 +327,19 @@
 
           setup(core) {
             core.application.register({
-              id: 'alerting',
+              id: _utils_constants__WEBPACK_IMPORTED_MODULE_1__['PLUGIN_NAME'],
               title: 'Alerting',
               description: 'Kibana Alerting Plugin',
-              // main: `plugins/${PLUGIN_NAME}/app`,
-              // icon: `plugins/${PLUGIN_NAME}/images/alerting_icon.svg`,
               order: 8020,
+              category:
+                _src_core_public__WEBPACK_IMPORTED_MODULE_0__['DEFAULT_APP_CATEGORIES'].kibana,
               mount: async (params) => {
                 const { renderApp } = await Promise.all(
                   /*! import() */ [__webpack_require__.e(1), __webpack_require__.e(0)]
                 ).then(__webpack_require__.bind(null, /*! ./app */ './public/app.js'));
                 const [coreStart, depsStart] = await core.getStartServices();
                 return renderApp(coreStart, params);
-              }, // category: DEFAULT_APP_CATEGORIES.kibana,
+              },
             });
             return {};
           }
@@ -347,157 +352,79 @@
         /***/
       },
 
-    /***/ './public/utils/constants.js':
-      /*!***********************************!*\
-  !*** ./public/utils/constants.js ***!
-  \***********************************/
-      /*! exports provided: ALERT_STATE, DEFAULT_EMPTY_DATA, APP_PATH, SEARCH_TYPE, DESTINATION_ACTIONS, MONITOR_ACTIONS, TRIGGER_ACTIONS, DATA_TYPES, ES_AD_PLUGIN, KIBANA_AD_PLUGIN, INPUTS_DETECTOR_ID, MONITOR_INPUT_DETECTOR_ID, AD_PREVIEW_DAYS */
+    /***/ './utils/constants.js':
+      /*!****************************!*\
+  !*** ./utils/constants.js ***!
+  \****************************/
+      /*! exports provided: OPEN_DISTRO_PREFIX, PLUGIN_NAME, INDEX_PREFIX, INDEX, URL, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING */
       /***/ function (module, __webpack_exports__, __webpack_require__) {
         'use strict';
         __webpack_require__.r(__webpack_exports__);
         /* harmony export (binding) */ __webpack_require__.d(
           __webpack_exports__,
-          'ALERT_STATE',
+          'OPEN_DISTRO_PREFIX',
           function () {
-            return ALERT_STATE;
+            return OPEN_DISTRO_PREFIX;
           }
         );
         /* harmony export (binding) */ __webpack_require__.d(
           __webpack_exports__,
-          'DEFAULT_EMPTY_DATA',
+          'PLUGIN_NAME',
           function () {
-            return DEFAULT_EMPTY_DATA;
+            return PLUGIN_NAME;
           }
         );
         /* harmony export (binding) */ __webpack_require__.d(
           __webpack_exports__,
-          'APP_PATH',
+          'INDEX_PREFIX',
           function () {
-            return APP_PATH;
+            return INDEX_PREFIX;
           }
         );
         /* harmony export (binding) */ __webpack_require__.d(
           __webpack_exports__,
-          'SEARCH_TYPE',
+          'INDEX',
           function () {
-            return SEARCH_TYPE;
+            return INDEX;
           }
         );
         /* harmony export (binding) */ __webpack_require__.d(
           __webpack_exports__,
-          'DESTINATION_ACTIONS',
+          'URL',
           function () {
-            return DESTINATION_ACTIONS;
+            return URL;
           }
         );
         /* harmony export (binding) */ __webpack_require__.d(
           __webpack_exports__,
-          'MONITOR_ACTIONS',
+          'MAX_THROTTLE_VALUE',
           function () {
-            return MONITOR_ACTIONS;
+            return MAX_THROTTLE_VALUE;
           }
         );
         /* harmony export (binding) */ __webpack_require__.d(
           __webpack_exports__,
-          'TRIGGER_ACTIONS',
+          'WRONG_THROTTLE_WARNING',
           function () {
-            return TRIGGER_ACTIONS;
+            return WRONG_THROTTLE_WARNING;
           }
         );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'DATA_TYPES',
-          function () {
-            return DATA_TYPES;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'ES_AD_PLUGIN',
-          function () {
-            return ES_AD_PLUGIN;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'KIBANA_AD_PLUGIN',
-          function () {
-            return KIBANA_AD_PLUGIN;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'INPUTS_DETECTOR_ID',
-          function () {
-            return INPUTS_DETECTOR_ID;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'MONITOR_INPUT_DETECTOR_ID',
-          function () {
-            return MONITOR_INPUT_DETECTOR_ID;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'AD_PREVIEW_DAYS',
-          function () {
-            return AD_PREVIEW_DAYS;
-          }
-        );
-        /*
-         *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-         *
-         *   Licensed under the Apache License, Version 2.0 (the "License").
-         *   You may not use this file except in compliance with the License.
-         *   A copy of the License is located at
-         *
-         *       http://www.apache.org/licenses/LICENSE-2.0
-         *
-         *   or in the "license" file accompanying this file. This file is distributed
-         *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-         *   express or implied. See the License for the specific language governing
-         *   permissions and limitations under the License.
-         */
-        const ALERT_STATE = Object.freeze({
-          ACTIVE: 'ACTIVE',
-          ACKNOWLEDGED: 'ACKNOWLEDGED',
-          COMPLETED: 'COMPLETED',
-          ERROR: 'ERROR',
-          DELETED: 'DELETED',
-        });
-        const DEFAULT_EMPTY_DATA = '-';
-        const APP_PATH = {
-          CREATE_MONITOR: '/create-monitor',
-          CREATE_DESTINATION: '/create-destination',
+        const OPEN_DISTRO_PREFIX = 'opendistro';
+        const PLUGIN_NAME = `${OPEN_DISTRO_PREFIX}-alerting`;
+        const INDEX_PREFIX = `${OPEN_DISTRO_PREFIX}-alerting`;
+        const INDEX = {
+          SCHEDULED_JOBS: `.${INDEX_PREFIX}-config`,
+          ALERTS: `.${INDEX_PREFIX}-alerts`,
+          ALL_ALERTS: `.${INDEX_PREFIX}-alert*`,
+          ALERT_HISTORY_WRITE: `.${INDEX_PREFIX}-alert-history-write`,
         };
-        const SEARCH_TYPE = {
-          GRAPH: 'graph',
-          QUERY: 'query',
-          AD: 'ad',
+        const URL = {
+          MUSTACHE: 'https://mustache.github.io/mustache.5.html',
+          DOCUMENTATION: 'https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/',
         };
-        const DESTINATION_ACTIONS = {
-          UPDATE_DESTINATION: 'update-destination',
-        };
-        const MONITOR_ACTIONS = {
-          UPDATE_MONITOR: 'update-monitor',
-        };
-        const TRIGGER_ACTIONS = {
-          UPDATE_TRIGGER: 'update-trigger',
-          CREATE_TRIGGER: 'create-trigger',
-        };
-        const DATA_TYPES = {
-          NUMBER: 'number',
-          TEXT: 'text',
-          BOOLEAN: 'boolean',
-          KEYWORD: 'keyword',
-        };
-        const ES_AD_PLUGIN = 'opendistro-anomaly-detection';
-        const KIBANA_AD_PLUGIN = 'opendistro-anomaly-detection-kibana';
-        const INPUTS_DETECTOR_ID = '0.search.query.query.bool.filter[1].term.detector_id.value';
-        const MONITOR_INPUT_DETECTOR_ID = `inputs.${INPUTS_DETECTOR_ID}`;
-        const AD_PREVIEW_DAYS = 7;
+        const MAX_THROTTLE_VALUE = 1440;
+        const WRONG_THROTTLE_WARNING =
+          'Throttle value must be greater than 0 and less than ' + MAX_THROTTLE_VALUE;
 
         /***/
       },
@@ -520,6 +447,19 @@
       /*! no static exports found */
       /***/ function (module, exports) {
         module.exports = __kbnSharedDeps__.ElasticEui;
+
+        /***/
+      },
+
+    /***/ 'entry/core/public':
+      /*!******************************************!*\
+  !*** @kbn/bundleRef "entry/core/public" ***!
+  \******************************************/
+      /*! no static exports found */
+      /***/ function (module, __webpack_exports__, __webpack_require__) {
+        __webpack_require__.r(__webpack_exports__);
+        var ns = __kbnBundles__.get('entry/core/public');
+        Object.defineProperties(__webpack_exports__, Object.getOwnPropertyDescriptors(ns));
 
         /***/
       },

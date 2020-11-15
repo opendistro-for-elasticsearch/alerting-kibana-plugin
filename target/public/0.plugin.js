@@ -41,8 +41,8 @@
         /* harmony import */ var _pages_Main__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
           /*! ./pages/Main */ './public/pages/Main/index.js'
         );
-        /* harmony import */ var _utils_CoreServices__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
-          /*! ./utils/CoreServices */ './public/utils/CoreServices.js'
+        /* harmony import */ var _utils_CoreServicesContext__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+          /*! ./utils/CoreServicesContext */ './public/utils/CoreServicesContext.js'
         );
         function _extends() {
           _extends =
@@ -61,9 +61,34 @@
           return _extends.apply(this, arguments);
         }
 
+        /*
+         *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+         *
+         *   Licensed under the Apache License, Version 2.0 (the "License").
+         *   You may not use this file except in compliance with the License.
+         *   A copy of the License is located at
+         *
+         *       http://www.apache.org/licenses/LICENSE-2.0
+         *
+         *   or in the "license" file accompanying this file. This file is distributed
+         *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+         *   express or implied. See the License for the specific language governing
+         *   permissions and limitations under the License.
+         */
+
         function renderApp(coreStart, params) {
           const http = coreStart.http;
-          const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false; // render react to DOM
+          const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false; //Load Chart's dark mode CSS
+
+          if (isDarkMode) {
+            __webpack_require__(
+              /*! @elastic/charts/dist/theme_only_dark.css */ '../../node_modules/@elastic/charts/dist/theme_only_dark.css'
+            );
+          } else {
+            __webpack_require__(
+              /*! @elastic/charts/dist/theme_only_light.css */ '../../node_modules/@elastic/charts/dist/theme_only_light.css'
+            );
+          } // render react to DOM
 
           react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(
             /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
@@ -78,7 +103,8 @@
                   },
                 },
                 /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  _utils_CoreServices__WEBPACK_IMPORTED_MODULE_5__['CoreServicesContext'].Provider,
+                  _utils_CoreServicesContext__WEBPACK_IMPORTED_MODULE_5__['CoreServicesContext']
+                    .Provider,
                   {
                     value: coreStart,
                   },
@@ -103,22 +129,9 @@
             ),
             params.element
           );
-        }
-        /*
-         *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-         *
-         *   Licensed under the Apache License, Version 2.0 (the "License").
-         *   You may not use this file except in compliance with the License.
-         *   A copy of the License is located at
-         *
-         *       http://www.apache.org/licenses/LICENSE-2.0
-         *
-         *   or in the "license" file accompanying this file. This file is distributed
-         *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-         *   express or implied. See the License for the specific language governing
-         *   permissions and limitations under the License.
-         */
-        // import React from 'react';
+          return () =>
+            react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.unmountComponentAtNode(params.element);
+        } // import React from 'react';
         // import chrome from 'ui/chrome';
         // import { render, unmountComponentAtNode } from 'react-dom';
         // import { uiModules } from 'ui/modules';
@@ -488,7 +501,7 @@
 
         const propTypes = {
           history: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object.isRequired,
-          httpClient: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
+          httpClient: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object.isRequired,
           location: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object.isRequired,
           title: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string.isRequired,
         };
@@ -625,8 +638,8 @@
                 try {
                   const response = await httpClient.get(`../api/alerting/monitors/${base}`);
 
-                  if (response.data.ok) {
-                    monitorName = response.data.resp.name;
+                  if (response.ok) {
+                    monitorName = response.resp.name;
                   }
                 } catch (err) {
                   console.error(err);
@@ -9745,8 +9758,8 @@
                 }
               );
 
-              if (response.data.ok) {
-                const { anomalyResult, detector } = response.data.response;
+              if (response.ok) {
+                const { anomalyResult, detector } = response.response;
                 this.setState({
                   ...this.state,
                   anomalyResult,
@@ -10276,13 +10289,13 @@
             const { httpClient } = this.props;
 
             try {
-              const resp = await httpClient.post('../api/alerting/monitors', monitor);
+              const resp = await httpClient.post('../api/alerting/monitors', {
+                body: JSON.stringify(monitor),
+              });
               setSubmitting(false);
               const {
-                data: {
-                  ok,
-                  resp: { _id },
-                },
+                ok,
+                resp: { _id },
               } = resp;
 
               if (ok) {
@@ -10290,8 +10303,8 @@
                   `/monitors/${_id}?action=${_utils_constants__WEBPACK_IMPORTED_MODULE_11__['TRIGGER_ACTIONS'].CREATE_TRIGGER}&success=true`
                 );
               } else {
-                console.log('Failed to create:', resp.data);
-                this.backendErrorHandler('create', resp.data);
+                console.log('Failed to create:', resp);
+                this.backendErrorHandler('create', resp);
               }
             } catch (err) {
               console.error(err);
@@ -10310,15 +10323,13 @@
             try {
               const resp = await updateMonitor(updatedMonitor);
               setSubmitting(false);
-              const {
-                data: { ok, id },
-              } = resp;
+              const { ok, id } = resp;
 
               if (ok) {
                 this.props.history.push(`/monitors/${id}`);
               } else {
-                console.log('Failed to update:', resp.data);
-                this.backendErrorHandler('update', resp.data);
+                console.log('Failed to update:', resp);
+                this.backendErrorHandler('update', resp);
               }
             } catch (err) {
               console.error(err);
@@ -10335,10 +10346,10 @@
             else this.onCreate(monitor, formikBag);
           }
 
-          backendErrorHandler(actionName, data) {
-            toastNotifications.addDanger({
+          backendErrorHandler(actionName, resp) {
+            this.props.core.toastNotifications.addDanger({
               title: `Failed to ${actionName} the monitor`,
-              text: data.resp,
+              text: resp,
               toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
             });
             window.scrollTo({
@@ -10401,6 +10412,7 @@
                           errors: errors,
                           httpClient: httpClient,
                           detectorId: this.props.detectorId,
+                          core: this.props.core,
                         }
                       ),
                       /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
@@ -11714,9 +11726,9 @@
             try {
               const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
 
-              if (pluginsResponse.data.ok) {
+              if (pluginsResponse.ok) {
                 this.setState({
-                  plugins: pluginsResponse.data.resp.map((plugin) => plugin.component),
+                  plugins: pluginsResponse.resp.map((plugin) => plugin.component),
                 });
               } else {
                 console.error('There was a problem getting plugins list');
@@ -11832,16 +11844,16 @@
               });
               const [queryResponse, optionalResponse] = await Promise.all(promises);
 
-              if (queryResponse.data.ok) {
+              if (queryResponse.ok) {
                 const response = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.get(
-                  queryResponse.data.resp,
+                  queryResponse.resp,
                   'input_results.results[0]'
                 ); // If there is an optionalResponse use it's results, otherwise use the original response
 
                 const performanceResponse = optionalResponse
                   ? lodash__WEBPACK_IMPORTED_MODULE_1___default.a.get(
                       optionalResponse,
-                      'data.resp.input_results.results[0]',
+                      'resp.input_results.results[0]',
                       null
                     )
                   : response;
@@ -11851,8 +11863,8 @@
                   performanceResponse,
                 });
               } else {
-                console.error('There was an error running the query', queryResponse.data.resp);
-                this.backendErrorHandler('run', queryResponse.data);
+                console.error('There was an error running the query', queryResponse.resp);
+                this.backendErrorHandler('run', queryResponse.resp);
                 this.setState({
                   response: null,
                   formikSnapshot: null,
@@ -11897,8 +11909,8 @@
                 index,
               });
 
-              if (response.data.ok) {
-                return response.data.resp;
+              if (response.ok) {
+                return response.resp;
               }
 
               return {};
@@ -12085,10 +12097,10 @@
             );
           }
 
-          backendErrorHandler(actionName, data) {
+          backendErrorHandler(actionName, resp) {
             this.props.core.toastNotifications.addDanger({
               title: `Failed to ${actionName} the query`,
-              text: data.resp,
+              text: resp,
               toastLifeTimeMs: 20000,
             });
             window.scrollTo({
@@ -12628,11 +12640,11 @@
 
             try {
               const response = await this.props.httpClient.post('../api/alerting/_indices', {
-                index,
+                body: JSON.stringify(index),
               });
 
-              if (response.data.ok) {
-                const indices = response.data.resp.map(({ health, index, status }) => ({
+              if (response.ok) {
+                const indices = response.resp.map(({ health, index, status }) => ({
                   label: index,
                   health,
                   status,
@@ -12660,11 +12672,11 @@
 
             try {
               const response = await this.props.httpClient.post('../api/alerting/_aliases', {
-                alias,
+                body: JSON.stringify(alias),
               });
 
-              if (response.data.ok) {
-                const indices = response.data.resp.map(({ alias, index }) => ({
+              if (response.ok) {
+                const indices = response.resp.map(({ alias, index }) => ({
                   label: alias,
                   index,
                 }));
@@ -15387,7 +15399,7 @@
               executeResponse: null,
               initialValues,
             };
-            this.isDarkMode = this.props.core.chrome.uiSettings.get('theme:darkMode') || false;
+            this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
           }
 
           componentDidMount() {
@@ -17243,23 +17255,22 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                   const queryParamsString = query_string__WEBPACK_IMPORTED_MODULE_2___default.a.stringify(
                     params
                   );
-                  const { httpClient, history } = this.props;
+                  location.search;
+                  const { httpClient, history, core } = this.props;
                   history.replace({ ...this.props.location, search: queryParamsString });
                   httpClient
-                    .get(
-                      `../api/alerting/alerts?${query_string__WEBPACK_IMPORTED_MODULE_2___default.a.stringify(
-                        params
-                      )}`
-                    )
+                    .get('../api/alerting/alerts', {
+                      query: params,
+                    })
                     .then((resp) => {
-                      if (resp.data.ok) {
-                        const {
-                          data: { alerts, totalAlerts },
-                        } = resp;
+                      // httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`).then(resp => {
+                      if (resp.ok) {
+                        const { alerts, totalAlerts } = resp;
                         this.setState({
                           alerts,
                           totalAlerts,
                         });
+                        console.log('succeeded to get alerts');
                       } else {
                         console.log('error getting alerts:', resp);
                       }
@@ -23753,13 +23764,18 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                   history.replace({ ...this.props.location, search: queryParms });
 
                   try {
-                    const resp = await httpClient.get(`../api/alerting/destinations?${queryParms}`);
+                    const resp = await httpClient.get('../api/alerting/destinations', {
+                      query: {
+                        from,
+                        ...params,
+                      },
+                    });
 
-                    if (resp.data.ok) {
+                    if (resp.ok) {
                       this.setState({
                         isDestinationLoading: false,
-                        destinations: resp.data.destinations,
-                        totalDestinations: resp.data.totalDestinations,
+                        destinations: resp.destinations,
+                        totalDestinations: resp.totalDestinations,
                       });
                     } else {
                       this.setState({
@@ -24728,8 +24744,8 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
         /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
           react_router_dom__WEBPACK_IMPORTED_MODULE_1__
         );
-        /* harmony import */ var _utils_CoreServices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-          /*! ../../utils/CoreServices */ './public/utils/CoreServices.js'
+        /* harmony import */ var _utils_CoreServicesContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+          /*! ../../utils/CoreServicesContext */ './public/utils/CoreServicesContext.js'
         );
         /* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
           /*! ../Home */ './public/pages/Home/index.js'
@@ -24825,7 +24841,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
             const { flyout } = this.state;
             const { httpClient, history, ...rest } = this.props;
             return /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              _utils_CoreServices__WEBPACK_IMPORTED_MODULE_2__['CoreServicesConsumer'],
+              _utils_CoreServicesContext__WEBPACK_IMPORTED_MODULE_2__['CoreServicesConsumer'],
               null,
               (core) =>
                 core &&
@@ -24955,6 +24971,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                               props,
                               {
                                 setFlyout: this.setFlyout,
+                                core: core,
                               }
                             )
                           ),
@@ -26496,7 +26513,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
               httpClient
                 .get(`../api/alerting/detectors/${id}`)
                 .then((resp) => {
-                  const { ok, detector, version: detectorVersion, seqNo, primaryTerm } = resp.data;
+                  const { ok, detector, version: detectorVersion, seqNo, primaryTerm } = resp;
 
                   if (ok) {
                     this.setState({
@@ -26525,7 +26542,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                     activeCount,
                     ifSeqNo,
                     ifPrimaryTerm,
-                  } = resp.data;
+                  } = resp;
 
                   if (ok) {
                     this.setState({
@@ -26707,6 +26724,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
               },
               history,
               httpClient,
+              core,
             } = this.props;
             const {
               action,
@@ -26928,6 +26946,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                     monitorId: monitorId,
                     onShowTrigger: this.onCreateTrigger,
                     triggers: monitor.triggers,
+                    core: core,
                   }
                 )
               ),
@@ -27458,18 +27477,20 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
 
               try {
                 const resp = await httpClient.post('../api/alerting/_search', {
-                  query: Object(
-                    _utils_chartHelpers__WEBPACK_IMPORTED_MODULE_9__['getPOISearchQuery']
-                  )(
-                    monitorId,
-                    poiTimeWindow.startTime.valueOf(),
-                    poiTimeWindow.endTime.valueOf(),
-                    intervalDuration
-                  ),
-                  index: _utils_constants__WEBPACK_IMPORTED_MODULE_11__['INDEX'].ALL_ALERTS,
+                  body: JSON.stringify({
+                    query: Object(
+                      _utils_chartHelpers__WEBPACK_IMPORTED_MODULE_9__['getPOISearchQuery']
+                    )(
+                      monitorId,
+                      poiTimeWindow.startTime.valueOf(),
+                      poiTimeWindow.endTime.valueOf(),
+                      intervalDuration
+                    ),
+                    index: _utils_constants__WEBPACK_IMPORTED_MODULE_11__['INDEX'].ALL_ALERTS,
+                  }),
                 });
 
-                if (resp.data.ok) {
+                if (resp.ok) {
                   const poiData = Object(lodash__WEBPACK_IMPORTED_MODULE_2__['get'])(
                     resp,
                     'data.resp.aggregations.alerts_over_time.buckets',
@@ -27491,7 +27512,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                     () => this.getAlerts()
                   );
                 } else {
-                  const parsedError = JSON.parse(resp.data.resp.response);
+                  const parsedError = JSON.parse(resp.resp.response);
                   this.setState({
                     queryResponse: parsedError,
                   });
@@ -27516,15 +27537,13 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                   sortDirection: 'asc',
                   monitorIds: monitorId,
                 };
-                const resp = await httpClient.get(
-                  `../api/alerting/alerts?${query_string__WEBPACK_IMPORTED_MODULE_12___default.a.stringify(
-                    params
-                  )}`
-                );
+                const resp = await httpClient.get('../api/alerting/alerts', {
+                  query: params,
+                });
                 var alerts;
 
-                if (resp.data.ok) {
-                  alerts = resp.data.alerts;
+                if (resp.ok) {
+                  alerts = resp.alerts;
                 } else {
                   console.log('error getting alerts:', resp);
                   alerts = [];
@@ -27599,7 +27618,7 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                 endTime: this.initialEndTime,
               },
             };
-            this.isDarkMode = this.props.core.chrome.uiSettings.get('theme:darkMode') || false;
+            this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
           }
 
           async componentDidMount() {
@@ -29434,16 +29453,12 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
               );
               const { httpClient, history } = this.props;
               history.replace({ ...this.props.location, search: queryParamsString });
-              const response = await httpClient.get(
-                `../api/alerting/monitors?${query_string__WEBPACK_IMPORTED_MODULE_2___default.a.stringify(
-                  params
-                )}`
-              );
+              const response = await httpClient.get('../api/alerting/monitors', {
+                query: params,
+              });
 
-              if (response.data.ok) {
-                const {
-                  data: { monitors, totalMonitors },
-                } = response;
+              if (response.ok) {
+                const { monitors, totalMonitors } = response;
                 this.setState({
                   monitors,
                   totalMonitors,
@@ -29495,10 +29510,16 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
             const { httpClient } = this.props;
             const { id, ifSeqNo, ifPrimaryTerm, monitor } = item;
             return httpClient
-              .put(
-                `../api/alerting/monitors/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-                { ...monitor, ...update }
-              )
+              .put('../api/alerting/monitors', {
+                params: {
+                  id,
+                },
+                query: {
+                  ifSeqNo,
+                  ifPrimaryTerm,
+                },
+                body: { ...monitor, ...update },
+              })
               .then((resp) => resp)
               .catch((err) => err);
           }
@@ -30136,10 +30157,10 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
         /***/
       },
 
-    /***/ './public/utils/CoreServices.js':
-      /*!**************************************!*\
-  !*** ./public/utils/CoreServices.js ***!
-  \**************************************/
+    /***/ './public/utils/CoreServicesContext.js':
+      /*!*********************************************!*\
+  !*** ./public/utils/CoreServicesContext.js ***!
+  \*********************************************/
       /*! exports provided: CoreServicesContext, CoreServicesConsumer */
       /***/ function (module, __webpack_exports__, __webpack_require__) {
         'use strict';
@@ -30251,6 +30272,161 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
           });
           return target;
         }
+
+        /***/
+      },
+
+    /***/ './public/utils/constants.js':
+      /*!***********************************!*\
+  !*** ./public/utils/constants.js ***!
+  \***********************************/
+      /*! exports provided: ALERT_STATE, DEFAULT_EMPTY_DATA, APP_PATH, SEARCH_TYPE, DESTINATION_ACTIONS, MONITOR_ACTIONS, TRIGGER_ACTIONS, DATA_TYPES, ES_AD_PLUGIN, KIBANA_AD_PLUGIN, INPUTS_DETECTOR_ID, MONITOR_INPUT_DETECTOR_ID, AD_PREVIEW_DAYS */
+      /***/ function (module, __webpack_exports__, __webpack_require__) {
+        'use strict';
+        __webpack_require__.r(__webpack_exports__);
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'ALERT_STATE',
+          function () {
+            return ALERT_STATE;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'DEFAULT_EMPTY_DATA',
+          function () {
+            return DEFAULT_EMPTY_DATA;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'APP_PATH',
+          function () {
+            return APP_PATH;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'SEARCH_TYPE',
+          function () {
+            return SEARCH_TYPE;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'DESTINATION_ACTIONS',
+          function () {
+            return DESTINATION_ACTIONS;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'MONITOR_ACTIONS',
+          function () {
+            return MONITOR_ACTIONS;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'TRIGGER_ACTIONS',
+          function () {
+            return TRIGGER_ACTIONS;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'DATA_TYPES',
+          function () {
+            return DATA_TYPES;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'ES_AD_PLUGIN',
+          function () {
+            return ES_AD_PLUGIN;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'KIBANA_AD_PLUGIN',
+          function () {
+            return KIBANA_AD_PLUGIN;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'INPUTS_DETECTOR_ID',
+          function () {
+            return INPUTS_DETECTOR_ID;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'MONITOR_INPUT_DETECTOR_ID',
+          function () {
+            return MONITOR_INPUT_DETECTOR_ID;
+          }
+        );
+        /* harmony export (binding) */ __webpack_require__.d(
+          __webpack_exports__,
+          'AD_PREVIEW_DAYS',
+          function () {
+            return AD_PREVIEW_DAYS;
+          }
+        );
+        /*
+         *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+         *
+         *   Licensed under the Apache License, Version 2.0 (the "License").
+         *   You may not use this file except in compliance with the License.
+         *   A copy of the License is located at
+         *
+         *       http://www.apache.org/licenses/LICENSE-2.0
+         *
+         *   or in the "license" file accompanying this file. This file is distributed
+         *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+         *   express or implied. See the License for the specific language governing
+         *   permissions and limitations under the License.
+         */
+        const ALERT_STATE = Object.freeze({
+          ACTIVE: 'ACTIVE',
+          ACKNOWLEDGED: 'ACKNOWLEDGED',
+          COMPLETED: 'COMPLETED',
+          ERROR: 'ERROR',
+          DELETED: 'DELETED',
+        });
+        const DEFAULT_EMPTY_DATA = '-';
+        const APP_PATH = {
+          CREATE_MONITOR: '/create-monitor',
+          CREATE_DESTINATION: '/create-destination',
+        };
+        const SEARCH_TYPE = {
+          GRAPH: 'graph',
+          QUERY: 'query',
+          AD: 'ad',
+        };
+        const DESTINATION_ACTIONS = {
+          UPDATE_DESTINATION: 'update-destination',
+        };
+        const MONITOR_ACTIONS = {
+          UPDATE_MONITOR: 'update-monitor',
+        };
+        const TRIGGER_ACTIONS = {
+          UPDATE_TRIGGER: 'update-trigger',
+          CREATE_TRIGGER: 'create-trigger',
+        };
+        const DATA_TYPES = {
+          NUMBER: 'number',
+          TEXT: 'text',
+          BOOLEAN: 'boolean',
+          KEYWORD: 'keyword',
+        };
+        const ES_AD_PLUGIN = 'opendistro-anomaly-detection';
+        const KIBANA_AD_PLUGIN = 'opendistro-anomaly-detection-kibana';
+        const INPUTS_DETECTOR_ID = '0.search.query.query.bool.filter[1].term.detector_id.value';
+        const MONITOR_INPUT_DETECTOR_ID = `inputs.${INPUTS_DETECTOR_ID}`;
+        const AD_PREVIEW_DAYS = 7;
 
         /***/
       },
@@ -30489,12 +30665,14 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
                 },
               },
             };
-            const response = await httpClient.post('../api/alerting/_search', options);
+            const response = await httpClient.post('../api/alerting/_search', {
+              body: JSON.stringify(options),
+            });
 
             if (
               lodash__WEBPACK_IMPORTED_MODULE_0___default.a.get(
                 response,
-                'data.resp.hits.total.value',
+                'resp.hits.total.value',
                 0
               )
             ) {
@@ -30558,83 +30736,6 @@ Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the i
             return 'Invalid JSON';
           }
         }
-
-        /***/
-      },
-
-    /***/ './utils/constants.js':
-      /*!****************************!*\
-  !*** ./utils/constants.js ***!
-  \****************************/
-      /*! exports provided: OPEN_DISTRO_PREFIX, PLUGIN_NAME, INDEX_PREFIX, INDEX, URL, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING */
-      /***/ function (module, __webpack_exports__, __webpack_require__) {
-        'use strict';
-        __webpack_require__.r(__webpack_exports__);
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'OPEN_DISTRO_PREFIX',
-          function () {
-            return OPEN_DISTRO_PREFIX;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'PLUGIN_NAME',
-          function () {
-            return PLUGIN_NAME;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'INDEX_PREFIX',
-          function () {
-            return INDEX_PREFIX;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'INDEX',
-          function () {
-            return INDEX;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'URL',
-          function () {
-            return URL;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'MAX_THROTTLE_VALUE',
-          function () {
-            return MAX_THROTTLE_VALUE;
-          }
-        );
-        /* harmony export (binding) */ __webpack_require__.d(
-          __webpack_exports__,
-          'WRONG_THROTTLE_WARNING',
-          function () {
-            return WRONG_THROTTLE_WARNING;
-          }
-        );
-        const OPEN_DISTRO_PREFIX = 'opendistro';
-        const PLUGIN_NAME = `${OPEN_DISTRO_PREFIX}-alerting`;
-        const INDEX_PREFIX = `${OPEN_DISTRO_PREFIX}-alerting`;
-        const INDEX = {
-          SCHEDULED_JOBS: `.${INDEX_PREFIX}-config`,
-          ALERTS: `.${INDEX_PREFIX}-alerts`,
-          ALL_ALERTS: `.${INDEX_PREFIX}-alert*`,
-          ALERT_HISTORY_WRITE: `.${INDEX_PREFIX}-alert-history-write`,
-        };
-        const URL = {
-          MUSTACHE: 'https://mustache.github.io/mustache.5.html',
-          DOCUMENTATION: 'https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/',
-        };
-        const MAX_THROTTLE_VALUE = 1440;
-        const WRONG_THROTTLE_WARNING =
-          'Throttle value must be greater than 0 and less than ' + MAX_THROTTLE_VALUE;
 
         /***/
       },

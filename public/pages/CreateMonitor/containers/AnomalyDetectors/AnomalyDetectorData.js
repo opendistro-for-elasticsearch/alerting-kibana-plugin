@@ -49,9 +49,7 @@ class AnomalyDetectorData extends React.Component {
     });
     if (!detectorId) return;
     const requestParams = {
-      startTime: moment()
-        .subtract(AD_PREVIEW_DAYS, 'd')
-        .valueOf(),
+      startTime: moment().subtract(AD_PREVIEW_DAYS, 'd').valueOf(),
       startTime: startTime,
       endTime: endTime,
       preview: this.props.preview,
@@ -60,8 +58,8 @@ class AnomalyDetectorData extends React.Component {
       const response = await httpClient.get(`../api/alerting/detectors/${detectorId}/results`, {
         params: requestParams,
       });
-      if (response.data.ok) {
-        const { anomalyResult, detector } = response.data.response;
+      if (response.ok) {
+        const { anomalyResult, detector } = response.response;
         this.setState({
           ...this.state,
           anomalyResult,
@@ -94,9 +92,7 @@ AnomalyDetectorData.propTypes = {
 };
 AnomalyDetectorData.defaultProps = {
   preview: true,
-  startTime: moment()
-    .subtract(5, 'd')
-    .valueOf(),
+  startTime: moment().subtract(5, 'd').valueOf(),
   endTime: moment().valueOf(),
 };
 

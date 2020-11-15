@@ -1,27 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { HashRouter as Router, Route } from 'react-router-dom';
-import { AppContext } from './utils/AppContext';
-import Main from './pages/Main';
-import { CoreServicesContext } from './utils/CoreServices';
-
-export function renderApp(coreStart, params) {
-  const http = coreStart.http;
-  const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false;
-
-  // render react to DOM
-  ReactDOM.render(
-    <Router>
-      <AppContext.Provider value={{ httpClient: http, isDarkMode }}>
-        <CoreServicesContext.Provider value={coreStart}>
-          <Route render={(props) => <Main title="Alerting" httpClient={http} {...props} />} />
-        </CoreServicesContext.Provider>
-      </AppContext.Provider>
-    </Router>,
-    params.element
-  );
-}
-
 /*
  *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -36,6 +12,38 @@ export function renderApp(coreStart, params) {
  *   express or implied. See the License for the specific language governing
  *   permissions and limitations under the License.
  */
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
+import { AppContext } from './utils/AppContext';
+import Main from './pages/Main';
+import { CoreServicesContext } from './utils/CoreServicesContext';
+
+export function renderApp(coreStart, params) {
+  const http = coreStart.http;
+  const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false;
+
+  //Load Chart's dark mode CSS
+  if (isDarkMode) {
+    require('@elastic/charts/dist/theme_only_dark.css');
+  } else {
+    require('@elastic/charts/dist/theme_only_light.css');
+  }
+
+  // render react to DOM
+  ReactDOM.render(
+    <Router>
+      <AppContext.Provider value={{ httpClient: http, isDarkMode }}>
+        <CoreServicesContext.Provider value={coreStart}>
+          <Route render={(props) => <Main title="Alerting" httpClient={http} {...props} />} />
+        </CoreServicesContext.Provider>
+      </AppContext.Provider>
+    </Router>,
+    params.element
+  );
+  return () => ReactDOM.unmountComponentAtNode(params.element);
+}
 
 // import React from 'react';
 // import chrome from 'ui/chrome';

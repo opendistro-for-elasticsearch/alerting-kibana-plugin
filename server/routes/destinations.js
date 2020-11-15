@@ -13,6 +13,8 @@
  *   permissions and limitations under the License.
  */
 
+import { schema } from '@kbn/config-schema';
+
 export default function (services, router) {
   const { destinationsService } = services;
 
@@ -21,88 +23,210 @@ export default function (services, router) {
   //   method: 'GET',
   //   handler: destinationsService.getDestinations,
   // });
-  //
+
+  router.get(
+    {
+      path: '/api/alerting/destinations',
+      validate: {
+        query: schema.any(),
+      },
+    },
+    destinationsService.getDestinations
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/{destinationId}',
   //   method: 'GET',
   //   handler: destinationsService.getDestination,
   // });
-  //
+
+  router.get(
+    {
+      path: '/api/alerting/destinations/{destinationId}',
+      validate: false,
+    },
+    destinationsService.getDestination
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations',
   //   method: 'POST',
   //   handler: destinationsService.createDestination,
   // });
-  //
+
+  router.post(
+    {
+      path: '/api/alerting/destinations',
+      validate: false,
+    },
+    destinationsService.createDestination
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/{destinationId}',
   //   method: 'PUT',
   //   handler: destinationsService.updateDestination,
   // });
-  //
+
+  router.put(
+    {
+      path: '/api/alerting/destinations/{destinationId}',
+      validate: false,
+    },
+    destinationsService.updateDestination
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/{destinationId}',
   //   method: 'DELETE',
   //   handler: destinationsService.deleteDestination,
   // });
-  //
+
+  router.delete(
+    {
+      path: '/api/alerting/destinations/{destinationId}',
+      validate: false,
+    },
+    destinationsService.deleteDestination
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_accounts',
   //   method: 'GET',
   //   handler: destinationsService.getEmailAccounts,
   // });
-  //
+
+  router.get(
+    {
+      path: '/api/alerting/destinations/email_accounts',
+      validate: false,
+    },
+    destinationsService.getEmailAccounts
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_accounts',
   //   method: 'POST',
   //   handler: destinationsService.createEmailAccount,
   // });
-  //
+
+  router.post(
+    {
+      path: '/api/alerting/destinations/email_accounts',
+      validate: false,
+    },
+    destinationsService.createEmailAccount
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_accounts/{id}',
   //   method: 'GET',
   //   handler: destinationsService.getEmailAccount,
   // });
-  //
+
+  router.get(
+    {
+      path: '/api/alerting/destinations/email_accounts/{id}',
+      validate: false,
+    },
+    destinationsService.getEmailAccount
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_accounts/{id}',
   //   method: 'PUT',
   //   handler: destinationsService.updateEmailAccount,
   // });
-  //
+
+  router.put(
+    {
+      path: '/api/alerting/destinations/email_accounts/{id}',
+      validate: false,
+    },
+    destinationsService.updateEmailAccount
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_accounts/{id}',
   //   method: 'DELETE',
   //   handler: destinationsService.deleteEmailAccount,
   // });
-  //
+
+  router.delete(
+    {
+      path: '/api/alerting/destinations/email_accounts/{id}',
+      validate: false,
+    },
+    destinationsService.deleteEmailAccount
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_groups',
   //   method: 'GET',
   //   handler: destinationsService.getEmailGroups,
   // });
-  //
+
+  router.get(
+    {
+      path: '/api/alerting/destinations/email_groups',
+      validate: false,
+    },
+    destinationsService.getEmailGroups
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_groups',
   //   method: 'POST',
   //   handler: destinationsService.createEmailGroup,
   // });
-  //
+
+  router.post(
+    {
+      path: '/api/alerting/destinations/email_groups',
+      validate: false,
+    },
+    destinationsService.createEmailGroup
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_groups/{id}',
   //   method: 'GET',
   //   handler: destinationsService.getEmailGroup,
   // });
-  //
+
+  router.get(
+    {
+      path: '/api/alerting/destinations/email_groups/{id}',
+      validate: false,
+    },
+    destinationsService.getEmailGroup
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_groups/{id}',
   //   method: 'PUT',
   //   handler: destinationsService.updateEmailGroup,
   // });
-  //
+
+  router.put(
+    {
+      path: '/api/alerting/destinations/email_groups/{id}',
+      validate: false,
+    },
+    destinationsService.updateEmailGroup
+  );
+
   // server.route({
   //   path: '/api/alerting/destinations/email_groups/{id}',
   //   method: 'DELETE',
   //   handler: destinationsService.deleteEmailGroup,
   // });
+
+  router.delete(
+    {
+      path: '/api/alerting/destinations/email_groups/{id}',
+      validate: false,
+    },
+    destinationsService.deleteEmailGroup
+  );
 }

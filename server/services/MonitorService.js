@@ -19,18 +19,20 @@ import { CLUSTER } from './utils/constants';
 import { INDEX } from '../../utils/constants';
 
 export default class MonitorService {
-  constructor(esDriver) {
+  constructor(esDriver, logger) {
     this.esDriver = esDriver;
+    this.logger = logger;
   }
 
-  createMonitor = async (ctx, req, resp) => {
+  createMonitor = async (ctx, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.payload) };
+      this.logger.info('createMonitor handler');
+      this.logger.info(req);
+      const params = { body: JSON.stringify(req.body) };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const createResponse = await callWithRequest('alerting.createMonitor', params);
-      return resp.custom({
-        statusCode: 200,
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const createResponse = await callAsCurrentUser('alerting.createMonitor', params);
+      return res.ok({
         body: {
           ok: true,
           resp: createResponse,
@@ -38,8 +40,7 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - createMonitor:', err);
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -48,23 +49,21 @@ export default class MonitorService {
     }
   };
 
-  deleteMonitor = async (ctx, req, resp) => {
+  deleteMonitor = async (ctx, req, res) => {
     try {
       const { id } = req.params;
       const params = { monitorId: id };
       const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
       const response = await callWithRequest('alerting.deleteMonitor', params);
       // return { ok: response.result === 'deleted' };
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: response.result === 'deleted',
         },
       });
     } catch (err) {
       console.error('Alerting - MonitorService - deleteMonitor:', err);
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -74,6 +73,7 @@ export default class MonitorService {
   };
 
   getMonitor = async (ctx, req, resp) => {
+    this.logger.info('enter getMonitor handler');
     try {
       const { id } = req.params;
       const params = { monitorId: id };
@@ -153,8 +153,7 @@ export default class MonitorService {
       const updateResponse = await callWithRequest('alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
       // return { ok: true, version: _version, id: _id };
-      return resp.custom({
-        statusCode: 200,
+      return resp.ok({
         body: {
           ok: true,
           version: _version,
@@ -163,8 +162,7 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - updateMonitor:', err);
-      return resp.custom({
-        statusCode: 200,
+      return resp.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -353,8 +351,7 @@ export default class MonitorService {
       //   monitors: results,
       //   totalMonitors,
       // };
-      return resp.custom({
-        statusCode: 200,
+      return resp.ok({
         body: {
           ok: true,
           monitors: results,
@@ -363,8 +360,7 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - getMonitors', err);
-      return resp.custom({
-        statusCode: 200,
+      return resp.ok({
         body: {
           ok: false,
           resp: err.message,

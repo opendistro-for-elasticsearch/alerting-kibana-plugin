@@ -15,20 +15,22 @@
 import { CLUSTER } from './utils/constants';
 
 export default class ElasticsearchService {
-  constructor(esDriver) {
+  constructor(esDriver, logger) {
     this.esDriver = esDriver;
+    this.logger = logger;
   }
 
-  search = async (context, request, response) => {
+  search = async (context, req, res) => {
     try {
-      const { query, index, size } = req.payload;
+      this.logger.info('enter ES handler');
+      this.logger.info(req);
+      const { query, index, size } = req.body;
       const params = { index, size, body: query };
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
-      const results = await callWithRequest('search', params);
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const results = await callAsCurrentUser('search', params);
       // return { ok: true, resp: results };
-      return response.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           resp: results,
@@ -37,8 +39,7 @@ export default class ElasticsearchService {
     } catch (err) {
       console.error('Alerting - ElasticsearchService - search', err);
       // return { ok: false, resp: err.message };
-      return response.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -47,23 +48,28 @@ export default class ElasticsearchService {
     }
   };
 
-  getIndices = async (context, request, response) => {
+  getIndices = async (context, req, res) => {
     try {
-      const { index } = request.payload;
+      const { index } = req.body;
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
-      const indices = await callWithRequest('cat.indices', {
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const indices = await callAsCurrentUser('cat.indices', {
         index,
         format: 'json',
         h: 'health,index,status',
       });
-      return { ok: true, resp: indices };
+      // return { ok: true, resp: indices };
+      return res.ok({
+        body: {
+          ok: true,
+          resp: indices,
+        },
+      });
     } catch (err) {
       // Elasticsearch throws an index_not_found_exception which we'll treat as a success
       if (err.statusCode === 404) {
         // return { ok: true, resp: [] };
-        return response.custom({
-          statusCode: 200,
+        return res.ok({
           body: {
             ok: true,
             resp: [],
@@ -72,8 +78,7 @@ export default class ElasticsearchService {
       } else {
         console.error('Alerting - ElasticsearchService - getIndices:', err);
         // return { ok: false, resp: err.message };
-        return response.custom({
-          statusCode: 200,
+        return res.ok({
           body: {
             ok: false,
             resp: err.message,
@@ -83,19 +88,18 @@ export default class ElasticsearchService {
     }
   };
 
-  getAliases = async (context, request, response) => {
+  getAliases = async (context, req, res) => {
     try {
-      const { alias } = request.payload;
+      const { alias } = req.body;
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
-      const aliases = await callWithRequest(request, 'cat.aliases', {
+      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(res);
+      const aliases = await callWithRequest('cat.aliases', {
         alias,
         format: 'json',
         h: 'alias,index',
       });
       // return { ok: true, resp: aliases };
-      return response.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           resp: aliases,
@@ -104,8 +108,7 @@ export default class ElasticsearchService {
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getAliases:', err);
       // return { ok: false, resp: err.message };
-      return response.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -114,15 +117,14 @@ export default class ElasticsearchService {
     }
   };
 
-  getMappings = async (context, request, response) => {
+  getMappings = async (context, req, res) => {
     try {
-      const { index } = request.payload;
+      const params = { body: JSON.stringify(req.body) };
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
-      const mappings = await callWithRequest('indices.getMapping', { index });
+      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
+      const mappings = await callWithRequest('indices.getMapping', params);
       // return { ok: true, resp: mappings };
-      return response.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           resp: mappings,
@@ -131,8 +133,7 @@ export default class ElasticsearchService {
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getMappings:', err);
       // return { ok: false, resp: err.message };
-      return response.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -141,16 +142,16 @@ export default class ElasticsearchService {
     }
   };
 
-  getPlugins = async (context, request, response) => {
+  getPlugins = async (context, req, res) => {
     try {
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
-      const plugins = await callWithRequest(req, 'cat.plugins', {
+      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
+      const plugins = await callWithRequest('cat.plugins', {
         format: 'json',
         h: 'component',
       });
       // return { ok: true, resp: plugins };
-      return response.custom({
+      return res.custom({
         statusCode: 200,
         body: {
           ok: true,
@@ -160,7 +161,7 @@ export default class ElasticsearchService {
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getPlugins:', err);
       // return { ok: false, resp: err.message };
-      return response.custom({
+      return res.custom({
         statusCode: 200,
         body: {
           ok: false,
@@ -170,15 +171,15 @@ export default class ElasticsearchService {
     }
   };
 
-  getSettings = async (context, request, response) => {
+  getSettings = async (context, req, res) => {
     try {
       // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(request);
+      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
       const settings = await callWithRequest('cluster.getSettings', {
         include_defaults: 'true',
       });
       // return { ok: true, resp: settings };
-      return response.custom({
+      return res.custom({
         statusCode: 200,
         body: {
           ok: true,
@@ -188,7 +189,7 @@ export default class ElasticsearchService {
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getSettings:', err);
       // return { ok: false, resp: err.message };
-      return response.custom({
+      return res.custom({
         statusCode: 200,
         body: {
           ok: false,

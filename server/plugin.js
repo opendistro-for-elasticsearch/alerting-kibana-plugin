@@ -2,6 +2,7 @@ import { AlertingPluginSetup, AlertingPluginStart } from '.';
 import { Plugin, CoreSetup, CoreStart, ILegacyClusterClient } from '../../../src/core/server';
 import alertingPlugin from './clusters/alerting/alertingPlugin';
 import adPlugin from './clusters/alerting/adPlugin';
+import { createAlertingCluster, createAlertingADCluster } from './clusters';
 import {
   AlertService,
   DestinationsService,
@@ -40,18 +41,26 @@ import { alerts, destinations, elasticsearch, monitors, detectors } from '../ser
 // }
 
 export class AlertingPlugin {
+  constructor(initializerContext) {
+    this.logger = initializerContext.logger.get();
+  }
+
   async setup(core) {
-    // create Elasticsearch client that aware of ISM API endpoints
-    const esDriver = core.elasticsearch.legacy.createClient('alerting', {
+    // create Elasticsearch client that aware of Alerting API endpoints
+    const esClient = core.elasticsearch.legacy.createClient('opendistro_alerting', {
       plugins: [alertingPlugin, adPlugin],
     });
 
+    // // Create clusters
+    // createAlertingCluster(core);
+    // createAlertingADCluster(core);
+
     // Initialize services
-    const alertService = new AlertService(esDriver);
-    const elasticsearchService = new ElasticsearchService(esDriver);
-    const monitorService = new MonitorService(esDriver);
-    const destinationsService = new DestinationsService(esDriver);
-    const anomalyDetectorService = new AnomalyDetectorService(esDriver);
+    const alertService = new AlertService(esClient, this.logger);
+    const elasticsearchService = new ElasticsearchService(esClient, this.logger);
+    const monitorService = new MonitorService(esClient, this.logger);
+    const destinationsService = new DestinationsService(esClient, this.logger);
+    const anomalyDetectorService = new AnomalyDetectorService(esClient, this.logger);
     const services = {
       alertService,
       destinationsService,

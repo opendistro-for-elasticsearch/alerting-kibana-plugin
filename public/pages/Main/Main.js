@@ -15,7 +15,7 @@
 
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { CoreServicesConsumer } from '../../utils/CoreServices';
+import { CoreServicesConsumer } from '../../utils/CoreServicesContext';
 
 import Home from '../Home';
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -102,7 +102,12 @@ class Main extends Component {
                 />
                 <Route
                   render={(props) => (
-                    <Home httpClient={httpClient} {...props} setFlyout={this.setFlyout} />
+                    <Home
+                      httpClient={httpClient}
+                      {...props}
+                      setFlyout={this.setFlyout}
+                      core={core}
+                    />
                   )}
                 />
               </Switch>

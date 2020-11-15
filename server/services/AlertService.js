@@ -14,8 +14,9 @@
  */
 
 export default class AlertService {
-  constructor(esDriver) {
+  constructor(esDriver, logger) {
     this.esDriver = esDriver;
+    this.logger = logger;
   }
 
   getAlerts = async (context, req, res) => {
@@ -30,6 +31,8 @@ export default class AlertService {
       monitorIds = [],
     } = req.query;
 
+    this.logger.info('enter getAlerts handler');
+    //this.logger.info(req)
     var params;
     switch (sortField) {
       case 'monitor_name':
@@ -105,7 +108,7 @@ export default class AlertService {
       });
     } catch (err) {
       console.log(err.message);
-      console.log(12345);
+      console.log('err in getAlerts'); // To be removed
       // return { ok: false, err: err.message };
       return res.custom({
         statusCode: 200,

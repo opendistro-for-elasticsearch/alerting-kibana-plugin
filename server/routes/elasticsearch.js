@@ -13,6 +13,8 @@
  *   permissions and limitations under the License.
  */
 
+import { schema } from '@kbn/config-schema';
+
 export default function (services, router) {
   const { elasticsearchService } = services;
 
@@ -25,7 +27,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/_search',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     elasticsearchService.search
   );
@@ -39,7 +43,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/_indices',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     elasticsearchService.getIndices
   );
@@ -53,7 +59,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/_aliases',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     elasticsearchService.getAliases
   );
@@ -67,7 +75,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/_mappings',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     elasticsearchService.getMappings
   );
