@@ -148,7 +148,7 @@ export default class MonitorService {
     try {
       const { id } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
-      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.payload) };
+      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.body) };
       const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
       const updateResponse = await callWithRequest('alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;

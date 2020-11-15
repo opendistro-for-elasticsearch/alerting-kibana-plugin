@@ -110,11 +110,11 @@ export default class CreateTrigger extends Component {
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
       .then((res) => {
         setSubmitting(false);
-        if (res.data.ok) {
+        if (res.ok) {
           onCloseTrigger();
         } else {
-          console.log('Failed to update the trigger:', res.data);
-          this.backendErrorHandler('update', res.data);
+          console.log('Failed to update the trigger:', res);
+          this.backendErrorHandler('update', res);
         }
       })
       .catch((err) => {
@@ -136,12 +136,12 @@ export default class CreateTrigger extends Component {
     httpClient
       .post('../api/alerting/monitors/_execute', monitorToExecute)
       .then((resp) => {
-        if (resp.data.ok) {
-          this.setState({ executeResponse: resp.data.resp });
+        if (resp.ok) {
+          this.setState({ executeResponse: resp.resp });
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
-          this.backendErrorHandler('run', resp.data);
+          this.backendErrorHandler('run', resp);
         }
       })
       .catch((err) => {
@@ -196,10 +196,10 @@ export default class CreateTrigger extends Component {
     monitor: monitor,
   });
 
-  backendErrorHandler(actionName, data) {
+  backendErrorHandler(actionName, resp) {
     this.props.core.toastNotifications.addDanger({
       title: `Failed to ${actionName} the trigger`,
-      text: data.resp,
+      text: resp,
       toastLifeTimeMs: 20000,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
