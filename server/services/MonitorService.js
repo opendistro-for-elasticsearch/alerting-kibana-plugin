@@ -24,7 +24,7 @@ export default class MonitorService {
     this.logger = logger;
   }
 
-  createMonitor = async (ctx, req, res) => {
+  createMonitor = async (context, req, res) => {
     try {
       this.logger.info('createMonitor handler');
       this.logger.info(req);
@@ -49,12 +49,12 @@ export default class MonitorService {
     }
   };
 
-  deleteMonitor = async (ctx, req, res) => {
+  deleteMonitor = async (context, req, res) => {
     try {
       const { id } = req.params;
       const params = { monitorId: id };
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const response = await callWithRequest('alerting.deleteMonitor', params);
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const response = await callAsCurrentUser('alerting.deleteMonitor', params);
       // return { ok: response.result === 'deleted' };
       return res.ok({
         body: {
@@ -72,7 +72,7 @@ export default class MonitorService {
     }
   };
 
-  getMonitor = async (ctx, req, resp) => {
+  getMonitor = async (context, req, res) => {
     this.logger.info('enter getMonitor handler');
     try {
       const { id } = req.params;
@@ -120,13 +120,11 @@ export default class MonitorService {
           0
         );
         // return { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm };
-        return resp.custom({
-          statusCode: 200,
+        return res.ok({
           body: { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm },
         });
       } else {
-        return resp.custom({
-          statusCode: 200,
+        return resp.ok({
           body: {
             ok: false,
           },
@@ -134,8 +132,7 @@ export default class MonitorService {
       }
     } catch (err) {
       console.error('Alerting - MonitorService - getMonitor:', err);
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -144,7 +141,7 @@ export default class MonitorService {
     }
   };
 
-  updateMonitor = async (ctx, req, resp) => {
+  updateMonitor = async (context, req, res) => {
     try {
       const { id } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
@@ -153,7 +150,7 @@ export default class MonitorService {
       const updateResponse = await callWithRequest('alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
       // return { ok: true, version: _version, id: _id };
-      return resp.ok({
+      return res.ok({
         body: {
           ok: true,
           version: _version,
@@ -162,7 +159,7 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - updateMonitor:', err);
-      return resp.ok({
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -171,7 +168,7 @@ export default class MonitorService {
     }
   };
 
-  getMonitors = async (ctx, req, resp) => {
+  getMonitors = async (context, req, res) => {
     try {
       const { from, size, search, sortDirection, sortField, state } = req.query;
 
@@ -351,7 +348,7 @@ export default class MonitorService {
       //   monitors: results,
       //   totalMonitors,
       // };
-      return resp.ok({
+      return res.ok({
         body: {
           ok: true,
           monitors: results,
@@ -360,7 +357,7 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - getMonitors', err);
-      return resp.ok({
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -369,19 +366,18 @@ export default class MonitorService {
     }
   };
 
-  acknowledgeAlerts = async (ctx, req, resp) => {
+  acknowledgeAlerts = async (context, req, res) => {
     try {
       const { id } = req.params;
       const params = {
         monitorId: id,
-        body: JSON.stringify(req.payload),
+        body: JSON.stringify(req.body),
       };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
       const acknowledgeResponse = await callWithRequest('alerting.acknowledgeAlerts', params);
       // return { ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse };
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: !acknowledgeResponse.failed.length,
           resp: acknowledgeResponse,
@@ -389,8 +385,7 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - acknowledgeAlerts:', err);
-      return resp.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -403,15 +398,14 @@ export default class MonitorService {
     try {
       const { dryrun = 'true' } = req.query;
       const params = {
-        body: JSON.stringify(req.payload),
+        body: JSON.stringify(req.body),
         dryrun,
       };
       // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const { callAsCurrentUser: callWithRequest } = await this.esDriver.asScoped(req);
-      const executeResponse = await callWithRequest('alerting.executeMonitor', params);
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const executeResponse = await callAsCurrentUser('alerting.executeMonitor', params);
       // return { ok: true, resp: executeResponse };
-      return res.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           resp: executeResponse,
@@ -419,8 +413,7 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - executeMonitor:', err);
-      return res.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,

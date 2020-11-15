@@ -187,7 +187,9 @@ class DefineMonitor extends Component {
         _.set(monitor, 'name', 'TEMP_MONITOR');
         _.set(monitor, 'triggers', []);
         _.set(monitor, 'inputs[0].search', searchRequest);
-        return httpClient.post('../api/alerting/monitors/_execute', monitor);
+        return httpClient.post('../api/alerting/monitors/_execute', {
+          body: JSON.stringify(monitor),
+        });
       });
 
       const [queryResponse, optionalResponse] = await Promise.all(promises);

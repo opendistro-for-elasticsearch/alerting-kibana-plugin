@@ -80,11 +80,11 @@ export default class CreateTrigger extends Component {
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
       .then((res) => {
         setSubmitting(false);
-        if (res.data.ok) {
+        if (res.ok) {
           onCloseTrigger();
         } else {
-          console.log('Failed to create the trigger:', res.data);
-          this.backendErrorHandler('create', res.data);
+          console.log('Failed to create the trigger:', res);
+          this.backendErrorHandler('create', res);
         }
       })
       .catch((err) => {
