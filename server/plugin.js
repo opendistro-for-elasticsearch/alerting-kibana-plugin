@@ -1,5 +1,7 @@
 import { AlertingPluginSetup, AlertingPluginStart } from '.';
 import { Plugin, CoreSetup, CoreStart, ILegacyClusterClient } from '../../../src/core/server';
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 import alertingPlugin from './clusters/alerting/alertingPlugin';
 import adPlugin from './clusters/alerting/adPlugin';
 import { createAlertingCluster, createAlertingADCluster } from './clusters';
@@ -11,6 +13,7 @@ import {
   AnomalyDetectorService,
 } from './services';
 import { alerts, destinations, elasticsearch, monitors, detectors } from '../server/routes';
+import { DEFAULT_HEADERS } from './services/utils/constants';
 
 // init(server, options) {
 //   // Create clusters
@@ -43,12 +46,20 @@ import { alerts, destinations, elasticsearch, monitors, detectors } from '../ser
 export class AlertingPlugin {
   constructor(initializerContext) {
     this.logger = initializerContext.logger.get();
+    this.globalConfig$ = initializerContext.config.legacy.globalConfig$;
   }
 
   async setup(core) {
+    const globalConfig = await this.globalConfig$.pipe(first()).toPromise();
+    const { customHeaders, ...rest } = globalConfig.elasticsearch;
     // create Elasticsearch client that aware of Alerting API endpoints
     const esClient = core.elasticsearch.legacy.createClient('opendistro_alerting', {
       plugins: [alertingPlugin, adPlugin],
+      // Currently we are overriding any headers with our own since we explicitly required User-Agent to be Kibana
+      // for integration with our backend plugin.
+      // TODO: Change our required header to x-<Header> to avoid overriding
+      customHeaders: { ...customHeaders, ...DEFAULT_HEADERS },
+      ...rest,
     });
 
     // // Create clusters
