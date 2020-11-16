@@ -18,11 +18,16 @@ import { shallow } from 'enzyme';
 
 import DefineMonitor from './DefineMonitor';
 import { FORMIK_INITIAL_VALUES } from '../CreateMonitor/utils/constants';
-import { httpClientMock } from '../../../../../test/mocks';
+import { httpClientMock, coreMock } from '../../../../../test/mocks';
 
 function getShallowWrapper(customProps = {}) {
   return shallow(
-    <DefineMonitor values={FORMIK_INITIAL_VALUES} httpClient={httpClientMock} {...customProps} />
+    <DefineMonitor
+      values={FORMIK_INITIAL_VALUES}
+      httpClient={httpClientMock}
+      core={coreMock}
+      {...customProps}
+    />
   );
 }
 

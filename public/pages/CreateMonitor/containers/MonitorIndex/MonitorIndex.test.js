@@ -110,7 +110,7 @@ describe('MonitorIndex', () => {
   });
 
   test('returns empty array for data.ok = false', async () => {
-    httpClientMock.post.mockResolvedValue({ data: { ok: false } });
+    httpClientMock.post.mockResolvedValue({ ok: false });
     const wrapper = getMountWrapper();
 
     expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('random')).toEqual([]);

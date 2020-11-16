@@ -99,7 +99,7 @@ describe('ManageSenders', () => {
     expect(wrapper.instance().state.initialValues.senders[0].name).toBe('test_account');
   });
 
-  test('getSenders logs resp.data.err when ok:false', async () => {
+  test('getSenders logs resp.err when ok:false', async () => {
     const log = jest.spyOn(global.console, 'log');
     // Mock return in getSenders function
     httpClientMock.get.mockResolvedValue({

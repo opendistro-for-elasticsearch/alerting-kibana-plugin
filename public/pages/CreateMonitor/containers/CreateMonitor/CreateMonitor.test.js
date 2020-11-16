@@ -212,7 +212,7 @@ describe('CreateMonitor', () => {
       expect(error).toHaveBeenCalled();
     });
 
-    test('logs resp.data when ok:false', async () => {
+    test('logs resp when ok:false', async () => {
       const log = jest.spyOn(global.console, 'log');
       updateMonitor.mockResolvedValue({ ok: false, resp: 'test' });
       const monitor = alertingFakes.randomMonitor();
@@ -271,7 +271,7 @@ describe('CreateMonitor', () => {
       expect(error).toHaveBeenCalled();
     });
 
-    test('logs resp.data when ok:false', async () => {
+    test('logs resp when ok:false', async () => {
       const log = jest.spyOn(global.console, 'log');
       httpClientMock.post.mockResolvedValue({ ok: false, resp: 'test' });
       const monitor = alertingFakes.randomMonitor();

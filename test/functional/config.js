@@ -25,7 +25,7 @@ export default async function ({ readConfigFile }) {
   const kibanaConfig = await readConfigFile(resolveKibanaPath('test/functional/config.js'));
   return {
     // list paths to the files that contain your plugins tests
-    testFiles: [resolve(__dirname, './tests/index_old.js')],
+    testFiles: [resolve(__dirname, './tests/index.js')],
 
     // define the name and providers for services that should be
     // available to your tests. If you don't specify anything here

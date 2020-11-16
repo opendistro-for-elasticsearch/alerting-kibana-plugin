@@ -19,6 +19,7 @@ import { set } from 'lodash';
 import { mount } from 'enzyme';
 import { getPOIResponse, getAlertsResponse } from './testHelpers';
 import MonitorHistory from '../MonitorHistory';
+import { coreMock } from '../../../../../../test/mocks';
 
 moment.tz.setDefault('America/Los_Angeles');
 
@@ -48,6 +49,7 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={[]}
+        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -70,6 +72,7 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
+        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -108,6 +111,7 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
+        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -142,6 +146,7 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
+        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -166,6 +171,7 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
+        core={coreMock}
       />
     );
 
@@ -190,7 +196,7 @@ describe('<MonitorHistory/>', () => {
   });
   test('should fall back to max scale if the max alerts are lower than threshold ', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
-    set(poiResponse, 'data.resp.aggregations.max_alerts.value', 3);
+    set(poiResponse, 'resp.aggregations.max_alerts.value', 3);
 
     Date.now = jest.fn(() => 1539619200000);
     httpClient.post.mockResolvedValue({ ok: true }).mockResolvedValueOnce(poiResponse);
@@ -204,6 +210,7 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
+        core={coreMock}
       />
     );
     process.nextTick(() => {

@@ -47,7 +47,7 @@ describe('AnomalyDetectors', () => {
     jest.clearAllMocks();
   });
   test('renders', () => {
-    httpClientMock.post.mockResolvedValue({ data: { ok: true, detectors: [] } });
+    httpClientMock.post.mockResolvedValue({ ok: true, detectors: [] });
     const wrapper = getMountWrapper();
     expect(wrapper).toMatchSnapshot();
   });

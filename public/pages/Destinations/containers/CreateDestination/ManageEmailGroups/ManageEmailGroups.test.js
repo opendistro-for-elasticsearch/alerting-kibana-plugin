@@ -98,7 +98,7 @@ describe('ManageEmailGroups', () => {
     ]);
   });
 
-  test('getEmailGroups logs resp.data.err when ok:false', async () => {
+  test('getEmailGroups logs resp.err when ok:false', async () => {
     const log = jest.spyOn(global.console, 'log');
     // Mock return in getEmailGroups function
     httpClientMock.get.mockResolvedValue({
