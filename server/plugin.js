@@ -2,8 +2,6 @@ import { AlertingPluginSetup, AlertingPluginStart } from '.';
 import { Plugin, CoreSetup, CoreStart, ILegacyClusterClient } from '../../../src/core/server';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
-import alertingPlugin from './clusters/alerting/alertingPlugin';
-import adPlugin from './clusters/alerting/adPlugin';
 import { createAlertingCluster, createAlertingADCluster } from './clusters';
 import {
   AlertService,
@@ -51,27 +49,17 @@ export class AlertingPlugin {
 
   async setup(core) {
     const globalConfig = await this.globalConfig$.pipe(first()).toPromise();
-    const { customHeaders, ...rest } = globalConfig.elasticsearch;
-    // create Elasticsearch client that aware of Alerting API endpoints
-    const esClient = core.elasticsearch.legacy.createClient('opendistro_alerting', {
-      plugins: [alertingPlugin, adPlugin],
-      // Currently we are overriding any headers with our own since we explicitly required User-Agent to be Kibana
-      // for integration with our backend plugin.
-      // TODO: Change our required header to x-<Header> to avoid overriding
-      customHeaders: { ...customHeaders, ...DEFAULT_HEADERS },
-      ...rest,
-    });
 
-    // // Create clusters
-    // createAlertingCluster(core);
-    // createAlertingADCluster(core);
+    // Create clusters
+    const alertingESClient = createAlertingCluster(core, globalConfig);
+    const adESClient = createAlertingADCluster(core, globalConfig);
 
     // Initialize services
-    const alertService = new AlertService(esClient, this.logger);
-    const elasticsearchService = new ElasticsearchService(esClient, this.logger);
-    const monitorService = new MonitorService(esClient, this.logger);
-    const destinationsService = new DestinationsService(esClient, this.logger);
-    const anomalyDetectorService = new AnomalyDetectorService(esClient, this.logger);
+    const alertService = new AlertService(alertingESClient, this.logger);
+    const elasticsearchService = new ElasticsearchService(alertingESClient, this.logger);
+    const monitorService = new MonitorService(alertingESClient, this.logger);
+    const destinationsService = new DestinationsService(alertingESClient, this.logger);
+    const anomalyDetectorService = new AnomalyDetectorService(adESClient, this.logger);
     const services = {
       alertService,
       destinationsService,
