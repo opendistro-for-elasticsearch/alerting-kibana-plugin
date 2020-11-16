@@ -136,10 +136,8 @@ describe('MonitorIndex', () => {
 
   test.skip('onBlur sets index to touched', () => {
     httpClientMock.post.mockResolvedValue({
-      data: {
-        ok: true,
-        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
-      },
+      ok: true,
+      resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
     });
     const wrapper = getMountWrapper();
 
@@ -154,10 +152,8 @@ describe('MonitorIndex', () => {
 
   test('sets option when calling onCreateOption', () => {
     httpClientMock.post.mockResolvedValue({
-      data: {
-        ok: true,
-        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
-      },
+      ok: true,
+      resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
     });
     const wrapper = getMountWrapper();
 

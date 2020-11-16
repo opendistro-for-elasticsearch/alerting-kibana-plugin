@@ -250,7 +250,7 @@ describe('CreateMonitor', () => {
       wrapper.instance().onCreate(monitor, formikBag);
       expect(httpClientMock.post).toHaveBeenCalledTimes(1);
       expect(httpClientMock.post).toHaveBeenCalledWith('../api/alerting/monitors', {
-        body: JSON.stringify(monitor()),
+        body: JSON.stringify(monitor),
       });
     });
 

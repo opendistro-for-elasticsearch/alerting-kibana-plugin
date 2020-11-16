@@ -27,7 +27,7 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
     const response = await httpClient.post('../api/alerting/_search', {
       body: JSON.stringify(options),
     });
-    if (_.get(response, 'data.resp.hits.total.value', 0)) {
+    if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!destinationToEdit) throw 'Destination name is already used';
       if (destinationToEdit && destinationToEdit.name !== value) {
         throw 'Destination name is already used';
