@@ -61,10 +61,8 @@ describe('<MonitorHistory/>', () => {
     const poiResponse = getPOIResponse(initialStartTime);
     httpClient.post.mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory
@@ -101,10 +99,8 @@ describe('<MonitorHistory/>', () => {
     const poiResponse = getPOIResponse(initialStartTime);
     httpClient.post.mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory
@@ -137,10 +133,8 @@ describe('<MonitorHistory/>', () => {
     ]);
     httpClient.post.mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: alerts,
-      },
+      ok: true,
+      alerts: alerts,
     });
     const wrapper = mount(
       <MonitorHistory
@@ -161,12 +155,10 @@ describe('<MonitorHistory/>', () => {
   test('should fetch new data on timeSeriesWindow change ', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
     Date.now = jest.fn(() => 1539619200000);
-    httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.post.mockResolvedValue({ ok: true }).mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory
@@ -201,12 +193,10 @@ describe('<MonitorHistory/>', () => {
     set(poiResponse, 'data.resp.aggregations.max_alerts.value', 3);
 
     Date.now = jest.fn(() => 1539619200000);
-    httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.post.mockResolvedValue({ ok: true }).mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory

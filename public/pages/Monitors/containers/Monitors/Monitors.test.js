@@ -54,10 +54,10 @@ function getMountWrapper(customProps = {}) {
 describe('Monitors', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    httpClientMock.put.mockResolvedValue({ data: { ok: true } });
-    httpClientMock.post.mockResolvedValue({ data: { ok: true } });
-    httpClientMock.get.mockResolvedValue({ data: { ok: true, monitors: [], totalMonitors: 0 } });
-    httpClientMock.delete.mockResolvedValue({ data: { ok: true } });
+    httpClientMock.put.mockResolvedValue({ ok: true });
+    httpClientMock.post.mockResolvedValue({ ok: true });
+    httpClientMock.get.mockResolvedValue({ ok: true, monitors: [], totalMonitors: 0 });
+    httpClientMock.delete.mockResolvedValue({ ok: true });
   });
   test('renders', () => {
     const wrapper = shallow(
@@ -146,7 +146,7 @@ describe('Monitors', () => {
     const updateMonitor = jest.spyOn(Monitors.prototype, 'updateMonitor');
     httpClientMock.put = jest
       .fn()
-      .mockResolvedValueOnce({ data: { ok: true } })
+      .mockResolvedValueOnce({ ok: true })
       .mockRejectedValueOnce(new Error('random error'));
     const mountWrapper = getMountWrapper();
     const monitor = alertingFakes.randomMonitor();
@@ -160,13 +160,12 @@ describe('Monitors', () => {
 
     expect(updateMonitor).toHaveBeenCalled();
     expect(httpClientMock.put).toHaveBeenCalled();
-    expect(
-      httpClientMock.put
-    ).toHaveBeenCalledWith(`../api/alerting/monitors/random_id?ifSeqNo=17&ifPrimaryTerm=20`, {
-      ...monitor,
-      name: 'UNIQUE_NAME',
+    expect(httpClientMock.put).toHaveBeenCalledWith(`../api/alerting/monitors/random_id`, {
+      query: { ifSeqNo: 17, ifPrimaryTerm: 20 },
+      body: JSON.stringify({ ...monitor, name: 'UNIQUE_NAME' }),
     });
-    expect(response).toEqual({ data: { ok: true } });
+
+    expect(response).toEqual({ ok: true });
     const error = await mountWrapper
       .instance()
       .updateMonitor(
@@ -181,7 +180,7 @@ describe('Monitors', () => {
     const deleteMonitor = jest.spyOn(Monitors.prototype, 'deleteMonitor');
     httpClientMock.delete = jest
       .fn()
-      .mockResolvedValueOnce({ data: { ok: true } })
+      .mockResolvedValueOnce({ ok: true })
       .mockRejectedValueOnce(new Error('random delete error'));
     const mountWrapper = getMountWrapper();
     const response = await mountWrapper.instance().deleteMonitor({ id: 'delete_id', version: 15 });
@@ -189,10 +188,10 @@ describe('Monitors', () => {
 
     expect(deleteMonitor).toHaveBeenCalled();
     expect(httpClientMock.delete).toHaveBeenCalled();
-    expect(httpClientMock.delete).toHaveBeenCalledWith(
-      `../api/alerting/monitors/delete_id?version=15`
-    );
-    expect(response).toEqual({ data: { ok: true } });
+    expect(httpClientMock.delete).toHaveBeenCalledWith(`../api/alerting/monitors/delete_id`, {
+      query: { version: 15 },
+    });
+    expect(response).toEqual({ ok: true });
     const error = await mountWrapper.instance().deleteMonitor({ id: 'delete_id', version: 15 });
     expect(httpClientMock.delete).toHaveBeenCalledTimes(2);
     expect(error.message).toBe('random delete error');
@@ -203,7 +202,7 @@ describe('Monitors', () => {
     const getActiveAlerts = jest.spyOn(Monitors.prototype, 'getActiveAlerts');
     const mountWrapper = getMountWrapper();
     const monitor = alertingFakes.randomMonitor();
-    httpClientMock.get.mockResolvedValue({ data: { ok: true, alerts: [], totalAlerts: 0 } });
+    httpClientMock.get.mockResolvedValue({ ok: true, alerts: [], totalAlerts: 0 });
     mountWrapper.instance().onClickAcknowledge(monitor);
 
     expect(onClickAcknowledge).toHaveBeenCalled();
@@ -227,12 +226,12 @@ describe('Monitors', () => {
     expect(httpClientMock.post).toHaveBeenNthCalledWith(
       1,
       `../api/alerting/monitors/monitor_1/_acknowledge/alerts`,
-      { alerts: ['alert_1', 'alert_2'] }
+      { body: JSON.stringify({ alerts: ['alert_1', 'alert_2'] }) }
     );
     expect(httpClientMock.post).toHaveBeenNthCalledWith(
       2,
       `../api/alerting/monitors/monitor_2/_acknowledge/alerts`,
-      { alerts: ['alert_1'] }
+      { body: JSON.stringify({ alerts: ['alert_1'] }) }
     );
   });
 
@@ -294,7 +293,7 @@ describe('Monitors', () => {
     mountWrapper.setState({ selectedItems });
     mountWrapper.update();
 
-    httpClientMock.get.mockResolvedValue({ data: { ok: true, alerts: [], totalAlerts: 0 } });
+    httpClientMock.get.mockResolvedValue({ ok: true, alerts: [], totalAlerts: 0 });
     mountWrapper.instance().onBulkAcknowledge();
 
     expect(onBulkAcknowledge).toHaveBeenCalled();

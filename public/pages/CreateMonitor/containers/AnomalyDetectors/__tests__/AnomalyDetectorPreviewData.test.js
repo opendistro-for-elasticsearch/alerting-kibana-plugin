@@ -20,7 +20,8 @@ import { httpClientMock } from '../../../../../../test/mocks';
 import { AppContext } from '../../../../../utils/AppContext';
 
 httpClientMock.get.mockResolvedValue({
-  data: { ok: true, response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} } },
+  ok: true,
+  response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
 });
 
 const mockedRender = jest.fn().mockImplementation(() => null);

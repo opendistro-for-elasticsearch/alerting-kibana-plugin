@@ -187,8 +187,8 @@ export default function (services, router) {
           id: schema.string(),
         }),
         query: schema.object({
-          ifSeqNo: schema.string(),
-          ifPrimaryTerm: schema.string(),
+          ifSeqNo: schema.number(),
+          ifPrimaryTerm: schema.number(),
         }),
         body: schema.any(),
       },
@@ -285,8 +285,8 @@ export default function (services, router) {
           id: schema.string(),
         }),
         query: schema.object({
-          ifSeqNo: schema.string(),
-          ifPrimaryTerm: schema.string(),
+          ifSeqNo: schema.number(),
+          ifPrimaryTerm: schema.number(),
         }),
         body: schema.any(),
       },

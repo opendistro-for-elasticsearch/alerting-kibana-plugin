@@ -80,7 +80,8 @@ describe('ManageSenders', () => {
 
     // Mock return in getSenders function
     httpClientMock.get.mockResolvedValue({
-      data: { ok: true, emailAccounts: [mockEmailAccount] },
+      ok: true,
+      emailAccounts: [mockEmailAccount],
     });
 
     const wrapper = mount(
@@ -102,7 +103,8 @@ describe('ManageSenders', () => {
     const log = jest.spyOn(global.console, 'log');
     // Mock return in getSenders function
     httpClientMock.get.mockResolvedValue({
-      data: { ok: false, err: 'test' },
+      ok: false,
+      err: 'test',
     });
 
     const wrapper = mount(
@@ -123,7 +125,8 @@ describe('ManageSenders', () => {
   test('loads empty list of senders when ok:false', async () => {
     // Mock return in getSenders function
     httpClientMock.get.mockResolvedValue({
-      data: { ok: false, err: 'test' },
+      ok: false,
+      err: 'test',
     });
 
     const wrapper = mount(

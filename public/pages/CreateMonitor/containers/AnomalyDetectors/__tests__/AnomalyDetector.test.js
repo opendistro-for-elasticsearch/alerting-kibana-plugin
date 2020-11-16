@@ -54,17 +54,13 @@ describe('AnomalyDetectors', () => {
 
   test('should be able to select the detector', (done) => {
     httpClientMock.post.mockResolvedValueOnce({
-      data: {
-        ok: true,
-        detectors: [{ name: 'sample-detector', id: 'sample-id', feature_attributes: [] }],
-      },
+      ok: true,
+      detectors: [{ name: 'sample-detector', id: 'sample-id', feature_attributes: [] }],
     });
     //Preview mock
     httpClientMock.post.mockResolvedValueOnce({
-      data: {
-        ok: true,
-        response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
-      },
+      ok: true,
+      response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
     });
     const wrapper = getMountWrapper();
     setTimeout(() => {

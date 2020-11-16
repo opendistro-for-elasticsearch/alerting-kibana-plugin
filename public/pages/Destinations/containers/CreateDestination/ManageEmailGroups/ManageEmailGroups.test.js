@@ -77,7 +77,8 @@ describe('ManageEmailGroups', () => {
 
     // Mock return in getEmailGroups function
     httpClientMock.get.mockResolvedValue({
-      data: { ok: true, emailGroups: [mockEmailGroup] },
+      ok: true,
+      emailGroups: [mockEmailGroup],
     });
 
     const wrapper = mount(
@@ -101,7 +102,8 @@ describe('ManageEmailGroups', () => {
     const log = jest.spyOn(global.console, 'log');
     // Mock return in getEmailGroups function
     httpClientMock.get.mockResolvedValue({
-      data: { ok: false, err: 'test' },
+      ok: false,
+      err: 'test',
     });
 
     const wrapper = mount(
@@ -122,7 +124,8 @@ describe('ManageEmailGroups', () => {
   test('loads empty list of email groups when ok:false', async () => {
     // Mock return in getEmailGroups function
     httpClientMock.get.mockResolvedValue({
-      data: { ok: false, err: 'test' },
+      ok: false,
+      err: 'test',
     });
 
     const wrapper = mount(
