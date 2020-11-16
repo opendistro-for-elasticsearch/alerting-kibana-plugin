@@ -51,9 +51,7 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/detectors/_search',
-      validate: {
-        body: schema.any(),
-      },
+      validate: false,
     },
     anomalyDetectorService.getDetectors
   );
@@ -63,7 +61,7 @@ export default function (services, router) {
       path: '/api/alerting/detectors/{detectorId}/results',
       validate: {
         params: schema.object({
-          id: schema.string(),
+          detectorId: schema.string(),
         }),
       },
     },
