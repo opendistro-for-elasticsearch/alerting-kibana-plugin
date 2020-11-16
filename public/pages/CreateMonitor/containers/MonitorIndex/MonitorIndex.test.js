@@ -119,10 +119,8 @@ describe('MonitorIndex', () => {
   //
   test('returns indices/aliases', async () => {
     httpClientMock.post.mockResolvedValue({
-      data: {
-        ok: true,
-        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
-      },
+      ok: true,
+      resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
     });
     const wrapper = getMountWrapper();
 
