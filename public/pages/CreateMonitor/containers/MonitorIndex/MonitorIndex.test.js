@@ -23,7 +23,7 @@ import * as helpers from './utils/helpers';
 import { httpClientMock } from '../../../../../test/mocks';
 
 helpers.createReasonableWait = jest.fn((cb) => cb());
-httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: [] } });
+httpClientMock.post.mockResolvedValue({ ok: true, resp: [] });
 
 function getMountWrapper(customProps = {}) {
   return mount(

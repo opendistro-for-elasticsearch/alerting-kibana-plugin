@@ -40,9 +40,7 @@ beforeEach(() => {
 
 describe('Breadcrumbs', () => {
   const title = 'Alerting';
-  httpClientMock.get = jest
-    .fn()
-    .mockResolvedValue({ data: { ok: true, resp: { name: 'random monitor' } } });
+  httpClientMock.get = jest.fn().mockResolvedValue({ ok: true, resp: { name: 'random monitor' } });
   delete global.window.location;
   global.window.location = { hash: '' };
 
@@ -115,29 +113,29 @@ describe('getBreadcrumb', () => {
 
   describe('when matching document IDs', () => {
     test('calls get monitor route', async () => {
-      httpClientMock.get.mockResolvedValue({ data: { ok: true, resp: { name: 'random_name' } } });
+      httpClientMock.get.mockResolvedValue({ ok: true, resp: { name: 'random_name' } });
       await getBreadcrumb(monitorId, {}, httpClientMock);
       expect(httpClientMock.get).toHaveBeenCalled();
       expect(httpClientMock.get).toHaveBeenCalledWith(`../api/alerting/monitors/${monitorId}`);
     });
 
     test('returns monitor name', async () => {
-      httpClientMock.get.mockResolvedValue({ data: { ok: true, resp: { name: 'random_name' } } });
+      httpClientMock.get.mockResolvedValue({ ok: true, resp: { name: 'random_name' } });
       expect(await getBreadcrumb(monitorId, {}, httpClientMock)).toMatchSnapshot();
     });
 
     test('uses monitor id as name if request fails', async () => {
-      httpClientMock.get.mockRejectedValue({ data: { ok: true, resp: { name: 'random_name' } } });
+      httpClientMock.get.mockRejectedValue({ ok: true, resp: { name: 'random_name' } });
       expect(await getBreadcrumb(monitorId, {}, httpClientMock)).toMatchSnapshot();
     });
 
     test('uses monitor id as name if ok=false', async () => {
-      httpClientMock.get.mockResolvedValue({ data: { ok: false, resp: { name: 'random_name' } } });
+      httpClientMock.get.mockResolvedValue({ ok: false, resp: { name: 'random_name' } });
       expect(await getBreadcrumb(monitorId, {}, httpClientMock)).toMatchSnapshot();
     });
 
     test('adds appropriate action breadcrumb', async () => {
-      httpClientMock.get.mockResolvedValue({ data: { ok: true, resp: { name: 'random_name' } } });
+      httpClientMock.get.mockResolvedValue({ ok: true, resp: { name: 'random_name' } });
       expect(
         await getBreadcrumb(
           `${monitorId}?action=${MONITOR_ACTIONS.UPDATE_MONITOR}`,
