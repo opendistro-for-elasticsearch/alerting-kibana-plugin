@@ -111,11 +111,6 @@ export default function (services, router) {
         params: schema.object({
           destinationId: schema.string(),
         }),
-        query: schema.object({
-          ifSeqNo: schema.string(),
-          ifPrimaryTerm: schema.string(),
-        }),
-        body: schema.any(),
       },
     },
     destinationsService.deleteDestination

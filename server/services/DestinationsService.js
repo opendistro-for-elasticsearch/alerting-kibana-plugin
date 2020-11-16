@@ -175,6 +175,7 @@ export default class DestinationsService {
     params.size = size;
     params.searchString = search;
     if (search.trim()) params.searchString = `*${search.trim().split(' ').join('* *')}*`;
+    params.destinationType = type;
 
     try {
       const resp = await callAsCurrentUser('alerting.searchDestinations', params);
