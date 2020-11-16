@@ -216,7 +216,9 @@ export default class Dashboard extends Component {
 
     const promises = Object.entries(monitorAlerts).map(([monitorId, alerts]) =>
       httpClient
-        .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, { alerts })
+        .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, {
+          body: JSON.stringify({ alerts }),
+        })
         .catch((error) => error)
     );
 

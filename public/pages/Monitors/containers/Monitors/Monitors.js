@@ -236,7 +236,7 @@ export default class Monitors extends Component {
     const promises = Object.entries(monitorAlerts).map(([monitorId, alerts]) =>
       httpClient
         .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, {
-          body: JSON.stringify(alerts),
+          body: JSON.stringify({ alerts }),
         })
         .catch((error) => error)
     );
@@ -305,9 +305,7 @@ export default class Monitors extends Component {
     const response = await httpClient.get('../api/alerting/alerts', { query: params });
 
     if (response.ok) {
-      const {
-        data: { alerts, totalAlerts },
-      } = response;
+      const { alerts, totalAlerts } = response;
       this.setState({
         alerts,
         totalAlerts,

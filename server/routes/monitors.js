@@ -148,6 +148,7 @@ export default function (services, router) {
         params: schema.object({
           id: schema.string(),
         }),
+        body: schema.any(),
       },
     },
     monitorService.acknowledgeAlerts
