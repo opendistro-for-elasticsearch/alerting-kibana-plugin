@@ -106,12 +106,14 @@ export default class ManageSenders extends React.Component {
       method: sender.method,
     };
     try {
-      const response = await httpClient.post(`../api/alerting/destinations/email_accounts`, body);
-      if (!response.data.ok) {
+      const response = await httpClient.post(`../api/alerting/destinations/email_accounts`, {
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
         this.setState({ failedSenders: true });
         this.props.core.toastNotifications.addDanger({
           title: `Failed to create sender: ${sender.name}`,
-          text: `Reason: ${response.data.resp}`,
+          text: `Reason: ${response.resp}`,
         });
       }
     } catch (err) {
@@ -135,15 +137,15 @@ export default class ManageSenders extends React.Component {
       method: updatedSender.method,
     };
     try {
-      const response = await httpClient.put(
-        `../api/alerting/destinations/email_accounts/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-        body
-      );
-      if (!response.data.ok) {
+      const response = await httpClient.put(`../api/alerting/destinations/email_accounts/${id}`, {
+        query: { ifSeqNo, ifPrimaryTerm },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
         this.setState({ failedSenders: true });
         this.props.core.toastNotifications.addDanger({
           title: `Failed to update sender: ${updatedSender.name}`,
-          text: `Reason: ${response.data.resp}`,
+          text: `Reason: ${response.resp}`,
         });
       }
     } catch (err) {
@@ -161,11 +163,11 @@ export default class ManageSenders extends React.Component {
     const { id } = sender;
     try {
       const response = await httpClient.delete(`../api/alerting/destinations/email_accounts/${id}`);
-      if (!response.data.ok) {
+      if (!response.ok) {
         this.setState({ failedSenders: true });
         this.props.core.toastNotifications.addDanger({
           title: `Failed to delete sender: ${sender.name}`,
-          text: `Reason: ${response.data.resp}`,
+          text: `Reason: ${response.resp}`,
         });
       }
     } catch (err) {

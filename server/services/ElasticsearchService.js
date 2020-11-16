@@ -149,8 +149,7 @@ export default class ElasticsearchService {
         h: 'component',
       });
       // return { ok: true, resp: plugins };
-      return res.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           resp: plugins,
@@ -159,8 +158,7 @@ export default class ElasticsearchService {
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getPlugins:', err);
       // return { ok: false, resp: err.message };
-      return res.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,
@@ -177,8 +175,7 @@ export default class ElasticsearchService {
         include_defaults: 'true',
       });
       // return { ok: true, resp: settings };
-      return res.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: true,
           resp: settings,
@@ -187,8 +184,7 @@ export default class ElasticsearchService {
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getSettings:', err);
       // return { ok: false, resp: err.message };
-      return res.custom({
-        statusCode: 200,
+      return res.ok({
         body: {
           ok: false,
           resp: err.message,

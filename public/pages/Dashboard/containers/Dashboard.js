@@ -191,7 +191,6 @@ export default class Dashboard extends Component {
             alerts,
             totalAlerts,
           });
-          console.log('succeeded to get alerts');
         } else {
           console.log('error getting alerts:', resp);
         }

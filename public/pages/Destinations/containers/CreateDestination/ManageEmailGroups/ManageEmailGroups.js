@@ -118,12 +118,14 @@ export default class ManageEmailGroups extends React.Component {
       emails: emailGroup.emails.map((email) => ({ email: email.label })),
     };
     try {
-      const response = await httpClient.post(`../api/alerting/destinations/email_groups`, body);
-      if (!response.data.ok) {
+      const response = await httpClient.post(`../api/alerting/destinations/email_groups`, {
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
         this.setState({ failedEmailGroups: true });
         core.notifications.toasts.addDanger({
           title: `Failed to create email group: ${emailGroup.name}`,
-          text: `Reason: ${response.data.resp}`,
+          text: `Reason: ${response.resp}`,
         });
       }
     } catch (err) {
@@ -144,15 +146,15 @@ export default class ManageEmailGroups extends React.Component {
       emails: updatedEmailGroup.emails.map((email) => ({ email: email.label })),
     };
     try {
-      const response = await httpClient.put(
-        `../api/alerting/destinations/email_groups/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-        body
-      );
-      if (!response.data.ok) {
+      const response = await httpClient.put(`../api/alerting/destinations/email_groups/${id}`, {
+        query: { ifSeqNo, ifPrimaryTerm },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
         this.setState({ failedEmailGroups: true });
         this.props.core.toastNotifications.addDanger({
           title: `Failed to update email group: ${updatedEmailGroup.name}`,
-          text: `Reason: ${response.data.resp}`,
+          text: `Reason: ${response.resp}`,
         });
       }
     } catch (err) {
@@ -170,11 +172,11 @@ export default class ManageEmailGroups extends React.Component {
     const { id } = emailGroup;
     try {
       const response = await httpClient.delete(`../api/alerting/destinations/email_groups/${id}`);
-      if (!response.data.ok) {
+      if (!response.ok) {
         this.setState({ failedEmailGroups: true });
         this.props.core.toastNotifications.addDanger({
           title: `Failed to delete email group: ${emailGroup.name}`,
-          text: `Reason: ${response.data.resp}`,
+          text: `Reason: ${respons.resp}`,
         });
       }
     } catch (err) {

@@ -41,7 +41,7 @@ export default function (services, router) {
       path: '/api/alerting/detectors/{detectorId}',
       validate: {
         params: schema.object({
-          id: schema.string(),
+          detectorId: schema.string(),
         }),
       },
     },

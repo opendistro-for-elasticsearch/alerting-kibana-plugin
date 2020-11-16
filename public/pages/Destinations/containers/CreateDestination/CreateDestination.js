@@ -90,9 +90,9 @@ class CreateDestination extends React.Component {
     const { httpClient, history } = this.props;
     try {
       const resp = await httpClient.get(`../api/alerting/destinations/${destinationId}`);
-      if (resp.data.ok) {
-        const ifSeqNo = _.get(resp, 'data.ifSeqNo');
-        const ifPrimaryTerm = _.get(resp, 'data.ifPrimaryTerm');
+      if (resp.ok) {
+        const ifSeqNo = _.get(resp, 'ifSeqNo');
+        const ifPrimaryTerm = _.get(resp, 'ifPrimaryTerm');
         this.setState({
           ifSeqNo,
           ifPrimaryTerm,
@@ -116,14 +116,11 @@ class CreateDestination extends React.Component {
     } = this.props;
     const { ifSeqNo, ifPrimaryTerm } = this.state;
     try {
-      const resp = await httpClient.put(
-        `../api/alerting/destinations/${destinationId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-        requestData
-      );
-      const {
-        data: { ok },
-      } = resp;
-      if (ok) {
+      const resp = await httpClient.put(`../api/alerting/destinations/${destinationId}`, {
+        query: { ifSeqNo, ifPrimaryTerm },
+        body: JSON.stringify(requestData),
+      });
+      if (resp.ok) {
         history.push(`/destinations`);
       } else {
         // Handles stale Destination data.
@@ -139,12 +136,11 @@ class CreateDestination extends React.Component {
   handleCreate = async (requestData, { setSubmitting }) => {
     const { httpClient, history } = this.props;
     try {
-      const resp = await httpClient.post('../api/alerting/destinations', requestData);
+      const resp = await httpClient.post('../api/alerting/destinations', {
+        body: JSON.stringify(requestData),
+      });
       setSubmitting(false);
-      const {
-        data: { ok },
-      } = resp;
-      if (ok) {
+      if (resp.ok) {
         history.push(`/destinations`);
       }
     } catch (e) {

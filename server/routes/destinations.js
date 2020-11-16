@@ -68,7 +68,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/destinations',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     destinationsService.createDestination
   );
@@ -82,7 +84,16 @@ export default function (services, router) {
   router.put(
     {
       path: '/api/alerting/destinations/{destinationId}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          destinationId: schema.string(),
+        }),
+        query: schema.object({
+          ifSeqNo: schema.string(),
+          ifPrimaryTerm: schema.string(),
+        }),
+        body: schema.any(),
+      },
     },
     destinationsService.updateDestination
   );
@@ -96,7 +107,16 @@ export default function (services, router) {
   router.delete(
     {
       path: '/api/alerting/destinations/{destinationId}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          destinationId: schema.string(),
+        }),
+        query: schema.object({
+          ifSeqNo: schema.string(),
+          ifPrimaryTerm: schema.string(),
+        }),
+        body: schema.any(),
+      },
     },
     destinationsService.deleteDestination
   );
@@ -110,7 +130,12 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/destinations/email_accounts',
-      validate: false,
+      validate: {
+        query: schema.object({
+          search: schema.maybe(schema.string()),
+          size: schema.number(),
+        }),
+      },
     },
     destinationsService.getEmailAccounts
   );
@@ -124,7 +149,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/destinations/email_accounts',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     destinationsService.createEmailAccount
   );
@@ -138,7 +165,15 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/destinations/email_accounts/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+        query: schema.object({
+          search: schema.maybe(schema.string()),
+          size: schema.number(),
+        }),
+      },
     },
     destinationsService.getEmailAccount
   );
@@ -152,7 +187,16 @@ export default function (services, router) {
   router.put(
     {
       path: '/api/alerting/destinations/email_accounts/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+        query: schema.object({
+          ifSeqNo: schema.string(),
+          ifPrimaryTerm: schema.string(),
+        }),
+        body: schema.any(),
+      },
     },
     destinationsService.updateEmailAccount
   );
@@ -166,7 +210,11 @@ export default function (services, router) {
   router.delete(
     {
       path: '/api/alerting/destinations/email_accounts/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     destinationsService.deleteEmailAccount
   );
@@ -180,7 +228,12 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/destinations/email_groups',
-      validate: false,
+      validate: {
+        query: schema.object({
+          search: schema.maybe(schema.string()),
+          size: schema.number(),
+        }),
+      },
     },
     destinationsService.getEmailGroups
   );
@@ -194,7 +247,9 @@ export default function (services, router) {
   router.post(
     {
       path: '/api/alerting/destinations/email_groups',
-      validate: false,
+      validate: {
+        body: schema.any(),
+      },
     },
     destinationsService.createEmailGroup
   );
@@ -208,7 +263,15 @@ export default function (services, router) {
   router.get(
     {
       path: '/api/alerting/destinations/email_groups/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+        query: schema.object({
+          search: schema.maybe(schema.string()),
+          size: schema.number(),
+        }),
+      },
     },
     destinationsService.getEmailGroup
   );
@@ -222,7 +285,16 @@ export default function (services, router) {
   router.put(
     {
       path: '/api/alerting/destinations/email_groups/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+        query: schema.object({
+          ifSeqNo: schema.string(),
+          ifPrimaryTerm: schema.string(),
+        }),
+        body: schema.any(),
+      },
     },
     destinationsService.updateEmailGroup
   );
@@ -236,7 +308,11 @@ export default function (services, router) {
   router.delete(
     {
       path: '/api/alerting/destinations/email_groups/{id}',
-      validate: false,
+      validate: {
+        params: schema.object({
+          id: schema.string(),
+        }),
+      },
     },
     destinationsService.deleteEmailGroup
   );

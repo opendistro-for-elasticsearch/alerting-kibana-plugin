@@ -193,28 +193,27 @@ class MonitorHistory extends PureComponent {
     );
 
     try {
+      const requestBody = {
+        query: getPOISearchQuery(
+          monitorId,
+          poiTimeWindow.startTime.valueOf(),
+          poiTimeWindow.endTime.valueOf(),
+          intervalDuration
+        ),
+        index: INDEX.ALL_ALERTS,
+      };
       const resp = await httpClient.post('../api/alerting/_search', {
-        body: JSON.stringify({
-          query: getPOISearchQuery(
-            monitorId,
-            poiTimeWindow.startTime.valueOf(),
-            poiTimeWindow.endTime.valueOf(),
-            intervalDuration
-          ),
-          index: INDEX.ALL_ALERTS,
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (resp.ok) {
-        const poiData = get(resp, 'data.resp.aggregations.alerts_over_time.buckets', []).map(
-          (item) => ({
-            x: item.key,
-            y: item.doc_count,
-          })
-        );
+        const poiData = get(resp, 'resp.aggregations.alerts_over_time.buckets', []).map((item) => ({
+          x: item.key,
+          y: item.doc_count,
+        }));
         this.setState(
           {
             poiData,
-            maxAlerts: get(resp, 'data.resp.aggregations.max_alerts.value', 0),
+            maxAlerts: get(resp, 'resp.aggregations.max_alerts.value', 0),
             timeSeriesWindow: {
               ...this.getWindowSize(poiData, intervalDuration),
             },

@@ -77,14 +77,14 @@ describe('<MonitorHistory/>', () => {
     process.nextTick(() => {
       wrapper.update();
       expect(wrapper.state().poiData).toEqual(
-        poiResponse.data.resp.aggregations.alerts_over_time.buckets.map((item) => ({
+        poiResponse.resp.aggregations.alerts_over_time.buckets.map((item) => ({
           x: item.key,
           y: item.doc_count,
         }))
       );
       expect(httpClient.post).toHaveBeenCalledTimes(1);
       expect(httpClient.get).toHaveBeenCalledTimes(1);
-      expect(wrapper.state().maxAlerts).toBe(poiResponse.data.resp.aggregations.max_alerts.value);
+      expect(wrapper.state().maxAlerts).toBe(poiResponse.resp.aggregations.max_alerts.value);
       const triggersData = wrapper.state().triggersData;
       const triggersDataKeys = Object.keys(triggersData);
       expect(triggersDataKeys.length).toBe(2);

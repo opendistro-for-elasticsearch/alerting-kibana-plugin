@@ -113,11 +113,14 @@ class DestinationsList extends React.Component {
 
   isDeleteAllowed = async (type, id) => {
     const { httpClient } = this.props;
-    const resp = await httpClient.post('../api/alerting/_search', {
+    const reuqestBody = {
       query: isDeleteAllowedQuery(type, id),
       index: INDEX.SCHEDULED_JOBS,
+    };
+    const resp = await httpClient.post('../api/alerting/_search', {
+      body: JSON.stringify(reuqestBody),
     });
-    const total = _.get(resp, 'data.resp.hits.total.value');
+    const total = _.get(resp, 'resp.hits.total.value');
     return total === 0;
   };
 
@@ -147,7 +150,7 @@ class DestinationsList extends React.Component {
     const { httpClient } = this.props;
     try {
       const resp = await httpClient.delete(`../api/alerting/destinations/${destinationId}`);
-      if (resp.data.ok) {
+      if (resp.ok) {
         await this.getDestinations();
       } else {
         // TODO::handle error
