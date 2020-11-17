@@ -21,7 +21,6 @@ import EmailRecipients from '../../../containers/CreateDestination/EmailRecipien
 
 const propTypes = {
   type: PropTypes.string.isRequired,
-  core: PropTypes.object.isRequired,
 };
 const Email = ({ httpClient, type, values }) => (
   <div>
