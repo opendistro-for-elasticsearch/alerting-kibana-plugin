@@ -18,12 +18,6 @@ import { schema } from '@kbn/config-schema';
 export default function (services, router) {
   const { elasticsearchService } = services;
 
-  // server.route({
-  //   path: '/api/alerting/_search',
-  //   method: 'POST',
-  //   handler: elasticsearchService.search,
-  // });
-
   router.post(
     {
       path: '/api/alerting/_search',
@@ -33,12 +27,6 @@ export default function (services, router) {
     },
     elasticsearchService.search
   );
-
-  // server.route({
-  //   path: '/api/alerting/_indices',
-  //   method: 'POST',
-  //   handler: elasticsearchService.getIndices,
-  // });
 
   router.post(
     {
@@ -50,12 +38,6 @@ export default function (services, router) {
     elasticsearchService.getIndices
   );
 
-  // server.route({
-  //   path: '/api/alerting/_aliases',
-  //   method: 'POST',
-  //   handler: elasticsearchService.getAliases,
-  // });
-
   router.post(
     {
       path: '/api/alerting/_aliases',
@@ -65,12 +47,6 @@ export default function (services, router) {
     },
     elasticsearchService.getAliases
   );
-
-  // server.route({
-  //   path: '/api/alerting/_mappings',
-  //   method: 'POST',
-  //   handler: elasticsearchService.getMappings,
-  // });
 
   router.post(
     {
@@ -82,12 +58,6 @@ export default function (services, router) {
     elasticsearchService.getMappings
   );
 
-  // server.route({
-  //   path: '/api/alerting/_plugins',
-  //   method: 'GET',
-  //   handler: elasticsearchService.getPlugins,
-  // });
-
   router.get(
     {
       path: '/api/alerting/_plugins',
@@ -95,12 +65,6 @@ export default function (services, router) {
     },
     elasticsearchService.getPlugins
   );
-
-  // server.route({
-  //   path: '/api/alerting/_settings',
-  //   method: 'GET',
-  //   handler: elasticsearchService.getSettings,
-  // });
 
   router.get(
     {

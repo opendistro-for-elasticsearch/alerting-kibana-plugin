@@ -18,12 +18,6 @@ import { schema } from '@kbn/config-schema';
 export default function (services, router) {
   const { monitorService } = services;
 
-  // server.route({
-  //   path: '/api/alerting/monitors',
-  //   method: 'GET',
-  //   handler: monitorService.getMonitors,
-  // });
-
   router.get(
     {
       path: '/api/alerting/monitors',
@@ -41,12 +35,6 @@ export default function (services, router) {
     monitorService.getMonitors
   );
 
-  // server.route({
-  //   path: '/api/alerting/monitors',
-  //   method: 'POST',
-  //   handler: monitorService.createMonitor,
-  // });
-
   router.post(
     {
       path: '/api/alerting/monitors',
@@ -56,12 +44,6 @@ export default function (services, router) {
     },
     monitorService.createMonitor
   );
-
-  // server.route({
-  //   path: '/api/alerting/monitors/_execute',
-  //   method: 'POST',
-  //   handler: monitorService.executeMonitor,
-  // });
 
   router.post(
     {
@@ -76,12 +58,6 @@ export default function (services, router) {
     monitorService.executeMonitor
   );
 
-  // server.route({
-  //   path: '/api/alerting/monitors/{id}',
-  //   method: 'GET',
-  //   handler: monitorService.getMonitor,
-  // });
-
   router.get(
     {
       path: '/api/alerting/monitors/{id}',
@@ -93,12 +69,6 @@ export default function (services, router) {
     },
     monitorService.getMonitor
   );
-
-  // server.route({
-  //   path: '/api/alerting/monitors/{id}',
-  //   method: 'PUT',
-  //   handler: monitorService.updateMonitor,
-  // });
 
   router.put(
     {
@@ -117,12 +87,6 @@ export default function (services, router) {
     monitorService.updateMonitor
   );
 
-  // server.route({
-  //   path: '/api/alerting/monitors/{id}',
-  //   method: 'DELETE',
-  //   handler: monitorService.deleteMonitor,
-  // });
-
   router.delete(
     {
       path: '/api/alerting/monitors/{id}',
@@ -137,12 +101,6 @@ export default function (services, router) {
     },
     monitorService.deleteMonitor
   );
-
-  // server.route({
-  //   path: '/api/alerting/monitors/{id}/_acknowledge/alerts',
-  //   method: 'POST',
-  //   handler: monitorService.acknowledgeAlerts,
-  // });
 
   router.post(
     {

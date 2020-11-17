@@ -14,7 +14,6 @@
  */
 
 import _ from 'lodash';
-import { ACTIONS_TEMPLATE } from '../pages/CreateTrigger/utils/constants';
 import { INDEX, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../utils/constants';
 
 // TODO: Use a validation framework to clean all of this up or create own.

@@ -15,13 +15,11 @@
 
 import _ from 'lodash';
 
-import { CLUSTER } from './utils/constants';
 import { INDEX } from '../../utils/constants';
 
 export default class MonitorService {
-  constructor(esDriver, logger) {
+  constructor(esDriver) {
     this.esDriver = esDriver;
-    this.logger = logger;
   }
 
   createMonitor = async (context, req, res) => {

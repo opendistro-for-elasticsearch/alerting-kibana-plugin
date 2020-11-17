@@ -25,7 +25,6 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
-// import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import { hasError, isInvalid, required } from '../../../../utils/validate';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';

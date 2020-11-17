@@ -14,9 +14,8 @@
  */
 
 export default class AlertService {
-  constructor(esDriver, logger) {
+  constructor(esDriver) {
     this.esDriver = esDriver;
-    this.logger = logger;
   }
 
   getAlerts = async (context, req, res) => {

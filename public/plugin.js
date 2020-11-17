@@ -15,7 +15,7 @@ export class AlertingPlugin {
       category: DEFAULT_APP_CATEGORIES.kibana,
       mount: async (params) => {
         const { renderApp } = await import('./app');
-        const [coreStart, depsStart] = await core.getStartServices();
+        const [coreStart] = await core.getStartServices();
         return renderApp(coreStart, params);
       },
     });

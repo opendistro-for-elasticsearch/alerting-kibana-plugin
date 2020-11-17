@@ -30,7 +30,6 @@ import {
   EuiOverlayMask,
   EuiSpacer,
 } from '@elastic/eui';
-// import { toastNotifications } from 'ui/notify';
 import PropTypes from 'prop-types';
 
 import AddEmailGroupButton from '../../../components/createDestinations/AddEmailGroupButton/AddEmailGroupButton';

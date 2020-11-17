@@ -15,7 +15,6 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-// import chrome from 'ui/chrome';
 import moment from 'moment';
 import { Formik, FieldArray } from 'formik';
 import {
@@ -28,7 +27,6 @@ import {
   EuiSpacer,
   EuiTitle,
 } from '@elastic/eui';
-// import { toastNotifications } from 'ui/notify';
 import 'brace/theme/github';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';

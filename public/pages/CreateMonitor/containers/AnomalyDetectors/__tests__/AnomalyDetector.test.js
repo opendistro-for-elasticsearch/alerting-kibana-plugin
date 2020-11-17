@@ -22,12 +22,6 @@ import AnomalyDetectors from '../AnomalyDetectors';
 import { httpClientMock } from '../../../../../../test/mocks';
 import { AppContext } from '../../../../../utils/AppContext';
 
-jest.mock('ui/chrome', () => ({
-  getBasePath: () => {
-    return 'http://localhost/app';
-  },
-}));
-
 const renderEmptyMessage = jest.fn();
 function getMountWrapper() {
   return mount(

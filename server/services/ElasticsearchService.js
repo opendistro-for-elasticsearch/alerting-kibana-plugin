@@ -15,9 +15,8 @@
 import { CLUSTER } from './utils/constants';
 
 export default class ElasticsearchService {
-  constructor(esDriver, logger) {
+  constructor(esDriver) {
     this.esDriver = esDriver;
-    this.logger = logger;
   }
 
   search = async (context, req, res) => {

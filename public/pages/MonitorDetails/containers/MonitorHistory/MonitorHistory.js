@@ -16,7 +16,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get, isEqual } from 'lodash';
-// import chrome from 'ui/chrome';
 import { EuiHorizontalRule } from '@elastic/eui';
 import moment from 'moment';
 

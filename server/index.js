@@ -1,5 +1,4 @@
-import { schema, TypeOf } from '@kbn/config-schema';
-import { PluginConfigDescriptor, PluginInitializerContext } from '../../../src/core/server';
+import { schema } from '@kbn/config-schema';
 import { AlertingPlugin } from './plugin';
 
 export const configSchema = schema.object({

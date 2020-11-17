@@ -25,7 +25,6 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
-//import { toastNotifications } from 'ui/notify';
 
 import ConfigureMonitor from '../ConfigureMonitor';
 import DefineMonitor from '../DefineMonitor';

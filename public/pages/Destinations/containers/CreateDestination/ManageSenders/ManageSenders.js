@@ -30,7 +30,6 @@ import {
   EuiOverlayMask,
   EuiSpacer,
 } from '@elastic/eui';
-// import { toastNotifications } from 'ui/notify';
 import PropTypes from 'prop-types';
 
 import AddSenderButton from '../../../components/createDestinations/AddSenderButton/AddSenderButton';

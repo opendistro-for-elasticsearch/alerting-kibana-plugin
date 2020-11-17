@@ -18,12 +18,6 @@ import { schema } from '@kbn/config-schema';
 export default function (services, router) {
   const { destinationsService } = services;
 
-  // server.route({
-  //   path: '/api/alerting/destinations',
-  //   method: 'GET',
-  //   handler: destinationsService.getDestinations,
-  // });
-
   router.get(
     {
       path: '/api/alerting/destinations',
@@ -41,12 +35,6 @@ export default function (services, router) {
     destinationsService.getDestinations
   );
 
-  // server.route({
-  //   path: '/api/alerting/destinations/{destinationId}',
-  //   method: 'GET',
-  //   handler: destinationsService.getDestination,
-  // });
-
   router.get(
     {
       path: '/api/alerting/destinations/{destinationId}',
@@ -59,12 +47,6 @@ export default function (services, router) {
     destinationsService.getDestination
   );
 
-  // server.route({
-  //   path: '/api/alerting/destinations',
-  //   method: 'POST',
-  //   handler: destinationsService.createDestination,
-  // });
-
   router.post(
     {
       path: '/api/alerting/destinations',
@@ -74,12 +56,6 @@ export default function (services, router) {
     },
     destinationsService.createDestination
   );
-
-  // server.route({
-  //   path: '/api/alerting/destinations/{destinationId}',
-  //   method: 'PUT',
-  //   handler: destinationsService.updateDestination,
-  // });
 
   router.put(
     {
@@ -98,12 +74,6 @@ export default function (services, router) {
     destinationsService.updateDestination
   );
 
-  // server.route({
-  //   path: '/api/alerting/destinations/{destinationId}',
-  //   method: 'DELETE',
-  //   handler: destinationsService.deleteDestination,
-  // });
-
   router.delete(
     {
       path: '/api/alerting/destinations/{destinationId}',
@@ -115,12 +85,6 @@ export default function (services, router) {
     },
     destinationsService.deleteDestination
   );
-
-  // server.route({
-  //   path: '/api/alerting/destinations/email_accounts',
-  //   method: 'GET',
-  //   handler: destinationsService.getEmailAccounts,
-  // });
 
   router.get(
     {
@@ -135,12 +99,6 @@ export default function (services, router) {
     destinationsService.getEmailAccounts
   );
 
-  // server.route({
-  //   path: '/api/alerting/destinations/email_accounts',
-  //   method: 'POST',
-  //   handler: destinationsService.createEmailAccount,
-  // });
-
   router.post(
     {
       path: '/api/alerting/destinations/email_accounts',
@@ -150,12 +108,6 @@ export default function (services, router) {
     },
     destinationsService.createEmailAccount
   );
-
-  // server.route({
-  //   path: '/api/alerting/destinations/email_accounts/{id}',
-  //   method: 'GET',
-  //   handler: destinationsService.getEmailAccount,
-  // });
 
   router.get(
     {
@@ -172,12 +124,6 @@ export default function (services, router) {
     },
     destinationsService.getEmailAccount
   );
-
-  // server.route({
-  //   path: '/api/alerting/destinations/email_accounts/{id}',
-  //   method: 'PUT',
-  //   handler: destinationsService.updateEmailAccount,
-  // });
 
   router.put(
     {
@@ -196,12 +142,6 @@ export default function (services, router) {
     destinationsService.updateEmailAccount
   );
 
-  // server.route({
-  //   path: '/api/alerting/destinations/email_accounts/{id}',
-  //   method: 'DELETE',
-  //   handler: destinationsService.deleteEmailAccount,
-  // });
-
   router.delete(
     {
       path: '/api/alerting/destinations/email_accounts/{id}',
@@ -213,12 +153,6 @@ export default function (services, router) {
     },
     destinationsService.deleteEmailAccount
   );
-
-  // server.route({
-  //   path: '/api/alerting/destinations/email_groups',
-  //   method: 'GET',
-  //   handler: destinationsService.getEmailGroups,
-  // });
 
   router.get(
     {
@@ -233,12 +167,6 @@ export default function (services, router) {
     destinationsService.getEmailGroups
   );
 
-  // server.route({
-  //   path: '/api/alerting/destinations/email_groups',
-  //   method: 'POST',
-  //   handler: destinationsService.createEmailGroup,
-  // });
-
   router.post(
     {
       path: '/api/alerting/destinations/email_groups',
@@ -248,12 +176,6 @@ export default function (services, router) {
     },
     destinationsService.createEmailGroup
   );
-
-  // server.route({
-  //   path: '/api/alerting/destinations/email_groups/{id}',
-  //   method: 'GET',
-  //   handler: destinationsService.getEmailGroup,
-  // });
 
   router.get(
     {
@@ -271,12 +193,6 @@ export default function (services, router) {
     destinationsService.getEmailGroup
   );
 
-  // server.route({
-  //   path: '/api/alerting/destinations/email_groups/{id}',
-  //   method: 'PUT',
-  //   handler: destinationsService.updateEmailGroup,
-  // });
-
   router.put(
     {
       path: '/api/alerting/destinations/email_groups/{id}',
@@ -293,12 +209,6 @@ export default function (services, router) {
     },
     destinationsService.updateEmailGroup
   );
-
-  // server.route({
-  //   path: '/api/alerting/destinations/email_groups/{id}',
-  //   method: 'DELETE',
-  //   handler: destinationsService.deleteEmailGroup,
-  // });
 
   router.delete(
     {

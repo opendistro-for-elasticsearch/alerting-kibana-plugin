@@ -15,10 +15,8 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-// import chrome from 'ui/chrome';
 import PropTypes from 'prop-types';
 import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
-// import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';

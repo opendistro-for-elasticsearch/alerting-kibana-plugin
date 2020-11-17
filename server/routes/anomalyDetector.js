@@ -18,24 +18,6 @@ import { schema } from '@kbn/config-schema';
 export default function (services, router) {
   const { anomalyDetectorService } = services;
 
-  // server.route({
-  //   path: '/api/alerting/detectors/{detectorId}',
-  //   method: 'GET',
-  //   handler: anomalyDetectorService.getDetector,
-  // });
-  //
-  // server.route({
-  //   path: '/api/alerting/detectors/_search',
-  //   method: 'POST',
-  //   handler: anomalyDetectorService.getDetectors,
-  // });
-  //
-  // server.route({
-  //   path: '/api/alerting/detectors/{detectorId}/results',
-  //   method: 'GET',
-  //   handler: anomalyDetectorService.getDetectorResults,
-  // });
-
   router.get(
     {
       path: '/api/alerting/detectors/{detectorId}',

@@ -18,12 +18,6 @@ import { schema } from '@kbn/config-schema';
 export default function (services, router) {
   const { alertService } = services;
 
-  // server.route({
-  //   path: '/api/alerting/alerts',
-  //   method: 'GET',
-  //   handler: alertService.getAlerts,
-  // });
-
   router.get(
     {
       path: '/api/alerting/alerts',

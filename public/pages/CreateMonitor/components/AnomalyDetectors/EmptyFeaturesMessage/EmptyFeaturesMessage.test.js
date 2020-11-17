@@ -17,12 +17,6 @@ import React from 'react';
 import { render } from 'enzyme';
 import { EmptyFeaturesMessage } from './EmptyFeaturesMessage';
 
-jest.mock('ui/chrome', () => ({
-  getBasePath: () => {
-    return 'http://localhost/app';
-  },
-}));
-
 describe('EmptyFeaturesMessage', () => {
   test('renders ', () => {
     const component = <EmptyFeaturesMessage detectorId="tempId" />;
