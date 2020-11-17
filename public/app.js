@@ -16,13 +16,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router, Route } from 'react-router-dom';
-import { AppContext } from './utils/AppContext';
+
+import 'react-vis/dist/style.css';
+//import './less/main.less';
 import Main from './pages/Main';
+import { AppContext } from './utils/AppContext';
 import { CoreServicesContext } from './utils/CoreServicesContext';
 
 export function renderApp(coreStart, params) {
   const http = coreStart.http;
   const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false;
+  coreStart.chrome.setBreadcrumbs([{ text: 'Alerting' }]); // Set Breadcrumbs for the plugin
 
   //Load Chart's dark mode CSS
   if (isDarkMode) {
@@ -57,8 +61,7 @@ export function renderApp(coreStart, params) {
 // import { AppContext } from './utils/AppContext';
 //
 // const app = uiModules.get('apps/alerting');
-// // const darkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
-// const isDarkMode = coreStart.uiSettings.get("theme:darkMode") || false;
+// const darkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
 //
 // //Load Chart's dark mode CSS
 // if (darkMode) {
@@ -96,4 +99,4 @@ export function renderApp(coreStart, params) {
 //   });
 // }
 //
-// chrome.setRootController('alerting', RootController);
+// chrome.setRootController('alerting', RootController); -> core.application.register
