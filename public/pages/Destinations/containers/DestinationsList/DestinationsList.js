@@ -117,7 +117,7 @@ class DestinationsList extends React.Component {
       query: isDeleteAllowedQuery(type, id),
       index: INDEX.SCHEDULED_JOBS,
     };
-    const resp = await httpClient.post('../api/alerting/_search', {
+    const resp = await httpClient.post('../api/alerting/monitors/_search', {
       body: JSON.stringify(reuqestBody),
     });
     const total = _.get(resp, 'resp.hits.total.value');

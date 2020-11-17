@@ -25,7 +25,6 @@ export default class MonitorService {
   createMonitor = async (context, req, res) => {
     try {
       const params = { body: JSON.stringify(req.body) };
-      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const createResponse = await callAsCurrentUser('alerting.createMonitor', params);
       return res.ok({
@@ -51,7 +50,6 @@ export default class MonitorService {
       const params = { monitorId: id };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const response = await callAsCurrentUser('alerting.deleteMonitor', params);
-      // return { ok: response.result === 'deleted' };
       return res.ok({
         body: {
           ok: response.result === 'deleted',
@@ -114,7 +112,6 @@ export default class MonitorService {
           (acc, curr) => (curr.key === 'ACTIVE' ? curr.doc_count : acc),
           0
         );
-        // return { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm };
         return res.ok({
           body: { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm },
         });
@@ -144,7 +141,6 @@ export default class MonitorService {
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const updateResponse = await callAsCurrentUser('alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
-      // return { ok: true, version: _version, id: _id };
       return res.ok({
         body: {
           ok: true,
@@ -209,9 +205,6 @@ export default class MonitorService {
         }),
       };
 
-      // const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
-      //   CLUSTER.ALERTING
-      // );
       const { callAsCurrentUser: alertingCallAsCurrentUser } = await this.esDriver.asScoped(req);
       const getResponse = await alertingCallAsCurrentUser('alerting.getMonitors', params);
 
@@ -281,7 +274,6 @@ export default class MonitorService {
         },
       };
 
-      // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
       const { callAsCurrentUser } = this.esDriver.asScoped(req);
       const esAggsResponse = await callAsCurrentUser('alerting.getMonitors', aggsParams);
       const buckets = _.get(esAggsResponse, 'aggregations.uniq_monitor_ids.buckets', []).map(
@@ -338,11 +330,6 @@ export default class MonitorService {
         results = results.slice(from, from + size);
       }
 
-      // return {
-      //   ok: true,
-      //   monitors: results,
-      //   totalMonitors,
-      // };
       return res.ok({
         body: {
           ok: true,
@@ -368,10 +355,8 @@ export default class MonitorService {
         monitorId: id,
         body: JSON.stringify(req.body),
       };
-      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const { callAsCurrentUser } = this.esDriver.asScoped(req);
       const acknowledgeResponse = await callAsCurrentUser('alerting.acknowledgeAlerts', params);
-      // return { ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse };
       return res.ok({
         body: {
           ok: !acknowledgeResponse.failed.length,
@@ -396,10 +381,8 @@ export default class MonitorService {
         body: JSON.stringify(req.body),
         dryrun,
       };
-      // const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const executeResponse = await callAsCurrentUser('alerting.executeMonitor', params);
-      // return { ok: true, resp: executeResponse };
       return res.ok({
         body: {
           ok: true,
@@ -408,6 +391,31 @@ export default class MonitorService {
       });
     } catch (err) {
       console.error('Alerting - MonitorService - executeMonitor:', err);
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
+    }
+  };
+
+  //TODO: This is temporarily a pass through call which needs to be deprecated
+  searchMonitors = async (context, req, res) => {
+    try {
+      const { query, index, size } = req.body;
+      const params = { index, size, body: query };
+
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const results = await callAsCurrentUser('alerting.getMonitors', params);
+      return res.ok({
+        body: {
+          ok: true,
+          resp: results,
+        },
+      });
+    } catch (err) {
+      console.error('Alerting - MonitorService - searchMonitor:', err);
       return res.ok({
         body: {
           ok: false,

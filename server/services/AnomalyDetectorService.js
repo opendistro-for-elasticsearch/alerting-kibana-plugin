@@ -13,8 +13,6 @@
  *   permissions and limitations under the License.
  */
 import { get } from 'lodash';
-import { CLUSTER } from './utils/constants';
-import { INDEX } from '../../utils/constants';
 import { mapKeysDeep, toCamel, toSnake } from './utils/helpers';
 import { anomalyResultMapper } from './utils/adHelpers';
 

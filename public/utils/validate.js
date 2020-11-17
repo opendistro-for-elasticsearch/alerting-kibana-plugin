@@ -56,7 +56,7 @@ export const validateMonitorName = (httpClient, monitorToEdit) => async (value) 
       index: INDEX.SCHEDULED_JOBS,
       query: { query: { term: { 'monitor.name.keyword': value } } },
     };
-    const response = await httpClient.post('../api/alerting/_search', {
+    const response = await httpClient.post('../api/alerting/monitors/_search', {
       body: JSON.stringify(options),
     });
     if (_.get(response, 'resp.hits.total.value', 0)) {

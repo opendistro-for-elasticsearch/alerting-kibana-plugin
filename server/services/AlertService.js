@@ -75,10 +75,8 @@ export default class AlertService {
     if (monitorIds.length > 0)
       params.monitorId = !Array.isArray(monitorIds) ? monitorIds : monitorIds[0];
 
-    // const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
     const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
     try {
-      // const resp = await callWithRequest(req, 'alerting.getAlerts', params);
       const resp = await callWithRequest('alerting.getAlerts', params);
       const alerts = resp.alerts.map((hit) => {
         const alert = hit;
@@ -88,14 +86,6 @@ export default class AlertService {
       });
       const totalAlerts = resp.totalAlerts;
 
-      // return { ok: true, alerts, totalAlerts };
-      // return response.custom({
-      //   statusCode: 200,
-      //   body: {
-      //     ok: true,
-      //     alerts, totalAlerts
-      //   },
-      // });
       return res.ok({
         body: {
           ok: true,
@@ -105,7 +95,6 @@ export default class AlertService {
       });
     } catch (err) {
       console.log(err.message);
-      // return { ok: false, err: err.message };
       return res.ok({
         body: {
           ok: false,

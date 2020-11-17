@@ -37,6 +37,16 @@ export default function (services, router) {
 
   router.post(
     {
+      path: '/api/alerting/monitors/_search',
+      validate: {
+        body: schema.any(),
+      },
+    },
+    monitorService.searchMonitors
+  );
+
+  router.post(
+    {
       path: '/api/alerting/monitors',
       validate: {
         body: schema.any(),

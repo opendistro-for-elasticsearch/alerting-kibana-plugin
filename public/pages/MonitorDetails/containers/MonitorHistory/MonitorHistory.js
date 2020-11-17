@@ -200,7 +200,7 @@ class MonitorHistory extends PureComponent {
         ),
         index: INDEX.ALL_ALERTS,
       };
-      const resp = await httpClient.post('../api/alerting/_search', {
+      const resp = await httpClient.post('../api/alerting/monitors/_search', {
         body: JSON.stringify(requestBody),
       });
       if (resp.ok) {
