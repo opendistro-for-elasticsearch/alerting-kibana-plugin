@@ -169,7 +169,6 @@ class CreateDestination extends React.Component {
   render() {
     const { edit, httpClient, location, core } = this.props;
     const { initialValues } = this.state;
-    console.log('Create Dest', core);
     return (
       <div style={{ padding: '25px 50px' }}>
         <Formik

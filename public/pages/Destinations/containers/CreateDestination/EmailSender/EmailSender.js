@@ -75,7 +75,6 @@ export default class EmailSender extends React.Component {
   render() {
     const { httpClient, type, core } = this.props;
     const { senderOptions, loadingSenders, showManageSendersModal } = this.state;
-    console.log('Email Sender', core);
     return (
       <Fragment>
         <EuiFlexGroup
