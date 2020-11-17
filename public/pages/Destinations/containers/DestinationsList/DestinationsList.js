@@ -210,7 +210,6 @@ class DestinationsList extends React.Component {
         ...this.props.location,
         search: queryParms,
       });
-      console.log({ query: { from, ...params } });
       try {
         const resp = await httpClient.get('../api/alerting/destinations', {
           query: { from, ...params },
