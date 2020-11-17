@@ -332,7 +332,6 @@ class DestinationsList extends React.Component {
             isVisible={this.state.showManageSenders}
             onClickCancel={this.hideManageSendersModal}
             onClickSave={this.hideManageSendersModal}
-            core={this.props.core}
           />
 
           <ManageEmailGroups
@@ -341,7 +340,6 @@ class DestinationsList extends React.Component {
             isVisible={this.state.showManageEmailGroups}
             onClickCancel={this.hideManageEmailGroupsModal}
             onClickSave={this.hideManageEmailGroupsModal}
-            core={this.props.core}
           />
 
           <DestinationsControls
@@ -383,6 +381,5 @@ class DestinationsList extends React.Component {
 DestinationsList.propTypes = {
   httpClient: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  core: PropTypes.object.isRequired,
 };
 export default DestinationsList;

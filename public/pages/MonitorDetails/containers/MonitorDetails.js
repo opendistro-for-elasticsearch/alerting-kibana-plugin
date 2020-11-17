@@ -228,7 +228,8 @@ export default class MonitorDetails extends Component {
       },
       history,
       httpClient,
-      core,
+      notifications,
+      isDarkMode,
     } = this.props;
     const { action, success: showSuccessCallOut = false } = queryString.parse(location.search);
     const updatingMonitor = action === MONITOR_ACTIONS.UPDATE_MONITOR;
@@ -267,7 +268,8 @@ export default class MonitorDetails extends Component {
           onCloseTrigger={this.onCloseTrigger}
           onMonitorFieldChange={() => {}}
           updateMonitor={this.updateMonitor}
-          core={core}
+          notifications={notifications}
+          isDarkMode={isDarkMode}
         />
       );
     }
@@ -344,7 +346,7 @@ export default class MonitorDetails extends Component {
             monitorId={monitorId}
             onShowTrigger={this.onCreateTrigger}
             triggers={monitor.triggers}
-            core={core}
+            isDarkMode={isDarkMode}
           />
         </div>
         <EuiSpacer />

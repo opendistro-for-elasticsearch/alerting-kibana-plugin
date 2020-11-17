@@ -59,7 +59,6 @@ class MonitorHistory extends PureComponent {
         endTime: this.initialEndTime,
       },
     };
-    this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
   }
   async componentDidMount() {
     const { triggers } = this.props;
@@ -341,7 +340,7 @@ class MonitorHistory extends PureComponent {
                   ? HistoryConstants.MIN_POI_Y_SCALE
                   : maxAlerts,
               ]}
-              isDarkMode={this.isDarkMode}
+              isDarkMode={this.props.isDarkMode}
             />
             <EuiHorizontalRule margin="xs" />
             <Legend />

@@ -17,7 +17,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { AnomalyDetectorData } from '../AnomalyDetectorData';
 import { httpClientMock } from '../../../../../../test/mocks';
-import { AppContext } from '../../../../../utils/AppContext';
+import { CoreContext } from '../../../../../utils/CoreContext';
 
 httpClientMock.get.mockResolvedValue({
   ok: true,
@@ -27,9 +27,9 @@ httpClientMock.get.mockResolvedValue({
 const mockedRender = jest.fn().mockImplementation(() => null);
 function getMountWrapper() {
   return mount(
-    <AppContext.Provider value={{ httpClient: httpClientMock }}>
+    <CoreContext.Provider value={{ http: httpClientMock }}>
       <AnomalyDetectorData detectorId="randomId" render={mockedRender} />
-    </AppContext.Provider>
+    </CoreContext.Provider>
   );
 }
 

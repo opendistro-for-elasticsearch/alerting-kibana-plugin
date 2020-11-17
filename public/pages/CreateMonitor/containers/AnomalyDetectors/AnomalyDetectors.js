@@ -18,10 +18,10 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { FormikComboBox } from '../../../../components/FormControls';
 import { hasError, isInvalid, validateDetector } from '../../../../utils/validate';
-import { AppContext } from '../../../../utils/AppContext';
+import { CoreContext } from '../../../../utils/CoreContext';
 
 class AnomalyDetectors extends React.Component {
-  static contextType = AppContext;
+  static contextType = CoreContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +35,7 @@ class AnomalyDetectors extends React.Component {
   }
 
   async searchDetectors() {
-    const { httpClient } = this.context;
+    const { http: httpClient } = this.context;
     try {
       const response = await httpClient.post('../api/alerting/detectors/_search');
       if (response.ok) {

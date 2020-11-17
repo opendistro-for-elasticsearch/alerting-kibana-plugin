@@ -56,7 +56,6 @@ export default class CreateTrigger extends Component {
       executeResponse: null,
       initialValues,
     };
-    this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -195,7 +194,7 @@ export default class CreateTrigger extends Component {
   });
 
   backendErrorHandler(actionName, resp) {
-    this.props.core.notifications.toasts.addDanger({
+    this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the trigger`,
       text: resp,
       toastLifeTimeMs: 20000,
@@ -227,7 +226,7 @@ export default class CreateTrigger extends Component {
                 setFlyout={setFlyout}
                 triggers={monitor.triggers}
                 triggerValues={values}
-                isDarkMode={this.isDarkMode}
+                isDarkMode={this.props.isDarkMode}
               />
               <EuiSpacer />
               <FieldArray
@@ -259,7 +258,7 @@ export default class CreateTrigger extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  this.props.core.notifications.toasts.addDanger({
+                  this.props.notifications.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the trigger`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

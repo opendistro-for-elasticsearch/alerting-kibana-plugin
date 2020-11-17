@@ -25,7 +25,7 @@ function getShallowWrapper(customProps = {}) {
     <DefineMonitor
       values={FORMIK_INITIAL_VALUES}
       httpClient={httpClientMock}
-      core={coreMock}
+      notifications={coreMock}
       {...customProps}
     />
   );

@@ -18,13 +18,12 @@ import ReactDOM from 'react-dom';
 import { HashRouter as Router, Route } from 'react-router-dom';
 
 import 'react-vis/dist/style.css';
+// TODO: review the CSS style and migrate the necessary style to SASS, as Less is not supported in Kibana "new platform" anymore
 //import './less/main.less';
 import Main from './pages/Main';
-import { AppContext } from './utils/AppContext';
-import { CoreServicesContext } from './utils/CoreServicesContext';
+import { CoreContext } from './utils/CoreContext';
 
 export function renderApp(coreStart, params) {
-  const http = coreStart.http;
   const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false;
   coreStart.chrome.setBreadcrumbs([{ text: 'Alerting' }]); // Set Breadcrumbs for the plugin
 
@@ -38,11 +37,11 @@ export function renderApp(coreStart, params) {
   // render react to DOM
   ReactDOM.render(
     <Router>
-      <AppContext.Provider value={{ httpClient: http, isDarkMode }}>
-        <CoreServicesContext.Provider value={coreStart}>
-          <Route render={(props) => <Main title="Alerting" httpClient={http} {...props} />} />
-        </CoreServicesContext.Provider>
-      </AppContext.Provider>
+      <CoreContext.Provider
+        value={{ http: coreStart.http, isDarkMode, notifications: coreStart.notifications }}
+      >
+        <Route render={(props) => <Main title="Alerting" {...props} />} />
+      </CoreContext.Provider>
     </Router>,
     params.element
   );

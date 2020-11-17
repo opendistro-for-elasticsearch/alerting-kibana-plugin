@@ -39,6 +39,7 @@ import { senderToFormik } from './utils/helpers';
 import getSenders from '../EmailSender/utils/helpers';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import { ignoreEscape } from '../../../../../utils/helpers';
+import { CoreContext } from '../../../../../utils/CoreContext';
 
 const createSenderContext = (senders) => ({
   ctx: {
@@ -52,6 +53,7 @@ const getInitialValues = (senders) =>
     : { senders: senders.map((sender) => senderToFormik(sender)) };
 
 export default class ManageSenders extends React.Component {
+  static contextType = CoreContext;
   constructor(props) {
     super(props);
 
@@ -96,7 +98,8 @@ export default class ManageSenders extends React.Component {
   };
 
   createSender = async (sender) => {
-    const { httpClient, core } = this.props;
+    const { httpClient } = this.props;
+    const { notifications } = this.context;
     const body = {
       name: sender.name,
       email: sender.email,
@@ -110,7 +113,7 @@ export default class ManageSenders extends React.Component {
       });
       if (!response.ok) {
         this.setState({ failedSenders: true });
-        core.notifications.toasts.addDanger({
+        notifications.toasts.addDanger({
           title: `Failed to create sender: ${sender.name}`,
           text: `Reason: ${response.resp}`,
         });
@@ -118,7 +121,7 @@ export default class ManageSenders extends React.Component {
     } catch (err) {
       console.error('Unable to create sender', err);
       this.setState({ failedSenders: true });
-      core.notifications.toasts.addDanger({
+      notifications.toasts.addDanger({
         title: `Failed to create sender: ${sender.name}`,
         text: `Reason: ${err}`,
       });
@@ -126,7 +129,8 @@ export default class ManageSenders extends React.Component {
   };
 
   updateSender = async (updatedSender) => {
-    const { httpClient, core } = this.props;
+    const { httpClient } = this.props;
+    const { notifications } = this.context;
     const { id, ifSeqNo, ifPrimaryTerm } = updatedSender;
     const body = {
       name: updatedSender.name,
@@ -142,7 +146,7 @@ export default class ManageSenders extends React.Component {
       });
       if (!response.ok) {
         this.setState({ failedSenders: true });
-        core.notifications.toasts.addDanger({
+        notifications.toasts.addDanger({
           title: `Failed to update sender: ${updatedSender.name}`,
           text: `Reason: ${response.resp}`,
         });
@@ -150,7 +154,7 @@ export default class ManageSenders extends React.Component {
     } catch (err) {
       console.error('Unable to update sender', err);
       this.setState({ failedSenders: true });
-      core.notifications.toasts.addDanger({
+      notifications.toasts.addDanger({
         title: `Failed to update sender: ${updatedSender.name}`,
         text: `Reason: ${err}`,
       });
@@ -158,13 +162,14 @@ export default class ManageSenders extends React.Component {
   };
 
   deleteSender = async (sender) => {
-    const { httpClient, core } = this.props;
+    const { httpClient } = this.props;
+    const { notifications } = this.context;
     const { id } = sender;
     try {
       const response = await httpClient.delete(`../api/alerting/destinations/email_accounts/${id}`);
       if (!response.ok) {
         this.setState({ failedSenders: true });
-        core.notifications.toasts.addDanger({
+        notifications.toasts.addDanger({
           title: `Failed to delete sender: ${sender.name}`,
           text: `Reason: ${response.resp}`,
         });
@@ -172,7 +177,7 @@ export default class ManageSenders extends React.Component {
     } catch (err) {
       console.error('Unable to delete sender', err);
       this.setState({ failedSenders: true });
-      core.notifications.toasts.addDanger({
+      notifications.toasts.addDanger({
         title: `Failed to delete sender: ${sender.name}`,
         text: `Reason: ${err}`,
       });
@@ -201,7 +206,7 @@ export default class ManageSenders extends React.Component {
     // If there were no failures, show a success toast
     const { failedSenders } = this.state;
     if (!failedSenders) {
-      this.props.core.notifications.toasts.addSuccess('Successfully saved senders');
+      this.context.notifications.toasts.addSuccess('Successfully saved senders');
     }
     this.setState({ failedSenders: false });
   };
@@ -313,7 +318,6 @@ ManageSenders.propTypes = {
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
-  core: PropTypes.object.isRequired,
 };
 
 ManageSenders.defaultProps = {

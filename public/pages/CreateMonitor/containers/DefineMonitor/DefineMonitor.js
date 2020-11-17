@@ -30,6 +30,7 @@ import { getPathsPerDataType } from './utils/mappings';
 import { buildSearchRequest } from './utils/searchRequests';
 import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
+import { CoreContext } from '../../../../utils/CoreContext';
 
 function renderEmptyMessage(message) {
   return (
@@ -47,12 +48,14 @@ const propTypes = {
   values: PropTypes.object.isRequired,
   httpClient: PropTypes.object.isRequired,
   errors: PropTypes.object,
+  notifications: PropTypes.object.isRequired,
 };
 const defaultProps = {
   errors: {},
 };
 
 class DefineMonitor extends Component {
+  static contextType = CoreContext;
   constructor(props) {
     super(props);
 
@@ -75,7 +78,6 @@ class DefineMonitor extends Component {
     this.getMonitorContent = this.getMonitorContent.bind(this);
     this.getPlugins = this.getPlugins.bind(this);
     this.showPluginWarning = this.showPluginWarning.bind(this);
-    this.isDarkMode = this.props.core.uiSettings.get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -281,7 +283,7 @@ class DefineMonitor extends Component {
       content = (
         <ExtractionQuery
           response={JSON.stringify(response || '', null, 4)}
-          isDarkMode={this.isDarkMode}
+          isDarkMode={this.context.isDarkMode}
         />
       );
     }
@@ -338,7 +340,7 @@ class DefineMonitor extends Component {
   }
 
   backendErrorHandler(actionName, resp) {
-    this.props.core.notifications.toasts.addDanger({
+    this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the query`,
       text: resp,
       toastLifeTimeMs: 20000,

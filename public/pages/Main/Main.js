@@ -15,7 +15,7 @@
 
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { CoreServicesConsumer } from '../../utils/CoreServicesContext';
+import { CoreConsumer } from '../../utils/CoreContext';
 
 import Home from '../Home';
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -41,13 +41,13 @@ class Main extends Component {
 
   render() {
     const { flyout } = this.state;
-    const { httpClient, history, ...rest } = this.props;
+    const { history, ...rest } = this.props;
     return (
-      <CoreServicesConsumer>
+      <CoreConsumer>
         {(core) =>
           core && (
             <div style={{ padding: '15px 0px' }}>
-              <Breadcrumbs history={history} httpClient={httpClient} {...rest} />
+              <Breadcrumbs history={history} httpClient={core.http} {...rest} />
               <Flyout
                 flyout={flyout}
                 onClose={() => {
@@ -59,9 +59,9 @@ class Main extends Component {
                   path={APP_PATH.CREATE_MONITOR}
                   render={(props) => (
                     <CreateMonitor
-                      httpClient={httpClient}
+                      httpClient={core.http}
                       setFlyout={this.setFlyout}
-                      core={core}
+                      notifications={core.notifications}
                       {...props}
                     />
                   )}
@@ -70,9 +70,9 @@ class Main extends Component {
                   path={APP_PATH.CREATE_DESTINATION}
                   render={(props) => (
                     <CreateDestination
-                      httpClient={httpClient}
+                      httpClient={core.http}
                       setFlyout={this.setFlyout}
-                      core={core}
+                      notifications={core.notifications}
                       {...props}
                     />
                   )}
@@ -81,9 +81,9 @@ class Main extends Component {
                   path="/destinations/:destinationId"
                   render={(props) => (
                     <CreateDestination
-                      httpClient={httpClient}
+                      httpClient={core.http}
                       setFlyout={this.setFlyout}
-                      core={core}
+                      notifications={core.notifications}
                       {...props}
                       edit
                     />
@@ -93,9 +93,10 @@ class Main extends Component {
                   path="/monitors/:monitorId"
                   render={(props) => (
                     <MonitorDetails
-                      httpClient={httpClient}
+                      httpClient={core.http}
                       setFlyout={this.setFlyout}
-                      core={core}
+                      notifications={core.notifications}
+                      isDarkMode={core.isDarkMode}
                       {...props}
                     />
                   )}
@@ -103,10 +104,10 @@ class Main extends Component {
                 <Route
                   render={(props) => (
                     <Home
-                      httpClient={httpClient}
+                      httpClient={core.http}
                       {...props}
                       setFlyout={this.setFlyout}
-                      core={core}
+                      notifications={core.notifications}
                     />
                   )}
                 />
@@ -114,7 +115,7 @@ class Main extends Component {
             </div>
           )
         }
-      </CoreServicesConsumer>
+      </CoreConsumer>
     );
   }
 }

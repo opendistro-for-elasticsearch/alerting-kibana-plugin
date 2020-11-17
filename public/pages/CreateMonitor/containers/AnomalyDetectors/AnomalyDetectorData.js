@@ -16,11 +16,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { AppContext } from '../../../../utils/AppContext';
+import { CoreContext } from '../../../../utils/CoreContext';
 import { AD_PREVIEW_DAYS } from '../../../../utils/constants';
 
 class AnomalyDetectorData extends React.Component {
-  static contextType = AppContext;
+  static contextType = CoreContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -43,7 +43,7 @@ class AnomalyDetectorData extends React.Component {
 
   async getPreviewData() {
     const { detectorId, startTime, endTime } = this.props;
-    const { httpClient } = this.context;
+    const { http: httpClient } = this.context;
     this.setState({
       isLoading: true,
     });

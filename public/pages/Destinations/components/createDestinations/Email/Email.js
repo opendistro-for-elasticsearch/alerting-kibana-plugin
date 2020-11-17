@@ -23,11 +23,11 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   core: PropTypes.object.isRequired,
 };
-const Email = ({ httpClient, type, values, core }) => (
+const Email = ({ httpClient, type, values }) => (
   <div>
-    <EmailSender httpClient={httpClient} type={type} core={core} />
+    <EmailSender httpClient={httpClient} type={type} />
     <EuiSpacer size="m" />
-    <EmailRecipients httpClient={httpClient} type={type} core={core} />
+    <EmailRecipients httpClient={httpClient} type={type} />
   </div>
 );
 

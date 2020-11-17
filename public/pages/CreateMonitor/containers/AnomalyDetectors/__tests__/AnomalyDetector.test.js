@@ -20,19 +20,19 @@ import { mount } from 'enzyme';
 import { FORMIK_INITIAL_VALUES } from '../../CreateMonitor/utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors';
 import { httpClientMock } from '../../../../../../test/mocks';
-import { AppContext } from '../../../../../utils/AppContext';
+import { CoreContext } from '../../../../../utils/CoreContext';
 
 const renderEmptyMessage = jest.fn();
 function getMountWrapper() {
   return mount(
-    <AppContext.Provider value={{ httpClient: httpClientMock }}>
+    <CoreContext.Provider value={{ http: httpClientMock }}>
       <Formik
         initialValues={FORMIK_INITIAL_VALUES}
         render={({ values }) => (
           <AnomalyDetectors values={values} renderEmptyMessage={renderEmptyMessage} />
         )}
       />
-    </AppContext.Provider>
+    </CoreContext.Provider>
   );
 }
 

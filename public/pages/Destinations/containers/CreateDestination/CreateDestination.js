@@ -167,7 +167,7 @@ class CreateDestination extends React.Component {
   };
 
   render() {
-    const { edit, httpClient, location, core } = this.props;
+    const { edit, httpClient, location } = this.props;
     const { initialValues } = this.state;
     return (
       <div style={{ padding: '25px 50px' }}>
@@ -232,7 +232,7 @@ class CreateDestination extends React.Component {
                   <EuiSpacer size="m" />
                   <SubHeader title={<h4>Settings</h4>} description={''} />
                   <EuiSpacer size="m" />
-                  {destinationType[values.type]({ httpClient, values, type: values.type, core })}
+                  {destinationType[values.type]({ httpClient, values, type: values.type })}
                 </div>
                 <EuiSpacer size="m" />
               </ContentPanel>
@@ -252,7 +252,7 @@ class CreateDestination extends React.Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  core.notifications.toasts.addDanger({
+                  this.props.notifications.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the destination`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })
@@ -271,7 +271,7 @@ CreateDestination.propTypes = {
   httpClient: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  core: PropTypes.object.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
 
 CreateDestination.defaultProps = {

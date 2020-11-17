@@ -89,7 +89,7 @@ export default class Home extends Component {
   );
 
   render() {
-    const { httpClient, core } = this.props;
+    const { httpClient } = this.props;
     return (
       <div>
         <EuiTabs>{this.tabs.map(this.renderTab)}</EuiTabs>
@@ -108,9 +108,7 @@ export default class Home extends Component {
             <Route
               exact
               path="/destinations"
-              render={(props) => (
-                <DestinationsList {...props} httpClient={httpClient} core={core} />
-              )}
+              render={(props) => <DestinationsList {...props} httpClient={httpClient} />}
             />
             <Redirect to="/dashboard" />
           </Switch>
