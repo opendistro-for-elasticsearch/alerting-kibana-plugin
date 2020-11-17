@@ -21,12 +21,13 @@ import EmailRecipients from '../../../containers/CreateDestination/EmailRecipien
 
 const propTypes = {
   type: PropTypes.string.isRequired,
+  core: PropTypes.object.isRequired,
 };
-const Email = ({ httpClient, type, values }) => (
+const Email = ({ httpClient, type, values, core }) => (
   <div>
-    <EmailSender httpClient={httpClient} type={type} />
+    <EmailSender httpClient={httpClient} type={type} core={core} />
     <EuiSpacer size="m" />
-    <EmailRecipients httpClient={httpClient} type={type} />
+    <EmailRecipients httpClient={httpClient} type={type} core={core} />
   </div>
 );
 

@@ -73,8 +73,9 @@ export default class EmailSender extends React.Component {
   };
 
   render() {
-    const { httpClient, type } = this.props;
+    const { httpClient, type, core } = this.props;
     const { senderOptions, loadingSenders, showManageSendersModal } = this.state;
+    console.log('Email Sender', core);
     return (
       <Fragment>
         <EuiFlexGroup
@@ -124,6 +125,7 @@ export default class EmailSender extends React.Component {
           isVisible={showManageSendersModal}
           onClickCancel={this.onClickCancel}
           onClickSave={this.onClickSave}
+          core={core}
         />
       </Fragment>
     );
@@ -133,4 +135,5 @@ export default class EmailSender extends React.Component {
 EmailSender.propTypes = {
   httpClient: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  core: PropTypes.object.isRequired,
 };

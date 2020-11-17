@@ -129,7 +129,7 @@ export default class CreateMonitor extends Component {
   }
 
   backendErrorHandler(actionName, resp) {
-    this.props.core.notification.toasts.addDanger({
+    this.props.core.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the monitor`,
       text: resp,
       toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
@@ -139,7 +139,7 @@ export default class CreateMonitor extends Component {
 
   render() {
     const { initialValues } = this.state;
-    const { edit, httpClient, monitorToEdit } = this.props;
+    const { edit, httpClient, monitorToEdit, core } = this.props;
     return (
       <div style={{ padding: '25px 50px' }}>
         <Formik
@@ -182,7 +182,7 @@ export default class CreateMonitor extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  this.props.core.notification.toasts.addDanger({
+                  core.notifications.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the monitor`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

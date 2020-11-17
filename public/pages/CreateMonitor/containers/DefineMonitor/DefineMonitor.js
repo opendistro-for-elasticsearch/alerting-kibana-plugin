@@ -338,7 +338,7 @@ class DefineMonitor extends Component {
   }
 
   backendErrorHandler(actionName, resp) {
-    this.props.core.toastNotifications.addDanger({
+    this.props.core.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the query`,
       text: resp,
       toastLifeTimeMs: 20000,

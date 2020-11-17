@@ -116,10 +116,6 @@ export default function (services, router) {
         params: schema.object({
           id: schema.string(),
         }),
-        query: schema.object({
-          search: schema.maybe(schema.string()),
-          size: schema.number(),
-        }),
       },
     },
     destinationsService.getEmailAccount
@@ -183,10 +179,6 @@ export default function (services, router) {
       validate: {
         params: schema.object({
           id: schema.string(),
-        }),
-        query: schema.object({
-          search: schema.maybe(schema.string()),
-          size: schema.number(),
         }),
       },
     },

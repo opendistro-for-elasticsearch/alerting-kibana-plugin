@@ -138,7 +138,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   updateEmailGroup = async (updatedEmailGroup) => {
-    const { httpClient } = this.props;
+    const { httpClient, core } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm } = updatedEmailGroup;
     const body = {
       name: updatedEmailGroup.name,
@@ -151,7 +151,7 @@ export default class ManageEmailGroups extends React.Component {
       });
       if (!response.ok) {
         this.setState({ failedEmailGroups: true });
-        this.props.core.toastNotifications.addDanger({
+        core.notifications.toasts.addDanger({
           title: `Failed to update email group: ${updatedEmailGroup.name}`,
           text: `Reason: ${response.resp}`,
         });
@@ -159,7 +159,7 @@ export default class ManageEmailGroups extends React.Component {
     } catch (err) {
       console.error('Unable to update email group', err);
       this.setState({ failedEmailGroups: true });
-      this.props.core.toastNotifications.addDanger({
+      core.notifications.toasts.addDanger({
         title: `Failed to update email group: ${updatedEmailGroup.name}`,
         text: `Reason: ${err}`,
       });
@@ -167,13 +167,13 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   deleteEmailGroup = async (emailGroup) => {
-    const { httpClient } = this.props;
+    const { httpClient, core } = this.props;
     const { id } = emailGroup;
     try {
       const response = await httpClient.delete(`../api/alerting/destinations/email_groups/${id}`);
       if (!response.ok) {
         this.setState({ failedEmailGroups: true });
-        this.props.core.toastNotifications.addDanger({
+        core.notifications.toasts.addDanger({
           title: `Failed to delete email group: ${emailGroup.name}`,
           text: `Reason: ${respons.resp}`,
         });
@@ -181,7 +181,7 @@ export default class ManageEmailGroups extends React.Component {
     } catch (err) {
       console.err('Unable to delete email group', err);
       this.setState({ failedEmailGroups: true });
-      this.props.core.toastNotifications.addDanger({
+      core.notifications.toasts.addDanger({
         title: `Failed to delete email group: ${emailGroup.name}`,
         text: `Reason: ${err}`,
       });
@@ -210,7 +210,7 @@ export default class ManageEmailGroups extends React.Component {
     // If there were no failures, show a success toast
     const { failedEmailGroups } = this.state;
     if (!failedEmailGroups) {
-      toastNotifications.addSuccess('Successfully saved email groups');
+      this.props.core.notifications.toasts.addSuccess('Successfully saved email groups');
     }
     this.setState({ failedEmailGroups: false });
   };
@@ -325,6 +325,7 @@ ManageEmailGroups.propTypes = {
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
+  core: PropTypes.object.isRequired,
 };
 
 ManageEmailGroups.defaultProps = {

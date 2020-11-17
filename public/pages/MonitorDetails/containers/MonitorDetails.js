@@ -267,7 +267,7 @@ export default class MonitorDetails extends Component {
           onCloseTrigger={this.onCloseTrigger}
           onMonitorFieldChange={() => {}}
           updateMonitor={this.updateMonitor}
-          core={this.props.core}
+          core={core}
         />
       );
     }

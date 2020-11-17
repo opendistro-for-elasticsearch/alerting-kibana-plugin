@@ -45,6 +45,7 @@ export default function (services, router) {
         params: schema.object({
           detectorId: schema.string(),
         }),
+        query: schema.any(),
       },
     },
     anomalyDetectorService.getDetectorResults
