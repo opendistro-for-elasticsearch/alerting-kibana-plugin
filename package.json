@@ -16,7 +16,11 @@
   "scripts": {
     "kbn": "node ../../scripts/kbn",
     "lint": "../../node_modules/.bin/eslint '**/*.js' -c .eslintrc",
-    "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js"
+    "start": "plugin-helpers start",
+    "test:server": "plugin-helpers test:server",
+    "test:browser": "plugin-helpers test:browser",
+    "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js",
+    "build": "plugin-helpers build"
   },
   "husky": {
     "hooks": {
