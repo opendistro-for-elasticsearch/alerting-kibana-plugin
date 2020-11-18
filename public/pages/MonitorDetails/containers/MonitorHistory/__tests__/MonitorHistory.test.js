@@ -19,7 +19,6 @@ import { set } from 'lodash';
 import { mount } from 'enzyme';
 import { getPOIResponse, getAlertsResponse } from './testHelpers';
 import MonitorHistory from '../MonitorHistory';
-import { coreMock } from '../../../../../../test/mocks';
 
 moment.tz.setDefault('America/Los_Angeles');
 
@@ -49,7 +48,6 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={[]}
-        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -72,7 +70,6 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
-        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -111,7 +108,6 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
-        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -146,7 +142,6 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
-        core={coreMock}
       />
     );
     process.nextTick(() => {
@@ -171,7 +166,6 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
-        core={coreMock}
       />
     );
 
@@ -210,7 +204,6 @@ describe('<MonitorHistory/>', () => {
         monitorId={'123'}
         onShowTrigger={jest.fn()}
         triggers={triggers}
-        core={coreMock}
       />
     );
     process.nextTick(() => {
