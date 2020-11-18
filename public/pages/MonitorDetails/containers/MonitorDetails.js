@@ -251,6 +251,7 @@ export default class MonitorDetails extends Component {
           updateMonitor={this.updateMonitor}
           monitorToEdit={monitor}
           detectorId={detectorId}
+          notifications={notifications}
           {...this.props}
         />
       );
