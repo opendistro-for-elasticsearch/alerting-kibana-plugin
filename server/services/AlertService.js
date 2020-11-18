@@ -75,9 +75,9 @@ export default class AlertService {
     if (monitorIds.length > 0)
       params.monitorId = !Array.isArray(monitorIds) ? monitorIds : monitorIds[0];
 
-    const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
+    const { callAsCurrentUser } = this.esDriver.asScoped(req);
     try {
-      const resp = await callWithRequest('alerting.getAlerts', params);
+      const resp = await callAsCurrentUser('alerting.getAlerts', params);
       const alerts = resp.alerts.map((hit) => {
         const alert = hit;
         const id = hit.alert_id;

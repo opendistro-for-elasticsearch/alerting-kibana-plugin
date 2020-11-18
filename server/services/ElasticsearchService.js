@@ -82,8 +82,8 @@ export default class ElasticsearchService {
   getAliases = async (context, req, res) => {
     try {
       const { alias } = req.body;
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(res);
-      const aliases = await callWithRequest('cat.aliases', {
+      const { callAsCurrentUser } = this.esDriver.asScoped(res);
+      const aliases = await callAsCurrentUser('cat.aliases', {
         alias,
         format: 'json',
         h: 'alias,index',
@@ -108,8 +108,8 @@ export default class ElasticsearchService {
   getMappings = async (context, req, res) => {
     try {
       const params = { body: JSON.stringify(req.body) };
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
-      const mappings = await callWithRequest('indices.getMapping', params);
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const mappings = await callAsCurrentUser('indices.getMapping', params);
       return res.ok({
         body: {
           ok: true,
@@ -129,8 +129,8 @@ export default class ElasticsearchService {
 
   getPlugins = async (context, req, res) => {
     try {
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
-      const plugins = await callWithRequest('cat.plugins', {
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const plugins = await callAsCurrentUser('cat.plugins', {
         format: 'json',
         h: 'component',
       });
@@ -153,8 +153,8 @@ export default class ElasticsearchService {
 
   getSettings = async (context, req, res) => {
     try {
-      const { callAsCurrentUser: callWithRequest } = this.esDriver.asScoped(req);
-      const settings = await callWithRequest('cluster.getSettings', {
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const settings = await callAsCurrentUser('cluster.getSettings', {
         include_defaults: 'true',
       });
       return res.ok({
