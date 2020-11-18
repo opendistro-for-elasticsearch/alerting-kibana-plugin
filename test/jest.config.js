@@ -33,6 +33,7 @@ module.exports = {
   collectCoverageFrom: [
     '**/*.js',
     '!**/node_modules/**',
+    '!**/index.js',
     '!<rootDir>/public/actions/**',
     '!<rootDir>/public/components/Charts/Highlight/Highlight.js',
     '!<rootDir>/public/reducers/**',
