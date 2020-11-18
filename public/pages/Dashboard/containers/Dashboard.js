@@ -184,7 +184,6 @@ export default class Dashboard extends Component {
       const { httpClient, history } = this.props;
       history.replace({ ...this.props.location, search: queryParamsString });
       httpClient.get('../api/alerting/alerts', { query: params }).then((resp) => {
-        // httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`).then(resp => {
         if (resp.ok) {
           const { alerts, totalAlerts } = resp;
           this.setState({
