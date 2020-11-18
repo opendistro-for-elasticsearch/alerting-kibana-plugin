@@ -196,7 +196,7 @@ export default class CreateTrigger extends Component {
   backendErrorHandler(actionName, resp) {
     this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the trigger`,
-      text: resp,
+      text: resp.resp,
       toastLifeTimeMs: 20000,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });

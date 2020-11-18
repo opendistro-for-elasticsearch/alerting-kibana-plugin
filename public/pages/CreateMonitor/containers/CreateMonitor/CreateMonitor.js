@@ -131,7 +131,7 @@ export default class CreateMonitor extends Component {
   backendErrorHandler(actionName, resp) {
     this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the monitor`,
-      text: resp,
+      text: resp.resp,
       toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });

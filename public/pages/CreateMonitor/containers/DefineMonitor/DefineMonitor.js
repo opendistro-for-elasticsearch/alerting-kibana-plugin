@@ -203,7 +203,7 @@ class DefineMonitor extends Component {
         this.setState({ response, formikSnapshot, performanceResponse });
       } else {
         console.error('There was an error running the query', queryResponse.resp);
-        this.backendErrorHandler('run', queryResponse.resp);
+        this.backendErrorHandler('run', queryResponse);
         this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
       }
     } catch (err) {
@@ -342,7 +342,7 @@ class DefineMonitor extends Component {
   backendErrorHandler(actionName, resp) {
     this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the query`,
-      text: resp,
+      text: resp.resp,
       toastLifeTimeMs: 20000,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
