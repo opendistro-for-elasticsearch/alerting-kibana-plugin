@@ -4,7 +4,7 @@
     "yarn.lock",
     ".yarnrc",
     "kibana.json",
-    "{lib,public,server,webpackShims,translations,utils,target}/**/*",
+    "{lib,server,webpackShims,translations,utils,target}/**/*",
     "!test",
     "!__tests__"
   ]
