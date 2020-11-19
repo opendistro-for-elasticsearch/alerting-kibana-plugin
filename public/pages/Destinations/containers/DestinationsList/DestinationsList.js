@@ -113,12 +113,12 @@ class DestinationsList extends React.Component {
 
   isDeleteAllowed = async (type, id) => {
     const { httpClient } = this.props;
-    const reuqestBody = {
+    const requestBody = {
       query: isDeleteAllowedQuery(type, id),
       index: INDEX.SCHEDULED_JOBS,
     };
     const resp = await httpClient.post('../api/alerting/monitors/_search', {
-      body: JSON.stringify(reuqestBody),
+      body: JSON.stringify(requestBody),
     });
     const total = _.get(resp, 'resp.hits.total.value');
     return total === 0;
@@ -272,6 +272,7 @@ class DestinationsList extends React.Component {
   };
 
   render() {
+    const { httpClient, notifications } = this.props;
     const {
       destinationToDelete,
       page,
@@ -327,19 +328,21 @@ class DestinationsList extends React.Component {
           />
 
           <ManageSenders
-            httpClient={this.props.httpClient}
+            httpClient={httpClient}
             isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageSenders}
             onClickCancel={this.hideManageSendersModal}
             onClickSave={this.hideManageSendersModal}
+            notifications={notifications}
           />
 
           <ManageEmailGroups
-            httpClient={this.props.httpClient}
+            httpClient={httpClient}
             isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageEmailGroups}
             onClickCancel={this.hideManageEmailGroupsModal}
             onClickSave={this.hideManageEmailGroupsModal}
+            notifications={notifications}
           />
 
           <DestinationsControls
@@ -381,5 +384,6 @@ class DestinationsList extends React.Component {
 DestinationsList.propTypes = {
   httpClient: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
 export default DestinationsList;

@@ -30,7 +30,6 @@ import { getPathsPerDataType } from './utils/mappings';
 import { buildSearchRequest } from './utils/searchRequests';
 import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
-import { CoreContext } from '../../../../utils/CoreContext';
 
 function renderEmptyMessage(message) {
   return (
@@ -55,7 +54,6 @@ const defaultProps = {
 };
 
 class DefineMonitor extends Component {
-  static contextType = CoreContext;
   constructor(props) {
     super(props);
 
@@ -269,7 +267,7 @@ class DefineMonitor extends Component {
     };
   }
   renderExtractionQuery() {
-    const { httpClient, values } = this.props;
+    const { httpClient, values, isDarkMode } = this.props;
     const { response, performanceResponse } = this.state;
     let invalidJSON = false;
     try {
@@ -283,7 +281,7 @@ class DefineMonitor extends Component {
       content = (
         <ExtractionQuery
           response={JSON.stringify(response || '', null, 4)}
-          isDarkMode={this.context.isDarkMode}
+          isDarkMode={isDarkMode}
         />
       );
     }

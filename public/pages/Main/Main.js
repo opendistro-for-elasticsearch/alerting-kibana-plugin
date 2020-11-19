@@ -62,6 +62,7 @@ class Main extends Component {
                       httpClient={core.http}
                       setFlyout={this.setFlyout}
                       notifications={core.notifications}
+                      isDarkMode={core.isDarkMode}
                       {...props}
                     />
                   )}

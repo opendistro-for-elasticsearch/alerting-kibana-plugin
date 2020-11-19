@@ -39,7 +39,6 @@ import { senderToFormik } from './utils/helpers';
 import getSenders from '../EmailSender/utils/helpers';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import { ignoreEscape } from '../../../../../utils/helpers';
-import { CoreContext } from '../../../../../utils/CoreContext';
 
 const createSenderContext = (senders) => ({
   ctx: {
@@ -53,7 +52,6 @@ const getInitialValues = (senders) =>
     : { senders: senders.map((sender) => senderToFormik(sender)) };
 
 export default class ManageSenders extends React.Component {
-  static contextType = CoreContext;
   constructor(props) {
     super(props);
 
@@ -98,8 +96,7 @@ export default class ManageSenders extends React.Component {
   };
 
   createSender = async (sender) => {
-    const { httpClient } = this.props;
-    const { notifications } = this.context;
+    const { httpClient, notifications } = this.props;
     const body = {
       name: sender.name,
       email: sender.email,
@@ -129,8 +126,7 @@ export default class ManageSenders extends React.Component {
   };
 
   updateSender = async (updatedSender) => {
-    const { httpClient } = this.props;
-    const { notifications } = this.context;
+    const { httpClient, notifications } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm } = updatedSender;
     const body = {
       name: updatedSender.name,
@@ -162,8 +158,7 @@ export default class ManageSenders extends React.Component {
   };
 
   deleteSender = async (sender) => {
-    const { httpClient } = this.props;
-    const { notifications } = this.context;
+    const { httpClient, notifications } = this.props;
     const { id } = sender;
     try {
       const response = await httpClient.delete(`../api/alerting/destinations/email_accounts/${id}`);
@@ -206,7 +201,7 @@ export default class ManageSenders extends React.Component {
     // If there were no failures, show a success toast
     const { failedSenders } = this.state;
     if (!failedSenders) {
-      this.context.notifications.toasts.addSuccess('Successfully saved senders');
+      this.props.notifications.toasts.addSuccess('Successfully saved senders');
     }
     this.setState({ failedSenders: false });
   };
@@ -318,6 +313,7 @@ ManageSenders.propTypes = {
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
+  notifications: PropTypes.object.isRequired,
 };
 
 ManageSenders.defaultProps = {

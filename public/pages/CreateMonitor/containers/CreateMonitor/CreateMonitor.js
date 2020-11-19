@@ -139,7 +139,7 @@ export default class CreateMonitor extends Component {
 
   render() {
     const { initialValues } = this.state;
-    const { edit, httpClient, monitorToEdit, notifications } = this.props;
+    const { edit, httpClient, monitorToEdit, notifications, isDarkMode } = this.props;
     return (
       <div style={{ padding: '25px 50px' }}>
         <Formik
@@ -160,6 +160,7 @@ export default class CreateMonitor extends Component {
                 httpClient={httpClient}
                 detectorId={this.props.detectorId}
                 notifications={notifications}
+                isDarkMode={isDarkMode}
               />
               <Fragment>
                 <EuiSpacer />

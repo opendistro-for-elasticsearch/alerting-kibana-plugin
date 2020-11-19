@@ -39,7 +39,6 @@ import { emailGroupToFormik } from './utils/helpers';
 import getEmailGroups from '../EmailRecipients/utils/helpers';
 import { STATE } from '../../../components/createDestinations/Email/utils/constants';
 import { ignoreEscape } from '../../../../../utils/helpers';
-import { CoreContext } from '../../../../../utils/CoreContext';
 
 const createEmailGroupContext = (emailGroups) => ({
   ctx: {
@@ -68,7 +67,6 @@ const getEmailOptions = (emailGroups) => {
 };
 
 export default class ManageEmailGroups extends React.Component {
-  static contextType = CoreContext;
   constructor(props) {
     super(props);
 
@@ -113,8 +111,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   createEmailGroup = async (emailGroup) => {
-    const { httpClient } = this.props;
-    const { notifications } = this.context;
+    const { httpClient, notifications } = this.props;
     const body = {
       name: emailGroup.name,
       emails: emailGroup.emails.map((email) => ({ email: email.label })),
@@ -141,8 +138,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   updateEmailGroup = async (updatedEmailGroup) => {
-    const { httpClient } = this.props;
-    const { notifications } = this.context;
+    const { httpClient, notifications } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm } = updatedEmailGroup;
     const body = {
       name: updatedEmailGroup.name,
@@ -171,8 +167,7 @@ export default class ManageEmailGroups extends React.Component {
   };
 
   deleteEmailGroup = async (emailGroup) => {
-    const { httpClient } = this.props;
-    const { notifications } = this.context;
+    const { httpClient, notifications } = this.props;
     const { id } = emailGroup;
     try {
       const response = await httpClient.delete(`../api/alerting/destinations/email_groups/${id}`);
@@ -215,7 +210,7 @@ export default class ManageEmailGroups extends React.Component {
     // If there were no failures, show a success toast
     const { failedEmailGroups } = this.state;
     if (!failedEmailGroups) {
-      this.context.notifications.toasts.addSuccess('Successfully saved email groups');
+      this.props.notifications.toasts.addSuccess('Successfully saved email groups');
     }
     this.setState({ failedEmailGroups: false });
   };
@@ -262,7 +257,7 @@ export default class ManageEmailGroups extends React.Component {
 
   render() {
     const { isEmailAllowed, isVisible, onClickCancel, onClickSave } = this.props;
-    const { initialValues, loadingEmailGroups, emailGroupsToDelete } = this.state;
+    const { initialValues, loadingEmailGroups } = this.state;
     return isVisible ? (
       <Formik
         initialValues={initialValues}
@@ -330,6 +325,7 @@ ManageEmailGroups.propTypes = {
   isVisible: PropTypes.bool,
   onClickCancel: PropTypes.func,
   onClickSave: PropTypes.func,
+  notifications: PropTypes.object.isRequired,
 };
 
 ManageEmailGroups.defaultProps = {
