@@ -26,7 +26,6 @@ export class AlertingPlugin {
       id: PLUGIN_NAME,
       title: 'Alerting',
       description: 'Kibana Alerting Plugin',
-      // icon: `plugins/${PLUGIN_NAME}/images/alerting_icon.svg`,
       category: DEFAULT_APP_CATEGORIES.kibana,
       order: 8020,
       mount: async (params) => {
