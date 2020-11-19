@@ -64,7 +64,7 @@ export function formikToAdQuery(values) {
         filter: [
           {
             range: {
-              data_end_time: {
+              execution_end_time: {
                 from: '{{period_end}}||-' + values.period.interval + 'm',
                 to: '{{period_end}}',
                 include_lower: true,

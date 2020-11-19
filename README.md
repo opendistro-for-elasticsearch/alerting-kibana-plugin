@@ -22,7 +22,7 @@ Please see our [documentation](https://opendistro.github.io/for-elasticsearch-do
 1. Download the Kibana source code for the [version specified in package.json](./package.json#L9) you want to set up.
 
    See the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md#setting-up-your-development-environment) for more instructions on setting up your development environment.
-   
+
 1. Change your node version to the version specified in `.node-version` inside the Kibana root directory.
 1. cd into the `plugins` directory of the Kibana source code directory.
 1. Check out this package from version control into the `plugins` directory.
@@ -49,7 +49,7 @@ Example output: `./build/opendistro-alerting-0.7.0.0.zip`
 
 - `yarn start`
 
-  Starts Kibana and includes this plugin. Kibana will be available on `localhost:5601`.
+  Starts Kibana on the root directory (not alerting plugin directory) and includes this plugin. Kibana will be available on `localhost:5601`.
 
 - `yarn test:jest`
 
@@ -65,7 +65,7 @@ Example output: `./build/opendistro-alerting-0.7.0.0.zip`
 
 ## License
 
-This code is licensed under the Apache 2.0 License. 
+This code is licensed under the Apache 2.0 License.
 
 ## Copyright
 

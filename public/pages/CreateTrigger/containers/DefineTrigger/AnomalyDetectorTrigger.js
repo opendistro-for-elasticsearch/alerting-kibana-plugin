@@ -32,18 +32,18 @@ class AnomalyDetectorTrigger extends React.Component {
       <div style={{ padding: '0px 10px' }}>
         <AnomalyDetectorData
           detectorId={this.props.detectorId}
-          render={anomalyData => {
+          render={(anomalyData) => {
             let featureData = [];
             //Skip disabled features showing from Alerting.
             featureData = get(anomalyData, 'detector.featureAttributes', [])
-              .filter(feature => feature.featureEnabled)
+              .filter((feature) => feature.featureEnabled)
               .map((feature, index) => ({
                 featureName: feature.featureName,
                 data: anomalyData.anomalyResult.featureData[feature.featureId] || [],
               }));
             const annotations = get(anomalyData, 'anomalyResult.anomalies', [])
-              .filter(anomaly => anomaly.anomalyGrade > 0)
-              .map(anomaly => ({
+              .filter((anomaly) => anomaly.anomalyGrade > 0)
+              .map((anomaly) => ({
                 coordinates: {
                   x0: anomaly.startTime,
                   x1: anomaly.endTime,
@@ -89,14 +89,6 @@ class AnomalyDetectorTrigger extends React.Component {
                     isLoading={anomalyData.isLoading}
                     displayConfidence
                     annotationData={[{ dataValue: adValues.anomalyConfidenceThresholdValue }]}
-                  />
-                  <EuiSpacer size="m" />
-                  <FeatureChart
-                    annotations={annotations}
-                    startDateTime={anomalyData.previewStartTime}
-                    endDateTime={anomalyData.previewEndTime}
-                    featureData={featureData}
-                    isLoading={anomalyData.isLoading}
                   />
                 </React.Fragment>
               );
