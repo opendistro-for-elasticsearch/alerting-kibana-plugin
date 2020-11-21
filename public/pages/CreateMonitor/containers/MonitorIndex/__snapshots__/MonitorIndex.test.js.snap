@@ -670,6 +670,7 @@ exports[`MonitorIndex renders 1`] = `
                             id="index"
                             inputRef={[Function]}
                             isListOpen={false}
+                            isLoading={true}
                             noIcon={false}
                             onChange={[Function]}
                             onClear={[Function]}
@@ -701,6 +702,7 @@ exports[`MonitorIndex renders 1`] = `
                                   "type": "arrowDown",
                                 }
                               }
+                              isLoading={true}
                             >
                               <div
                                 className="euiFormControlLayout"
@@ -709,7 +711,7 @@ exports[`MonitorIndex renders 1`] = `
                                   className="euiFormControlLayout__childrenWrapper"
                                 >
                                   <div
-                                    className="euiComboBox__inputWrap euiComboBox__inputWrap-isClearable"
+                                    className="euiComboBox__inputWrap euiComboBox__inputWrap-isLoading euiComboBox__inputWrap-isClearable"
                                     data-test-subj="comboBoxInput"
                                     onClick={[Function]}
                                     tabIndex={-1}
@@ -791,10 +793,18 @@ exports[`MonitorIndex renders 1`] = `
                                         "type": "arrowDown",
                                       }
                                     }
+                                    isLoading={true}
                                   >
                                     <div
                                       className="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
                                     >
+                                      <EuiLoadingSpinner
+                                        size="m"
+                                      >
+                                        <span
+                                          className="euiLoadingSpinner euiLoadingSpinner--medium"
+                                        />
+                                      </EuiLoadingSpinner>
                                       <EuiFormControlLayoutCustomIcon
                                         aria-label="Open list of options"
                                         data-test-subj="comboBoxToggleListButton"

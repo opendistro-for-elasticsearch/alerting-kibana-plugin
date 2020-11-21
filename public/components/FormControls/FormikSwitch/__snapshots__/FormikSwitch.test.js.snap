@@ -5,6 +5,7 @@ exports[`FormikSwitch renders 1`] = `
   class="euiSwitch"
 >
   <button
+    aria-checked="false"
     aria-labelledby="generated-id"
     class="euiSwitch__button"
     id="testing"
