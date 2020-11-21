@@ -21,7 +21,7 @@ import Dashboard from '../Dashboard/containers/Dashboard';
 import Monitors from '../Monitors/containers/Monitors';
 import DestinationsList from '../Destinations/containers/DestinationsList';
 
-const getSelectedTabId = pathname => {
+const getSelectedTabId = (pathname) => {
   if (pathname.includes('monitors')) return 'monitors';
   if (pathname.includes('destinations')) return 'destinations';
   return 'dashboard';
@@ -69,7 +69,7 @@ export default class Home extends Component {
     }
   }
 
-  onSelectedTabChanged = route => {
+  onSelectedTabChanged = (route) => {
     const {
       location: { pathname: currPathname },
     } = this.props;
@@ -78,7 +78,7 @@ export default class Home extends Component {
     }
   };
 
-  renderTab = tab => (
+  renderTab = (tab) => (
     <EuiTab
       onClick={() => this.onSelectedTabChanged(tab.route)}
       isSelected={tab.id === this.state.selectedTabId}
@@ -89,7 +89,7 @@ export default class Home extends Component {
   );
 
   render() {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     return (
       <div>
         <EuiTabs>{this.tabs.map(this.renderTab)}</EuiTabs>
@@ -98,17 +98,23 @@ export default class Home extends Component {
             <Route
               exact
               path="/dashboard"
-              render={props => <Dashboard {...props} httpClient={httpClient} />}
+              render={(props) => <Dashboard {...props} httpClient={httpClient} />}
             />
             <Route
               exact
               path="/monitors"
-              render={props => <Monitors {...props} httpClient={httpClient} />}
+              render={(props) => <Monitors {...props} httpClient={httpClient} />}
             />
             <Route
               exact
               path="/destinations"
-              render={props => <DestinationsList {...props} httpClient={httpClient} />}
+              render={(props) => (
+                <DestinationsList
+                  {...props}
+                  httpClient={httpClient}
+                  notifications={notifications}
+                />
+              )}
             />
             <Redirect to="/dashboard" />
           </Switch>

@@ -18,10 +18,10 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { FormikComboBox } from '../../../../components/FormControls';
 import { hasError, isInvalid, validateDetector } from '../../../../utils/validate';
-import { AppContext } from '../../../../utils/AppContext';
+import { CoreContext } from '../../../../utils/CoreContext';
 
 class AnomalyDetectors extends React.Component {
-  static contextType = AppContext;
+  static contextType = CoreContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -35,11 +35,11 @@ class AnomalyDetectors extends React.Component {
   }
 
   async searchDetectors() {
-    const { httpClient } = this.context;
+    const { http: httpClient } = this.context;
     try {
       const response = await httpClient.post('../api/alerting/detectors/_search');
-      if (response.data.ok) {
-        const detectorOptions = response.data.detectors.map(detector => ({
+      if (response.ok) {
+        const detectorOptions = response.detectors.map((detector) => ({
           label: detector.name,
           value: detector.id,
           features: detector.featureAttributes,
@@ -59,7 +59,7 @@ class AnomalyDetectors extends React.Component {
     let selectedOptions = [];
     if (detectorOptions.length > 0) {
       const adId = values.detectorId ? values.detectorId : detectorId;
-      const selectedValue = detectorOptions.find(detector => adId === detector.value);
+      const selectedValue = detectorOptions.find((detector) => adId === detector.value);
       if (selectedValue) {
         selectedOptions = [selectedValue];
       }
@@ -79,7 +79,7 @@ class AnomalyDetectors extends React.Component {
             error: hasError,
           }}
           fieldProps={{
-            validate: value => validateDetector(value, selectedOptions[0]),
+            validate: (value) => validateDetector(value, selectedOptions[0]),
           }}
           inputProps={{
             placeholder: 'Select a detector',

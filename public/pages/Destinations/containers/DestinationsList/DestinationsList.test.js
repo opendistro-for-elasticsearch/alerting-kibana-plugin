@@ -49,11 +49,14 @@ describe('DestinationsList', () => {
     httpClientMock.get
       .mockResolvedValueOnce({
         // Mock getAllowList
-        data: { ok: true, resp: mockSettings },
+        ok: true,
+        resp: mockSettings,
       })
       .mockResolvedValue({
         // Mock return in getDestinations function
-        data: { ok: true, destinations: [], totalDestinations: 0 },
+        ok: true,
+        destinations: [],
+        totalDestinations: 0,
       });
 
     const wrapper = mount(
@@ -82,11 +85,14 @@ describe('DestinationsList', () => {
     httpClientMock.get
       .mockResolvedValueOnce({
         // Mock getAllowList
-        data: { ok: true, resp: mockSettings },
+        ok: true,
+        resp: mockSettings,
       })
       .mockResolvedValue({
         // Mock return in getDestinations function
-        data: { ok: true, destinations: [], totalDestinations: 0 },
+        ok: true,
+        destinations: [],
+        totalDestinations: 0,
       });
 
     const wrapper = mount(
@@ -126,11 +132,14 @@ describe('DestinationsList', () => {
     httpClientMock.get
       .mockResolvedValueOnce({
         // Mock getAllowList
-        data: { ok: true, resp: mockSettings },
+        ok: true,
+        resp: mockSettings,
       })
       .mockResolvedValue({
         // Mock return in getDestinations function
-        data: { ok: true, destinations: [mockDestination], totalDestinations: 1 },
+        ok: true,
+        destinations: [mockDestination],
+        totalDestinations: 1,
       });
 
     const wrapper = mount(

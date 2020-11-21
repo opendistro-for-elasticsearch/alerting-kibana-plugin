@@ -77,12 +77,12 @@ export default class MonitorDetails extends Component {
     this.props.setFlyout(null);
   }
 
-  getDetector = id => {
+  getDetector = (id) => {
     const { httpClient } = this.props;
     httpClient
       .get(`../api/alerting/detectors/${id}`)
-      .then(resp => {
-        const { ok, detector, version: detectorVersion, seqNo, primaryTerm } = resp.data;
+      .then((resp) => {
+        const { ok, detector, version: detectorVersion, seqNo, primaryTerm } = resp;
         if (ok) {
           this.setState({
             detector: detector,
@@ -92,16 +92,16 @@ export default class MonitorDetails extends Component {
           console.log('can not get detector', id);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error while getting detector', err);
       });
   };
 
-  getMonitor = id => {
+  getMonitor = (id) => {
     const { httpClient } = this.props;
     httpClient
       .get(`../api/alerting/monitors/${id}`)
-      .then(resp => {
+      .then((resp) => {
         const {
           ok,
           resp: monitor,
@@ -110,7 +110,7 @@ export default class MonitorDetails extends Component {
           activeCount,
           ifSeqNo,
           ifPrimaryTerm,
-        } = resp.data;
+        } = resp;
         if (ok) {
           this.setState({
             ifSeqNo,
@@ -131,12 +131,12 @@ export default class MonitorDetails extends Component {
           this.props.history.push('/monitors');
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
       });
   };
 
-  updateMonitor = update => {
+  updateMonitor = (update) => {
     const {
       match: {
         params: { monitorId },
@@ -146,16 +146,16 @@ export default class MonitorDetails extends Component {
     const { monitor, ifSeqNo, ifPrimaryTerm } = this.state;
     this.setState({ updating: true });
     return httpClient
-      .put(
-        `../api/alerting/monitors/${monitorId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-        { ...monitor, ...update }
-      )
-      .then(resp => {
-        const { version: monitorVersion } = resp.data;
+      .put(`../api/alerting/monitors/${monitorId}`, {
+        query: { ifSeqNo, ifPrimaryTerm },
+        body: JSON.stringify({ ...monitor, ...update }),
+      })
+      .then((resp) => {
+        const { version: monitorVersion } = resp;
         this.setState({ monitorVersion, updating: false });
         return resp;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
         this.setState({ updating: false });
         return err;
@@ -174,7 +174,7 @@ export default class MonitorDetails extends Component {
     this.setState({ triggerToEdit: null });
   };
 
-  onEditTrigger = trigger => {
+  onEditTrigger = (trigger) => {
     this.setState({ triggerToEdit: trigger });
     this.props.history.push({
       ...this.props.location,
@@ -228,6 +228,8 @@ export default class MonitorDetails extends Component {
       },
       history,
       httpClient,
+      notifications,
+      isDarkMode,
     } = this.props;
     const { action, success: showSuccessCallOut = false } = queryString.parse(location.search);
     const updatingMonitor = action === MONITOR_ACTIONS.UPDATE_MONITOR;
@@ -249,6 +251,7 @@ export default class MonitorDetails extends Component {
           updateMonitor={this.updateMonitor}
           monitorToEdit={monitor}
           detectorId={detectorId}
+          notifications={notifications}
           {...this.props}
         />
       );
@@ -266,6 +269,8 @@ export default class MonitorDetails extends Component {
           onCloseTrigger={this.onCloseTrigger}
           onMonitorFieldChange={() => {}}
           updateMonitor={this.updateMonitor}
+          notifications={notifications}
+          isDarkMode={isDarkMode}
         />
       );
     }
@@ -342,6 +347,7 @@ export default class MonitorDetails extends Component {
             monitorId={monitorId}
             onShowTrigger={this.onCreateTrigger}
             triggers={monitor.triggers}
+            isDarkMode={isDarkMode}
           />
         </div>
         <EuiSpacer />

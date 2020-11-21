@@ -14,7 +14,6 @@
  */
 
 import _ from 'lodash';
-import { ACTIONS_TEMPLATE } from '../pages/CreateTrigger/utils/constants';
 import { INDEX, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../utils/constants';
 
 // TODO: Use a validation framework to clean all of this up or create own.
@@ -57,8 +56,10 @@ export const validateMonitorName = (httpClient, monitorToEdit) => async (value) 
       index: INDEX.SCHEDULED_JOBS,
       query: { query: { term: { 'monitor.name.keyword': value } } },
     };
-    const response = await httpClient.post('../api/alerting/monitors/_search', options);
-    if (_.get(response, 'data.resp.hits.total.value', 0)) {
+    const response = await httpClient.post('../api/alerting/monitors/_search', {
+      body: JSON.stringify(options),
+    });
+    if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!monitorToEdit) throw 'Monitor name is already used';
       if (monitorToEdit && monitorToEdit.name !== value) {
         throw 'Monitor name is already used';

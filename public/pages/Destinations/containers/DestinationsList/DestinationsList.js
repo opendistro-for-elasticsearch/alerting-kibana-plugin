@@ -113,11 +113,14 @@ class DestinationsList extends React.Component {
 
   isDeleteAllowed = async (type, id) => {
     const { httpClient } = this.props;
-    const resp = await httpClient.post('../api/alerting/monitors/_search', {
+    const requestBody = {
       query: isDeleteAllowedQuery(type, id),
       index: INDEX.SCHEDULED_JOBS,
+    };
+    const resp = await httpClient.post('../api/alerting/monitors/_search', {
+      body: JSON.stringify(requestBody),
     });
-    const total = _.get(resp, 'data.resp.hits.total.value');
+    const total = _.get(resp, 'resp.hits.total.value');
     return total === 0;
   };
 
@@ -147,7 +150,7 @@ class DestinationsList extends React.Component {
     const { httpClient } = this.props;
     try {
       const resp = await httpClient.delete(`../api/alerting/destinations/${destinationId}`);
-      if (resp.data.ok) {
+      if (resp.ok) {
         await this.getDestinations();
       } else {
         // TODO::handle error
@@ -208,12 +211,14 @@ class DestinationsList extends React.Component {
         search: queryParms,
       });
       try {
-        const resp = await httpClient.get(`../api/alerting/destinations?${queryParms}`);
-        if (resp.data.ok) {
+        const resp = await httpClient.get('../api/alerting/destinations', {
+          query: { from, ...params },
+        });
+        if (resp.ok) {
           this.setState({
             isDestinationLoading: false,
-            destinations: resp.data.destinations,
-            totalDestinations: resp.data.totalDestinations,
+            destinations: resp.destinations,
+            totalDestinations: resp.totalDestinations,
           });
         } else {
           this.setState({
@@ -267,6 +272,7 @@ class DestinationsList extends React.Component {
   };
 
   render() {
+    const { httpClient, notifications } = this.props;
     const {
       destinationToDelete,
       page,
@@ -322,19 +328,21 @@ class DestinationsList extends React.Component {
           />
 
           <ManageSenders
-            httpClient={this.props.httpClient}
+            httpClient={httpClient}
             isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageSenders}
             onClickCancel={this.hideManageSendersModal}
             onClickSave={this.hideManageSendersModal}
+            notifications={notifications}
           />
 
           <ManageEmailGroups
-            httpClient={this.props.httpClient}
+            httpClient={httpClient}
             isEmailAllowed={this.isEmailAllowed()}
             isVisible={this.state.showManageEmailGroups}
             onClickCancel={this.hideManageEmailGroupsModal}
             onClickSave={this.hideManageEmailGroupsModal}
+            notifications={notifications}
           />
 
           <DestinationsControls
@@ -374,7 +382,8 @@ class DestinationsList extends React.Component {
 }
 
 DestinationsList.propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
 export default DestinationsList;

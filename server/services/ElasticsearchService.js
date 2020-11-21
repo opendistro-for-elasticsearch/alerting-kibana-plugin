@@ -12,7 +12,6 @@
  *   express or implied. See the License for the specific language governing
  *   permissions and limitations under the License.
  */
-import { CLUSTER } from './utils/constants';
 
 export default class ElasticsearchService {
   constructor(esDriver) {
@@ -21,92 +20,157 @@ export default class ElasticsearchService {
 
   // TODO: This will be deprecated as we do not want to support accessing alerting indices directly
   //  and that is what this is used for
-  search = async (req, h) => {
+  search = async (context, req, res) => {
     try {
-      const { query, index, size } = req.payload;
+      const { query, index, size } = req.body;
       const params = { index, size, body: query };
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const results = await callWithRequest(req, 'search', params);
-      return { ok: true, resp: results };
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const results = await callAsCurrentUser('search', params);
+      return res.ok({
+        body: {
+          ok: true,
+          resp: results,
+        },
+      });
     } catch (err) {
       console.error('Alerting - ElasticsearchService - search', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getIndices = async (req, h) => {
+  getIndices = async (context, req, res) => {
     try {
-      const { index } = req.payload;
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const indices = await callWithRequest(req, 'cat.indices', {
+      const { index } = req.body;
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const indices = await callAsCurrentUser('cat.indices', {
         index,
         format: 'json',
         h: 'health,index,status',
       });
-      return { ok: true, resp: indices };
+      return res.ok({
+        body: {
+          ok: true,
+          resp: indices,
+        },
+      });
     } catch (err) {
       // Elasticsearch throws an index_not_found_exception which we'll treat as a success
       if (err.statusCode === 404) {
-        return { ok: true, resp: [] };
+        return res.ok({
+          body: {
+            ok: true,
+            resp: [],
+          },
+        });
       } else {
         console.error('Alerting - ElasticsearchService - getIndices:', err);
-        return { ok: false, resp: err.message };
+        return res.ok({
+          body: {
+            ok: false,
+            resp: err.message,
+          },
+        });
       }
     }
   };
 
-  getAliases = async (req, h) => {
+  getAliases = async (context, req, res) => {
     try {
-      const { alias } = req.payload;
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const aliases = await callWithRequest(req, 'cat.aliases', {
+      const { alias } = req.body;
+      const { callAsCurrentUser } = this.esDriver.asScoped(res);
+      const aliases = await callAsCurrentUser('cat.aliases', {
         alias,
         format: 'json',
         h: 'alias,index',
       });
-      return { ok: true, resp: aliases };
+      return res.ok({
+        body: {
+          ok: true,
+          resp: aliases,
+        },
+      });
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getAliases:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getMappings = async (req, h) => {
+  getMappings = async (context, req, res) => {
     try {
-      const { index } = req.payload;
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const mappings = await callWithRequest(req, 'indices.getMapping', { index });
-      return { ok: true, resp: mappings };
+      const params = { body: JSON.stringify(req.body) };
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const mappings = await callAsCurrentUser('indices.getMapping', params);
+      return res.ok({
+        body: {
+          ok: true,
+          resp: mappings,
+        },
+      });
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getMappings:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getPlugins = async (req, h) => {
+  getPlugins = async (context, req, res) => {
     try {
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const plugins = await callWithRequest(req, 'cat.plugins', {
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const plugins = await callAsCurrentUser('cat.plugins', {
         format: 'json',
         h: 'component',
       });
-      return { ok: true, resp: plugins };
+      return res.ok({
+        body: {
+          ok: true,
+          resp: plugins,
+        },
+      });
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getPlugins:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getSettings = async (req, h) => {
+  getSettings = async (context, req, res) => {
     try {
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.DATA);
-      const settings = await callWithRequest(req, 'cluster.getSettings', {
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const settings = await callAsCurrentUser('cluster.getSettings', {
         include_defaults: 'true',
       });
-      return { ok: true, resp: settings };
+      return res.ok({
+        body: {
+          ok: true,
+          resp: settings,
+        },
+      });
     } catch (err) {
       console.error('Alerting - ElasticsearchService - getSettings:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 }

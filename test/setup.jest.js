@@ -14,7 +14,6 @@
  */
 
 import React from 'react';
-import { toastNotifications } from 'ui/notify';
 
 // https://github.com/elastic/eui/issues/2530
 jest.mock('@elastic/eui/lib/components/icon', () => ({
@@ -33,13 +32,6 @@ jest.mock('@elastic/eui/lib/services/accessibility', () => ({
   cascadingMenuKeys: require('@elastic/eui/lib/services/accessibility/cascading_menu_keys'),
   comboBoxKeys: require('@elastic/eui/lib/services/accessibility/combo_box_keys'),
   accessibleClickKeys: require('@elastic/eui/lib/services/accessibility/accessible_click_keys'),
-}));
-
-jest.mock('ui/notify', () => ({
-  toastNotifications: {
-    addDanger: jest.fn().mockName('addDanger'),
-    addSuccess: jest.fn().mockName('addSuccess'),
-  },
 }));
 
 // https://github.com/facebook/jest/issues/5785

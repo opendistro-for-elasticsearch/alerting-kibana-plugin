@@ -15,10 +15,8 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-import chrome from 'ui/chrome';
 import PropTypes from 'prop-types';
 import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
@@ -47,8 +45,9 @@ function renderEmptyMessage(message) {
 
 const propTypes = {
   values: PropTypes.object.isRequired,
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   errors: PropTypes.object,
+  notifications: PropTypes.object.isRequired,
 };
 const defaultProps = {
   errors: {},
@@ -77,7 +76,6 @@ class DefineMonitor extends Component {
     this.getMonitorContent = this.getMonitorContent.bind(this);
     this.getPlugins = this.getPlugins.bind(this);
     this.showPluginWarning = this.showPluginWarning.bind(this);
-    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -128,8 +126,8 @@ class DefineMonitor extends Component {
     const { httpClient } = this.props;
     try {
       const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
-      if (pluginsResponse.data.ok) {
-        this.setState({ plugins: pluginsResponse.data.resp.map((plugin) => plugin.component) });
+      if (pluginsResponse.ok) {
+        this.setState({ plugins: pluginsResponse.resp.map((plugin) => plugin.component) });
       } else {
         console.error('There was a problem getting plugins list');
       }
@@ -187,21 +185,23 @@ class DefineMonitor extends Component {
         _.set(monitor, 'name', 'TEMP_MONITOR');
         _.set(monitor, 'triggers', []);
         _.set(monitor, 'inputs[0].search', searchRequest);
-        return httpClient.post('../api/alerting/monitors/_execute', monitor);
+        return httpClient.post('../api/alerting/monitors/_execute', {
+          body: JSON.stringify(monitor),
+        });
       });
 
       const [queryResponse, optionalResponse] = await Promise.all(promises);
 
-      if (queryResponse.data.ok) {
-        const response = _.get(queryResponse.data.resp, 'input_results.results[0]');
+      if (queryResponse.ok) {
+        const response = _.get(queryResponse.resp, 'input_results.results[0]');
         // If there is an optionalResponse use it's results, otherwise use the original response
         const performanceResponse = optionalResponse
-          ? _.get(optionalResponse, 'data.resp.input_results.results[0]', null)
+          ? _.get(optionalResponse, 'resp.input_results.results[0]', null)
           : response;
         this.setState({ response, formikSnapshot, performanceResponse });
       } else {
-        console.error('There was an error running the query', queryResponse.data.resp);
-        this.backendErrorHandler('run', queryResponse.data);
+        console.error('There was an error running the query', queryResponse.resp);
+        this.backendErrorHandler('run', queryResponse);
         this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
       }
     } catch (err) {
@@ -230,9 +230,11 @@ class DefineMonitor extends Component {
     }
 
     try {
-      const response = await this.props.httpClient.post('../api/alerting/_mappings', { index });
-      if (response.data.ok) {
-        return response.data.resp;
+      const response = await this.props.httpClient.post('../api/alerting/_mappings', {
+        body: JSON.stringify(index),
+      });
+      if (response.ok) {
+        return response.resp;
       }
       return {};
     } catch (err) {
@@ -265,7 +267,7 @@ class DefineMonitor extends Component {
     };
   }
   renderExtractionQuery() {
-    const { httpClient, values } = this.props;
+    const { httpClient, values, isDarkMode } = this.props;
     const { response, performanceResponse } = this.state;
     let invalidJSON = false;
     try {
@@ -279,7 +281,7 @@ class DefineMonitor extends Component {
       content = (
         <ExtractionQuery
           response={JSON.stringify(response || '', null, 4)}
-          isDarkMode={this.isDarkMode}
+          isDarkMode={isDarkMode}
         />
       );
     }
@@ -335,10 +337,10 @@ class DefineMonitor extends Component {
     return values.searchType == SEARCH_TYPE.AD && plugins.indexOf(ES_AD_PLUGIN) == -1;
   }
 
-  backendErrorHandler(actionName, data) {
-    toastNotifications.addDanger({
+  backendErrorHandler(actionName, resp) {
+    this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the query`,
-      text: data.resp,
+      text: resp.resp,
       toastLifeTimeMs: 20000,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -20,13 +20,15 @@ import EmailSender from '../../../containers/CreateDestination/EmailSender';
 import EmailRecipients from '../../../containers/CreateDestination/EmailRecipients';
 
 const propTypes = {
+  httpClient: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
-const Email = ({ httpClient, type, values }) => (
+const Email = ({ httpClient, type, values, notifications }) => (
   <div>
-    <EmailSender httpClient={httpClient} type={type} />
+    <EmailSender httpClient={httpClient} type={type} notifications={notifications} />
     <EuiSpacer size="m" />
-    <EmailRecipients httpClient={httpClient} type={type} />
+    <EmailRecipients httpClient={httpClient} type={type} notifications={notifications} />
   </div>
 );
 

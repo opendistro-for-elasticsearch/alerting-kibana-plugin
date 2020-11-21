@@ -15,13 +15,13 @@
 
 export default async function getSenders(httpClient, searchText = '') {
   try {
-    const response = await httpClient.get(
-      `../api/alerting/destinations/email_accounts?search=${searchText}&size=200`
-    );
-    if (response.data.ok) {
-      return response.data.emailAccounts;
+    const response = await httpClient.get('../api/alerting/destinations/email_accounts', {
+      query: { search: searchText, size: 200 },
+    });
+    if (response.ok) {
+      return response.emailAccounts;
     } else {
-      console.log('Unable to get email accounts', response.data.err);
+      console.log('Unable to get email accounts', response.err);
       return [];
     }
   } catch (err) {

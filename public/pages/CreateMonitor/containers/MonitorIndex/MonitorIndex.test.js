@@ -23,7 +23,7 @@ import * as helpers from './utils/helpers';
 import { httpClientMock } from '../../../../../test/mocks';
 
 helpers.createReasonableWait = jest.fn((cb) => cb());
-httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: [] } });
+httpClientMock.post.mockResolvedValue({ ok: true, resp: [] });
 
 function getMountWrapper(customProps = {}) {
   return mount(
@@ -110,7 +110,7 @@ describe('MonitorIndex', () => {
   });
 
   test('returns empty array for data.ok = false', async () => {
-    httpClientMock.post.mockResolvedValue({ data: { ok: false } });
+    httpClientMock.post.mockResolvedValue({ ok: false });
     const wrapper = getMountWrapper();
 
     expect(await wrapper.find(MonitorIndex).instance().handleQueryAliases('random')).toEqual([]);
@@ -119,10 +119,8 @@ describe('MonitorIndex', () => {
   //
   test('returns indices/aliases', async () => {
     httpClientMock.post.mockResolvedValue({
-      data: {
-        ok: true,
-        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
-      },
+      ok: true,
+      resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
     });
     const wrapper = getMountWrapper();
 
@@ -136,10 +134,8 @@ describe('MonitorIndex', () => {
 
   test.skip('onBlur sets index to touched', () => {
     httpClientMock.post.mockResolvedValue({
-      data: {
-        ok: true,
-        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
-      },
+      ok: true,
+      resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
     });
     const wrapper = getMountWrapper();
 
@@ -154,10 +150,8 @@ describe('MonitorIndex', () => {
 
   test('sets option when calling onCreateOption', () => {
     httpClientMock.post.mockResolvedValue({
-      data: {
-        ok: true,
-        resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
-      },
+      ok: true,
+      resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
     });
     const wrapper = getMountWrapper();
 

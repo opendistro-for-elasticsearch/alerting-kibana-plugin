@@ -14,53 +14,36 @@
  */
 
 import React from 'react';
-import chrome from 'ui/chrome';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { uiModules } from 'ui/modules';
+import ReactDOM from 'react-dom';
 import { HashRouter as Router, Route } from 'react-router-dom';
 
 import 'react-vis/dist/style.css';
-import './less/main.less';
+// TODO: review the CSS style and migrate the necessary style to SASS, as Less is not supported in Kibana "new platform" anymore
+// import './less/main.less';
 import Main from './pages/Main';
-import { AppContext } from './utils/AppContext';
+import { CoreContext } from './utils/CoreContext';
 
-const app = uiModules.get('apps/alerting');
-const darkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
+export function renderApp(coreStart, params) {
+  const isDarkMode = coreStart.uiSettings.get('theme:darkMode') || false;
+  coreStart.chrome.setBreadcrumbs([{ text: 'Alerting' }]); // Set Breadcrumbs for the plugin
 
-//Load Chart's dark mode CSS
-if (darkMode) {
-  require('@elastic/charts/dist/theme_only_dark.css');
-} else {
-  require('@elastic/charts/dist/theme_only_light.css');
-}
-
-app.config(($locationProvider) => {
-  $locationProvider.html5Mode({
-    enabled: false,
-    requireBase: false,
-    rewriteLinks: false,
-  });
-});
-
-app.config((stateManagementConfigProvider) => stateManagementConfigProvider.disable());
-
-function RootController($scope, $element, $http) {
-  const domNode = $element[0];
+  // Load Chart's dark mode CSS
+  if (isDarkMode) {
+    require('@elastic/charts/dist/theme_only_dark.css');
+  } else {
+    require('@elastic/charts/dist/theme_only_light.css');
+  }
 
   // render react to DOM
-  render(
+  ReactDOM.render(
     <Router>
-      <AppContext.Provider value={{ httpClient: $http, darkMode }}>
-        <Route render={(props) => <Main title="Alerting" httpClient={$http} {...props} />} />
-      </AppContext.Provider>
+      <CoreContext.Provider
+        value={{ http: coreStart.http, isDarkMode, notifications: coreStart.notifications }}
+      >
+        <Route render={(props) => <Main title="Alerting" {...props} />} />
+      </CoreContext.Provider>
     </Router>,
-    domNode
+    params.element
   );
-
-  // unmount react on controller destroy
-  $scope.$on('$destroy', () => {
-    unmountComponentAtNode(domNode);
-  });
+  return () => ReactDOM.unmountComponentAtNode(params.element);
 }
-
-chrome.setRootController('alerting', RootController);

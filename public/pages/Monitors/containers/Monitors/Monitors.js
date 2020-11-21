@@ -143,13 +143,9 @@ export default class Monitors extends Component {
       const queryParamsString = queryString.stringify(params);
       const { httpClient, history } = this.props;
       history.replace({ ...this.props.location, search: queryParamsString });
-      const response = await httpClient.get(
-        `../api/alerting/monitors?${queryString.stringify(params)}`
-      );
-      if (response.data.ok) {
-        const {
-          data: { monitors, totalMonitors },
-        } = response;
+      const response = await httpClient.get('../api/alerting/monitors', { query: params });
+      if (response.ok) {
+        const { monitors, totalMonitors } = response;
         this.setState({ monitors, totalMonitors });
       } else {
         console.log('error getting monitors:', response);
@@ -182,29 +178,29 @@ export default class Monitors extends Component {
     const { httpClient } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm, monitor } = item;
     return httpClient
-      .put(`../api/alerting/monitors/${id}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`, {
-        ...monitor,
-        ...update,
+      .put(`../api/alerting/monitors/${id}`, {
+        query: { ifSeqNo, ifPrimaryTerm },
+        body: JSON.stringify({ ...monitor, ...update }),
       })
-      .then(resp => resp)
-      .catch(err => err);
+      .then((resp) => resp)
+      .catch((err) => err);
   }
 
   deleteMonitor(item) {
     const { httpClient } = this.props;
     const { id, version } = item;
     return httpClient
-      .delete(`../api/alerting/monitors/${id}?version=${version}`)
-      .then(resp => resp)
-      .catch(err => err);
+      .delete(`../api/alerting/monitors/${id}`, { query: { version } })
+      .then((resp) => resp)
+      .catch((err) => err);
   }
 
   updateMonitors(items, update) {
-    const arrayOfPromises = items.map(item =>
-      this.updateMonitor(item, update).catch(error => error)
+    const arrayOfPromises = items.map((item) =>
+      this.updateMonitor(item, update).catch((error) => error)
     );
 
-    return Promise.all(arrayOfPromises).then(values => {
+    return Promise.all(arrayOfPromises).then((values) => {
       // TODO: Show which values failed, succeeded, etc.
       const { page, size, search, sortField, sortDirection, monitorState } = this.state;
       this.getMonitors(page * size, size, search, sortField, sortDirection, monitorState);
@@ -213,9 +209,9 @@ export default class Monitors extends Component {
   }
 
   deleteMonitors(items) {
-    const arrayOfPromises = items.map(item => this.deleteMonitor(item).catch(error => error));
+    const arrayOfPromises = items.map((item) => this.deleteMonitor(item).catch((error) => error));
 
-    return Promise.all(arrayOfPromises).then(values => {
+    return Promise.all(arrayOfPromises).then((values) => {
       // TODO: Show which values failed, succeeded, etc.
       const { page, size, search, sortField, sortDirection, monitorState } = this.state;
       this.getMonitors(page * size, size, search, sortField, sortDirection, monitorState);
@@ -239,8 +235,10 @@ export default class Monitors extends Component {
 
     const promises = Object.entries(monitorAlerts).map(([monitorId, alerts]) =>
       httpClient
-        .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, { alerts })
-        .catch(error => error)
+        .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, {
+          body: JSON.stringify({ alerts }),
+        })
+        .catch((error) => error)
     );
 
     const values = await Promise.all(promises);
@@ -290,7 +288,7 @@ export default class Monitors extends Component {
   }
 
   async getActiveAlerts(selectedItems) {
-    const monitorIds = selectedItems.map(monitor => monitor.id);
+    const monitorIds = selectedItems.map((monitor) => monitor.id);
     if (!monitorIds.length) return;
     // TODO: Limiting to 100.. otherwise could be bringing back large amount of alerts that all need to be acknowledged 1 by 1, handle case when there are more than 100 on UI
     const params = {
@@ -304,14 +302,10 @@ export default class Monitors extends Component {
 
     const { httpClient } = this.props;
 
-    const response = await httpClient.get(
-      `../api/alerting/alerts?${queryString.stringify(params)}`
-    );
+    const response = await httpClient.get('../api/alerting/alerts', { query: params });
 
-    if (response.data.ok) {
-      const {
-        data: { alerts, totalAlerts },
-      } = response;
+    if (response.ok) {
+      const { alerts, totalAlerts } = response;
       this.setState({
         alerts,
         totalAlerts,
@@ -371,7 +365,7 @@ export default class Monitors extends Component {
 
     const selection = {
       onSelectionChange: this.onSelectionChange,
-      selectableMessage: selectable => (selectable ? undefined : undefined),
+      selectableMessage: (selectable) => (selectable ? undefined : undefined),
     };
 
     return (

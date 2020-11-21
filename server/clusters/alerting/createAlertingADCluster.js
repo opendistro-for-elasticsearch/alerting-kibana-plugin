@@ -16,9 +16,9 @@
 import alertingADPlugin from './adPlugin';
 import { CLUSTER, DEFAULT_HEADERS } from '../../services/utils/constants';
 
-export default function createAlertingADCluster(server) {
-  const { customHeaders, ...rest } = server.config().get('elasticsearch');
-  server.plugins.elasticsearch.createCluster(CLUSTER.AD_ALERTING, {
+export default function createAlertingADCluster(core, globalConfig) {
+  const { customHeaders, ...rest } = globalConfig.elasticsearch;
+  return core.elasticsearch.legacy.createClient(CLUSTER.AD_ALERTING, {
     plugins: [alertingADPlugin],
     // Currently we are overriding any headers with our own since we explicitly required User-Agent to be Kibana
     // for integration with our backend plugin.

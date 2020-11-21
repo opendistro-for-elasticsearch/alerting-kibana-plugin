@@ -25,7 +25,7 @@ import { SEARCH_TYPE } from '../../../../utils/constants';
 const alertingFakes = new AlertingFakes('CreateMonitor random seed');
 
 const setFlyout = jest.fn();
-const updateMonitor = jest.fn().mockResolvedValue({ data: { ok: true, id: 'monitor_id' } });
+const updateMonitor = jest.fn().mockResolvedValue({ ok: true, id: 'monitor_id' });
 const formikBag = {
   setSubmitting: jest.fn(),
   setErrors: jest.fn(),
@@ -116,7 +116,7 @@ describe('CreateMonitor', () => {
     test('calls only onCreate when creating', () => {
       const onCreate = jest.spyOn(CreateMonitor.prototype, 'onCreate');
       const onUpdate = jest.spyOn(CreateMonitor.prototype, 'onUpdate');
-      httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: { _id: 'monitor_id' } } });
+      httpClientMock.post.mockResolvedValue({ ok: true, resp: { _id: 'monitor_id' } });
       const wrapper = shallow(
         <CreateMonitor
           httpClient={httpClientMock}
@@ -212,9 +212,9 @@ describe('CreateMonitor', () => {
       expect(error).toHaveBeenCalled();
     });
 
-    test('logs resp.data when ok:false', async () => {
+    test('logs resp when ok:false', async () => {
       const log = jest.spyOn(global.console, 'log');
-      updateMonitor.mockResolvedValue({ data: { ok: false, resp: 'test' } });
+      updateMonitor.mockResolvedValue({ ok: false, resp: 'test' });
       const monitor = alertingFakes.randomMonitor();
       const wrapper = shallow(
         <CreateMonitor
@@ -237,7 +237,7 @@ describe('CreateMonitor', () => {
   describe('onCreate', () => {
     test('calls post with monitor', () => {
       const monitor = alertingFakes.randomMonitor();
-      httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: { _id: 'id' } } });
+      httpClientMock.post.mockResolvedValue({ ok: true, resp: { _id: 'id' } });
       const wrapper = shallow(
         <CreateMonitor
           httpClient={httpClientMock}
@@ -249,7 +249,9 @@ describe('CreateMonitor', () => {
       );
       wrapper.instance().onCreate(monitor, formikBag);
       expect(httpClientMock.post).toHaveBeenCalledTimes(1);
-      expect(httpClientMock.post).toHaveBeenCalledWith('../api/alerting/monitors', monitor);
+      expect(httpClientMock.post).toHaveBeenCalledWith('../api/alerting/monitors', {
+        body: JSON.stringify(monitor),
+      });
     });
 
     test('logs error when updateMonitor rejects', async () => {
@@ -269,9 +271,9 @@ describe('CreateMonitor', () => {
       expect(error).toHaveBeenCalled();
     });
 
-    test('logs resp.data when ok:false', async () => {
+    test('logs resp when ok:false', async () => {
       const log = jest.spyOn(global.console, 'log');
-      httpClientMock.post.mockResolvedValue({ data: { ok: false, resp: 'test' } });
+      httpClientMock.post.mockResolvedValue({ ok: false, resp: 'test' });
       const monitor = alertingFakes.randomMonitor();
       const wrapper = shallow(
         <CreateMonitor
