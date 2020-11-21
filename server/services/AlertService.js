@@ -13,15 +13,12 @@
  *   permissions and limitations under the License.
  */
 
-import { CLUSTER } from './utils/constants';
-import { INDEX } from '../../utils/constants';
-
 export default class AlertService {
   constructor(esDriver) {
     this.esDriver = esDriver;
   }
 
-  getAlerts = async (req, h) => {
+  getAlerts = async (context, req, res) => {
     const {
       from = 0,
       size = 20,
@@ -78,9 +75,9 @@ export default class AlertService {
     if (monitorIds.length > 0)
       params.monitorId = !Array.isArray(monitorIds) ? monitorIds : monitorIds[0];
 
-    const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
+    const { callAsCurrentUser } = this.esDriver.asScoped(req);
     try {
-      const resp = await callWithRequest(req, 'alerting.getAlerts', params);
+      const resp = await callAsCurrentUser('alerting.getAlerts', params);
       const alerts = resp.alerts.map((hit) => {
         const alert = hit;
         const id = hit.alert_id;
@@ -89,10 +86,21 @@ export default class AlertService {
       });
       const totalAlerts = resp.totalAlerts;
 
-      return { ok: true, alerts, totalAlerts };
+      return res.ok({
+        body: {
+          ok: true,
+          alerts,
+          totalAlerts,
+        },
+      });
     } catch (err) {
       console.log(err.message);
-      return { ok: false, err: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          error: err.message,
+        },
+      });
     }
   };
 }

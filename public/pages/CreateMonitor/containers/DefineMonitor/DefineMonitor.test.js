@@ -29,8 +29,8 @@ function getShallowWrapper(customProps = {}) {
 describe('DefineMonitor', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    httpClientMock.post.mockResolvedValue({ data: { ok: true, resp: [] } });
-    httpClientMock.get.mockResolvedValue({ data: { ok: true, resp: [] } });
+    httpClientMock.post.mockResolvedValue({ ok: true, resp: [] });
+    httpClientMock.get.mockResolvedValue({ ok: true, resp: [] });
   });
 
   test('renders', () => {

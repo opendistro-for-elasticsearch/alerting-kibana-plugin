@@ -166,6 +166,6 @@ export default class EmailRecipients extends React.Component {
 }
 
 EmailRecipients.propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
 };

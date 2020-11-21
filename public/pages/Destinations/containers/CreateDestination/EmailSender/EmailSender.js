@@ -85,7 +85,7 @@ export default class EmailSender extends React.Component {
   };
 
   render() {
-    const { httpClient, type } = this.props;
+    const { httpClient, type, notifications } = this.props;
     const { senderOptions, loadingSenders, showManageSendersModal } = this.state;
     return (
       <Fragment>
@@ -137,6 +137,7 @@ export default class EmailSender extends React.Component {
           isVisible={showManageSendersModal}
           onClickCancel={this.onClickCancel}
           onClickSave={this.onClickSave}
+          notifications={notifications}
         />
       </Fragment>
     );
@@ -144,6 +145,7 @@ export default class EmailSender extends React.Component {
 }
 
 EmailSender.propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  notifications: PropTypes.object.isRequired,
 };

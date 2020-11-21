@@ -13,12 +13,27 @@
  *   permissions and limitations under the License.
  */
 
-export default function(server, services) {
+import { schema } from '@kbn/config-schema';
+
+export default function (services, router) {
   const { alertService } = services;
 
-  server.route({
-    path: '/api/alerting/alerts',
-    method: 'GET',
-    handler: alertService.getAlerts,
-  });
+  router.get(
+    {
+      path: '/api/alerting/alerts',
+      validate: {
+        query: schema.object({
+          from: schema.maybe(schema.number()),
+          size: schema.number(),
+          search: schema.maybe(schema.string()),
+          sortField: schema.string(),
+          sortDirection: schema.string(),
+          severityLevel: schema.maybe(schema.string()),
+          alertState: schema.maybe(schema.string()),
+          monitorIds: schema.maybe(schema.string()),
+        }),
+      },
+    },
+    alertService.getAlerts
+  );
 }

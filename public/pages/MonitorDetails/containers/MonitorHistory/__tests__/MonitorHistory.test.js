@@ -61,10 +61,8 @@ describe('<MonitorHistory/>', () => {
     const poiResponse = getPOIResponse(initialStartTime);
     httpClient.post.mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory
@@ -77,14 +75,14 @@ describe('<MonitorHistory/>', () => {
     process.nextTick(() => {
       wrapper.update();
       expect(wrapper.state().poiData).toEqual(
-        poiResponse.data.resp.aggregations.alerts_over_time.buckets.map((item) => ({
+        poiResponse.resp.aggregations.alerts_over_time.buckets.map((item) => ({
           x: item.key,
           y: item.doc_count,
         }))
       );
       expect(httpClient.post).toHaveBeenCalledTimes(1);
       expect(httpClient.get).toHaveBeenCalledTimes(1);
-      expect(wrapper.state().maxAlerts).toBe(poiResponse.data.resp.aggregations.max_alerts.value);
+      expect(wrapper.state().maxAlerts).toBe(poiResponse.resp.aggregations.max_alerts.value);
       const triggersData = wrapper.state().triggersData;
       const triggersDataKeys = Object.keys(triggersData);
       expect(triggersDataKeys.length).toBe(2);
@@ -101,10 +99,8 @@ describe('<MonitorHistory/>', () => {
     const poiResponse = getPOIResponse(initialStartTime);
     httpClient.post.mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory
@@ -137,10 +133,8 @@ describe('<MonitorHistory/>', () => {
     ]);
     httpClient.post.mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: alerts,
-      },
+      ok: true,
+      alerts: alerts,
     });
     const wrapper = mount(
       <MonitorHistory
@@ -161,12 +155,10 @@ describe('<MonitorHistory/>', () => {
   test('should fetch new data on timeSeriesWindow change ', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
     Date.now = jest.fn(() => 1539619200000);
-    httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.post.mockResolvedValue({ ok: true }).mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory
@@ -198,15 +190,13 @@ describe('<MonitorHistory/>', () => {
   });
   test('should fall back to max scale if the max alerts are lower than threshold ', (done) => {
     const poiResponse = getPOIResponse(initialStartTime);
-    set(poiResponse, 'data.resp.aggregations.max_alerts.value', 3);
+    set(poiResponse, 'resp.aggregations.max_alerts.value', 3);
 
     Date.now = jest.fn(() => 1539619200000);
-    httpClient.post.mockResolvedValue({ data: { ok: true } }).mockResolvedValueOnce(poiResponse);
+    httpClient.post.mockResolvedValue({ ok: true }).mockResolvedValueOnce(poiResponse);
     httpClient.get.mockResolvedValue({
-      data: {
-        ok: true,
-        alerts: [],
-      },
+      ok: true,
+      alerts: [],
     });
     const wrapper = mount(
       <MonitorHistory

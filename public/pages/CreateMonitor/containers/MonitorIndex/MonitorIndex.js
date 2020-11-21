@@ -43,7 +43,7 @@ const CustomOption = ({ option, searchValue, contentClassName }) => {
 };
 
 const propTypes = {
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
 };
 
 class MonitorIndex extends React.Component {
@@ -120,9 +120,11 @@ class MonitorIndex extends React.Component {
       return [];
     }
     try {
-      const response = await this.props.httpClient.post('../api/alerting/_indices', { index });
-      if (response.data.ok) {
-        const indices = response.data.resp.map(({ health, index, status }) => ({
+      const response = await this.props.httpClient.post('../api/alerting/_indices', {
+        body: JSON.stringify(index),
+      });
+      if (response.ok) {
+        const indices = response.resp.map(({ health, index, status }) => ({
           label: index,
           health,
           status,
@@ -148,9 +150,11 @@ class MonitorIndex extends React.Component {
     }
 
     try {
-      const response = await this.props.httpClient.post('../api/alerting/_aliases', { alias });
-      if (response.data.ok) {
-        const indices = response.data.resp.map(({ alias, index }) => ({ label: alias, index }));
+      const response = await this.props.httpClient.post('../api/alerting/_aliases', {
+        body: JSON.stringify(alias),
+      });
+      if (response.ok) {
+        const indices = response.resp.map(({ alias, index }) => ({ label: alias, index }));
         return _.sortBy(indices, 'label');
       }
       return [];

@@ -20,25 +20,19 @@ import { mount } from 'enzyme';
 import { FORMIK_INITIAL_VALUES } from '../../CreateMonitor/utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors';
 import { httpClientMock } from '../../../../../../test/mocks';
-import { AppContext } from '../../../../../utils/AppContext';
-
-jest.mock('ui/chrome', () => ({
-  getBasePath: () => {
-    return 'http://localhost/app';
-  },
-}));
+import { CoreContext } from '../../../../../utils/CoreContext';
 
 const renderEmptyMessage = jest.fn();
 function getMountWrapper() {
   return mount(
-    <AppContext.Provider value={{ httpClient: httpClientMock }}>
+    <CoreContext.Provider value={{ http: httpClientMock }}>
       <Formik
         initialValues={FORMIK_INITIAL_VALUES}
         render={({ values }) => (
           <AnomalyDetectors values={values} renderEmptyMessage={renderEmptyMessage} />
         )}
       />
-    </AppContext.Provider>
+    </CoreContext.Provider>
   );
 }
 
@@ -47,24 +41,20 @@ describe('AnomalyDetectors', () => {
     jest.clearAllMocks();
   });
   test('renders', () => {
-    httpClientMock.post.mockResolvedValue({ data: { ok: true, detectors: [] } });
+    httpClientMock.post.mockResolvedValue({ ok: true, detectors: [] });
     const wrapper = getMountWrapper();
     expect(wrapper).toMatchSnapshot();
   });
 
   test('should be able to select the detector', (done) => {
     httpClientMock.post.mockResolvedValueOnce({
-      data: {
-        ok: true,
-        detectors: [{ name: 'sample-detector', id: 'sample-id', feature_attributes: [] }],
-      },
+      ok: true,
+      detectors: [{ name: 'sample-detector', id: 'sample-id', feature_attributes: [] }],
     });
     //Preview mock
     httpClientMock.post.mockResolvedValueOnce({
-      data: {
-        ok: true,
-        response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
-      },
+      ok: true,
+      response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
     });
     const wrapper = getMountWrapper();
     setTimeout(() => {

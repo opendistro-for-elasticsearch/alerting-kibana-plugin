@@ -16,7 +16,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get, isEqual } from 'lodash';
-import chrome from 'ui/chrome';
 import { EuiHorizontalRule } from '@elastic/eui';
 import moment from 'moment';
 
@@ -60,7 +59,6 @@ class MonitorHistory extends PureComponent {
         endTime: this.initialEndTime,
       },
     };
-    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
   }
   async componentDidMount() {
     const { triggers } = this.props;
@@ -193,7 +191,7 @@ class MonitorHistory extends PureComponent {
     );
 
     try {
-      const resp = await httpClient.post('../api/alerting/monitors/_search', {
+      const requestBody = {
         query: getPOISearchQuery(
           monitorId,
           poiTimeWindow.startTime.valueOf(),
@@ -201,18 +199,19 @@ class MonitorHistory extends PureComponent {
           intervalDuration
         ),
         index: INDEX.ALL_ALERTS,
+      };
+      const resp = await httpClient.post('../api/alerting/monitors/_search', {
+        body: JSON.stringify(requestBody),
       });
-      if (resp.data.ok) {
-        const poiData = get(resp, 'data.resp.aggregations.alerts_over_time.buckets', []).map(
-          (item) => ({
-            x: item.key,
-            y: item.doc_count,
-          })
-        );
+      if (resp.ok) {
+        const poiData = get(resp, 'resp.aggregations.alerts_over_time.buckets', []).map((item) => ({
+          x: item.key,
+          y: item.doc_count,
+        }));
         this.setState(
           {
             poiData,
-            maxAlerts: get(resp, 'data.resp.aggregations.max_alerts.value', 0),
+            maxAlerts: get(resp, 'resp.aggregations.max_alerts.value', 0),
             timeSeriesWindow: {
               ...this.getWindowSize(poiData, intervalDuration),
             },
@@ -220,7 +219,7 @@ class MonitorHistory extends PureComponent {
           () => this.getAlerts()
         );
       } else {
-        const parsedError = JSON.parse(resp.data.resp.response);
+        const parsedError = JSON.parse(resp.resp.response);
         this.setState({ queryResponse: parsedError });
       }
     } catch (err) {
@@ -243,10 +242,10 @@ class MonitorHistory extends PureComponent {
         monitorIds: monitorId,
       };
 
-      const resp = await httpClient.get(`../api/alerting/alerts?${queryString.stringify(params)}`);
+      const resp = await httpClient.get('../api/alerting/alerts', { query: params });
       var alerts;
-      if (resp.data.ok) {
-        alerts = resp.data.alerts;
+      if (resp.ok) {
+        alerts = resp.alerts;
       } else {
         console.log('error getting alerts:', resp);
         alerts = [];
@@ -341,7 +340,7 @@ class MonitorHistory extends PureComponent {
                   ? HistoryConstants.MIN_POI_Y_SCALE
                   : maxAlerts,
               ]}
-              isDarkMode={this.isDarkMode}
+              isDarkMode={this.props.isDarkMode}
             />
             <EuiHorizontalRule margin="xs" />
             <Legend />

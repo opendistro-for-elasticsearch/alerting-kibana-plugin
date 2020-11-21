@@ -15,7 +15,6 @@
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-import chrome from 'ui/chrome';
 import moment from 'moment';
 import { Formik, FieldArray } from 'formik';
 import {
@@ -28,7 +27,6 @@ import {
   EuiSpacer,
   EuiTitle,
 } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
 import 'brace/theme/github';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
@@ -58,7 +56,6 @@ export default class CreateTrigger extends Component {
       executeResponse: null,
       initialValues,
     };
-    this.isDarkMode = chrome.getUiSettingsClient().get('theme:darkMode') || false;
   }
 
   componentDidMount() {
@@ -80,11 +77,11 @@ export default class CreateTrigger extends Component {
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
       .then((res) => {
         setSubmitting(false);
-        if (res.data.ok) {
+        if (res.ok) {
           onCloseTrigger();
         } else {
-          console.log('Failed to create the trigger:', res.data);
-          this.backendErrorHandler('create', res.data);
+          console.log('Failed to create the trigger:', res);
+          this.backendErrorHandler('create', res);
         }
       })
       .catch((err) => {
@@ -110,11 +107,11 @@ export default class CreateTrigger extends Component {
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
       .then((res) => {
         setSubmitting(false);
-        if (res.data.ok) {
+        if (res.ok) {
           onCloseTrigger();
         } else {
-          console.log('Failed to update the trigger:', res.data);
-          this.backendErrorHandler('update', res.data);
+          console.log('Failed to update the trigger:', res);
+          this.backendErrorHandler('update', res);
         }
       })
       .catch((err) => {
@@ -134,14 +131,14 @@ export default class CreateTrigger extends Component {
       _.set(monitorToExecute, 'inputs[0].search', searchRequest);
     }
     httpClient
-      .post('../api/alerting/monitors/_execute', monitorToExecute)
+      .post('../api/alerting/monitors/_execute', { body: JSON.stringify(monitorToExecute) })
       .then((resp) => {
-        if (resp.data.ok) {
-          this.setState({ executeResponse: resp.data.resp });
+        if (resp.ok) {
+          this.setState({ executeResponse: resp.resp });
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
-          this.backendErrorHandler('run', resp.data);
+          this.backendErrorHandler('run', resp);
         }
       })
       .catch((err) => {
@@ -196,10 +193,10 @@ export default class CreateTrigger extends Component {
     monitor: monitor,
   });
 
-  backendErrorHandler(actionName, data) {
-    toastNotifications.addDanger({
+  backendErrorHandler(actionName, resp) {
+    this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the trigger`,
-      text: data.resp,
+      text: resp.resp,
       toastLifeTimeMs: 20000,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -229,7 +226,7 @@ export default class CreateTrigger extends Component {
                 setFlyout={setFlyout}
                 triggers={monitor.triggers}
                 triggerValues={values}
-                isDarkMode={this.isDarkMode}
+                isDarkMode={this.props.isDarkMode}
               />
               <EuiSpacer />
               <FieldArray
@@ -261,7 +258,7 @@ export default class CreateTrigger extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  toastNotifications.addDanger({
+                  this.props.notifications.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the trigger`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

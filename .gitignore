@@ -11,5 +11,6 @@ build
 .kibana-plugin-helpers.dev.json
 coverage
 yarn-error.log
+target
 /cypress/screenshots/
 /cypress/videos/

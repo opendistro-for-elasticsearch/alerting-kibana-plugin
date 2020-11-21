@@ -13,13 +13,8 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import { render } from 'enzyme';
-import { EmptyFeaturesMessage } from './EmptyFeaturesMessage';
+import { AlertingPlugin } from './plugin';
 
-describe('EmptyFeaturesMessage', () => {
-  test('renders ', () => {
-    const component = <EmptyFeaturesMessage detectorId="tempId" />;
-    expect(render(component)).toMatchSnapshot();
-  });
-});
+export function plugin(initializerContext) {
+  return new AlertingPlugin(initializerContext);
+}

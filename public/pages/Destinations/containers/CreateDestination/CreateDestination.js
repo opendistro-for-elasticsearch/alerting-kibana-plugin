@@ -25,7 +25,6 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
 import ContentPanel from '../../../../components/ContentPanel';
 import { hasError, isInvalid, required } from '../../../../utils/validate';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
@@ -90,9 +89,9 @@ class CreateDestination extends React.Component {
     const { httpClient, history } = this.props;
     try {
       const resp = await httpClient.get(`../api/alerting/destinations/${destinationId}`);
-      if (resp.data.ok) {
-        const ifSeqNo = _.get(resp, 'data.ifSeqNo');
-        const ifPrimaryTerm = _.get(resp, 'data.ifPrimaryTerm');
+      if (resp.ok) {
+        const ifSeqNo = _.get(resp, 'ifSeqNo');
+        const ifPrimaryTerm = _.get(resp, 'ifPrimaryTerm');
         this.setState({
           ifSeqNo,
           ifPrimaryTerm,
@@ -116,14 +115,11 @@ class CreateDestination extends React.Component {
     } = this.props;
     const { ifSeqNo, ifPrimaryTerm } = this.state;
     try {
-      const resp = await httpClient.put(
-        `../api/alerting/destinations/${destinationId}?ifSeqNo=${ifSeqNo}&ifPrimaryTerm=${ifPrimaryTerm}`,
-        requestData
-      );
-      const {
-        data: { ok },
-      } = resp;
-      if (ok) {
+      const resp = await httpClient.put(`../api/alerting/destinations/${destinationId}`, {
+        query: { ifSeqNo, ifPrimaryTerm },
+        body: JSON.stringify(requestData),
+      });
+      if (resp.ok) {
         history.push(`/destinations`);
       } else {
         // Handles stale Destination data.
@@ -139,12 +135,11 @@ class CreateDestination extends React.Component {
   handleCreate = async (requestData, { setSubmitting }) => {
     const { httpClient, history } = this.props;
     try {
-      const resp = await httpClient.post('../api/alerting/destinations', requestData);
+      const resp = await httpClient.post('../api/alerting/destinations', {
+        body: JSON.stringify(requestData),
+      });
       setSubmitting(false);
-      const {
-        data: { ok },
-      } = resp;
-      if (ok) {
+      if (resp.ok) {
         history.push(`/destinations`);
       }
     } catch (e) {
@@ -174,7 +169,6 @@ class CreateDestination extends React.Component {
   render() {
     const { edit, httpClient, location } = this.props;
     const { initialValues } = this.state;
-
     return (
       <div style={{ padding: '25px 50px' }}>
         <Formik
@@ -258,7 +252,7 @@ class CreateDestination extends React.Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  toastNotifications.addDanger({
+                  this.props.notifications.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the destination`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })
@@ -274,9 +268,10 @@ class CreateDestination extends React.Component {
 
 CreateDestination.propTypes = {
   edit: PropTypes.bool,
-  httpClient: PropTypes.func.isRequired,
+  httpClient: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
 
 CreateDestination.defaultProps = {

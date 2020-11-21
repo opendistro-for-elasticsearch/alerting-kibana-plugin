@@ -26,14 +26,12 @@ export const generatePOIData = (startTime) =>
 export const getPOIResponse = (initialStartTime) => {
   const histogramBucketsData = generatePOIData(initialStartTime);
   return {
-    data: {
-      ok: true,
-      resp: {
-        aggregations: {
-          alerts_over_time: { buckets: histogramBucketsData },
-          max_alerts: {
-            value: Math.max(...histogramBucketsData.map((datapoint) => datapoint.doc_count)),
-          },
+    ok: true,
+    resp: {
+      aggregations: {
+        alerts_over_time: { buckets: histogramBucketsData },
+        max_alerts: {
+          value: Math.max(...histogramBucketsData.map((datapoint) => datapoint.doc_count)),
         },
       },
     },

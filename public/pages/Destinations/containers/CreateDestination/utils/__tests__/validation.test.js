@@ -24,7 +24,7 @@ describe('destinations Validations', () => {
   });
   describe('validateDestinationName', () => {
     httpClient.post.mockResolvedValue({
-      data: { resp: { hits: { total: { value: 0, relation: 'eq' } } } },
+      resp: { hits: { total: { value: 0, relation: 'eq' } } },
     });
     test('should be undefined if name is valid', () => {
       return expect(
@@ -36,7 +36,7 @@ describe('destinations Validations', () => {
     });
     test('should reject if name already is being in used', () => {
       httpClient.post.mockResolvedValue({
-        data: { resp: { hits: { total: { value: 1, relation: 'eq' } } } },
+        resp: { hits: { total: { value: 1, relation: 'eq' } } },
       });
       return expect(validateDestinationName(httpClient, null)('destinationName')).rejects.toEqual(
         'Destination name is already used'
@@ -44,7 +44,7 @@ describe('destinations Validations', () => {
     });
     test('should reject if name already is being in used while editing destination', () => {
       httpClient.post.mockResolvedValue({
-        data: { resp: { hits: { total: { value: 1, relation: 'eq' } } } },
+        resp: { hits: { total: { value: 1, relation: 'eq' } } },
       });
       return expect(
         validateDestinationName(httpClient, { name: 'destinationName' })('destinationName Existing')
@@ -52,7 +52,7 @@ describe('destinations Validations', () => {
     });
     test('should rejects if network request has some error', () => {
       httpClient.post.mockRejectedValue({
-        data: { resp: { ok: false, error: 'There was an issue' } },
+        resp: { ok: false, error: 'There was an issue' },
       });
       return expect(validateDestinationName(httpClient, null)('destinationName')).rejects.toEqual(
         'There was a problem validating destination name. Please try again.'

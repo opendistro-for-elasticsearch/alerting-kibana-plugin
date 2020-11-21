@@ -25,7 +25,6 @@ import {
   EuiButton,
   EuiButtonEmpty,
 } from '@elastic/eui';
-import { toastNotifications } from 'ui/notify';
 
 import ConfigureMonitor from '../ConfigureMonitor';
 import DefineMonitor from '../DefineMonitor';
@@ -76,21 +75,21 @@ export default class CreateMonitor extends Component {
   async onCreate(monitor, { setSubmitting, setErrors }) {
     const { httpClient } = this.props;
     try {
-      const resp = await httpClient.post('../api/alerting/monitors', monitor);
+      const resp = await httpClient.post('../api/alerting/monitors', {
+        body: JSON.stringify(monitor),
+      });
       setSubmitting(false);
       const {
-        data: {
-          ok,
-          resp: { _id },
-        },
+        ok,
+        resp: { _id },
       } = resp;
       if (ok) {
         this.props.history.push(
           `/monitors/${_id}?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}&success=true`
         );
       } else {
-        console.log('Failed to create:', resp.data);
-        this.backendErrorHandler('create', resp.data);
+        console.log('Failed to create:', resp);
+        this.backendErrorHandler('create', resp);
       }
     } catch (err) {
       console.error(err);
@@ -108,14 +107,12 @@ export default class CreateMonitor extends Component {
     try {
       const resp = await updateMonitor(updatedMonitor);
       setSubmitting(false);
-      const {
-        data: { ok, id },
-      } = resp;
+      const { ok, id } = resp;
       if (ok) {
         this.props.history.push(`/monitors/${id}`);
       } else {
-        console.log('Failed to update:', resp.data);
-        this.backendErrorHandler('update', resp.data);
+        console.log('Failed to update:', resp);
+        this.backendErrorHandler('update', resp);
       }
     } catch (err) {
       console.error(err);
@@ -131,10 +128,10 @@ export default class CreateMonitor extends Component {
     else this.onCreate(monitor, formikBag);
   }
 
-  backendErrorHandler(actionName, data) {
-    toastNotifications.addDanger({
+  backendErrorHandler(actionName, resp) {
+    this.props.notifications.toasts.addDanger({
       title: `Failed to ${actionName} the monitor`,
-      text: data.resp,
+      text: resp.resp,
       toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -142,7 +139,7 @@ export default class CreateMonitor extends Component {
 
   render() {
     const { initialValues } = this.state;
-    const { edit, httpClient, monitorToEdit } = this.props;
+    const { edit, httpClient, monitorToEdit, notifications, isDarkMode } = this.props;
     return (
       <div style={{ padding: '25px 50px' }}>
         <Formik
@@ -162,6 +159,8 @@ export default class CreateMonitor extends Component {
                 errors={errors}
                 httpClient={httpClient}
                 detectorId={this.props.detectorId}
+                notifications={notifications}
+                isDarkMode={isDarkMode}
               />
               <Fragment>
                 <EuiSpacer />
@@ -184,7 +183,7 @@ export default class CreateMonitor extends Component {
                 isSubmitting={isSubmitting}
                 isValid={isValid}
                 onSubmitError={() =>
-                  toastNotifications.addDanger({
+                  notifications.toasts.addDanger({
                     title: `Failed to ${edit ? 'update' : 'create'} the monitor`,
                     text: 'Fix all highlighted error(s) before continuing.',
                   })

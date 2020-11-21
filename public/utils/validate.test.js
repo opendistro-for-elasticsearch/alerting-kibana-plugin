@@ -95,14 +95,14 @@ describe('validateActionName', () => {
 });
 
 describe('validateMonitorName', () => {
-  httpClient.post.mockResolvedValue({ data: { resp: { hits: { total: 0 } } } });
+  httpClient.post.mockResolvedValue({ resp: { hits: { total: 0 } } });
   test('returns undefined if no error', () => {
     expect(validateMonitorName(httpClient, {})('valid monitor name')).resolves.toBeUndefined();
   });
 
   test('returns Required string if falsy value', () => {
-    validateMonitorName(httpClient, {})().catch(err => expect(err).toEqual('Required'));
-    validateMonitorName(httpClient, {})('').catch(err => expect(err).toEqual('Required'));
+    validateMonitorName(httpClient, {})().catch((err) => expect(err).toEqual('Required'));
+    validateMonitorName(httpClient, {})('').catch((err) => expect(err).toEqual('Required'));
   });
 });
 
@@ -180,7 +180,7 @@ describe('isIndexPatternQueryValid', () => {
     expect(isIndexPatternQueryValid('..', ILLEGAL_CHARACTERS)).toBe(false);
   });
 
-  test.each(ILLEGAL_CHARACTERS)('returns false if pattern contains %s', char => {
+  test.each(ILLEGAL_CHARACTERS)('returns false if pattern contains %s', (char) => {
     expect(isIndexPatternQueryValid(`random${char}pattern`, ILLEGAL_CHARACTERS)).toBe(false);
   });
 });

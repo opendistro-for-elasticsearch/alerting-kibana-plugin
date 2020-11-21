@@ -15,7 +15,6 @@
 
 import _ from 'lodash';
 
-import { CLUSTER } from './utils/constants';
 import { INDEX } from '../../utils/constants';
 
 export default class MonitorService {
@@ -23,44 +22,63 @@ export default class MonitorService {
     this.esDriver = esDriver;
   }
 
-  createMonitor = async (req, h) => {
+  createMonitor = async (context, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.payload) };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const createResponse = await callWithRequest(req, 'alerting.createMonitor', params);
-      return { ok: true, resp: createResponse };
+      const params = { body: JSON.stringify(req.body) };
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const createResponse = await callAsCurrentUser('alerting.createMonitor', params);
+      return res.ok({
+        body: {
+          ok: true,
+          resp: createResponse,
+        },
+      });
     } catch (err) {
       console.error('Alerting - MonitorService - createMonitor:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  deleteMonitor = async (req, h) => {
+  deleteMonitor = async (context, req, res) => {
     try {
       const { id } = req.params;
       const params = { monitorId: id };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const response = await callWithRequest(req, 'alerting.deleteMonitor', params);
-      return { ok: response.result === 'deleted' };
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const response = await callAsCurrentUser('alerting.deleteMonitor', params);
+      return res.ok({
+        body: {
+          ok: response.result === 'deleted',
+        },
+      });
     } catch (err) {
       console.error('Alerting - MonitorService - deleteMonitor:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getMonitor = async (req, h) => {
+  getMonitor = async (context, req, res) => {
     try {
       const { id } = req.params;
       const params = { monitorId: id };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const getResponse = await callWithRequest(req, 'alerting.getMonitor', params);
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const getResponse = await callAsCurrentUser('alerting.getMonitor', params);
       const monitor = _.get(getResponse, 'monitor', null);
       const version = _.get(getResponse, '_version', null);
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (monitor) {
-        const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
-        const searchResponse = await callWithRequest(req, 'alerting.getMonitors', {
+        const { callAsCurrentUser } = this.esDriver.asScoped(req);
+        const searchResponse = await callAsCurrentUser('alerting.getMonitors', {
           index: INDEX.ALL_ALERTS,
           body: {
             size: 0,
@@ -94,32 +112,54 @@ export default class MonitorService {
           (acc, curr) => (curr.key === 'ACTIVE' ? curr.doc_count : acc),
           0
         );
-        return { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm };
+        return res.ok({
+          body: { ok: true, resp: monitor, activeCount, dayCount, version, ifSeqNo, ifPrimaryTerm },
+        });
       } else {
-        return { ok: false };
+        return res.ok({
+          body: {
+            ok: false,
+          },
+        });
       }
     } catch (err) {
       console.error('Alerting - MonitorService - getMonitor:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  updateMonitor = async (req, h) => {
+  updateMonitor = async (context, req, res) => {
     try {
       const { id } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
-      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.payload) };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const updateResponse = await callWithRequest(req, 'alerting.updateMonitor', params);
+      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.body) };
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const updateResponse = await callAsCurrentUser('alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
-      return { ok: true, version: _version, id: _id };
+      return res.ok({
+        body: {
+          ok: true,
+          version: _version,
+          id: _id,
+        },
+      });
     } catch (err) {
       console.error('Alerting - MonitorService - updateMonitor:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  getMonitors = async (req, h) => {
+  getMonitors = async (context, req, res) => {
     try {
       const { from, size, search, sortDirection, sortField, state } = req.query;
 
@@ -165,10 +205,8 @@ export default class MonitorService {
         }),
       };
 
-      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
-        CLUSTER.ALERTING
-      );
-      const getResponse = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
+      const { callAsCurrentUser: alertingCallAsCurrentUser } = await this.esDriver.asScoped(req);
+      const getResponse = await alertingCallAsCurrentUser('alerting.getMonitors', params);
 
       const totalMonitors = _.get(getResponse, 'hits.total.value', 0);
       const monitorKeyValueTuples = _.get(getResponse, 'hits.hits', []).map((result) => {
@@ -236,8 +274,8 @@ export default class MonitorService {
         },
       };
 
-      const { callWithRequest } = this.esDriver.getCluster(CLUSTER.ALERTING);
-      const esAggsResponse = await callWithRequest(req, 'alerting.getMonitors', aggsParams);
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const esAggsResponse = await callAsCurrentUser('alerting.getMonitors', aggsParams);
       const buckets = _.get(esAggsResponse, 'aggregations.uniq_monitor_ids.buckets', []).map(
         (bucket) => {
           const {
@@ -292,63 +330,98 @@ export default class MonitorService {
         results = results.slice(from, from + size);
       }
 
-      return {
-        ok: true,
-        monitors: results,
-        totalMonitors,
-      };
+      return res.ok({
+        body: {
+          ok: true,
+          monitors: results,
+          totalMonitors,
+        },
+      });
     } catch (err) {
       console.error('Alerting - MonitorService - getMonitors', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  acknowledgeAlerts = async (req, h) => {
+  acknowledgeAlerts = async (context, req, res) => {
     try {
       const { id } = req.params;
       const params = {
         monitorId: id,
-        body: JSON.stringify(req.payload),
+        body: JSON.stringify(req.body),
       };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const acknowledgeResponse = await callWithRequest(req, 'alerting.acknowledgeAlerts', params);
-      return { ok: !acknowledgeResponse.failed.length, resp: acknowledgeResponse };
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
+      const acknowledgeResponse = await callAsCurrentUser('alerting.acknowledgeAlerts', params);
+      return res.ok({
+        body: {
+          ok: !acknowledgeResponse.failed.length,
+          resp: acknowledgeResponse,
+        },
+      });
     } catch (err) {
       console.error('Alerting - MonitorService - acknowledgeAlerts:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
-  executeMonitor = async (req, h) => {
+  executeMonitor = async (context, req, res) => {
     try {
       const { dryrun = 'true' } = req.query;
       const params = {
-        body: JSON.stringify(req.payload),
+        body: JSON.stringify(req.body),
         dryrun,
       };
-      const { callWithRequest } = await this.esDriver.getCluster(CLUSTER.ALERTING);
-      const executeResponse = await callWithRequest(req, 'alerting.executeMonitor', params);
-      return { ok: true, resp: executeResponse };
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const executeResponse = await callAsCurrentUser('alerting.executeMonitor', params);
+      return res.ok({
+        body: {
+          ok: true,
+          resp: executeResponse,
+        },
+      });
     } catch (err) {
       console.error('Alerting - MonitorService - executeMonitor:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 
   //TODO: This is temporarily a pass through call which needs to be deprecated
-  searchMonitors = async (req, h) => {
+  searchMonitors = async (context, req, res) => {
     try {
-      const { query, index, size } = req.payload;
+      const { query, index, size } = req.body;
       const params = { index, size, body: query };
 
-      const { callWithRequest: alertingCallWithRequest } = await this.esDriver.getCluster(
-        CLUSTER.ALERTING
-      );
-      const results = await alertingCallWithRequest(req, 'alerting.getMonitors', params);
-      return { ok: true, resp: results };
+      const { callAsCurrentUser } = await this.esDriver.asScoped(req);
+      const results = await callAsCurrentUser('alerting.getMonitors', params);
+      return res.ok({
+        body: {
+          ok: true,
+          resp: results,
+        },
+      });
     } catch (err) {
       console.error('Alerting - MonitorService - searchMonitor:', err);
-      return { ok: false, resp: err.message };
+      return res.ok({
+        body: {
+          ok: false,
+          resp: err.message,
+        },
+      });
     }
   };
 }

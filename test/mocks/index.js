@@ -17,8 +17,4 @@ import historyMock from './historyMock';
 import httpClientMock from './httpClientMock';
 import styleMock from './styleMock';
 
-export {
-  historyMock,
-  httpClientMock,
-  styleMock,
-}
+export { historyMock, httpClientMock, styleMock };

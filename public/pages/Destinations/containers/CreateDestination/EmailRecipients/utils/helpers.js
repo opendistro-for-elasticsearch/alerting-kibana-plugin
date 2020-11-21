@@ -15,13 +15,13 @@
 
 export default async function getEmailGroups(httpClient, searchText = '') {
   try {
-    const response = await httpClient.get(
-      `../api/alerting/destinations/email_groups?search=${searchText}&size=200`
-    );
-    if (response.data.ok) {
-      return response.data.emailGroups;
+    const response = await httpClient.get('../api/alerting/destinations/email_groups', {
+      query: { search: searchText, size: 200 },
+    });
+    if (response.ok) {
+      return response.emailGroups;
     } else {
-      console.log('Unable to get email groups', response.data.err);
+      console.log('Unable to get email groups', response.err);
       return [];
     }
   } catch (err) {

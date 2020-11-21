@@ -34,7 +34,9 @@ describe('Dashboard', () => {
 
   test('renders', () => {
     const resp = {
-      data: { ok: true, alerts: [], totalAlerts: 0 },
+      ok: true,
+      alerts: [],
+      totalAlerts: 0,
     };
 
     httpClientMock.get = jest.fn().mockImplementation(() => Promise.resolve(resp));
@@ -63,7 +65,9 @@ describe('Dashboard', () => {
     };
 
     const resp = {
-      data: { ok: true, alerts: [mockAlert], totalAlerts: 1 },
+      ok: true,
+      alerts: [mockAlert],
+      totalAlerts: 1,
     };
 
     // Mock return in getAlerts function

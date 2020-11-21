@@ -16,11 +16,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { AppContext } from '../../../../utils/AppContext';
+import { CoreContext } from '../../../../utils/CoreContext';
 import { AD_PREVIEW_DAYS } from '../../../../utils/constants';
 
 class AnomalyDetectorData extends React.Component {
-  static contextType = AppContext;
+  static contextType = CoreContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -43,25 +43,23 @@ class AnomalyDetectorData extends React.Component {
 
   async getPreviewData() {
     const { detectorId, startTime, endTime } = this.props;
-    const { httpClient } = this.context;
+    const { http: httpClient } = this.context;
     this.setState({
       isLoading: true,
     });
     if (!detectorId) return;
     const requestParams = {
-      startTime: moment()
-        .subtract(AD_PREVIEW_DAYS, 'd')
-        .valueOf(),
+      startTime: moment().subtract(AD_PREVIEW_DAYS, 'd').valueOf(),
       startTime: startTime,
       endTime: endTime,
       preview: this.props.preview,
     };
     try {
       const response = await httpClient.get(`../api/alerting/detectors/${detectorId}/results`, {
-        params: requestParams,
+        query: requestParams,
       });
-      if (response.data.ok) {
-        const { anomalyResult, detector } = response.data.response;
+      if (response.ok) {
+        const { anomalyResult, detector } = response.response;
         this.setState({
           ...this.state,
           anomalyResult,
@@ -94,9 +92,7 @@ AnomalyDetectorData.propTypes = {
 };
 AnomalyDetectorData.defaultProps = {
   preview: true,
-  startTime: moment()
-    .subtract(5, 'd')
-    .valueOf(),
+  startTime: moment().subtract(5, 'd').valueOf(),
   endTime: moment().valueOf(),
 };
 

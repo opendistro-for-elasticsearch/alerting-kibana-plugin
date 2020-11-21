@@ -19,7 +19,7 @@ import { AlertingPageProvider } from './pageObjects';
 
 // the default export of config files must be a config provider
 // that returns an object with the projects config values
-export default async function({ readConfigFile }) {
+export default async function ({ readConfigFile }) {
   // read the Kibana config file so that we can utilize some of
   // its services and PageObjects
   const kibanaConfig = await readConfigFile(resolveKibanaPath('test/functional/config.js'));

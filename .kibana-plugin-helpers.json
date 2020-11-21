@@ -3,8 +3,8 @@
     "package.json",
     "yarn.lock",
     ".yarnrc",
-    "index.js",
-    "{lib,public,server,webpackShims,translations,utils}/**/*",
+    "kibana.json",
+    "{lib,server,webpackShims,translations,utils,target}/**/*",
     "!test",
     "!__tests__"
   ]
