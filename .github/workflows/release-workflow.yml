@@ -18,6 +18,11 @@ jobs:
         id: kibana_version
         run: |
           echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/package.json').kibana.version).match(/[.0-9]+/)[0]")"
+      - name: Get plugin id and version
+        id: plugin_version
+        run: |
+          echo "::set-output name=plugin_id::$(node -p "(require('./alerting-kibana-plugin/kibana.json').id)")"
+          echo "::set-output name=plugin_version::$(node -p "(require('./alerting-kibana-plugin/kibana.json').version).match(/[.0-9]+/)[0]")"
       - name: Checkout Kibana
         uses: actions/checkout@v2
         with:
@@ -51,6 +56,7 @@ jobs:
         run: |
           cd kibana/plugins/alerting-kibana-plugin
           yarn build
+          mv build/*.zip build/${{ steps.plugin_version.outputs.plugin_id }}-${{ steps.plugin_version.outputs.plugin_version }}.zip
           zip_path=`ls $(pwd)/build/*.zip`
           echo "::set-output name=zip_path::$zip_path"
       - name: Configure AWS Credentials
@@ -88,4 +94,3 @@ jobs:
         with:
           name: alerting-plugin
           path: ${{ steps.build_zip.outputs.zip_path }}
-          
