@@ -14,7 +14,7 @@
   },
   "scripts": {
     "kbn": "node ../../scripts/kbn",
-    "lint": "../../node_modules/.bin/eslint '**/*.js' -c .eslintrc",
+    "lint": "../../node_modules/.bin/eslint '**/*.js' -c .eslintrc --ignore-path .gitignore",
     "start": "plugin-helpers start",
     "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js",
     "build": "yarn plugin-helpers build",
