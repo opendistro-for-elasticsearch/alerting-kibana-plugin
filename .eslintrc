@@ -3,12 +3,5 @@ extends:
   - "@elastic/eslint-config-kibana"
   - "plugin:@elastic/eui/recommended"
 
-settings:
-  import/resolver:
-    '@kbn/eslint-import-resolver-kibana':
-      rootPackageName: 'opendistro-alerting'
-      pluginPaths:
-        - .
-
 rules:
   "@kbn/eslint/require-license-header": off
