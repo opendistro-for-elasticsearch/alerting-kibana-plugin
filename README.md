@@ -42,14 +42,15 @@ Ultimately, your directory structure should look like this:
 
 To build the plugin's distributable zip simply run `yarn build`.
 
-Example output: `./build/opendistro-alerting-0.7.0.0.zip`
+Example output: `./build/opendistroAlertingKibana-1.12.0.0.zip`
 
 
 ## Run
 
 - `yarn start`
 
-  Starts Kibana on the root directory (not alerting plugin directory) and includes this plugin. Kibana will be available on `localhost:5601`.
+  Starts Kibana and includes this plugin. Kibana will be available on `localhost:5601`.
+  Please run in the Kibana root directory.
 
 - `yarn test:jest`
 
@@ -59,7 +60,7 @@ Example output: `./build/opendistro-alerting-0.7.0.0.zip`
 ## Contributing to Open Distro for Elasticsearch Alerting Kibana
 
 - Refer to [CONTRIBUTING.md](./CONTRIBUTING.md).
-- Since this is a Kibana plugin, it can be useful to review the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) alongside the documentation around [Kibana plugins](https://www.elastic.co/guide/en/kibana/master/kibana-plugins.html) and [plugin development](https://www.elastic.co/guide/en/kibana/master/plugin-development.html).
+- Since this is a Kibana plugin, it can be useful to review the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) alongside the documentation around [Kibana plugins](https://www.elastic.co/guide/en/kibana/master/kibana-plugins.html) and [plugin development](https://www.elastic.co/guide/en/kibana/master/external-plugin-development.html).
 
 
 
