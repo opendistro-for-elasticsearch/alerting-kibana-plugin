@@ -62,3 +62,5 @@ export const INPUTS_DETECTOR_ID = '0.search.query.query.bool.filter[1].term.dete
 export const MONITOR_INPUT_DETECTOR_ID = `inputs.${INPUTS_DETECTOR_ID}`;
 
 export const AD_PREVIEW_DAYS = 7;
+
+export const MAX_QUERY_RESULT_SIZE = 200;

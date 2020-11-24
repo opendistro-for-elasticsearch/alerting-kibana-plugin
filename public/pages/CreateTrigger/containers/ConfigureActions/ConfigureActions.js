@@ -22,6 +22,7 @@ import ContentPanel from '../../../../components/ContentPanel';
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
 import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../../Destinations/utils/constants';
 import { getAllowList } from '../../../Destinations/utils/helpers';
+import { MAX_QUERY_RESULT_SIZE } from '../../../../utils/constants';
 
 const createActionContext = (context, action) => ({
   ctx: {
@@ -61,7 +62,7 @@ class ConfigureActions extends React.Component {
     };
     try {
       const response = await httpClient.get('../api/alerting/destinations', {
-        query: { search: searchText, size: 200 },
+        query: { search: searchText, size: MAX_QUERY_RESULT_SIZE },
       });
       const destinations = response.destinations
         .map((destination) => ({
