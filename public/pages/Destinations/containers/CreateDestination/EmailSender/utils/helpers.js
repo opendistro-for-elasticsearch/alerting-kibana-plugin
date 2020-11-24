@@ -13,10 +13,12 @@
  *   permissions and limitations under the License.
  */
 
+import { MAX_QUERY_RESULT_SIZE } from '../../../../../../utils/constants';
+
 export default async function getSenders(httpClient, searchText = '') {
   try {
     const response = await httpClient.get('../api/alerting/destinations/email_accounts', {
-      query: { search: searchText, size: 200 },
+      query: { search: searchText, size: MAX_QUERY_RESULT_SIZE },
     });
     if (response.ok) {
       return response.emailAccounts;
