@@ -16,7 +16,7 @@ jobs:
       - name: Get Kibana version
         id: kibana_version
         run: |
-          echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/package.json').kibana.version).match(/[.0-9]+/)[0]")"
+          echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/kibana.json').kibanaVersion).match(/[.0-9]+/)[0]")"
       - name: Checkout Kibana
         uses: actions/checkout@v2
         with:

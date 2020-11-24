@@ -14,15 +14,15 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: alerting-kibana-plugin
-      - name: Get Kibana version
-        id: kibana_version
-        run: |
-          echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/package.json').kibana.version).match(/[.0-9]+/)[0]")"
       - name: Get plugin id and version
         id: plugin_version
         run: |
           echo "::set-output name=plugin_id::$(node -p "(require('./alerting-kibana-plugin/kibana.json').id)")"
           echo "::set-output name=plugin_version::$(node -p "(require('./alerting-kibana-plugin/kibana.json').version).match(/[.0-9]+/)[0]")"
+      - name: Get Kibana version
+        id: kibana_version
+        run: |
+          echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/kibana.json').kibanaVersion).match(/[.0-9]+/)[0]")"
       - name: Checkout Kibana
         uses: actions/checkout@v2
         with:
