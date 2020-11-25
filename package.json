@@ -9,12 +9,16 @@
     "type": "git",
     "url": "https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin"
   },
+  "config": {
+    "id": "opendistroAlertingKibana"
+  },
   "scripts": {
     "kbn": "node ../../scripts/kbn",
     "lint": "../../node_modules/.bin/eslint '**/*.js' -c .eslintrc --ignore-path .gitignore",
     "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js",
     "build": "yarn plugin-helpers build",
-    "plugin-helpers": "node ../../scripts/plugin_helpers"
+    "plugin-helpers": "node ../../scripts/plugin_helpers",
+    "postbuild": "mv build/$npm_package_config_id*.zip build/$npm_package_config_id-$npm_package_version.zip"
   },
   "husky": {
     "hooks": {
