@@ -20,6 +20,7 @@ import {
   TRIGGER_TYPE,
   ANOMALY_GRADE_RESULT_PATH,
   ANOMALY_CONFIDENCE_RESULT_PATH,
+  NOT_EMPTY_RESULT,
 } from './constants';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
@@ -40,7 +41,7 @@ export function formikToTrigger(values, monitorUiMetadata = {}) {
 export function formikToAction(values) {
   const actions = values.actions;
   if (actions && actions.length > 0) {
-    return actions.map(action => {
+    return actions.map((action) => {
       if (!action.throttle_enabled) return _.omit(action, ['throttle']);
       return action;
     });
@@ -90,7 +91,7 @@ export function getADCondition(values) {
     return {
       script: {
         lang: 'painless',
-        source: `return ${ANOMALY_GRADE_RESULT_PATH} != null && ${ANOMALY_GRADE_RESULT_PATH} ${anomalyGradeOperator} ${anomalyDetector.anomalyGradeThresholdValue} && ${ANOMALY_CONFIDENCE_RESULT_PATH} ${anomalyConfidenceOperator} ${anomalyDetector.anomalyConfidenceThresholdValue}`,
+        source: `return ${NOT_EMPTY_RESULT} && ${ANOMALY_GRADE_RESULT_PATH} != null && ${ANOMALY_GRADE_RESULT_PATH} ${anomalyGradeOperator} ${anomalyDetector.anomalyGradeThresholdValue} && ${ANOMALY_CONFIDENCE_RESULT_PATH} ${anomalyConfidenceOperator} ${anomalyDetector.anomalyConfidenceThresholdValue}`,
       },
     };
   } else {
