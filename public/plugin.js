@@ -26,8 +26,13 @@ export class AlertingPlugin {
       id: PLUGIN_NAME,
       title: 'Alerting',
       description: 'Kibana Alerting Plugin',
-      category: DEFAULT_APP_CATEGORIES.kibana,
-      order: 8020,
+      category: {
+        id: 'odfe',
+        label: 'Open Distro for Elasticsearch',
+        euiIconType: 'logoKibana',
+        order: 2000,
+      },
+      order: 4000,
       mount: async (params) => {
         const { renderApp } = await import('./app');
         const [coreStart] = await core.getStartServices();
