@@ -34,6 +34,7 @@ import ManageSenders from '../CreateDestination/ManageSenders';
 import ManageEmailGroups from '../CreateDestination/ManageEmailGroups';
 import { getAllowList } from '../../utils/helpers';
 import { DESTINATION_TYPE } from '../../utils/constants';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 class DestinationsList extends React.Component {
   constructor(props) {
@@ -147,7 +148,7 @@ class DestinationsList extends React.Component {
 
   handleDeleteDestination = async () => {
     const { id: destinationId } = this.state.destinationToDelete;
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     try {
       const resp = await httpClient.delete(`../api/alerting/destinations/${destinationId}`);
       if (resp.ok) {
@@ -156,6 +157,7 @@ class DestinationsList extends React.Component {
         // TODO::handle error
         //Something went wrong unable to delete if trying to delete already deleted destination
         console.log('Unable to delete destination');
+        backendErrorNotification(notifications, 'delete', 'destination', resp);
       }
       this.setState({
         showDeleteConfirmation: false,
@@ -204,7 +206,7 @@ class DestinationsList extends React.Component {
       this.setState({
         isDestinationLoading: true,
       });
-      const { history, httpClient } = this.props;
+      const { history, httpClient, notifications } = this.props;
       const queryParms = queryString.stringify({ from, ...params });
       history.replace({
         ...this.props.location,
@@ -221,6 +223,7 @@ class DestinationsList extends React.Component {
             totalDestinations: resp.totalDestinations,
           });
         } else {
+          backendErrorNotification(notifications, 'get', 'destinations', resp);
           this.setState({
             isDestinationLoading: false,
           });

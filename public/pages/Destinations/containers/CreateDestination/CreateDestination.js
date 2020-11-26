@@ -37,6 +37,7 @@ import { destinationToFormik } from './utils/destinationToFormik';
 import { Webhook, CustomWebhook, Email } from '../../components/createDestinations';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { getAllowList } from '../../utils/helpers';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 const destinationType = {
   [DESTINATION_TYPE.SLACK]: (props) => <Webhook {...props} />,
@@ -133,7 +134,7 @@ class CreateDestination extends React.Component {
   };
 
   handleCreate = async (requestData, { setSubmitting }) => {
-    const { httpClient, history } = this.props;
+    const { httpClient, history, notifications } = this.props;
     try {
       const resp = await httpClient.post('../api/alerting/destinations', {
         body: JSON.stringify(requestData),
@@ -141,6 +142,8 @@ class CreateDestination extends React.Component {
       setSubmitting(false);
       if (resp.ok) {
         history.push(`/destinations`);
+      } else {
+        backendErrorNotification(notifications, 'create', 'destination', resp);
       }
     } catch (e) {
       setSubmitting(false);

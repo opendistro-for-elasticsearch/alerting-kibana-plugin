@@ -98,12 +98,16 @@ export default class Home extends Component {
             <Route
               exact
               path="/dashboard"
-              render={(props) => <Dashboard {...props} httpClient={httpClient} />}
+              render={(props) => (
+                <Dashboard {...props} httpClient={httpClient} notifications={notifications} />
+              )}
             />
             <Route
               exact
               path="/monitors"
-              render={(props) => <Monitors {...props} httpClient={httpClient} />}
+              render={(props) => (
+                <Monitors {...props} httpClient={httpClient} notifications={notifications} />
+              )}
             />
             <Route
               exact

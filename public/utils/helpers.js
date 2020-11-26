@@ -19,3 +19,11 @@ export const ignoreEscape = (eventHandler) => (event) => {
     eventHandler();
   }
 };
+
+export const backendErrorNotification = (notifications, actionName, objectName, httpResponse) => {
+  notifications.toasts.addDanger({
+    title: `Failed to ${actionName} the ${objectName}`,
+    text: httpResponse.resp,
+    toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
+  });
+};

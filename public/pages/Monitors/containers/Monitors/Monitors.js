@@ -27,6 +27,7 @@ import { DEFAULT_PAGE_SIZE_OPTIONS, DEFAULT_QUERY_PARAMS } from './utils/constan
 import { getURLQueryParams } from './utils/helpers';
 import { columns as staticColumns } from './utils/tableUtils';
 import { MONITOR_ACTIONS } from '../../../../utils/constants';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 const MAX_MONITOR_COUNT = 1000;
 
@@ -141,7 +142,7 @@ export default class Monitors extends Component {
     try {
       const params = { from, size, search, sortField, sortDirection, state };
       const queryParamsString = queryString.stringify(params);
-      const { httpClient, history } = this.props;
+      const { httpClient, history, notifications } = this.props;
       history.replace({ ...this.props.location, search: queryParamsString });
       const response = await httpClient.get('../api/alerting/monitors', { query: params });
       if (response.ok) {
@@ -149,6 +150,7 @@ export default class Monitors extends Component {
         this.setState({ monitors, totalMonitors });
       } else {
         console.log('error getting monitors:', response);
+        backendErrorNotification(notifications, 'get', 'monitors', response);
       }
     } catch (err) {
       console.error(err);
@@ -175,23 +177,31 @@ export default class Monitors extends Component {
   }
 
   updateMonitor(item, update) {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     const { id, ifSeqNo, ifPrimaryTerm, monitor } = item;
     return httpClient
       .put(`../api/alerting/monitors/${id}`, {
         query: { ifSeqNo, ifPrimaryTerm },
         body: JSON.stringify({ ...monitor, ...update }),
       })
-      .then((resp) => resp)
+      .then((resp) => {
+        if (!resp.ok) {
+          backendErrorNotification(notifications, 'update', 'monitor', resp);
+        }
+      })
       .catch((err) => err);
   }
 
   deleteMonitor(item) {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     const { id, version } = item;
     return httpClient
       .delete(`../api/alerting/monitors/${id}`, { query: { version } })
-      .then((resp) => resp)
+      .then((resp) => {
+        if (!resp.ok) {
+          backendErrorNotification(notifications, 'delete', 'monitor', resp);
+        }
+      })
       .catch((err) => err);
   }
 
@@ -224,7 +234,7 @@ export default class Monitors extends Component {
   }
 
   async onClickAcknowledgeModal(alerts) {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
 
     const monitorAlerts = alerts.reduce((monitorAlerts, alert) => {
       const { id, monitor_id: monitorId } = alert;
@@ -237,6 +247,11 @@ export default class Monitors extends Component {
       httpClient
         .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, {
           body: JSON.stringify({ alerts }),
+        })
+        .then((resp) => {
+          if (!resp.ok) {
+            backendErrorNotification(notifications, 'acknowledge', 'alert', resp);
+          }
         })
         .catch((error) => error)
     );
@@ -300,7 +315,7 @@ export default class Monitors extends Component {
       monitorIds,
     };
 
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
 
     const response = await httpClient.get('../api/alerting/alerts', { query: params });
 
@@ -313,6 +328,7 @@ export default class Monitors extends Component {
       });
     } else {
       console.error(response);
+      backendErrorNotification(notifications, 'get', 'alerts', response);
     }
   }
 
