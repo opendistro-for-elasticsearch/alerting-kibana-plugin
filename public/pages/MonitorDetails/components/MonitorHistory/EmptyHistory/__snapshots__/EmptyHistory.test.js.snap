@@ -31,7 +31,7 @@ exports[`<EmptyHistory/> renders 1`] = `
     type="button"
   >
     <span
-      class="euiButton__content"
+      class="euiButtonContent euiButton__content"
     >
       <span
         class="euiButton__text"

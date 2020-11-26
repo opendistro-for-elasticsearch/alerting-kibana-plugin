@@ -15,11 +15,11 @@ exports[`<DestinationsActions /> should render DestinationsActions 1`] = `
         class="euiPopover__anchor"
       >
         <button
-          class="euiButton euiButton--primary euiButton--iconRight"
+          class="euiButton euiButton--primary"
           type="button"
         >
           <span
-            class="euiButton__content"
+            class="euiButtonContent euiButtonContent--iconRight euiButton__content"
           >
             <div>
               EuiIconMock
@@ -43,7 +43,7 @@ exports[`<DestinationsActions /> should render DestinationsActions 1`] = `
       rel="noreferrer"
     >
       <span
-        class="euiButton__content"
+        class="euiButtonContent euiButton__content"
       >
         <span
           class="euiButton__text"

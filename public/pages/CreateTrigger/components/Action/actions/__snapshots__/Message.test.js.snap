@@ -57,7 +57,7 @@ exports[`Message renders 1`] = `
             type="button"
           >
             <span
-              class="euiButtonEmpty__content"
+              class="euiButtonContent euiButtonEmpty__content"
             >
               <span
                 class="euiButtonEmpty__text"
@@ -110,7 +110,7 @@ exports[`Message renders 1`] = `
                 type="button"
               >
                 <span
-                  class="euiButtonEmpty__content"
+                  class="euiButtonContent euiButtonEmpty__content"
                 >
                   <span
                     class="euiButtonEmpty__text"
@@ -184,7 +184,7 @@ exports[`Message renders 1`] = `
             type="button"
           >
             <span
-              class="euiButtonEmpty__content"
+              class="euiButtonContent euiButtonEmpty__content"
             >
               <span
                 class="euiButtonEmpty__text"
