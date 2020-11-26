@@ -13,7 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-import { DEFAULT_APP_CATEGORIES } from '../../../src/core/public';
 import { PLUGIN_NAME } from '../utils/constants';
 
 export class AlertingPlugin {
