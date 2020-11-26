@@ -138,21 +138,37 @@ exports[`Dashboard renders 1`] = `
                         <EuiButton
                           onClick={[Function]}
                         >
-                          <button
-                            className="euiButton euiButton--primary"
+                          <EuiButtonDisplay
+                            element="button"
                             onClick={[Function]}
                             type="button"
                           >
-                            <span
-                              className="euiButton__content"
+                            <button
+                              className="euiButton euiButton--primary"
+                              onClick={[Function]}
+                              type="button"
                             >
-                              <span
-                                className="euiButton__text"
+                              <EuiButtonContent
+                                className="euiButton__content"
+                                iconSide="left"
+                                textProps={
+                                  Object {
+                                    "className": "euiButton__text",
+                                  }
+                                }
                               >
-                                Acknowledge
-                              </span>
-                            </span>
-                          </button>
+                                <span
+                                  className="euiButtonContent euiButton__content"
+                                >
+                                  <span
+                                    className="euiButton__text"
+                                  >
+                                    Acknowledge
+                                  </span>
+                                </span>
+                              </EuiButtonContent>
+                            </button>
+                          </EuiButtonDisplay>
                         </EuiButton>
                       </div>
                     </EuiFlexItem>
@@ -231,7 +247,7 @@ exports[`Dashboard renders 1`] = `
                           >
                             <EuiValidatableControl>
                               <input
-                                className="euiFieldSearch euiFieldSearch--fullWidth"
+                                className="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
                                 onChange={[Function]}
                                 onKeyUp={[Function]}
                                 placeholder="Search"
@@ -661,21 +677,31 @@ exports[`Dashboard renders 1`] = `
                                       <button
                                         aria-current={true}
                                         aria-label="Page 1 of 1"
-                                        className="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+                                        className="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiButtonEmpty-isDisabled euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
                                         data-test-subj="pagination-button-0"
                                         disabled={true}
                                         onClick={[Function]}
                                         type="button"
                                       >
-                                        <span
+                                        <EuiButtonContent
                                           className="euiButtonEmpty__content"
+                                          iconSide="left"
+                                          textProps={
+                                            Object {
+                                              "className": "euiButtonEmpty__text",
+                                            }
+                                          }
                                         >
                                           <span
-                                            className="euiButtonEmpty__text"
+                                            className="euiButtonContent euiButtonEmpty__content"
                                           >
-                                            1
+                                            <span
+                                              className="euiButtonEmpty__text"
+                                            >
+                                              1
+                                            </span>
                                           </span>
-                                        </span>
+                                        </EuiButtonContent>
                                       </button>
                                     </EuiButtonEmpty>
                                   </EuiI18n>
@@ -992,34 +1018,44 @@ exports[`Dashboard renders 1`] = `
                                           size="xs"
                                         >
                                           <button
-                                            className="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--xSmall euiButtonEmpty--iconRight euiButtonEmpty--flushRight"
+                                            className="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--xSmall euiButtonEmpty--flushRight"
                                             onClick={[Function]}
                                             type="button"
                                           >
-                                            <span
+                                            <EuiButtonContent
                                               className="euiButtonEmpty__content"
+                                              iconSide="right"
+                                              iconType="arrowDown"
+                                              textProps={
+                                                Object {
+                                                  "className": "euiButtonEmpty__text",
+                                                }
+                                              }
                                             >
-                                              <EuiIcon
-                                                aria-hidden="true"
-                                                className="euiButtonEmpty__icon"
-                                                size="m"
-                                                type="arrowDown"
-                                              >
-                                                <div>
-                                                  EuiIconMock
-                                                </div>
-                                              </EuiIcon>
                                               <span
-                                                className="euiButtonEmpty__text"
+                                                className="euiButtonContent euiButtonContent--iconRight euiButtonEmpty__content"
                                               >
-                                                <EuiI18n
-                                                  default="Sorting"
-                                                  token="euiTableSortMobile.sorting"
+                                                <EuiIcon
+                                                  className="euiButtonContent__icon"
+                                                  size="m"
+                                                  type="arrowDown"
                                                 >
-                                                  Sorting
-                                                </EuiI18n>
+                                                  <div>
+                                                    EuiIconMock
+                                                  </div>
+                                                </EuiIcon>
+                                                <span
+                                                  className="euiButtonEmpty__text"
+                                                >
+                                                  <EuiI18n
+                                                    default="Sorting"
+                                                    token="euiTableSortMobile.sorting"
+                                                  >
+                                                    Sorting
+                                                  </EuiI18n>
+                                                </span>
                                               </span>
-                                            </span>
+                                            </EuiButtonContent>
                                           </button>
                                         </EuiButtonEmpty>
                                       </div>
@@ -1611,21 +1647,38 @@ exports[`Dashboard renders 1`] = `
                                             fill={true}
                                             href="opendistro-alerting#/create-monitor"
                                           >
-                                            <a
-                                              className="euiButton euiButton--primary euiButton--fill"
+                                            <EuiButtonDisplay
+                                              element="a"
+                                              fill={true}
                                               href="opendistro-alerting#/create-monitor"
                                               rel="noreferrer"
                                             >
-                                              <span
-                                                className="euiButton__content"
+                                              <a
+                                                className="euiButton euiButton--primary euiButton--fill"
+                                                href="opendistro-alerting#/create-monitor"
+                                                rel="noreferrer"
                                               >
-                                                <span
-                                                  className="euiButton__text"
+                                                <EuiButtonContent
+                                                  className="euiButton__content"
+                                                  iconSide="left"
+                                                  textProps={
+                                                    Object {
+                                                      "className": "euiButton__text",
+                                                    }
+                                                  }
                                                 >
-                                                  Create monitor
-                                                </span>
-                                              </span>
-                                            </a>
+                                                  <span
+                                                    className="euiButtonContent euiButton__content"
+                                                  >
+                                                    <span
+                                                      className="euiButton__text"
+                                                    >
+                                                      Create monitor
+                                                    </span>
+                                                  </span>
+                                                </EuiButtonContent>
+                                              </a>
+                                            </EuiButtonDisplay>
                                           </EuiButton>
                                         </div>
                                       </EuiEmptyPrompt>

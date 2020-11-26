@@ -34,7 +34,7 @@ import { FORMIK_INITIAL_VALUES } from './constants';
 import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
 
 jest.mock('moment-timezone', () => {
-  const moment = require.requireActual('moment-timezone');
+  const moment = jest.requireActual('moment-timezone');
   moment.tz.guess = () => 'America/Los_Angeles';
   return moment;
 });
