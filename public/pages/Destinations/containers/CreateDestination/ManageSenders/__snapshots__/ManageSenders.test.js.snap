@@ -33,11 +33,15 @@ exports[`ManageSenders renders when email is disallowed 1`] = `
             class="euiOverlayMask euiOverlayMask--aboveHeader"
           >
             <div
+              aria-hidden="true"
+              data-aria-hidden="true"
               data-focus-guard="true"
               style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
               tabindex="0"
             />
             <div
+              aria-hidden="true"
+              data-aria-hidden="true"
               data-focus-guard="true"
               style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
               tabindex="1"
@@ -91,6 +95,8 @@ exports[`ManageSenders renders when email is disallowed 1`] = `
               </div>
             </div>
             <div
+              aria-hidden="true"
+              data-aria-hidden="true"
               data-focus-guard="true"
               style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
               tabindex="0"
@@ -104,116 +110,95 @@ exports[`ManageSenders renders when email is disallowed 1`] = `
           onClose={[Function]}
         >
           <EuiFocusTrap>
-            <FocusLock
-              as="div"
-              autoFocus={true}
-              disabled={false}
-              lockProps={
-                Object {
-                  "style": undefined,
-                }
-              }
-              noFocusGuards={false}
-              persistentFocus={false}
+            <ForwardRef
+              enabled={true}
+              noIsolation={true}
               returnFocus={true}
+              scrollLock={false}
             >
-              <div
-                data-focus-guard={true}
-                key="guard-first"
-                style={
-                  Object {
-                    "height": "0px",
-                    "left": "1px",
-                    "overflow": "hidden",
-                    "padding": 0,
-                    "position": "fixed",
-                    "top": "1px",
-                    "width": "1px",
-                  }
-                }
-                tabIndex={0}
-              />
-              <div
-                data-focus-guard={true}
-                key="guard-nearest"
-                style={
-                  Object {
-                    "height": "0px",
-                    "left": "1px",
-                    "overflow": "hidden",
-                    "padding": 0,
-                    "position": "fixed",
-                    "top": "1px",
-                    "width": "1px",
-                  }
-                }
-                tabIndex={1}
-              />
-              <div
-                data-focus-lock-disabled={false}
-                onBlur={[Function]}
-                onFocus={[Function]}
+              <ForwardRef
+                enabled={true}
+                noIsolation={true}
+                returnFocus={true}
+                scrollLock={false}
+                sideCar={[Function]}
               >
-                <SideEffect(FocusWatcher)
-                  autoFocus={true}
-                  disabled={false}
-                  observed={
-                    <div
-                      data-focus-lock-disabled="false"
-                    >
-                      <div
-                        class="euiModal modal-manage-email"
-                        style="max-width: 1000px;"
-                        tabindex="0"
-                      >
-                        <button
-                          aria-label="Closes this modal window"
-                          class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
-                          type="button"
-                        >
-                          <div>
-                            EuiIconMock
-                          </div>
-                        </button>
-                        <div
-                          class="euiModal__flex"
-                        >
-                          <div
-                            class="euiModalHeader"
-                          >
-                            <div
-                              class="euiModalHeader__title"
-                            >
-                              Manage email senders
-                            </div>
-                          </div>
-                          <hr
-                            class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
-                          />
-                          <div
-                            class="euiModalBody"
-                          >
-                            <div
-                              class="euiModalBody__overflow"
-                            >
-                              <div
-                                style="display: flex; justify-content: center;"
-                              >
-                                Email is disallowed
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <ForwardRef
+                  as={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "classNames": Object {
+                        "fullWidth": "width-before-scroll-bar",
+                        "zeroRight": "right-scroll-bar-position",
+                      },
+                      "defaultProps": Object {
+                        "enabled": true,
+                        "inert": false,
+                        "removeScrollBar": true,
+                      },
+                      "render": [Function],
+                    }
                   }
+                  autoFocus={true}
+                  crossFrame={true}
+                  disabled={false}
+                  lockProps={
+                    Object {
+                      "allowPinchZoom": undefined,
+                      "as": undefined,
+                      "enabled": false,
+                      "inert": undefined,
+                      "onMouseDown": [Function],
+                      "onTouchStart": [Function],
+                      "shards": undefined,
+                      "sideCar": [Function],
+                      "style": undefined,
+                    }
+                  }
+                  noFocusGuards={false}
                   onActivation={[Function]}
                   onDeactivation={[Function]}
                   persistentFocus={false}
+                  returnFocus={true}
+                  sideCar={[Function]}
                 >
-                  <FocusWatcher
+                  <div
+                    data-focus-guard={true}
+                    key="guard-first"
+                    style={
+                      Object {
+                        "height": "0px",
+                        "left": "1px",
+                        "overflow": "hidden",
+                        "padding": 0,
+                        "position": "fixed",
+                        "top": "1px",
+                        "width": "1px",
+                      }
+                    }
+                    tabIndex={0}
+                  />
+                  <div
+                    data-focus-guard={true}
+                    key="guard-nearest"
+                    style={
+                      Object {
+                        "height": "0px",
+                        "left": "1px",
+                        "overflow": "hidden",
+                        "padding": 0,
+                        "position": "fixed",
+                        "top": "1px",
+                        "width": "1px",
+                      }
+                    }
+                    tabIndex={1}
+                  />
+                  <RequireSideCar
                     autoFocus={true}
+                    crossFrame={true}
                     disabled={false}
+                    id={Object {}}
                     observed={
                       <div
                         data-focus-lock-disabled="false"
@@ -267,159 +252,442 @@ exports[`ManageSenders renders when email is disallowed 1`] = `
                     onActivation={[Function]}
                     onDeactivation={[Function]}
                     persistentFocus={false}
-                  />
-                </SideEffect(FocusWatcher)>
-                <div
-                  className="euiModal modal-manage-email"
-                  onKeyDown={[Function]}
-                  style={
-                    Object {
-                      "maxWidth": "1000px",
+                    returnFocus={[Function]}
+                    shards={Array []}
+                    sideCar={
+                      Object {
+                        "assignMedium": [Function],
+                        "assignSyncMedium": [Function],
+                        "options": Object {
+                          "async": true,
+                          "ssr": false,
+                        },
+                        "read": [Function],
+                        "useMedium": [Function],
+                      }
                     }
-                  }
-                  tabIndex={0}
-                >
-                  <EuiI18n
-                    default="Closes this modal window"
-                    token="euiModal.closeModal"
                   >
-                    <EuiButtonIcon
-                      aria-label="Closes this modal window"
-                      className="euiModal__closeIcon"
-                      color="text"
-                      iconType="cross"
-                      onClick={[Function]}
-                    >
-                      <button
-                        aria-label="Closes this modal window"
-                        className="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
-                        onClick={[Function]}
-                        type="button"
-                      >
-                        <EuiIcon
-                          aria-hidden="true"
-                          className="euiButtonIcon__icon"
-                          size="m"
-                          type="cross"
-                        >
-                          <div>
-                            EuiIconMock
-                          </div>
-                        </EuiIcon>
-                      </button>
-                    </EuiButtonIcon>
-                  </EuiI18n>
-                  <div
-                    className="euiModal__flex"
-                  >
-                    <EuiModalHeader>
-                      <div
-                        className="euiModalHeader"
-                      >
-                        <EuiModalHeaderTitle>
-                          <div
-                            className="euiModalHeader__title"
-                          >
-                            Manage email senders
-                          </div>
-                        </EuiModalHeaderTitle>
-                      </div>
-                    </EuiModalHeader>
-                    <EuiHorizontalRule
-                      margin="s"
-                    >
-                      <hr
-                        className="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
-                      />
-                    </EuiHorizontalRule>
-                    <EuiModalBody>
-                      <div
-                        className="euiModalBody"
-                      >
+                    <SideCar
+                      autoFocus={true}
+                      crossFrame={true}
+                      disabled={false}
+                      id={Object {}}
+                      observed={
                         <div
-                          className="euiModalBody__overflow"
+                          data-focus-lock-disabled="false"
                         >
-                          <C
-                            name="senders"
-                            render={[Function]}
-                            validateOnChange={true}
+                          <div
+                            class="euiModal modal-manage-email"
+                            style="max-width: 1000px;"
+                            tabindex="0"
                           >
-                            <FieldArrayInner
-                              formik={
-                                Object {
-                                  "dirty": false,
-                                  "errors": Object {},
-                                  "handleBlur": [Function],
-                                  "handleChange": [Function],
-                                  "handleReset": [Function],
-                                  "handleSubmit": [Function],
-                                  "initialValues": Object {},
-                                  "isSubmitting": false,
-                                  "isValid": false,
-                                  "isValidating": false,
-                                  "registerField": [Function],
-                                  "resetForm": [Function],
-                                  "setError": [Function],
-                                  "setErrors": [Function],
-                                  "setFieldError": [Function],
-                                  "setFieldTouched": [Function],
-                                  "setFieldValue": [Function],
-                                  "setFormikState": [Function],
-                                  "setStatus": [Function],
-                                  "setSubmitting": [Function],
-                                  "setTouched": [Function],
-                                  "setValues": [Function],
-                                  "submitCount": 0,
-                                  "submitForm": [Function],
-                                  "touched": Object {},
-                                  "unregisterField": [Function],
-                                  "validate": undefined,
-                                  "validateField": [Function],
-                                  "validateForm": [Function],
-                                  "validateOnBlur": true,
-                                  "validateOnChange": false,
-                                  "validationSchema": undefined,
-                                  "values": Object {},
-                                }
-                              }
-                              name="senders"
-                              render={[Function]}
-                              validateOnChange={true}
+                            <button
+                              aria-label="Closes this modal window"
+                              class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                              type="button"
+                            >
+                              <div>
+                                EuiIconMock
+                              </div>
+                            </button>
+                            <div
+                              class="euiModal__flex"
                             >
                               <div
-                                style={
-                                  Object {
-                                    "display": "flex",
-                                    "justifyContent": "center",
-                                  }
-                                }
+                                class="euiModalHeader"
                               >
-                                Email is disallowed
+                                <div
+                                  class="euiModalHeader__title"
+                                >
+                                  Manage email senders
+                                </div>
                               </div>
-                            </FieldArrayInner>
-                          </C>
+                              <hr
+                                class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                              />
+                              <div
+                                class="euiModalBody"
+                              >
+                                <div
+                                  class="euiModalBody__overflow"
+                                >
+                                  <div
+                                    style="display: flex; justify-content: center;"
+                                  >
+                                    Email is disallowed
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      onActivation={[Function]}
+                      onDeactivation={[Function]}
+                      persistentFocus={false}
+                      returnFocus={[Function]}
+                      shards={Array []}
+                      sideCar={
+                        Object {
+                          "assignMedium": [Function],
+                          "assignSyncMedium": [Function],
+                          "options": Object {
+                            "async": true,
+                            "ssr": false,
+                          },
+                          "read": [Function],
+                          "useMedium": [Function],
+                        }
+                      }
+                    >
+                      <SideEffect(FocusWatcher)
+                        autoFocus={true}
+                        crossFrame={true}
+                        disabled={false}
+                        id={Object {}}
+                        observed={
+                          <div
+                            data-focus-lock-disabled="false"
+                          >
+                            <div
+                              class="euiModal modal-manage-email"
+                              style="max-width: 1000px;"
+                              tabindex="0"
+                            >
+                              <button
+                                aria-label="Closes this modal window"
+                                class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                                type="button"
+                              >
+                                <div>
+                                  EuiIconMock
+                                </div>
+                              </button>
+                              <div
+                                class="euiModal__flex"
+                              >
+                                <div
+                                  class="euiModalHeader"
+                                >
+                                  <div
+                                    class="euiModalHeader__title"
+                                  >
+                                    Manage email senders
+                                  </div>
+                                </div>
+                                <hr
+                                  class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                                />
+                                <div
+                                  class="euiModalBody"
+                                >
+                                  <div
+                                    class="euiModalBody__overflow"
+                                  >
+                                    <div
+                                      style="display: flex; justify-content: center;"
+                                    >
+                                      Email is disallowed
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                        onActivation={[Function]}
+                        onDeactivation={[Function]}
+                        persistentFocus={false}
+                        returnFocus={[Function]}
+                        shards={Array []}
+                      >
+                        <FocusWatcher
+                          autoFocus={true}
+                          crossFrame={true}
+                          disabled={false}
+                          id={Object {}}
+                          observed={
+                            <div
+                              data-focus-lock-disabled="false"
+                            >
+                              <div
+                                class="euiModal modal-manage-email"
+                                style="max-width: 1000px;"
+                                tabindex="0"
+                              >
+                                <button
+                                  aria-label="Closes this modal window"
+                                  class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                                  type="button"
+                                >
+                                  <div>
+                                    EuiIconMock
+                                  </div>
+                                </button>
+                                <div
+                                  class="euiModal__flex"
+                                >
+                                  <div
+                                    class="euiModalHeader"
+                                  >
+                                    <div
+                                      class="euiModalHeader__title"
+                                    >
+                                      Manage email senders
+                                    </div>
+                                  </div>
+                                  <hr
+                                    class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                                  />
+                                  <div
+                                    class="euiModalBody"
+                                  >
+                                    <div
+                                      class="euiModalBody__overflow"
+                                    >
+                                      <div
+                                        style="display: flex; justify-content: center;"
+                                      >
+                                        Email is disallowed
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          }
+                          onActivation={[Function]}
+                          onDeactivation={[Function]}
+                          persistentFocus={false}
+                          returnFocus={[Function]}
+                          shards={Array []}
+                        />
+                      </SideEffect(FocusWatcher)>
+                    </SideCar>
+                  </RequireSideCar>
+                  <ForwardRef
+                    data-focus-lock-disabled={false}
+                    enabled={false}
+                    inert={false}
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseDown={[Function]}
+                    onTouchStart={[Function]}
+                    removeScrollBar={true}
+                    sideCar={[Function]}
+                  >
+                    <div
+                      data-focus-lock-disabled={false}
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onMouseDown={[Function]}
+                      onScrollCapture={[Function]}
+                      onTouchMoveCapture={[Function]}
+                      onTouchStart={[Function]}
+                      onWheelCapture={[Function]}
+                    >
+                      <div
+                        className="euiModal modal-manage-email"
+                        onKeyDown={[Function]}
+                        style={
+                          Object {
+                            "maxWidth": "1000px",
+                          }
+                        }
+                        tabIndex={0}
+                      >
+                        <EuiI18n
+                          default="Closes this modal window"
+                          token="euiModal.closeModal"
+                        >
+                          <EuiButtonIcon
+                            aria-label="Closes this modal window"
+                            className="euiModal__closeIcon"
+                            color="text"
+                            iconType="cross"
+                            onClick={[Function]}
+                          >
+                            <button
+                              aria-label="Closes this modal window"
+                              className="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                              onClick={[Function]}
+                              type="button"
+                            >
+                              <EuiIcon
+                                aria-hidden="true"
+                                className="euiButtonIcon__icon"
+                                size="m"
+                                type="cross"
+                              >
+                                <div>
+                                  EuiIconMock
+                                </div>
+                              </EuiIcon>
+                            </button>
+                          </EuiButtonIcon>
+                        </EuiI18n>
+                        <div
+                          className="euiModal__flex"
+                        >
+                          <EuiModalHeader>
+                            <div
+                              className="euiModalHeader"
+                            >
+                              <EuiModalHeaderTitle>
+                                <div
+                                  className="euiModalHeader__title"
+                                >
+                                  Manage email senders
+                                </div>
+                              </EuiModalHeaderTitle>
+                            </div>
+                          </EuiModalHeader>
+                          <EuiHorizontalRule
+                            margin="s"
+                          >
+                            <hr
+                              className="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                            />
+                          </EuiHorizontalRule>
+                          <EuiModalBody>
+                            <div
+                              className="euiModalBody"
+                            >
+                              <div
+                                className="euiModalBody__overflow"
+                              >
+                                <C
+                                  name="senders"
+                                  render={[Function]}
+                                  validateOnChange={true}
+                                >
+                                  <FieldArrayInner
+                                    formik={
+                                      Object {
+                                        "dirty": false,
+                                        "errors": Object {},
+                                        "handleBlur": [Function],
+                                        "handleChange": [Function],
+                                        "handleReset": [Function],
+                                        "handleSubmit": [Function],
+                                        "initialValues": Object {},
+                                        "isSubmitting": false,
+                                        "isValid": false,
+                                        "isValidating": false,
+                                        "registerField": [Function],
+                                        "resetForm": [Function],
+                                        "setError": [Function],
+                                        "setErrors": [Function],
+                                        "setFieldError": [Function],
+                                        "setFieldTouched": [Function],
+                                        "setFieldValue": [Function],
+                                        "setFormikState": [Function],
+                                        "setStatus": [Function],
+                                        "setSubmitting": [Function],
+                                        "setTouched": [Function],
+                                        "setValues": [Function],
+                                        "submitCount": 0,
+                                        "submitForm": [Function],
+                                        "touched": Object {},
+                                        "unregisterField": [Function],
+                                        "validate": undefined,
+                                        "validateField": [Function],
+                                        "validateForm": [Function],
+                                        "validateOnBlur": true,
+                                        "validateOnChange": false,
+                                        "validationSchema": undefined,
+                                        "values": Object {},
+                                      }
+                                    }
+                                    name="senders"
+                                    render={[Function]}
+                                    validateOnChange={true}
+                                  >
+                                    <div
+                                      style={
+                                        Object {
+                                          "display": "flex",
+                                          "justifyContent": "center",
+                                        }
+                                      }
+                                    >
+                                      Email is disallowed
+                                    </div>
+                                  </FieldArrayInner>
+                                </C>
+                              </div>
+                            </div>
+                          </EuiModalBody>
                         </div>
                       </div>
-                    </EuiModalBody>
-                  </div>
-                </div>
-              </div>
-              <div
-                data-focus-guard={true}
-                style={
-                  Object {
-                    "height": "0px",
-                    "left": "1px",
-                    "overflow": "hidden",
-                    "padding": 0,
-                    "position": "fixed",
-                    "top": "1px",
-                    "width": "1px",
+                    </div>
+                  </ForwardRef>
+                  <div
+                    data-focus-guard={true}
+                    style={
+                      Object {
+                        "height": "0px",
+                        "left": "1px",
+                        "overflow": "hidden",
+                        "padding": 0,
+                        "position": "fixed",
+                        "top": "1px",
+                        "width": "1px",
+                      }
+                    }
+                    tabIndex={0}
+                  />
+                </ForwardRef>
+                <RequireSideCar
+                  noIsolation={true}
+                  setLockProps={[Function]}
+                  sideCar={
+                    Object {
+                      "assignMedium": [Function],
+                      "assignSyncMedium": [Function],
+                      "options": Object {
+                        "async": true,
+                        "ssr": false,
+                      },
+                      "read": [Function],
+                      "useMedium": [Function],
+                    }
                   }
-                }
-                tabIndex={0}
-              />
-            </FocusLock>
+                >
+                  <SideCar
+                    noIsolation={true}
+                    setLockProps={[Function]}
+                    sideCar={
+                      Object {
+                        "assignMedium": [Function],
+                        "assignSyncMedium": [Function],
+                        "options": Object {
+                          "async": true,
+                          "ssr": false,
+                        },
+                        "read": [Function],
+                        "useMedium": [Function],
+                      }
+                    }
+                  >
+                    <Effect
+                      noIsolation={true}
+                      setLockProps={[Function]}
+                    >
+                      <Component>
+                        <Sheet
+                          styles="
+ [data-focus-on-hidden] {
+   pointer-events: none !important;
+ }
+"
+                        />
+                      </Component>
+                    </Effect>
+                  </SideCar>
+                </RequireSideCar>
+              </ForwardRef>
+            </ForwardRef>
           </EuiFocusTrap>
         </EuiModal>
       </Portal>
@@ -451,11 +719,15 @@ exports[`ManageSenders renders when visible 1`] = `
             class="euiOverlayMask euiOverlayMask--aboveHeader"
           >
             <div
+              aria-hidden="true"
+              data-aria-hidden="true"
               data-focus-guard="true"
               style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
               tabindex="0"
             />
             <div
+              aria-hidden="true"
+              data-aria-hidden="true"
               data-focus-guard="true"
               style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
               tabindex="1"
@@ -509,6 +781,8 @@ exports[`ManageSenders renders when visible 1`] = `
               </div>
             </div>
             <div
+              aria-hidden="true"
+              data-aria-hidden="true"
               data-focus-guard="true"
               style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
               tabindex="0"
@@ -522,116 +796,95 @@ exports[`ManageSenders renders when visible 1`] = `
           onClose={[Function]}
         >
           <EuiFocusTrap>
-            <FocusLock
-              as="div"
-              autoFocus={true}
-              disabled={false}
-              lockProps={
-                Object {
-                  "style": undefined,
-                }
-              }
-              noFocusGuards={false}
-              persistentFocus={false}
+            <ForwardRef
+              enabled={true}
+              noIsolation={true}
               returnFocus={true}
+              scrollLock={false}
             >
-              <div
-                data-focus-guard={true}
-                key="guard-first"
-                style={
-                  Object {
-                    "height": "0px",
-                    "left": "1px",
-                    "overflow": "hidden",
-                    "padding": 0,
-                    "position": "fixed",
-                    "top": "1px",
-                    "width": "1px",
-                  }
-                }
-                tabIndex={0}
-              />
-              <div
-                data-focus-guard={true}
-                key="guard-nearest"
-                style={
-                  Object {
-                    "height": "0px",
-                    "left": "1px",
-                    "overflow": "hidden",
-                    "padding": 0,
-                    "position": "fixed",
-                    "top": "1px",
-                    "width": "1px",
-                  }
-                }
-                tabIndex={1}
-              />
-              <div
-                data-focus-lock-disabled={false}
-                onBlur={[Function]}
-                onFocus={[Function]}
+              <ForwardRef
+                enabled={true}
+                noIsolation={true}
+                returnFocus={true}
+                scrollLock={false}
+                sideCar={[Function]}
               >
-                <SideEffect(FocusWatcher)
-                  autoFocus={true}
-                  disabled={false}
-                  observed={
-                    <div
-                      data-focus-lock-disabled="false"
-                    >
-                      <div
-                        class="euiModal modal-manage-email"
-                        style="max-width: 1000px;"
-                        tabindex="0"
-                      >
-                        <button
-                          aria-label="Closes this modal window"
-                          class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
-                          type="button"
-                        >
-                          <div>
-                            EuiIconMock
-                          </div>
-                        </button>
-                        <div
-                          class="euiModal__flex"
-                        >
-                          <div
-                            class="euiModalHeader"
-                          >
-                            <div
-                              class="euiModalHeader__title"
-                            >
-                              Manage email senders
-                            </div>
-                          </div>
-                          <hr
-                            class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
-                          />
-                          <div
-                            class="euiModalBody"
-                          >
-                            <div
-                              class="euiModalBody__overflow"
-                            >
-                              <div
-                                style="display: flex; justify-content: center;"
-                              >
-                                Loading Senders...
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <ForwardRef
+                  as={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "classNames": Object {
+                        "fullWidth": "width-before-scroll-bar",
+                        "zeroRight": "right-scroll-bar-position",
+                      },
+                      "defaultProps": Object {
+                        "enabled": true,
+                        "inert": false,
+                        "removeScrollBar": true,
+                      },
+                      "render": [Function],
+                    }
                   }
+                  autoFocus={true}
+                  crossFrame={true}
+                  disabled={false}
+                  lockProps={
+                    Object {
+                      "allowPinchZoom": undefined,
+                      "as": undefined,
+                      "enabled": false,
+                      "inert": undefined,
+                      "onMouseDown": [Function],
+                      "onTouchStart": [Function],
+                      "shards": undefined,
+                      "sideCar": [Function],
+                      "style": undefined,
+                    }
+                  }
+                  noFocusGuards={false}
                   onActivation={[Function]}
                   onDeactivation={[Function]}
                   persistentFocus={false}
+                  returnFocus={true}
+                  sideCar={[Function]}
                 >
-                  <FocusWatcher
+                  <div
+                    data-focus-guard={true}
+                    key="guard-first"
+                    style={
+                      Object {
+                        "height": "0px",
+                        "left": "1px",
+                        "overflow": "hidden",
+                        "padding": 0,
+                        "position": "fixed",
+                        "top": "1px",
+                        "width": "1px",
+                      }
+                    }
+                    tabIndex={0}
+                  />
+                  <div
+                    data-focus-guard={true}
+                    key="guard-nearest"
+                    style={
+                      Object {
+                        "height": "0px",
+                        "left": "1px",
+                        "overflow": "hidden",
+                        "padding": 0,
+                        "position": "fixed",
+                        "top": "1px",
+                        "width": "1px",
+                      }
+                    }
+                    tabIndex={1}
+                  />
+                  <RequireSideCar
                     autoFocus={true}
+                    crossFrame={true}
                     disabled={false}
+                    id={Object {}}
                     observed={
                       <div
                         data-focus-lock-disabled="false"
@@ -685,159 +938,442 @@ exports[`ManageSenders renders when visible 1`] = `
                     onActivation={[Function]}
                     onDeactivation={[Function]}
                     persistentFocus={false}
-                  />
-                </SideEffect(FocusWatcher)>
-                <div
-                  className="euiModal modal-manage-email"
-                  onKeyDown={[Function]}
-                  style={
-                    Object {
-                      "maxWidth": "1000px",
+                    returnFocus={[Function]}
+                    shards={Array []}
+                    sideCar={
+                      Object {
+                        "assignMedium": [Function],
+                        "assignSyncMedium": [Function],
+                        "options": Object {
+                          "async": true,
+                          "ssr": false,
+                        },
+                        "read": [Function],
+                        "useMedium": [Function],
+                      }
                     }
-                  }
-                  tabIndex={0}
-                >
-                  <EuiI18n
-                    default="Closes this modal window"
-                    token="euiModal.closeModal"
                   >
-                    <EuiButtonIcon
-                      aria-label="Closes this modal window"
-                      className="euiModal__closeIcon"
-                      color="text"
-                      iconType="cross"
-                      onClick={[Function]}
-                    >
-                      <button
-                        aria-label="Closes this modal window"
-                        className="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
-                        onClick={[Function]}
-                        type="button"
-                      >
-                        <EuiIcon
-                          aria-hidden="true"
-                          className="euiButtonIcon__icon"
-                          size="m"
-                          type="cross"
-                        >
-                          <div>
-                            EuiIconMock
-                          </div>
-                        </EuiIcon>
-                      </button>
-                    </EuiButtonIcon>
-                  </EuiI18n>
-                  <div
-                    className="euiModal__flex"
-                  >
-                    <EuiModalHeader>
-                      <div
-                        className="euiModalHeader"
-                      >
-                        <EuiModalHeaderTitle>
-                          <div
-                            className="euiModalHeader__title"
-                          >
-                            Manage email senders
-                          </div>
-                        </EuiModalHeaderTitle>
-                      </div>
-                    </EuiModalHeader>
-                    <EuiHorizontalRule
-                      margin="s"
-                    >
-                      <hr
-                        className="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
-                      />
-                    </EuiHorizontalRule>
-                    <EuiModalBody>
-                      <div
-                        className="euiModalBody"
-                      >
+                    <SideCar
+                      autoFocus={true}
+                      crossFrame={true}
+                      disabled={false}
+                      id={Object {}}
+                      observed={
                         <div
-                          className="euiModalBody__overflow"
+                          data-focus-lock-disabled="false"
                         >
-                          <C
-                            name="senders"
-                            render={[Function]}
-                            validateOnChange={true}
+                          <div
+                            class="euiModal modal-manage-email"
+                            style="max-width: 1000px;"
+                            tabindex="0"
                           >
-                            <FieldArrayInner
-                              formik={
-                                Object {
-                                  "dirty": false,
-                                  "errors": Object {},
-                                  "handleBlur": [Function],
-                                  "handleChange": [Function],
-                                  "handleReset": [Function],
-                                  "handleSubmit": [Function],
-                                  "initialValues": Object {},
-                                  "isSubmitting": false,
-                                  "isValid": false,
-                                  "isValidating": false,
-                                  "registerField": [Function],
-                                  "resetForm": [Function],
-                                  "setError": [Function],
-                                  "setErrors": [Function],
-                                  "setFieldError": [Function],
-                                  "setFieldTouched": [Function],
-                                  "setFieldValue": [Function],
-                                  "setFormikState": [Function],
-                                  "setStatus": [Function],
-                                  "setSubmitting": [Function],
-                                  "setTouched": [Function],
-                                  "setValues": [Function],
-                                  "submitCount": 0,
-                                  "submitForm": [Function],
-                                  "touched": Object {},
-                                  "unregisterField": [Function],
-                                  "validate": undefined,
-                                  "validateField": [Function],
-                                  "validateForm": [Function],
-                                  "validateOnBlur": true,
-                                  "validateOnChange": false,
-                                  "validationSchema": undefined,
-                                  "values": Object {},
-                                }
-                              }
-                              name="senders"
-                              render={[Function]}
-                              validateOnChange={true}
+                            <button
+                              aria-label="Closes this modal window"
+                              class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                              type="button"
+                            >
+                              <div>
+                                EuiIconMock
+                              </div>
+                            </button>
+                            <div
+                              class="euiModal__flex"
                             >
                               <div
-                                style={
-                                  Object {
-                                    "display": "flex",
-                                    "justifyContent": "center",
-                                  }
-                                }
+                                class="euiModalHeader"
                               >
-                                Loading Senders...
+                                <div
+                                  class="euiModalHeader__title"
+                                >
+                                  Manage email senders
+                                </div>
                               </div>
-                            </FieldArrayInner>
-                          </C>
+                              <hr
+                                class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                              />
+                              <div
+                                class="euiModalBody"
+                              >
+                                <div
+                                  class="euiModalBody__overflow"
+                                >
+                                  <div
+                                    style="display: flex; justify-content: center;"
+                                  >
+                                    Loading Senders...
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      onActivation={[Function]}
+                      onDeactivation={[Function]}
+                      persistentFocus={false}
+                      returnFocus={[Function]}
+                      shards={Array []}
+                      sideCar={
+                        Object {
+                          "assignMedium": [Function],
+                          "assignSyncMedium": [Function],
+                          "options": Object {
+                            "async": true,
+                            "ssr": false,
+                          },
+                          "read": [Function],
+                          "useMedium": [Function],
+                        }
+                      }
+                    >
+                      <SideEffect(FocusWatcher)
+                        autoFocus={true}
+                        crossFrame={true}
+                        disabled={false}
+                        id={Object {}}
+                        observed={
+                          <div
+                            data-focus-lock-disabled="false"
+                          >
+                            <div
+                              class="euiModal modal-manage-email"
+                              style="max-width: 1000px;"
+                              tabindex="0"
+                            >
+                              <button
+                                aria-label="Closes this modal window"
+                                class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                                type="button"
+                              >
+                                <div>
+                                  EuiIconMock
+                                </div>
+                              </button>
+                              <div
+                                class="euiModal__flex"
+                              >
+                                <div
+                                  class="euiModalHeader"
+                                >
+                                  <div
+                                    class="euiModalHeader__title"
+                                  >
+                                    Manage email senders
+                                  </div>
+                                </div>
+                                <hr
+                                  class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                                />
+                                <div
+                                  class="euiModalBody"
+                                >
+                                  <div
+                                    class="euiModalBody__overflow"
+                                  >
+                                    <div
+                                      style="display: flex; justify-content: center;"
+                                    >
+                                      Loading Senders...
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                        onActivation={[Function]}
+                        onDeactivation={[Function]}
+                        persistentFocus={false}
+                        returnFocus={[Function]}
+                        shards={Array []}
+                      >
+                        <FocusWatcher
+                          autoFocus={true}
+                          crossFrame={true}
+                          disabled={false}
+                          id={Object {}}
+                          observed={
+                            <div
+                              data-focus-lock-disabled="false"
+                            >
+                              <div
+                                class="euiModal modal-manage-email"
+                                style="max-width: 1000px;"
+                                tabindex="0"
+                              >
+                                <button
+                                  aria-label="Closes this modal window"
+                                  class="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                                  type="button"
+                                >
+                                  <div>
+                                    EuiIconMock
+                                  </div>
+                                </button>
+                                <div
+                                  class="euiModal__flex"
+                                >
+                                  <div
+                                    class="euiModalHeader"
+                                  >
+                                    <div
+                                      class="euiModalHeader__title"
+                                    >
+                                      Manage email senders
+                                    </div>
+                                  </div>
+                                  <hr
+                                    class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                                  />
+                                  <div
+                                    class="euiModalBody"
+                                  >
+                                    <div
+                                      class="euiModalBody__overflow"
+                                    >
+                                      <div
+                                        style="display: flex; justify-content: center;"
+                                      >
+                                        Loading Senders...
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          }
+                          onActivation={[Function]}
+                          onDeactivation={[Function]}
+                          persistentFocus={false}
+                          returnFocus={[Function]}
+                          shards={Array []}
+                        />
+                      </SideEffect(FocusWatcher)>
+                    </SideCar>
+                  </RequireSideCar>
+                  <ForwardRef
+                    data-focus-lock-disabled={false}
+                    enabled={false}
+                    inert={false}
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseDown={[Function]}
+                    onTouchStart={[Function]}
+                    removeScrollBar={true}
+                    sideCar={[Function]}
+                  >
+                    <div
+                      data-focus-lock-disabled={false}
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onMouseDown={[Function]}
+                      onScrollCapture={[Function]}
+                      onTouchMoveCapture={[Function]}
+                      onTouchStart={[Function]}
+                      onWheelCapture={[Function]}
+                    >
+                      <div
+                        className="euiModal modal-manage-email"
+                        onKeyDown={[Function]}
+                        style={
+                          Object {
+                            "maxWidth": "1000px",
+                          }
+                        }
+                        tabIndex={0}
+                      >
+                        <EuiI18n
+                          default="Closes this modal window"
+                          token="euiModal.closeModal"
+                        >
+                          <EuiButtonIcon
+                            aria-label="Closes this modal window"
+                            className="euiModal__closeIcon"
+                            color="text"
+                            iconType="cross"
+                            onClick={[Function]}
+                          >
+                            <button
+                              aria-label="Closes this modal window"
+                              className="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                              onClick={[Function]}
+                              type="button"
+                            >
+                              <EuiIcon
+                                aria-hidden="true"
+                                className="euiButtonIcon__icon"
+                                size="m"
+                                type="cross"
+                              >
+                                <div>
+                                  EuiIconMock
+                                </div>
+                              </EuiIcon>
+                            </button>
+                          </EuiButtonIcon>
+                        </EuiI18n>
+                        <div
+                          className="euiModal__flex"
+                        >
+                          <EuiModalHeader>
+                            <div
+                              className="euiModalHeader"
+                            >
+                              <EuiModalHeaderTitle>
+                                <div
+                                  className="euiModalHeader__title"
+                                >
+                                  Manage email senders
+                                </div>
+                              </EuiModalHeaderTitle>
+                            </div>
+                          </EuiModalHeader>
+                          <EuiHorizontalRule
+                            margin="s"
+                          >
+                            <hr
+                              className="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginSmall"
+                            />
+                          </EuiHorizontalRule>
+                          <EuiModalBody>
+                            <div
+                              className="euiModalBody"
+                            >
+                              <div
+                                className="euiModalBody__overflow"
+                              >
+                                <C
+                                  name="senders"
+                                  render={[Function]}
+                                  validateOnChange={true}
+                                >
+                                  <FieldArrayInner
+                                    formik={
+                                      Object {
+                                        "dirty": false,
+                                        "errors": Object {},
+                                        "handleBlur": [Function],
+                                        "handleChange": [Function],
+                                        "handleReset": [Function],
+                                        "handleSubmit": [Function],
+                                        "initialValues": Object {},
+                                        "isSubmitting": false,
+                                        "isValid": false,
+                                        "isValidating": false,
+                                        "registerField": [Function],
+                                        "resetForm": [Function],
+                                        "setError": [Function],
+                                        "setErrors": [Function],
+                                        "setFieldError": [Function],
+                                        "setFieldTouched": [Function],
+                                        "setFieldValue": [Function],
+                                        "setFormikState": [Function],
+                                        "setStatus": [Function],
+                                        "setSubmitting": [Function],
+                                        "setTouched": [Function],
+                                        "setValues": [Function],
+                                        "submitCount": 0,
+                                        "submitForm": [Function],
+                                        "touched": Object {},
+                                        "unregisterField": [Function],
+                                        "validate": undefined,
+                                        "validateField": [Function],
+                                        "validateForm": [Function],
+                                        "validateOnBlur": true,
+                                        "validateOnChange": false,
+                                        "validationSchema": undefined,
+                                        "values": Object {},
+                                      }
+                                    }
+                                    name="senders"
+                                    render={[Function]}
+                                    validateOnChange={true}
+                                  >
+                                    <div
+                                      style={
+                                        Object {
+                                          "display": "flex",
+                                          "justifyContent": "center",
+                                        }
+                                      }
+                                    >
+                                      Loading Senders...
+                                    </div>
+                                  </FieldArrayInner>
+                                </C>
+                              </div>
+                            </div>
+                          </EuiModalBody>
                         </div>
                       </div>
-                    </EuiModalBody>
-                  </div>
-                </div>
-              </div>
-              <div
-                data-focus-guard={true}
-                style={
-                  Object {
-                    "height": "0px",
-                    "left": "1px",
-                    "overflow": "hidden",
-                    "padding": 0,
-                    "position": "fixed",
-                    "top": "1px",
-                    "width": "1px",
+                    </div>
+                  </ForwardRef>
+                  <div
+                    data-focus-guard={true}
+                    style={
+                      Object {
+                        "height": "0px",
+                        "left": "1px",
+                        "overflow": "hidden",
+                        "padding": 0,
+                        "position": "fixed",
+                        "top": "1px",
+                        "width": "1px",
+                      }
+                    }
+                    tabIndex={0}
+                  />
+                </ForwardRef>
+                <RequireSideCar
+                  noIsolation={true}
+                  setLockProps={[Function]}
+                  sideCar={
+                    Object {
+                      "assignMedium": [Function],
+                      "assignSyncMedium": [Function],
+                      "options": Object {
+                        "async": true,
+                        "ssr": false,
+                      },
+                      "read": [Function],
+                      "useMedium": [Function],
+                    }
                   }
-                }
-                tabIndex={0}
-              />
-            </FocusLock>
+                >
+                  <SideCar
+                    noIsolation={true}
+                    setLockProps={[Function]}
+                    sideCar={
+                      Object {
+                        "assignMedium": [Function],
+                        "assignSyncMedium": [Function],
+                        "options": Object {
+                          "async": true,
+                          "ssr": false,
+                        },
+                        "read": [Function],
+                        "useMedium": [Function],
+                      }
+                    }
+                  >
+                    <Effect
+                      noIsolation={true}
+                      setLockProps={[Function]}
+                    >
+                      <Component>
+                        <Sheet
+                          styles="
+ [data-focus-on-hidden] {
+   pointer-events: none !important;
+ }
+"
+                        />
+                      </Component>
+                    </Effect>
+                  </SideCar>
+                </RequireSideCar>
+              </ForwardRef>
+            </ForwardRef>
           </EuiFocusTrap>
         </EuiModal>
       </Portal>

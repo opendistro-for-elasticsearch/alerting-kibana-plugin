@@ -15,7 +15,7 @@ exports[`DashboardControls renders 1`] = `
         class="euiFormControlLayout__childrenWrapper"
       >
         <input
-          class="euiFieldSearch euiFieldSearch--fullWidth"
+          class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
           placeholder="Search"
           type="search"
           value=""
@@ -180,7 +180,7 @@ exports[`DashboardControls renders 1`] = `
             type="button"
           >
             <span
-              class="euiButtonEmpty__content"
+              class="euiButtonContent euiButtonEmpty__content"
             >
               <span
                 class="euiButtonEmpty__text"
@@ -196,13 +196,13 @@ exports[`DashboardControls renders 1`] = `
           <button
             aria-current="true"
             aria-label="Page 2 of 2"
-            class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+            class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiButtonEmpty-isDisabled euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
             data-test-subj="pagination-button-1"
             disabled=""
             type="button"
           >
             <span
-              class="euiButtonEmpty__content"
+              class="euiButtonContent euiButtonEmpty__content"
             >
               <span
                 class="euiButtonEmpty__text"
