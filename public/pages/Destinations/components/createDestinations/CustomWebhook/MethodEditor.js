@@ -29,5 +29,7 @@ const MethodEditor = ({ type }) => (
     />
 </Fragment>
 );
+
+MethodEditor.propTypes = propTypes;
       
 export default MethodEditor;
