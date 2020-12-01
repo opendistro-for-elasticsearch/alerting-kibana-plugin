@@ -143,6 +143,7 @@ class CreateDestination extends React.Component {
       if (resp.ok) {
         history.push(`/destinations`);
       } else {
+        // TODO: the notification doesn't have chance to show when no destination types is allowed to the user. Can modify the validation message instead
         backendErrorNotification(notifications, 'create', 'destination', resp);
       }
     } catch (e) {

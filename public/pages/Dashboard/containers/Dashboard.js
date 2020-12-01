@@ -222,6 +222,7 @@ export default class Dashboard extends Component {
         })
         .then((resp) => {
           if (!resp.ok) {
+            // TODO: check why the notification can not be shown when clicking the button in MonitorDetail page
             backendErrorNotification(notifications, 'acknowledge', 'alert', resp);
           }
         })

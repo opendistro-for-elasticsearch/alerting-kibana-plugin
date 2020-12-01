@@ -365,7 +365,6 @@ export default class MonitorDetails extends Component {
           httpClient={httpClient}
           location={location}
           history={history}
-          notification={notifications} // TODO: check the reason toast can be shown when clicking Ack button in this page
         />
       </div>
     );
