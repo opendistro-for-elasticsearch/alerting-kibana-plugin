@@ -1,6 +1,6 @@
 ## Version 1.12.0.0, 2020-11-30
 
-Compatible with Kibana 7.10.0.
+Compatible with Kibana 7.10.0
 
 ### Enhancements
   * Change the position of the plugin in the side bar ([#214](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/pull/214))
