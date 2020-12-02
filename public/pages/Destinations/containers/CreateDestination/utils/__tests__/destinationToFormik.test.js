@@ -50,6 +50,7 @@ describe('destinationToFormik', () => {
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
           url: 'https://custom.webhook',
           port: -1,
+          method: 'PUT',     
           query_params: { key1: 'value1', key2: 'Value2' },
           header_params: {
             'Content-Type': 'application/json',
@@ -68,6 +69,7 @@ describe('destinationToFormik', () => {
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
           url: 'https://custom.webhook',
           port: 8888,
+          method: 'PUT',
           query_params: { key1: 'value1', key2: 'Value2' },
           header_params: {
             'Content-Type': 'application/json',
@@ -87,6 +89,7 @@ describe('destinationToFormik', () => {
           host: 'https://custom.webhook',
           port: 80,
           path: '/my_custom_path',
+          method: 'PUT',
           query_params: { key1: 'value1', key2: 'Value2' },
           header_params: {
             'Content-Type': 'application/json',
