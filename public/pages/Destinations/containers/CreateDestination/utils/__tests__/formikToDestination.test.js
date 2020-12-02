@@ -45,6 +45,7 @@ describe('formikToDestination', () => {
         type: DESTINATION_TYPE.CUSTOM_HOOK,
         [DESTINATION_TYPE.CUSTOM_HOOK]: {
           url: 'https://custom.webhook',
+          method: 'PUT',
           queryParams: [
             {
               key: 'key1',

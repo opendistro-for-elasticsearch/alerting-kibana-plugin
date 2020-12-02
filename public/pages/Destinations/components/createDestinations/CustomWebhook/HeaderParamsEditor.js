@@ -34,7 +34,7 @@ const handleRenderKeyField = (fieldName, index) => (
     }}
     inputProps={{
       isInvalid,
-      disabled: index === 0, //Content-Type should be provided
+      disabled: false,
     }}
     name={fieldName}
   />
