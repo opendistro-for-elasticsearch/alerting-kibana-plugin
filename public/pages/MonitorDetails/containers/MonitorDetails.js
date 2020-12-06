@@ -159,6 +159,7 @@ export default class MonitorDetails extends Component {
         } else {
           console.error('Failed to update the monitor:', resp);
           backendErrorNotification(notifications, ...actionKeywords, resp);
+          this.setState({ updating: false }); // release the button
         }
         return resp;
       })
