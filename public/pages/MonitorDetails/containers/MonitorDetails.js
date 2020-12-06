@@ -365,6 +365,7 @@ export default class MonitorDetails extends Component {
           httpClient={httpClient}
           location={location}
           history={history}
+          notifications={notifications}
         />
       </div>
     );
