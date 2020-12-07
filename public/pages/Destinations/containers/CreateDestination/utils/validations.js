@@ -16,8 +16,11 @@
 import _ from 'lodash';
 import { INDEX } from '../../../../../../utils/constants';
 import { getAllowList } from '../../../utils/helpers';
+import { backendErrorNotification } from '../../../../../utils/helpers';
 
-export const validateDestinationName = (httpClient, destinationToEdit) => async (value) => {
+export const validateDestinationName = (httpClient, destinationToEdit, notifications) => async (
+  value
+) => {
   try {
     if (!value) throw 'Required';
     const options = {
@@ -27,7 +30,11 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
     const response = await httpClient.post('../api/alerting/monitors/_search', {
       body: JSON.stringify(options),
     });
-    if (_.get(response, 'resp.hits.total.value', 0)) {
+    if (!response.ok) {
+      backendErrorNotification(notifications, 'validate', 'destination name', response);
+      // TODO: response.ok can be 'false' if there is no alerting config index in the cluster
+      // throw 'To create the destination, contact your administrator to obtain the following required permission for at least one of your Security role(s): cluster:admin/opendistro/alerting/monitor/search';
+    } else if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!destinationToEdit) throw 'Destination name is already used';
       if (destinationToEdit && destinationToEdit.name !== value) {
         throw 'Destination name is already used';
@@ -44,8 +51,7 @@ export const validateDestinationType = (httpClient, notifications) => async (val
   // where a Destination type has been disallowed during form editing
   const allowList = await getAllowList(httpClient, notifications);
   if (allowList.length === 0) {
-    // TODO: check the permission name
-    return `To create a destination, contact your administrator to obtain the following required permissions for at least one of your Security role(s):/ncluster:monitor/state`;
+    return 'To select a type of destination, contact your administrator to obtain the following required permission for at least one of your Security role(s): cluster:monitor/state';
   } else if (!allowList.includes(value)) {
     return `Destination type [${value}] is disallowed`;
   }

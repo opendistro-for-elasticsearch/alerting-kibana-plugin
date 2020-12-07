@@ -21,12 +21,12 @@ import MonitorState from '../../components/MonitorState';
 import { hasError, isInvalid, required, validateMonitorName } from '../../../../utils/validate';
 import FormikFieldText from '../../../../components/FormControls/FormikFieldText';
 
-const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
+const ConfigureMonitor = ({ httpClient, monitorToEdit, notifications }) => (
   <ContentPanel title="Configure monitor" titleSize="s" bodyStyles={{ padding: 'initial' }}>
     <FormikFieldText
       name="name"
       formRow
-      fieldProps={{ validate: validateMonitorName(httpClient, monitorToEdit) }}
+      fieldProps={{ validate: validateMonitorName(httpClient, monitorToEdit, notifications) }}
       rowProps={{
         label: 'Monitor name',
         style: { paddingLeft: '10px' },
