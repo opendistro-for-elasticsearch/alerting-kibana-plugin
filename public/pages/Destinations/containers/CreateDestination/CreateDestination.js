@@ -194,7 +194,8 @@ class CreateDestination extends React.Component {
                     fieldProps={{
                       validate: validateDestinationName(
                         httpClient,
-                        _.get(location, 'state.destinationToEdit')
+                        _.get(location, 'state.destinationToEdit'),
+                        notifications
                       ),
                     }}
                     rowProps={{
