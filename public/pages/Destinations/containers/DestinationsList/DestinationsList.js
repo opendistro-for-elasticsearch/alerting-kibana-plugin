@@ -99,8 +99,8 @@ class DestinationsList extends React.Component {
   }
 
   async componentDidMount() {
-    const { httpClient } = this.props;
-    const allowList = await getAllowList(httpClient);
+    const { httpClient, notifications } = this.props;
+    const allowList = await getAllowList(httpClient, notifications);
     this.setState({ allowList });
 
     const { page, queryParams } = this.state;

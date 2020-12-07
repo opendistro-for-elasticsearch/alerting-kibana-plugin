@@ -56,9 +56,9 @@ class CreateDestination extends React.Component {
   }
 
   async componentDidMount() {
-    const { httpClient, location, edit, history } = this.props;
+    const { httpClient, location, edit, history, notifications } = this.props;
 
-    const allowList = await getAllowList(httpClient);
+    const allowList = await getAllowList(httpClient, notifications);
     this.setState({ allowList });
 
     let ifSeqNo, ifPrimaryTerm;
@@ -87,7 +87,7 @@ class CreateDestination extends React.Component {
   }
 
   getDestination = async (destinationId) => {
-    const { httpClient, history } = this.props;
+    const { httpClient, history, notifications } = this.props;
     try {
       const resp = await httpClient.get(`../api/alerting/destinations/${destinationId}`);
       if (resp.ok) {
@@ -99,6 +99,7 @@ class CreateDestination extends React.Component {
         });
       } else {
         // Handle error, show message in case of 404
+        backendErrorNotification(notifications, 'get', 'destination', resp);
         history.push(`/destinations`);
       }
     } catch (e) {
@@ -143,7 +144,6 @@ class CreateDestination extends React.Component {
       if (resp.ok) {
         history.push(`/destinations`);
       } else {
-        // TODO: the notification doesn't have chance to show when no destination types is allowed to the user. Can modify the validation message instead
         backendErrorNotification(notifications, 'create', 'destination', resp);
       }
     } catch (e) {
@@ -219,7 +219,7 @@ class CreateDestination extends React.Component {
                     name="type"
                     formRow
                     fieldProps={{
-                      validate: validateDestinationType(httpClient),
+                      validate: validateDestinationType(httpClient, notifications),
                     }}
                     rowProps={{
                       label: 'Type',

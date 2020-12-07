@@ -14,8 +14,9 @@
  */
 
 import { MAX_QUERY_RESULT_SIZE } from '../../../../../../utils/constants';
+import { backendErrorNotification } from '../../../../../../utils/helpers';
 
-export default async function getEmailGroups(httpClient, searchText = '') {
+export default async function getEmailGroups(httpClient, notifications, searchText = '') {
   try {
     const response = await httpClient.get('../api/alerting/destinations/email_groups', {
       query: { search: searchText, size: MAX_QUERY_RESULT_SIZE },
@@ -23,7 +24,8 @@ export default async function getEmailGroups(httpClient, searchText = '') {
     if (response.ok) {
       return response.emailGroups;
     } else {
-      console.log('Unable to get email groups', response.err);
+      console.log('Unable to get email groups', response.resp);
+      backendErrorNotification(notifications, 'get', 'email groups', response);
       return [];
     }
   } catch (err) {

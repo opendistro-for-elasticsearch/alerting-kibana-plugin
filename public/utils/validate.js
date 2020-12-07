@@ -59,6 +59,10 @@ export const validateMonitorName = (httpClient, monitorToEdit) => async (value) 
     const response = await httpClient.post('../api/alerting/monitors/_search', {
       body: JSON.stringify(options),
     });
+    if (!response.ok) {
+      // TODO
+      throw '';
+    }
     if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!monitorToEdit) throw 'Monitor name is already used';
       if (monitorToEdit && monitorToEdit.name !== value) {

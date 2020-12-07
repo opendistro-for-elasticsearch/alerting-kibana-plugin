@@ -14,8 +14,9 @@
  */
 
 import { MAX_QUERY_RESULT_SIZE } from '../../../../../../utils/constants';
+import { backendErrorNotification } from '../../../../../../utils/helpers';
 
-export default async function getSenders(httpClient, searchText = '') {
+export default async function getSenders(httpClient, notifications, searchText = '') {
   try {
     const response = await httpClient.get('../api/alerting/destinations/email_accounts', {
       query: { search: searchText, size: MAX_QUERY_RESULT_SIZE },
@@ -23,7 +24,8 @@ export default async function getSenders(httpClient, searchText = '') {
     if (response.ok) {
       return response.emailAccounts;
     } else {
-      console.log('Unable to get email accounts', response.err);
+      console.log('Unable to get email accounts', response.resp);
+      backendErrorNotification(notifications, 'get', 'email accounts', response);
       return [];
     }
   } catch (err) {

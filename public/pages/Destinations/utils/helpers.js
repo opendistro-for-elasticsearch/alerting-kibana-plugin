@@ -15,8 +15,9 @@
 
 import _ from 'lodash';
 import { ALLOW_LIST_SETTING_PATH } from './constants';
+import { backendErrorNotification } from '../../../utils/helpers';
 
-export async function getAllowList(httpClient) {
+export async function getAllowList(httpClient, notifications) {
   try {
     const response = await httpClient.get('../api/alerting/_settings');
     if (response.ok) {
@@ -29,6 +30,7 @@ export async function getAllowList(httpClient) {
       return persistentList || transientList || defaultList;
     } else {
       console.log('Unable to get destination allow_list', response.resp);
+      backendErrorNotification(notifications, 'get', 'destination allow_list', response);
       return [];
     }
   } catch (err) {

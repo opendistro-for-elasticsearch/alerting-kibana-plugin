@@ -43,8 +43,8 @@ export default class EmailRecipients extends React.Component {
   }
 
   async componentDidMount() {
-    const { httpClient } = this.props;
-    const allowList = await getAllowList(httpClient);
+    const { httpClient, notifications } = this.props;
+    const allowList = await getAllowList(httpClient, notifications);
     this.setState({ allowList });
 
     this.loadData();
@@ -79,10 +79,10 @@ export default class EmailRecipients extends React.Component {
 
   // TODO: Only loading email groups here at the moment, should add emails as options too
   loadData = async (searchText = '') => {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     this.setState({ isLoading: true });
 
-    const emailGroups = await getEmailGroups(httpClient);
+    const emailGroups = await getEmailGroups(httpClient, notifications);
     const emailGroupOptions = emailGroups.map((emailGroup) => ({
       label: emailGroup.name,
       value: emailGroup.id,

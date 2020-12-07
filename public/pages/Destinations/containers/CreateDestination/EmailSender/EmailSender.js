@@ -42,8 +42,8 @@ export default class EmailSender extends React.Component {
   }
 
   async componentDidMount() {
-    const { httpClient } = this.props;
-    const allowList = await getAllowList(httpClient);
+    const { httpClient, notifications } = this.props;
+    const allowList = await getAllowList(httpClient, notifications);
     this.setState({ allowList });
 
     this.loadSenders();
@@ -64,10 +64,10 @@ export default class EmailSender extends React.Component {
   };
 
   loadSenders = async () => {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     this.setState({ loadingSenders: true });
 
-    const senders = await getSenders(httpClient);
+    const senders = await getSenders(httpClient, notifications);
     const senderOptions = senders.map((sender) => ({
       label: sender.name,
       value: sender.id,
