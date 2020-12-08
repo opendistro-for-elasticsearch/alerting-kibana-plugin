@@ -16,11 +16,8 @@
 import _ from 'lodash';
 import { INDEX } from '../../../../../../utils/constants';
 import { getAllowList } from '../../../utils/helpers';
-import { backendErrorNotification } from '../../../../../utils/helpers';
 
-export const validateDestinationName = (httpClient, destinationToEdit, notifications) => async (
-  value
-) => {
+export const validateDestinationName = (httpClient, destinationToEdit) => async (value) => {
   try {
     if (!value) throw 'Required';
     const options = {
@@ -31,8 +28,8 @@ export const validateDestinationName = (httpClient, destinationToEdit, notificat
       body: JSON.stringify(options),
     });
     if (!response.ok) {
-      backendErrorNotification(notifications, 'validate', 'destination name', response);
-      // TODO: response.ok can be 'false' if there is no alerting config index in the cluster
+      // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+      // backendErrorNotification(notifications, 'validate', 'destination name', response);
       // throw 'To create the destination, contact your administrator to obtain the following required permission for at least one of your Security role(s): cluster:admin/opendistro/alerting/monitor/search';
     } else if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!destinationToEdit) throw 'Destination name is already used';

@@ -97,10 +97,10 @@ export default class ManageEmailGroups extends React.Component {
   }
 
   loadInitialValues = async () => {
-    const { httpClient, notifications } = this.props;
+    const { httpClient } = this.props;
     this.setState({ loadingEmailGroups: true });
 
-    const emailGroups = await getEmailGroups(httpClient, notifications);
+    const emailGroups = await getEmailGroups(httpClient);
     const initialValues = getInitialValues(emailGroups);
 
     this.setState({

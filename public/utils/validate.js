@@ -15,7 +15,6 @@
 
 import _ from 'lodash';
 import { INDEX, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../utils/constants';
-import { backendErrorNotification } from './helpers';
 
 // TODO: Use a validation framework to clean all of this up or create own.
 
@@ -50,7 +49,7 @@ export const required = (value) => {
   if (!value) return 'Required';
 };
 
-export const validateMonitorName = (httpClient, monitorToEdit, notifications) => async (value) => {
+export const validateMonitorName = (httpClient, monitorToEdit) => async (value) => {
   try {
     if (!value) throw 'Required';
     const options = {
@@ -61,8 +60,8 @@ export const validateMonitorName = (httpClient, monitorToEdit, notifications) =>
       body: JSON.stringify(options),
     });
     if (!response.ok) {
-      // TODO: response.ok can be 'false' if there is no alerting config index in the cluster
-      backendErrorNotification(notifications, 'validate', 'monitor name', response);
+      // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+      // backendErrorNotification(notifications, 'validate', 'monitor name', response);
       //throw 'To create the monitor, contact your administrator to obtain the following required permission for at least one of your Security role(s): cluster:admin/opendistro/alerting/monitor/search';
     } else if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!monitorToEdit) throw 'Monitor name is already used';

@@ -14,9 +14,8 @@
  */
 
 import { MAX_QUERY_RESULT_SIZE } from '../../../../../../utils/constants';
-import { backendErrorNotification } from '../../../../../../utils/helpers';
 
-export default async function getSenders(httpClient, notifications, searchText = '') {
+export default async function getSenders(httpClient, searchText = '') {
   try {
     const response = await httpClient.get('../api/alerting/destinations/email_accounts', {
       query: { search: searchText, size: MAX_QUERY_RESULT_SIZE },
@@ -25,7 +24,8 @@ export default async function getSenders(httpClient, notifications, searchText =
       return response.emailAccounts;
     } else {
       console.log('Unable to get email accounts', response.resp);
-      backendErrorNotification(notifications, 'get', 'email accounts', response);
+      // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+      // backendErrorNotification(notifications, 'get', 'email accounts', response);
       return [];
     }
   } catch (err) {

@@ -143,11 +143,7 @@ export default class CreateMonitor extends Component {
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
               </EuiTitle>
               <EuiSpacer />
-              <ConfigureMonitor
-                httpClient={httpClient}
-                monitorToEdit={monitorToEdit}
-                notifications={notifications}
-              />
+              <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
               <DefineMonitor
                 values={values}

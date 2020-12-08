@@ -142,7 +142,7 @@ export default class Monitors extends Component {
     try {
       const params = { from, size, search, sortField, sortDirection, state };
       const queryParamsString = queryString.stringify(params);
-      const { httpClient, history, notifications } = this.props;
+      const { httpClient, history } = this.props;
       history.replace({ ...this.props.location, search: queryParamsString });
       const response = await httpClient.get('../api/alerting/monitors', { query: params });
       if (response.ok) {
@@ -150,7 +150,8 @@ export default class Monitors extends Component {
         this.setState({ monitors, totalMonitors });
       } else {
         console.log('error getting monitors:', response);
-        backendErrorNotification(notifications, 'get', 'monitors', response);
+        // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+        // backendErrorNotification(notifications, 'get', 'monitors', response);
       }
     } catch (err) {
       console.error(err);

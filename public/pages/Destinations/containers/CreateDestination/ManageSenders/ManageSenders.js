@@ -82,10 +82,10 @@ export default class ManageSenders extends React.Component {
   }
 
   loadInitialValues = async () => {
-    const { httpClient, notifications } = this.props;
+    const { httpClient } = this.props;
     this.setState({ loadingSenders: true });
 
-    const senders = await getSenders(httpClient, notifications);
+    const senders = await getSenders(httpClient);
     const initialValues = getInitialValues(senders);
 
     this.setState({

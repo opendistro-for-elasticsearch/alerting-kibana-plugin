@@ -206,7 +206,7 @@ class DestinationsList extends React.Component {
       this.setState({
         isDestinationLoading: true,
       });
-      const { history, httpClient, notifications } = this.props;
+      const { history, httpClient } = this.props;
       const queryParms = queryString.stringify({ from, ...params });
       history.replace({
         ...this.props.location,
@@ -223,7 +223,8 @@ class DestinationsList extends React.Component {
             totalDestinations: resp.totalDestinations,
           });
         } else {
-          backendErrorNotification(notifications, 'get', 'destinations', resp);
+          // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+          // backendErrorNotification(notifications, 'get', 'destinations', resp);
           this.setState({
             isDestinationLoading: false,
           });

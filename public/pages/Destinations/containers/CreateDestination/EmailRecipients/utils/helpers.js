@@ -14,9 +14,8 @@
  */
 
 import { MAX_QUERY_RESULT_SIZE } from '../../../../../../utils/constants';
-import { backendErrorNotification } from '../../../../../../utils/helpers';
 
-export default async function getEmailGroups(httpClient, notifications, searchText = '') {
+export default async function getEmailGroups(httpClient, searchText = '') {
   try {
     const response = await httpClient.get('../api/alerting/destinations/email_groups', {
       query: { search: searchText, size: MAX_QUERY_RESULT_SIZE },
@@ -25,7 +24,8 @@ export default async function getEmailGroups(httpClient, notifications, searchTe
       return response.emailGroups;
     } else {
       console.log('Unable to get email groups', response.resp);
-      backendErrorNotification(notifications, 'get', 'email groups', response);
+      // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+      // backendErrorNotification(notifications, 'get', 'email groups', response);
       return [];
     }
   } catch (err) {

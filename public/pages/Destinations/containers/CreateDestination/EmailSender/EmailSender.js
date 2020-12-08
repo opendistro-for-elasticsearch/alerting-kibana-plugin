@@ -64,10 +64,10 @@ export default class EmailSender extends React.Component {
   };
 
   loadSenders = async () => {
-    const { httpClient, notifications } = this.props;
+    const { httpClient } = this.props;
     this.setState({ loadingSenders: true });
 
-    const senders = await getSenders(httpClient, notifications);
+    const senders = await getSenders(httpClient);
     const senderOptions = senders.map((sender) => ({
       label: sender.name,
       value: sender.id,
