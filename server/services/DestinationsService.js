@@ -286,7 +286,7 @@ export default class DestinationsService {
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (emailAccount) {
-        return resp.ok({
+        return res.ok({
           body: {
             ok: true,
             resp: emailAccount,
@@ -473,7 +473,7 @@ export default class DestinationsService {
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (emailGroup) {
-        return resp.ok({
+        return res.ok({
           body: {
             ok: true,
             resp: emailGroup,
