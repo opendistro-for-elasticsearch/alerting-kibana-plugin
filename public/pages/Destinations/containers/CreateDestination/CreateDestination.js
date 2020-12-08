@@ -167,7 +167,7 @@ class CreateDestination extends React.Component {
   };
 
   render() {
-    const { edit, httpClient, location } = this.props;
+    const { edit, httpClient, location, notifications } = this.props;
     const { initialValues } = this.state;
     return (
       <div style={{ padding: '25px 50px' }}>
@@ -232,7 +232,12 @@ class CreateDestination extends React.Component {
                   <EuiSpacer size="m" />
                   <SubHeader title={<h4>Settings</h4>} description={''} />
                   <EuiSpacer size="m" />
-                  {destinationType[values.type]({ httpClient, values, type: values.type })}
+                  {destinationType[values.type]({
+                    httpClient,
+                    values,
+                    type: values.type,
+                    notifications,
+                  })}
                 </div>
                 <EuiSpacer size="m" />
               </ContentPanel>
