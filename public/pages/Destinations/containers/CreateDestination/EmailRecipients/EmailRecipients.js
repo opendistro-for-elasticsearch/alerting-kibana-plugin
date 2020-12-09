@@ -101,7 +101,7 @@ export default class EmailRecipients extends React.Component {
   };
 
   render() {
-    const { httpClient, type } = this.props;
+    const { httpClient, type, notifications } = this.props;
     const { recipientOptions, isLoading, showManageEmailGroupsModal } = this.state;
     return (
       <Fragment>
@@ -159,6 +159,7 @@ export default class EmailRecipients extends React.Component {
           isVisible={showManageEmailGroupsModal}
           onClickCancel={this.onClickCancel}
           onClickSave={this.onClickSave}
+          notifications={notifications}
         />
       </Fragment>
     );
@@ -168,4 +169,5 @@ export default class EmailRecipients extends React.Component {
 EmailRecipients.propTypes = {
   httpClient: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
