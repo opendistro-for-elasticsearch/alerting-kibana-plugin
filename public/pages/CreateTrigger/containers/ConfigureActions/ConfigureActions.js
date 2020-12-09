@@ -20,7 +20,7 @@ import ActionEmptyPrompt from '../../components/ActionEmptyPrompt';
 import AddActionButton from '../../components/AddActionButton';
 import ContentPanel from '../../../../components/ContentPanel';
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
-import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../../Destinations/utils/constants';
+import { DESTINATION_OPTIONS } from '../../../Destinations/utils/constants';
 import { getAllowList } from '../../../Destinations/utils/helpers';
 import { MAX_QUERY_RESULT_SIZE } from '../../../../utils/constants';
 import { backendErrorNotification } from '../../../../utils/helpers';
@@ -44,9 +44,9 @@ class ConfigureActions extends React.Component {
   }
 
   async componentDidMount() {
-    const { httpClient, notifications } = this.props;
+    const { httpClient } = this.props;
 
-    const allowList = await getAllowList(httpClient, notifications);
+    const allowList = await getAllowList(httpClient);
     this.setState({ allowList });
 
     this.loadDestinations();

@@ -43,10 +43,10 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
   }
 };
 
-export const validateDestinationType = (httpClient, notifications) => async (value) => {
+export const validateDestinationType = (httpClient) => async (value) => {
   // Check if Destination type is allowed to notify users in the cases
   // where a Destination type has been disallowed during form editing
-  const allowList = await getAllowList(httpClient, notifications);
+  const allowList = await getAllowList(httpClient);
   if (allowList.length === 0) {
     return 'To select a type of destination, contact your administrator to obtain the following required permission for at least one of your Security role(s): cluster:monitor/state';
   } else if (!allowList.includes(value)) {

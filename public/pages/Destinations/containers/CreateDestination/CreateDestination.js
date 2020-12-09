@@ -56,9 +56,9 @@ class CreateDestination extends React.Component {
   }
 
   async componentDidMount() {
-    const { httpClient, location, edit, history, notifications } = this.props;
+    const { httpClient, location, edit, history } = this.props;
 
-    const allowList = await getAllowList(httpClient, notifications);
+    const allowList = await getAllowList(httpClient);
     this.setState({ allowList });
 
     let ifSeqNo, ifPrimaryTerm;

@@ -43,8 +43,8 @@ export default class EmailRecipients extends React.Component {
   }
 
   async componentDidMount() {
-    const { httpClient, notifications } = this.props;
-    const allowList = await getAllowList(httpClient, notifications);
+    const { httpClient } = this.props;
+    const allowList = await getAllowList(httpClient);
     this.setState({ allowList });
 
     this.loadData();
