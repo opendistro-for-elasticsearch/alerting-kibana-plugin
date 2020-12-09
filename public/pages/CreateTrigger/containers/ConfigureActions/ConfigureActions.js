@@ -79,7 +79,7 @@ class ConfigureActions extends React.Component {
           arrayHelpers.insert(0, FORMIK_INITIAL_ACTION_VALUES);
         }
       } else {
-        backendErrorNotification(notifications, 'load', 'destinations', response);
+        backendErrorNotification(notifications, 'load', 'destinations', response.err);
       }
     } catch (err) {
       console.error(err);
@@ -103,7 +103,7 @@ class ConfigureActions extends React.Component {
       });
       if (!response.ok) {
         console.error('There was an error trying to send test message', response.resp);
-        backendErrorNotification(notifications, 'send', 'test message', response);
+        backendErrorNotification(notifications, 'send', 'test message', response.resp);
       }
     } catch (err) {
       console.error('There was an error trying to send test message', err);

@@ -20,13 +20,13 @@ describe('backendErrorNotification', () => {
   test('can generate error notifications as desired', () => {
     const actionName = 'create';
     const objectName = 'monitor';
-    const httpResponse = { ok: false, resp: 'test' };
+    const response = { ok: false, resp: 'test' };
     const toastProps = {
       text: 'test',
       title: 'Failed to create the monitor',
       toastLifeTimeMs: 20000,
     };
-    backendErrorNotification(coreMock.notifications, actionName, objectName, httpResponse);
+    backendErrorNotification(coreMock.notifications, actionName, objectName, response.resp);
     expect(coreMock.notifications.toasts.addDanger).toHaveBeenCalledWith(toastProps);
   });
 });

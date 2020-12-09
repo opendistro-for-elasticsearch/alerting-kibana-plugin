@@ -135,7 +135,7 @@ export default class CreateTrigger extends Component {
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
-          backendErrorNotification(notifications, 'run', 'trigger', resp);
+          backendErrorNotification(notifications, 'run', 'trigger', resp.resp);
         }
       })
       .catch((err) => {

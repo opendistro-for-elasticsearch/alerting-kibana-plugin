@@ -131,7 +131,7 @@ class DefineMonitor extends Component {
         this.setState({ plugins: pluginsResponse.resp.map((plugin) => plugin.component) });
       } else {
         console.error('There was a problem getting plugins list');
-        backendErrorNotification(notifications, 'get', 'plugins list', pluginsResponse);
+        backendErrorNotification(notifications, 'get', 'plugins list', pluginsResponse.resp);
       }
     } catch (e) {
       console.error('There was a problem getting plugins list', e);
@@ -203,7 +203,7 @@ class DefineMonitor extends Component {
         this.setState({ response, formikSnapshot, performanceResponse });
       } else {
         console.error('There was an error running the query', queryResponse.resp);
-        backendErrorNotification(notifications, 'run', 'query', queryResponse);
+        backendErrorNotification(notifications, 'run', 'query', queryResponse.resp);
         this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
       }
     } catch (err) {

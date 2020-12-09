@@ -23,9 +23,9 @@ export default async function getEmailGroups(httpClient, searchText = '') {
     if (response.ok) {
       return response.emailGroups;
     } else {
-      console.log('Unable to get email groups', response.resp);
+      console.log('Unable to get email groups', response.err);
       // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
-      // backendErrorNotification(notifications, 'get', 'email groups', response);
+      // backendErrorNotification(notifications, 'get', 'email groups', response.err);
       return [];
     }
   } catch (err) {

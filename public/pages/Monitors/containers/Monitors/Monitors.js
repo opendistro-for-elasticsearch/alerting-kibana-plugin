@@ -151,7 +151,7 @@ export default class Monitors extends Component {
       } else {
         console.log('error getting monitors:', response);
         // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
-        // backendErrorNotification(notifications, 'get', 'monitors', response);
+        // backendErrorNotification(notifications, 'get', 'monitors', response.resp);
       }
     } catch (err) {
       console.error(err);
@@ -187,7 +187,7 @@ export default class Monitors extends Component {
       })
       .then((resp) => {
         if (!resp.ok) {
-          backendErrorNotification(notifications, 'update', 'monitor', resp);
+          backendErrorNotification(notifications, 'update', 'monitor', resp.resp);
         }
       })
       .catch((err) => err);
@@ -200,7 +200,7 @@ export default class Monitors extends Component {
       .delete(`../api/alerting/monitors/${id}`, { query: { version } })
       .then((resp) => {
         if (!resp.ok) {
-          backendErrorNotification(notifications, 'delete', 'monitor', resp);
+          backendErrorNotification(notifications, 'delete', 'monitor', resp.resp);
         }
       })
       .catch((err) => err);
@@ -251,7 +251,7 @@ export default class Monitors extends Component {
         })
         .then((resp) => {
           if (!resp.ok) {
-            backendErrorNotification(notifications, 'acknowledge', 'alert', resp);
+            backendErrorNotification(notifications, 'acknowledge', 'alert', resp.resp);
           }
         })
         .catch((error) => error)
@@ -329,7 +329,7 @@ export default class Monitors extends Component {
       });
     } else {
       console.error(response);
-      backendErrorNotification(notifications, 'get', 'alerts', response);
+      backendErrorNotification(notifications, 'get', 'alerts', response.error);
     }
   }
 

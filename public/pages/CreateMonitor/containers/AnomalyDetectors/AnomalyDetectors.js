@@ -48,7 +48,7 @@ class AnomalyDetectors extends React.Component {
         }));
         this.setState({ detectorOptions });
       } else {
-        backendErrorNotification(notifications, 'get', 'detectors', response);
+        backendErrorNotification(notifications, 'get', 'detectors', response.resp);
       }
     } catch (err) {
       console.error(err);

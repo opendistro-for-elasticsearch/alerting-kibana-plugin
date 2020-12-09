@@ -158,7 +158,7 @@ export default class MonitorDetails extends Component {
           this.setState({ monitorVersion, updating: false });
         } else {
           console.error('Failed to update the monitor:', resp);
-          backendErrorNotification(notifications, ...actionKeywords, resp);
+          backendErrorNotification(notifications, ...actionKeywords, resp.resp);
           this.setState({ updating: false }); // release the button
         }
         return resp;
@@ -356,6 +356,7 @@ export default class MonitorDetails extends Component {
             onShowTrigger={this.onCreateTrigger}
             triggers={monitor.triggers}
             isDarkMode={isDarkMode}
+            notifications={notifications}
           />
         </div>
         <EuiSpacer />

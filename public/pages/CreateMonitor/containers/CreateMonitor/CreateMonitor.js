@@ -90,7 +90,7 @@ export default class CreateMonitor extends Component {
         );
       } else {
         console.log('Failed to create:', resp);
-        backendErrorNotification(notifications, 'create', 'monitor', resp);
+        backendErrorNotification(notifications, 'create', 'monitor', resp.resp);
       }
     } catch (err) {
       console.error(err);

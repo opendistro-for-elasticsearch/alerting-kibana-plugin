@@ -73,7 +73,7 @@ class AnomalyDetectorData extends React.Component {
         this.setState({
           isLoading: false,
         });
-        backendErrorNotification(notifications, 'get', 'detector results', response);
+        backendErrorNotification(notifications, 'get', 'detector results', response.error);
       }
     } catch (err) {
       console.error('Unable to get detectorResults', err);

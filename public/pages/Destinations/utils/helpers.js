@@ -30,7 +30,7 @@ export async function getAllowList(httpClient, notifications) {
       return persistentList || transientList || defaultList;
     } else {
       console.log('Unable to get destination allow_list', response.resp);
-      backendErrorNotification(notifications, 'get', 'destination allow_list', response);
+      backendErrorNotification(notifications, 'get', 'destination allow_list', response.resp);
       return [];
     }
   } catch (err) {

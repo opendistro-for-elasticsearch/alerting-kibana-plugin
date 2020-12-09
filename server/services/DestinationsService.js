@@ -190,7 +190,7 @@ export default class DestinationsService {
       return res.ok({
         body: {
           ok: false,
-          resp: err.message,
+          err: err.message,
         },
       });
     }
@@ -377,7 +377,7 @@ export default class DestinationsService {
       return res.ok({
         body: {
           ok: false,
-          resp: err.message,
+          err: err.message,
         },
       });
     }
@@ -473,7 +473,7 @@ export default class DestinationsService {
       const ifSeqNo = _.get(getResponse, '_seq_no', null);
       const ifPrimaryTerm = _.get(getResponse, '_primary_term', null);
       if (emailGroup) {
-        return resp.ok({
+        return res.ok({
           body: {
             ok: true,
             resp: emailGroup,
@@ -564,7 +564,7 @@ export default class DestinationsService {
       return res.ok({
         body: {
           ok: false,
-          resp: err.message,
+          err: err.message,
         },
       });
     }

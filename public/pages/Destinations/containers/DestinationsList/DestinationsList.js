@@ -157,7 +157,7 @@ class DestinationsList extends React.Component {
         // TODO::handle error
         //Something went wrong unable to delete if trying to delete already deleted destination
         console.log('Unable to delete destination');
-        backendErrorNotification(notifications, 'delete', 'destination', resp);
+        backendErrorNotification(notifications, 'delete', 'destination', resp.resp);
       }
       this.setState({
         showDeleteConfirmation: false,
@@ -224,7 +224,7 @@ class DestinationsList extends React.Component {
           });
         } else {
           // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
-          // backendErrorNotification(notifications, 'get', 'destinations', resp);
+          // backendErrorNotification(notifications, 'get', 'destinations', resp.err);
           this.setState({
             isDestinationLoading: false,
           });

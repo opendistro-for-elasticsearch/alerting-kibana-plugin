@@ -99,7 +99,7 @@ class CreateDestination extends React.Component {
         });
       } else {
         // Handle error, show message in case of 404
-        backendErrorNotification(notifications, 'get', 'destination', resp);
+        backendErrorNotification(notifications, 'get', 'destination', resp.resp);
         history.push(`/destinations`);
       }
     } catch (e) {
@@ -144,7 +144,7 @@ class CreateDestination extends React.Component {
       if (resp.ok) {
         history.push(`/destinations`);
       } else {
-        backendErrorNotification(notifications, 'create', 'destination', resp);
+        backendErrorNotification(notifications, 'create', 'destination', resp.resp);
       }
     } catch (e) {
       setSubmitting(false);
