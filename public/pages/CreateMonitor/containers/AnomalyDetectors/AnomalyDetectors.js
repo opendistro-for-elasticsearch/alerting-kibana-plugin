@@ -48,7 +48,8 @@ class AnomalyDetectors extends React.Component {
         }));
         this.setState({ detectorOptions });
       } else {
-        backendErrorNotification(notifications, 'get', 'detectors', response.resp);
+        // TODO: 'response.ok' is 'false' when there is no anomaly-detection config index in the cluster, and notification should not be shown to new Anomaly-Detection users
+        // backendErrorNotification(notifications, 'get', 'detectors', response.resp);
       }
     } catch (err) {
       console.error(err);
