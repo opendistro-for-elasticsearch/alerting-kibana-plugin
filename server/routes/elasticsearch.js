@@ -32,7 +32,9 @@ export default function (services, router) {
     {
       path: '/api/alerting/_indices',
       validate: {
-        body: schema.any(),
+        body: schema.object({
+          index: schema.string(),
+        }),
       },
     },
     elasticsearchService.getIndices
@@ -42,7 +44,9 @@ export default function (services, router) {
     {
       path: '/api/alerting/_aliases',
       validate: {
-        body: schema.any(),
+        body: schema.object({
+          alias: schema.string(),
+        }),
       },
     },
     elasticsearchService.getAliases
@@ -52,7 +56,9 @@ export default function (services, router) {
     {
       path: '/api/alerting/_mappings',
       validate: {
-        body: schema.any(),
+        body: schema.object({
+          index: schema.arrayOf(schema.string()),
+        }),
       },
     },
     elasticsearchService.getMappings

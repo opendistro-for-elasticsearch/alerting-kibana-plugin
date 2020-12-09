@@ -82,7 +82,7 @@ export default class ElasticsearchService {
   getAliases = async (context, req, res) => {
     try {
       const { alias } = req.body;
-      const { callAsCurrentUser } = this.esDriver.asScoped(res);
+      const { callAsCurrentUser } = this.esDriver.asScoped(req);
       const aliases = await callAsCurrentUser('cat.aliases', {
         alias,
         format: 'json',
@@ -107,9 +107,9 @@ export default class ElasticsearchService {
 
   getMappings = async (context, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.body) };
+      const { index } = req.body;
       const { callAsCurrentUser } = this.esDriver.asScoped(req);
-      const mappings = await callAsCurrentUser('indices.getMapping', params);
+      const mappings = await callAsCurrentUser('indices.getMapping', { index });
       return res.ok({
         body: {
           ok: true,

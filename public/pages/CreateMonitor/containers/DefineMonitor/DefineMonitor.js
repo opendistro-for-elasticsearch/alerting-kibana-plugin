@@ -231,7 +231,7 @@ class DefineMonitor extends Component {
 
     try {
       const response = await this.props.httpClient.post('../api/alerting/_mappings', {
-        body: JSON.stringify(index),
+        body: JSON.stringify({ index }),
       });
       if (response.ok) {
         return response.resp;
