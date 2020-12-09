@@ -121,7 +121,7 @@ class MonitorIndex extends React.Component {
     }
     try {
       const response = await this.props.httpClient.post('../api/alerting/_indices', {
-        body: JSON.stringify(index),
+        body: JSON.stringify({ index }),
       });
       if (response.ok) {
         const indices = response.resp.map(({ health, index, status }) => ({
@@ -151,7 +151,7 @@ class MonitorIndex extends React.Component {
 
     try {
       const response = await this.props.httpClient.post('../api/alerting/_aliases', {
-        body: JSON.stringify(alias),
+        body: JSON.stringify({ alias }),
       });
       if (response.ok) {
         const indices = response.resp.map(({ alias, index }) => ({ label: alias, index }));
