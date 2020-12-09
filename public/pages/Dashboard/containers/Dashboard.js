@@ -193,7 +193,7 @@ export default class Dashboard extends Component {
           });
         } else {
           console.log('error getting alerts:', resp);
-          backendErrorNotification(notifications, 'get', 'alerts', resp.error);
+          backendErrorNotification(notifications, 'get', 'alerts', resp.err);
         }
       });
     },

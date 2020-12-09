@@ -248,7 +248,7 @@ class MonitorHistory extends PureComponent {
         alerts = resp.alerts;
       } else {
         console.log('error getting alerts:', resp);
-        backendErrorNotification(notifications, 'get', 'alerts', resp.error);
+        backendErrorNotification(notifications, 'get', 'alerts', resp.err);
         alerts = [];
       }
 

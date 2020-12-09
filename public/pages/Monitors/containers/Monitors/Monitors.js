@@ -329,7 +329,7 @@ export default class Monitors extends Component {
       });
     } else {
       console.error(response);
-      backendErrorNotification(notifications, 'get', 'alerts', response.error);
+      backendErrorNotification(notifications, 'get', 'alerts', response.err);
     }
   }
 
