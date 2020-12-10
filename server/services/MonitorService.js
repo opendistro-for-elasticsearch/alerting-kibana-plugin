@@ -24,7 +24,7 @@ export default class MonitorService {
 
   createMonitor = async (context, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.body) };
+      const params = { body: req.body };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const createResponse = await callAsCurrentUser('alerting.createMonitor', params);
       return res.ok({
@@ -137,7 +137,7 @@ export default class MonitorService {
     try {
       const { id } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
-      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: JSON.stringify(req.body) };
+      const params = { monitorId: id, ifSeqNo, ifPrimaryTerm, body: req.body };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const updateResponse = await callAsCurrentUser('alerting.updateMonitor', params);
       const { _version, _id } = updateResponse;
@@ -192,7 +192,7 @@ export default class MonitorService {
       }
 
       const params = {
-        body: JSON.stringify({
+        body: {
           seq_no_primary_term: true,
           version: true,
           ...monitorSortPageData,
@@ -202,7 +202,7 @@ export default class MonitorService {
               must,
             },
           },
-        }),
+        },
       };
 
       const { callAsCurrentUser: alertingCallAsCurrentUser } = await this.esDriver.asScoped(req);
@@ -353,7 +353,7 @@ export default class MonitorService {
       const { id } = req.params;
       const params = {
         monitorId: id,
-        body: JSON.stringify(req.body),
+        body: req.body,
       };
       const { callAsCurrentUser } = this.esDriver.asScoped(req);
       const acknowledgeResponse = await callAsCurrentUser('alerting.acknowledgeAlerts', params);
@@ -378,7 +378,7 @@ export default class MonitorService {
     try {
       const { dryrun = 'true' } = req.query;
       const params = {
-        body: JSON.stringify(req.body),
+        body: req.body,
         dryrun,
       };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
