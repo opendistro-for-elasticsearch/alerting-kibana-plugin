@@ -22,7 +22,7 @@ export default class DestinationsService {
 
   createDestination = async (context, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.body) };
+      const params = { body: req.body };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const createResponse = await callAsCurrentUser('alerting.createDestination', params);
       return res.ok({
@@ -47,7 +47,7 @@ export default class DestinationsService {
       const { destinationId } = req.params;
       const { ifSeqNo, ifPrimaryTerm } = req.query;
       const params = {
-        body: JSON.stringify(req.body),
+        body: req.body,
         destinationId,
         ifSeqNo,
         ifPrimaryTerm,
@@ -204,7 +204,7 @@ export default class DestinationsService {
 
   createEmailAccount = async (context, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.body) };
+      const params = { body: req.body };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const createResponse = await callAsCurrentUser('alerting.createEmailAccount', params);
       return res.ok({
@@ -232,7 +232,7 @@ export default class DestinationsService {
         emailAccountId: id,
         ifSeqNo,
         ifPrimaryTerm,
-        body: JSON.stringify(req.body),
+        body: req.body,
       };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const updateResponse = await callAsCurrentUser('alerting.updateEmailAccount', params);
@@ -391,7 +391,7 @@ export default class DestinationsService {
 
   createEmailGroup = async (context, req, res) => {
     try {
-      const params = { body: JSON.stringify(req.body) };
+      const params = { body: req.body };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const createResponse = await callAsCurrentUser('alerting.createEmailGroup', params);
       return res.ok({
@@ -419,7 +419,7 @@ export default class DestinationsService {
         emailGroupId: id,
         ifSeqNo,
         ifPrimaryTerm,
-        body: JSON.stringify(req.body),
+        body: req.body,
       };
       const { callAsCurrentUser } = await this.esDriver.asScoped(req);
       const updateResponse = await callAsCurrentUser('alerting.updateEmailGroup', params);
