@@ -98,7 +98,7 @@ export default class AlertService {
       return res.ok({
         body: {
           ok: false,
-          error: err.message,
+          err: err.message,
         },
       });
     }

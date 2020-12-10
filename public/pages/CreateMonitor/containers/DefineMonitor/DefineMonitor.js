@@ -30,6 +30,7 @@ import { getPathsPerDataType } from './utils/mappings';
 import { buildSearchRequest } from './utils/searchRequests';
 import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 function renderEmptyMessage(message) {
   return (
@@ -164,7 +165,7 @@ class DefineMonitor extends Component {
   }
 
   async onRunQuery() {
-    const { httpClient, values } = this.props;
+    const { httpClient, values, notifications } = this.props;
     const formikSnapshot = _.cloneDeep(values);
 
     // If we are running a visual graph query, then we need to run two separate queries
@@ -201,7 +202,7 @@ class DefineMonitor extends Component {
         this.setState({ response, formikSnapshot, performanceResponse });
       } else {
         console.error('There was an error running the query', queryResponse.resp);
-        this.backendErrorHandler('run', queryResponse);
+        backendErrorNotification(notifications, 'run', 'query', queryResponse.resp);
         this.setState({ response: null, formikSnapshot: null, performanceResponse: null });
       }
     } catch (err) {
@@ -335,15 +336,6 @@ class DefineMonitor extends Component {
     const { values } = this.props;
     const { plugins } = this.state;
     return values.searchType == SEARCH_TYPE.AD && plugins.indexOf(ES_AD_PLUGIN) == -1;
-  }
-
-  backendErrorHandler(actionName, resp) {
-    this.props.notifications.toasts.addDanger({
-      title: `Failed to ${actionName} the query`,
-      text: resp.resp,
-      toastLifeTimeMs: 20000,
-    });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   render() {

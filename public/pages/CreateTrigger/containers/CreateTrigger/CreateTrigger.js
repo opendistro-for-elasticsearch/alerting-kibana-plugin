@@ -41,6 +41,7 @@ import { triggerToFormik } from './utils/triggerToFormik';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 export default class CreateTrigger extends Component {
   constructor(props) {
@@ -74,14 +75,12 @@ export default class CreateTrigger extends Component {
       ...uiMetadata,
       triggers: { ...uiMetadata.triggers, ...triggerMetadata },
     };
-    updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
+    const actionKeywords = ['create', 'trigger'];
+    updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata }, actionKeywords)
       .then((res) => {
         setSubmitting(false);
         if (res.ok) {
           onCloseTrigger();
-        } else {
-          console.log('Failed to create the trigger:', res);
-          this.backendErrorHandler('create', res);
         }
       })
       .catch((err) => {
@@ -104,14 +103,12 @@ export default class CreateTrigger extends Component {
     const indexToUpdate = _.findIndex(triggers, { name });
     const updatedTriggers = triggers.slice();
     updatedTriggers.splice(indexToUpdate, 1, trigger);
-    updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata })
+    const actionKeywords = ['update', 'trigger'];
+    updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata }, actionKeywords)
       .then((res) => {
         setSubmitting(false);
         if (res.ok) {
           onCloseTrigger();
-        } else {
-          console.log('Failed to update the trigger:', res);
-          this.backendErrorHandler('update', res);
         }
       })
       .catch((err) => {
@@ -122,7 +119,7 @@ export default class CreateTrigger extends Component {
   };
 
   onRunExecute = (triggers = []) => {
-    const { httpClient, monitor } = this.props;
+    const { httpClient, monitor, notifications } = this.props;
     const formikValues = monitorToFormik(monitor);
     const monitorToExecute = _.cloneDeep(monitor);
     _.set(monitorToExecute, 'triggers', triggers);
@@ -138,7 +135,7 @@ export default class CreateTrigger extends Component {
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
-          this.backendErrorHandler('run', resp);
+          backendErrorNotification(notifications, 'run', 'trigger', resp.resp);
         }
       })
       .catch((err) => {
@@ -193,17 +190,8 @@ export default class CreateTrigger extends Component {
     monitor: monitor,
   });
 
-  backendErrorHandler(actionName, resp) {
-    this.props.notifications.toasts.addDanger({
-      title: `Failed to ${actionName} the trigger`,
-      text: resp.resp,
-      toastLifeTimeMs: 20000,
-    });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
   render() {
-    const { monitor, onCloseTrigger, setFlyout, edit, httpClient } = this.props;
+    const { monitor, onCloseTrigger, setFlyout, edit, httpClient, notifications } = this.props;
     const { initialValues, executeResponse } = this.state;
     return (
       <div style={{ padding: '25px 50px' }}>
@@ -239,6 +227,7 @@ export default class CreateTrigger extends Component {
                     httpClient={httpClient}
                     setFlyout={setFlyout}
                     values={values}
+                    notifications={notifications}
                   />
                 )}
               />

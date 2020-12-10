@@ -190,7 +190,7 @@ export default class DestinationsService {
       return res.ok({
         body: {
           ok: false,
-          resp: err.message,
+          err: err.message,
         },
       });
     }
@@ -377,7 +377,7 @@ export default class DestinationsService {
       return res.ok({
         body: {
           ok: false,
-          resp: err.message,
+          err: err.message,
         },
       });
     }
@@ -564,7 +564,7 @@ export default class DestinationsService {
       return res.ok({
         body: {
           ok: false,
-          resp: err.message,
+          err: err.message,
         },
       });
     }

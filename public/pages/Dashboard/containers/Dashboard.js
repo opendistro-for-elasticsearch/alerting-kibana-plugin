@@ -23,6 +23,7 @@ import DashboardEmptyPrompt from '../components/DashboardEmptyPrompt';
 import DashboardControls from '../components/DashboardControls';
 import { columns } from '../utils/tableUtils';
 import { KIBANA_AD_PLUGIN } from '../../../utils/constants';
+import { backendErrorNotification } from '../../../utils/helpers';
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 const DEFAULT_QUERY_PARAMS = {
@@ -181,7 +182,7 @@ export default class Dashboard extends Component {
       };
       const queryParamsString = queryString.stringify(params);
       location.search;
-      const { httpClient, history } = this.props;
+      const { httpClient, history, notifications } = this.props;
       history.replace({ ...this.props.location, search: queryParamsString });
       httpClient.get('../api/alerting/alerts', { query: params }).then((resp) => {
         if (resp.ok) {
@@ -192,6 +193,7 @@ export default class Dashboard extends Component {
           });
         } else {
           console.log('error getting alerts:', resp);
+          backendErrorNotification(notifications, 'get', 'alerts', resp.err);
         }
       });
     },
@@ -202,7 +204,7 @@ export default class Dashboard extends Component {
   // TODO: exists in both Dashboard and Monitors, should be moved to redux when implemented
   acknowledgeAlert = async () => {
     const { selectedItems } = this.state;
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
 
     if (!selectedItems.length) return;
 
@@ -217,6 +219,11 @@ export default class Dashboard extends Component {
       httpClient
         .post(`../api/alerting/monitors/${monitorId}/_acknowledge/alerts`, {
           body: JSON.stringify({ alerts }),
+        })
+        .then((resp) => {
+          if (!resp.ok) {
+            backendErrorNotification(notifications, 'acknowledge', 'alert', resp.resp);
+          }
         })
         .catch((error) => error)
     );

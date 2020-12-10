@@ -19,6 +19,7 @@ import { get } from 'lodash';
 import { FormikComboBox } from '../../../../components/FormControls';
 import { hasError, isInvalid, validateDetector } from '../../../../utils/validate';
 import { CoreContext } from '../../../../utils/CoreContext';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 class AnomalyDetectors extends React.Component {
   static contextType = CoreContext;
@@ -35,7 +36,7 @@ class AnomalyDetectors extends React.Component {
   }
 
   async searchDetectors() {
-    const { http: httpClient } = this.context;
+    const { http: httpClient, notifications } = this.context;
     try {
       const response = await httpClient.post('../api/alerting/detectors/_search');
       if (response.ok) {
@@ -46,6 +47,9 @@ class AnomalyDetectors extends React.Component {
           interval: detector.detectionInterval,
         }));
         this.setState({ detectorOptions });
+      } else {
+        // TODO: 'response.ok' is 'false' when there is no anomaly-detection config index in the cluster, and notification should not be shown to new Anomaly-Detection users
+        // backendErrorNotification(notifications, 'get', 'detectors', response.resp);
       }
     } catch (err) {
       console.error(err);

@@ -15,6 +15,7 @@
 
 import _ from 'lodash';
 import { ALLOW_LIST_SETTING_PATH } from './constants';
+import { backendErrorNotification } from '../../../utils/helpers';
 
 export async function getAllowList(httpClient) {
   try {

@@ -37,6 +37,7 @@ import { destinationToFormik } from './utils/destinationToFormik';
 import { Webhook, CustomWebhook, Email } from '../../components/createDestinations';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { getAllowList } from '../../utils/helpers';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 const destinationType = {
   [DESTINATION_TYPE.SLACK]: (props) => <Webhook {...props} />,
@@ -86,7 +87,7 @@ class CreateDestination extends React.Component {
   }
 
   getDestination = async (destinationId) => {
-    const { httpClient, history } = this.props;
+    const { httpClient, history, notifications } = this.props;
     try {
       const resp = await httpClient.get(`../api/alerting/destinations/${destinationId}`);
       if (resp.ok) {
@@ -98,6 +99,7 @@ class CreateDestination extends React.Component {
         });
       } else {
         // Handle error, show message in case of 404
+        backendErrorNotification(notifications, 'get', 'destination', resp.resp);
         history.push(`/destinations`);
       }
     } catch (e) {
@@ -133,7 +135,7 @@ class CreateDestination extends React.Component {
   };
 
   handleCreate = async (requestData, { setSubmitting }) => {
-    const { httpClient, history } = this.props;
+    const { httpClient, history, notifications } = this.props;
     try {
       const resp = await httpClient.post('../api/alerting/destinations', {
         body: JSON.stringify(requestData),
@@ -141,6 +143,8 @@ class CreateDestination extends React.Component {
       setSubmitting(false);
       if (resp.ok) {
         history.push(`/destinations`);
+      } else {
+        backendErrorNotification(notifications, 'create', 'destination', resp.resp);
       }
     } catch (e) {
       setSubmitting(false);
@@ -215,7 +219,7 @@ class CreateDestination extends React.Component {
                     name="type"
                     formRow
                     fieldProps={{
-                      validate: validateDestinationType(httpClient),
+                      validate: validateDestinationType(httpClient, notifications),
                     }}
                     rowProps={{
                       label: 'Type',

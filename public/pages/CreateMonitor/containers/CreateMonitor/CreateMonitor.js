@@ -35,6 +35,7 @@ import { DefineSchedule } from '../DefineSchedule';
 import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
 import { initializeFromQueryParams } from './utils/monitorQueryParams';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -73,7 +74,7 @@ export default class CreateMonitor extends Component {
   }
 
   async onCreate(monitor, { setSubmitting, setErrors }) {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     try {
       const resp = await httpClient.post('../api/alerting/monitors', {
         body: JSON.stringify(monitor),
@@ -89,7 +90,7 @@ export default class CreateMonitor extends Component {
         );
       } else {
         console.log('Failed to create:', resp);
-        this.backendErrorHandler('create', resp);
+        backendErrorNotification(notifications, 'create', 'monitor', resp.resp);
       }
     } catch (err) {
       console.error(err);
@@ -112,7 +113,6 @@ export default class CreateMonitor extends Component {
         this.props.history.push(`/monitors/${id}`);
       } else {
         console.log('Failed to update:', resp);
-        this.backendErrorHandler('update', resp);
       }
     } catch (err) {
       console.error(err);
@@ -126,15 +126,6 @@ export default class CreateMonitor extends Component {
     const monitor = formikToMonitor(values);
     if (edit) this.onUpdate(monitor, formikBag);
     else this.onCreate(monitor, formikBag);
-  }
-
-  backendErrorHandler(actionName, resp) {
-    this.props.notifications.toasts.addDanger({
-      title: `Failed to ${actionName} the monitor`,
-      text: resp.resp,
-      toastLifeTimeMs: 20000, // the default lifetime for toasts is 10 sec
-    });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   render() {
