@@ -59,7 +59,11 @@ export const validateMonitorName = (httpClient, monitorToEdit) => async (value) 
     const response = await httpClient.post('../api/alerting/monitors/_search', {
       body: JSON.stringify(options),
     });
-    if (_.get(response, 'resp.hits.total.value', 0)) {
+    if (!response.ok) {
+      // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+      // backendErrorNotification(notifications, 'validate', 'monitor name', response);
+      // throw 'To create the monitor, contact your administrator to obtain the following required permission for at least one of your Security role(s): cluster:admin/opendistro/alerting/monitor/search';
+    } else if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!monitorToEdit) throw 'Monitor name is already used';
       if (monitorToEdit && monitorToEdit.name !== value) {
         throw 'Monitor name is already used';

@@ -36,7 +36,7 @@ import {
 } from './utils/chartHelpers';
 import * as HistoryConstants from './utils/constants';
 import { INDEX } from '../../../../../utils/constants';
-import queryString from 'query-string';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 class MonitorHistory extends PureComponent {
   constructor(props) {
@@ -233,7 +233,7 @@ class MonitorHistory extends PureComponent {
       isLoading: true,
     });
     const { timeSeriesWindow } = this.state;
-    const { httpClient, triggers, monitorId } = this.props;
+    const { httpClient, triggers, monitorId, notifications } = this.props;
     try {
       const params = {
         size: HistoryConstants.MAX_DOC_COUNT_FOR_ALERTS,
@@ -248,6 +248,7 @@ class MonitorHistory extends PureComponent {
         alerts = resp.alerts;
       } else {
         console.log('error getting alerts:', resp);
+        backendErrorNotification(notifications, 'get', 'alerts', resp.err);
         alerts = [];
       }
 
@@ -356,6 +357,8 @@ class MonitorHistory extends PureComponent {
 MonitorHistory.propTypes = {
   triggers: PropTypes.array.isRequired,
   onShowTrigger: PropTypes.func.isRequired,
+  isDarkMode: PropTypes.object.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
 
 export default MonitorHistory;

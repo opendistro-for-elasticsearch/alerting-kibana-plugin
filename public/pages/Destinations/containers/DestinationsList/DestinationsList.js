@@ -34,6 +34,7 @@ import ManageSenders from '../CreateDestination/ManageSenders';
 import ManageEmailGroups from '../CreateDestination/ManageEmailGroups';
 import { getAllowList } from '../../utils/helpers';
 import { DESTINATION_TYPE } from '../../utils/constants';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 class DestinationsList extends React.Component {
   constructor(props) {
@@ -147,7 +148,7 @@ class DestinationsList extends React.Component {
 
   handleDeleteDestination = async () => {
     const { id: destinationId } = this.state.destinationToDelete;
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     try {
       const resp = await httpClient.delete(`../api/alerting/destinations/${destinationId}`);
       if (resp.ok) {
@@ -156,6 +157,7 @@ class DestinationsList extends React.Component {
         // TODO::handle error
         //Something went wrong unable to delete if trying to delete already deleted destination
         console.log('Unable to delete destination');
+        backendErrorNotification(notifications, 'delete', 'destination', resp.resp);
       }
       this.setState({
         showDeleteConfirmation: false,
@@ -221,6 +223,8 @@ class DestinationsList extends React.Component {
             totalDestinations: resp.totalDestinations,
           });
         } else {
+          // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
+          // backendErrorNotification(notifications, 'get', 'destinations', resp.err);
           this.setState({
             isDestinationLoading: false,
           });

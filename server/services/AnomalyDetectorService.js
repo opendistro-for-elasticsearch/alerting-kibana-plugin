@@ -168,7 +168,7 @@ export default class DestinationsService {
       return res.ok({
         body: {
           ok: false,
-          resp: err.message,
+          error: err.message,
         },
       });
     }
