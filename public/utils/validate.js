@@ -65,6 +65,7 @@ export const validateMonitorName = (httpClient, monitorToEdit) => async (value) 
         throw 'Monitor name is already used';
       }
     }
+    // TODO: Handle the situation that monitors with a same name can be created when user don't have the permission of 'cluster:admin/opendistro/alerting/monitor/search'
   } catch (err) {
     if (typeof err === 'string') throw err;
     throw 'There was a problem validating monitor name. Please try again.';
