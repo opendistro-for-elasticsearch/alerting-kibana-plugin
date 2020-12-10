@@ -1,3 +1,9 @@
+[![Test Workflow](https://github.com/opendistro-for-elasticsearch/alerting-kibana-plugin/workflows/Test%20Workflow/badge.svg)](https://github.com/opendistro-for-elasticsearch/alerting/actions)
+[![codecov](https://codecov.io/gh/opendistro-for-elasticsearch/alerting-kibana-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/opendistro-for-elasticsearch/alerting)
+[![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting-kibana-plugin/api/)
+[![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://discuss.opendistrocommunity.dev/c/alerting-kibana-plugin/)
+![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
+
 # Open Distro for Elasticsearch Alerting Kibana
 
 The Open Distro for Elasticsearch Alerting Kibana plugin lets you manage your [Open Distro for Elasticsearch alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting) to monitor your data and send notifications when certain criteria are met---all from Kibana.
