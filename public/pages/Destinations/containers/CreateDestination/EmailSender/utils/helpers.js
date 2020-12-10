@@ -23,7 +23,7 @@ export default async function getSenders(httpClient, searchText = '') {
     if (response.ok) {
       return response.emailAccounts;
     } else {
-      console.log('Unable to get email accounts', response.resp);
+      console.log('Unable to get email accounts', response.err);
       // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
       // backendErrorNotification(notifications, 'get', 'email accounts', response.err);
       return [];
