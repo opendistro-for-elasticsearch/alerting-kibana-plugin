@@ -42,6 +42,7 @@ import {
   MONITOR_INPUT_DETECTOR_ID,
 } from '../../../utils/constants';
 import { migrateTriggerMetadata } from './utils/helpers';
+import { backendErrorNotification } from '../../../utils/helpers';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -78,7 +79,7 @@ export default class MonitorDetails extends Component {
   }
 
   getDetector = (id) => {
-    const { httpClient } = this.props;
+    const { httpClient, notifications } = this.props;
     httpClient
       .get(`../api/alerting/detectors/${id}`)
       .then((resp) => {
@@ -136,12 +137,13 @@ export default class MonitorDetails extends Component {
       });
   };
 
-  updateMonitor = (update) => {
+  updateMonitor = (update, actionKeywords = ['update', 'monitor']) => {
     const {
       match: {
         params: { monitorId },
       },
       httpClient,
+      notifications,
     } = this.props;
     const { monitor, ifSeqNo, ifPrimaryTerm } = this.state;
     this.setState({ updating: true });
@@ -151,8 +153,14 @@ export default class MonitorDetails extends Component {
         body: JSON.stringify({ ...monitor, ...update }),
       })
       .then((resp) => {
-        const { version: monitorVersion } = resp;
-        this.setState({ monitorVersion, updating: false });
+        if (resp.ok) {
+          const { version: monitorVersion } = resp;
+          this.setState({ monitorVersion, updating: false });
+        } else {
+          console.error('Failed to update the monitor:', resp);
+          backendErrorNotification(notifications, ...actionKeywords, resp.resp);
+          this.setState({ updating: false }); // release the button
+        }
         return resp;
       })
       .catch((err) => {
@@ -348,6 +356,7 @@ export default class MonitorDetails extends Component {
             onShowTrigger={this.onCreateTrigger}
             triggers={monitor.triggers}
             isDarkMode={isDarkMode}
+            notifications={notifications}
           />
         </div>
         <EuiSpacer />
@@ -358,6 +367,7 @@ export default class MonitorDetails extends Component {
           httpClient={httpClient}
           location={location}
           history={history}
+          notifications={notifications}
         />
       </div>
     );

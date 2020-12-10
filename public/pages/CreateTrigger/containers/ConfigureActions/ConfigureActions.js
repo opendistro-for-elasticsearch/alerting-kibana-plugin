@@ -20,9 +20,10 @@ import ActionEmptyPrompt from '../../components/ActionEmptyPrompt';
 import AddActionButton from '../../components/AddActionButton';
 import ContentPanel from '../../../../components/ContentPanel';
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
-import { DESTINATION_OPTIONS, DESTINATION_TYPE } from '../../../Destinations/utils/constants';
+import { DESTINATION_OPTIONS } from '../../../Destinations/utils/constants';
 import { getAllowList } from '../../../Destinations/utils/helpers';
 import { MAX_QUERY_RESULT_SIZE } from '../../../../utils/constants';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 const createActionContext = (context, action) => ({
   ctx: {
@@ -52,7 +53,7 @@ class ConfigureActions extends React.Component {
   }
 
   loadDestinations = async (searchText = '') => {
-    const { httpClient, values, arrayHelpers } = this.props;
+    const { httpClient, values, arrayHelpers, notifications } = this.props;
     const { allowList, actionDeleted } = this.state;
     this.setState({ loadingDestinations: true });
     const getDestinationLabel = (destination) => {
@@ -64,17 +65,21 @@ class ConfigureActions extends React.Component {
       const response = await httpClient.get('../api/alerting/destinations', {
         query: { search: searchText, size: MAX_QUERY_RESULT_SIZE },
       });
-      const destinations = response.destinations
-        .map((destination) => ({
-          label: `${destination.name} - (${getDestinationLabel(destination)})`,
-          value: destination.id,
-          type: destination.type,
-        }))
-        .filter(({ type }) => allowList.includes(type));
-      this.setState({ destinations, loadingDestinations: false });
-      // If actions is not defined  If user choose to delete actions, it will not override customer's preferences.
-      if (destinations.length > 0 && !values.actions && !actionDeleted) {
-        arrayHelpers.insert(0, FORMIK_INITIAL_ACTION_VALUES);
+      if (response.ok) {
+        const destinations = response.destinations
+          .map((destination) => ({
+            label: `${destination.name} - (${getDestinationLabel(destination)})`,
+            value: destination.id,
+            type: destination.type,
+          }))
+          .filter(({ type }) => allowList.includes(type));
+        this.setState({ destinations, loadingDestinations: false });
+        // If actions is not defined  If user choose to delete actions, it will not override customer's preferences.
+        if (destinations.length > 0 && !values.actions && !actionDeleted) {
+          arrayHelpers.insert(0, FORMIK_INITIAL_ACTION_VALUES);
+        }
+      } else {
+        backendErrorNotification(notifications, 'load', 'destinations', response.err);
       }
     } catch (err) {
       console.error(err);
@@ -86,6 +91,7 @@ class ConfigureActions extends React.Component {
     const {
       context: { monitor, trigger },
       httpClient,
+      notifications,
     } = this.props;
     const action = trigger.actions[index];
     const condition = { script: { lang: 'painless', source: 'return true' } };
@@ -97,6 +103,7 @@ class ConfigureActions extends React.Component {
       });
       if (!response.ok) {
         console.error('There was an error trying to send test message', response.resp);
+        backendErrorNotification(notifications, 'send', 'test message', response.resp);
       }
     } catch (err) {
       console.error('There was an error trying to send test message', err);

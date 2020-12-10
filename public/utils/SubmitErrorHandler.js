@@ -28,8 +28,12 @@ export const SubmitErrorHandler = (props) => {
       const selector = `[id="${errorKeys[0]}"], [name="${errorKeys[0]}"]:not(div)`;
       const errorElement = document.querySelector(selector);
       if (errorElement) {
-        errorElement.focus();
-        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        errorElement.focus({ preventScroll: true });
+        /*  Scrolling sometime doesn't work in recent versions of Chrome browser,
+        unless putting it into setTimeout(). https://github.com/iamdustan/smoothscroll/issues/28 */
+        setTimeout(function () {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
       }
     }
   };

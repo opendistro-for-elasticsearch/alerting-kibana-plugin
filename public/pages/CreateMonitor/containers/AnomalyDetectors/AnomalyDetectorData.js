@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { CoreContext } from '../../../../utils/CoreContext';
 import { AD_PREVIEW_DAYS } from '../../../../utils/constants';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 class AnomalyDetectorData extends React.Component {
   static contextType = CoreContext;
@@ -43,7 +44,7 @@ class AnomalyDetectorData extends React.Component {
 
   async getPreviewData() {
     const { detectorId, startTime, endTime } = this.props;
-    const { http: httpClient } = this.context;
+    const { http: httpClient, notifications } = this.context;
     this.setState({
       isLoading: true,
     });
@@ -72,6 +73,7 @@ class AnomalyDetectorData extends React.Component {
         this.setState({
           isLoading: false,
         });
+        backendErrorNotification(notifications, 'get', 'detector results', response.error);
       }
     } catch (err) {
       console.error('Unable to get detectorResults', err);
