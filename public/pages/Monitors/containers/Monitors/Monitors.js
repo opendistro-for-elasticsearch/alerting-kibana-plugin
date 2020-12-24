@@ -189,6 +189,7 @@ export default class Monitors extends Component {
         if (!resp.ok) {
           backendErrorNotification(notifications, 'update', 'monitor', resp.resp);
         }
+        return resp;
       })
       .catch((err) => err);
   }
@@ -202,6 +203,7 @@ export default class Monitors extends Component {
         if (!resp.ok) {
           backendErrorNotification(notifications, 'delete', 'monitor', resp.resp);
         }
+        return resp;
       })
       .catch((err) => err);
   }

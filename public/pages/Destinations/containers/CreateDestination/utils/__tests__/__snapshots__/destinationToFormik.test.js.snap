@@ -28,6 +28,7 @@ Object {
       },
     ],
     "host": "https://custom.webhook",
+    "method": "PUT",
     "path": "/my_custom_path",
     "port": 80,
     "queryParams": Array [
@@ -65,6 +66,7 @@ Object {
         "value": "headerValue2",
       },
     ],
+    "method": "PUT",
     "port": 8888,
     "queryParams": Array [
       Object {
@@ -101,6 +103,7 @@ Object {
         "value": "headerValue2",
       },
     ],
+    "method": "PUT",
     "port": null,
     "queryParams": Array [
       Object {

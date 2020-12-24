@@ -18,6 +18,7 @@ Object {
       "headerKey1": "Header Value1",
       "headerKey2": "Header Value2",
     },
+    "method": "PUT",
     "port": -1,
     "query_params": Object {
       "key1": "value1",
