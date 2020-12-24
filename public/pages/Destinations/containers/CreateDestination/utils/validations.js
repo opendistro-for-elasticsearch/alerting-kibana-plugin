@@ -27,16 +27,13 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
     const response = await httpClient.post('../api/alerting/monitors/_search', {
       body: JSON.stringify(options),
     });
-    if (!response.ok) {
-      // TODO: 'response.ok' is 'false' when there is no alerting config index in the cluster, and notification should not be shown to new Alerting users
-      // backendErrorNotification(notifications, 'validate', 'destination name', response.resp);
-      // throw 'To create the destination, contact your administrator to obtain the following required permission for at least one of your Security role(s): cluster:admin/opendistro/alerting/monitor/search';
-    } else if (_.get(response, 'resp.hits.total.value', 0)) {
+    if (_.get(response, 'resp.hits.total.value', 0)) {
       if (!destinationToEdit) throw 'Destination name is already used';
       if (destinationToEdit && destinationToEdit.name !== value) {
         throw 'Destination name is already used';
       }
     }
+    // TODO: Handle the situation that destinations with a same name can be created when user don't have the permission of 'cluster:admin/opendistro/alerting/monitor/search'
   } catch (err) {
     if (typeof err === 'string') throw err;
     throw 'There was a problem validating destination name. Please try again.';
