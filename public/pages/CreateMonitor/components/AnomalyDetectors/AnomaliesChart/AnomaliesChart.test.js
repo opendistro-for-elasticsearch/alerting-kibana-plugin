@@ -70,7 +70,6 @@ const createTestData = (startTime, endTime, count) => {
   });
 
   let mid = startTime + (endTime - startTime) / 2;
-  console.log(mid);
   data.push({
     anomalyGrade: 0.7,
     confidence: 0.9,

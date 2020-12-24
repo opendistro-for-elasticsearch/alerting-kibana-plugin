@@ -33,13 +33,8 @@ class AnomalyDetectorTrigger extends React.Component {
         <AnomalyDetectorData
           detectorId={this.props.detectorId}
           render={(anomalyData) => {
-            // double bang for short-circuit null-check
-            if (
-              !!anomalyData &&
-              !!anomalyData.anomalyResult &&
-              !!anomalyData.anomalyResult.anomalies &&
-              anomalyData.anomalyResult.anomalies.length > 0
-            ) {
+            // using lodash.get without worrying about whether an intermediate property is null or undefined.
+            if (get(anomalyData, 'anomalyResult.anomalies', []).length > 0) {
               return (
                 <React.Fragment>
                   <TriggerExpressions
