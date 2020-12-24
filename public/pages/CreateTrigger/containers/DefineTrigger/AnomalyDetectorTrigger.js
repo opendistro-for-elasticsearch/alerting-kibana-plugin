@@ -33,24 +33,8 @@ class AnomalyDetectorTrigger extends React.Component {
         <AnomalyDetectorData
           detectorId={this.props.detectorId}
           render={(anomalyData) => {
-            let featureData = [];
-            //Skip disabled features showing from Alerting.
-            featureData = get(anomalyData, 'detector.featureAttributes', [])
-              .filter((feature) => feature.featureEnabled)
-              .map((feature, index) => ({
-                featureName: feature.featureName,
-                data: anomalyData.anomalyResult.featureData[feature.featureId] || [],
-              }));
-            const annotations = get(anomalyData, 'anomalyResult.anomalies', [])
-              .filter((anomaly) => anomaly.anomalyGrade > 0)
-              .map((anomaly) => ({
-                coordinates: {
-                  x0: anomaly.startTime,
-                  x1: anomaly.endTime,
-                },
-                details: `There is an anomaly with confidence ${anomaly.confidence}`,
-              }));
-            if (featureData.length > 0) {
+            // using lodash.get without worrying about whether an intermediate property is null or undefined.
+            if (get(anomalyData, 'anomalyResult.anomalies', []).length > 0) {
               return (
                 <React.Fragment>
                   <TriggerExpressions
