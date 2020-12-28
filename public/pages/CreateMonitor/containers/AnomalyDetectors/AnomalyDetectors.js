@@ -40,12 +40,14 @@ class AnomalyDetectors extends React.Component {
     try {
       const response = await httpClient.post('../api/alerting/detectors/_search');
       if (response.ok) {
-        const detectorOptions = response.detectors.map((detector) => ({
-          label: detector.name,
-          value: detector.id,
-          features: detector.featureAttributes,
-          interval: detector.detectionInterval,
-        }));
+        const detectorOptions = response.detectors
+          .filter((detector) => detector.detectionDateRange === undefined)
+          .map((detector) => ({
+            label: detector.name,
+            value: detector.id,
+            features: detector.featureAttributes,
+            interval: detector.detectionInterval,
+          }));
         this.setState({ detectorOptions });
       } else {
         // TODO: 'response.ok' is 'false' when there is no anomaly-detection config index in the cluster, and notification should not be shown to new Anomaly-Detection users
