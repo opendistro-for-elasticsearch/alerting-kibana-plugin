@@ -39,7 +39,7 @@ describe('Destinations', () => {
       cy.deleteAllIndices();
     });
 
-    it('successfully', () => {
+    it('with a custom webhook', () => {
       // Confirm we loaded empty destination list
       cy.contains('There are no existing destinations');
 
@@ -63,13 +63,13 @@ describe('Destinations', () => {
     });
   });
 
-  describe('can be updated by changing the name', () => {
+  describe('can be updated', () => {
     before(() => {
       cy.deleteAllIndices();
       cy.createDestination(sampleDestination);
     });
 
-    it('successfully', () => {
+    it('by changing the name', () => {
       // Confirm we can see the created destination in the list
       cy.contains(SAMPLE_DESTINATION);
 
@@ -93,7 +93,7 @@ describe('Destinations', () => {
       cy.createDestination(sampleDestination);
     });
 
-    it('successfully', () => {
+    it('by clicking the button under "Actions"', () => {
       // Confirm we can see the created destination in the list
       cy.contains(SAMPLE_DESTINATION);
 
@@ -118,7 +118,7 @@ describe('Destinations', () => {
       cy.createDestination(sampleDestinationChime);
     });
 
-    it('successfully', () => {
+    it('by name', () => {
       // Sort the table by monitor name in alphabetical order
       cy.get('thead > tr > th').contains('Destination name').click({ force: true });
 

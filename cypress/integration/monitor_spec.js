@@ -41,7 +41,7 @@ describe('Monitors', () => {
       cy.deleteAllIndices();
     });
 
-    it('successfully', () => {
+    it('defining with extraction query', () => {
       // Confirm we loaded empty monitor list
       cy.contains('There are no existing monitors');
 
@@ -71,13 +71,13 @@ describe('Monitors', () => {
     });
   });
 
-  describe('can be updated by changing the name', () => {
+  describe('can be updated', () => {
     before(() => {
       cy.deleteAllIndices();
       cy.createMonitor(sampleMonitor);
     });
 
-    it('successfully', () => {
+    it('by changing the name', () => {
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
 
@@ -110,7 +110,7 @@ describe('Monitors', () => {
       cy.createMonitor(sampleMonitor);
     });
 
-    it('successfully', () => {
+    it('from "Actions" menu', () => {
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
 
@@ -138,7 +138,7 @@ describe('Monitors', () => {
       cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it('successfully', () => {
+    it('by name', () => {
       // Sort the table by monitor name in alphabetical order
       cy.get('thead > tr > th').contains('Monitor name').click({ force: true });
 
@@ -156,13 +156,13 @@ describe('Monitors', () => {
     });
   });
 
-  describe('can have a trigger', () => {
+  describe('can have triggers', () => {
     before(() => {
       cy.deleteAllIndices();
       cy.createMonitor(sampleMonitor);
     });
 
-    it('successfully', () => {
+    it('a trigger can be created', () => {
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
 
@@ -184,16 +184,11 @@ describe('Monitors', () => {
       // Confirm we can see the new trigger
       cy.contains(SAMPLE_TRIGGER);
     });
-  });
 
-  describe('can have an action with its trigger', () => {
-    before(() => {
-      cy.deleteAllIndices();
-      cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
+    it('an action can be attached to the trigger', () => {
+      // Create a destination
       cy.createDestination(sampleDestination);
-    });
 
-    it('successfully', () => {
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
 

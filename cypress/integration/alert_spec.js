@@ -38,7 +38,7 @@ describe('Alerts', () => {
       cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it('successfully', () => {
+    it('after the monitor starts running', () => {
       // Wait for 1 minute
       cy.wait(60000);
 
@@ -59,7 +59,7 @@ describe('Alerts', () => {
       cy.createAndExecuteMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it('successfully', () => {
+    it('by clicking the button in Dashboard', () => {
       //Confirm there is an active alert
       cy.contains('Active');
 
@@ -81,7 +81,7 @@ describe('Alerts', () => {
       cy.createAndExecuteMonitor(sampleMonitorWorkflow);
     });
 
-    it('successfully', () => {
+    it('when the trigger condition is not met after met once', () => {
       //Confirm there is an active alert
       cy.contains('Active');
 
@@ -139,7 +139,7 @@ describe('Alerts', () => {
       cy.createAndExecuteMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it('successfully', () => {
+    it('by using a wrong destination', () => {
       // Confirm we can see the alert is in 'Error' state
       cy.contains('Error');
     });
@@ -151,7 +151,7 @@ describe('Alerts', () => {
       cy.createAndExecuteMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
-    it('successfully', () => {
+    it('by deleting the monitor', () => {
       //Confirm there is an active alert
       cy.contains('Active');
 
