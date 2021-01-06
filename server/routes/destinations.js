@@ -24,8 +24,8 @@ export default function (services, router) {
       validate: {
         query: schema.object({
           from: schema.maybe(schema.number()),
-          size: schema.number(),
-          search: schema.string(),
+          size: schema.maybe(schema.number()),
+          search: schema.maybe(schema.string()),
           sortField: schema.maybe(schema.string()),
           sortDirection: schema.maybe(schema.string()),
           type: schema.maybe(schema.string()),
