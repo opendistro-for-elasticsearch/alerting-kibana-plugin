@@ -63,11 +63,8 @@ describe('Monitors', () => {
       // Confirm "monitor is created" shows
       cy.contains(`Monitor ${SAMPLE_MONITOR} has been created`);
 
-      // Go back to main page of the Plugin
-      cy.get('a').contains('Alerting').click({ force: true });
-
-      // Go to the Monitors list
-      cy.get('button').contains('Monitors').click({ force: true });
+      // Go back to the Monitors list
+      cy.get('a').contains('Monitors').click({ force: true });
 
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
@@ -99,12 +96,8 @@ describe('Monitors', () => {
       // Confirm the update process is done and the page loaded
       cy.contains('Create trigger');
 
-      // This step is used to make the monitors list refresh
-      // Go back to main page of Alerting plugin
-      cy.get('a').contains('Alerting').click({ force: true });
-
-      // Go to the Monitors list
-      cy.get('button').contains('Monitors').click({ force: true });
+      // Go back to the Monitors list
+      cy.get('a').contains('Monitors').click({ force: true });
 
       // Confirm we can see the updated monitor in the list
       cy.contains(UPDATED_MONITOR);
@@ -185,7 +178,7 @@ describe('Monitors', () => {
       // Click the create button
       cy.get('button').contains('Create').click({ force: true });
 
-      // Confirm we can see only one row in the trigger list
+      // Confirm we can see only one row in the trigger list by checking <caption> element
       cy.contains('This table contains 1 row');
 
       // Confirm we can see the new trigger
@@ -223,7 +216,7 @@ describe('Monitors', () => {
       cy.get('div[data-test-subj="comboBoxInput"]').click({ force: true });
 
       // Select a destination
-      cy.get('button[type="custom_webhook"]').click({ force: true });
+      cy.get('button[type="custom_webhook"]').focus().click({ force: true });
 
       // Click Update button to update the monitor
       cy.get('button').contains('Update').click({ force: true });
