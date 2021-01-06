@@ -25,7 +25,7 @@ jobs:
           path: alerting
           # TODO: Move this after Kibana plugin setup so we can pull down the correct branch to support all opendistro branches
           repository: opendistro-for-elasticsearch/alerting
-      - name: Run elasticsearch with plugin
+      - name: Run Elasticsearch with plugin
         run: |
           cd alerting
           ./gradlew run &
@@ -60,7 +60,7 @@ jobs:
           npm uninstall -g yarn
           echo "Installing yarn ${{ steps.versions_step.outputs.yarn_version }}"
           npm i -g yarn@${{ steps.versions.outputs.yarn_version }}
-      - name: Bootstrap plugin/kibana
+      - name: Bootstrap Kibana with plugin
         env:
           CYPRESS_INSTALL_BINARY: 0
         run: |
@@ -68,7 +68,7 @@ jobs:
           mv alerting-kibana-plugin kibana/plugins
           cd kibana/plugins/alerting-kibana-plugin
           yarn kbn bootstrap
-      - name: Run kibana server
+      - name: Run Kibana server
         run: |
           cd kibana
           yarn start --no-base-path --no-watch &
@@ -76,7 +76,7 @@ jobs:
           curl localhost:5601/api/status
           # timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:5601/api/status)" != "200" ]]; do sleep 5; done'
       # for now just chrome, use matrix to do all browsers later
-      - name: Cypress tests
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v2
         with:
           working-directory: kibana/plugins/alerting-kibana-plugin
