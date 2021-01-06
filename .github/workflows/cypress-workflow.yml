@@ -61,8 +61,6 @@ jobs:
           echo "Installing yarn ${{ steps.versions_step.outputs.yarn_version }}"
           npm i -g yarn@${{ steps.versions.outputs.yarn_version }}
       - name: Bootstrap Kibana with plugin
-        env:
-          CYPRESS_INSTALL_BINARY: 0
         run: |
           mkdir -p kibana/plugins
           mv alerting-kibana-plugin kibana/plugins
@@ -72,8 +70,6 @@ jobs:
         run: |
           cd kibana
           yarn start --no-base-path --no-watch &
-          sleep 300
-          curl localhost:5601/api/status
           # timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:5601/api/status)" != "200" ]]; do sleep 5; done'
       # for now just chrome, use matrix to do all browsers later
       - name: Run Cypress tests
