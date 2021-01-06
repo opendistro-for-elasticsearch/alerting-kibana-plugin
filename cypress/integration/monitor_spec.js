@@ -41,7 +41,7 @@ describe('Monitors', () => {
       cy.deleteAllIndices();
     });
 
-    it('defining with extraction query', () => {
+    it('defining by extraction query', () => {
       // Confirm we loaded empty monitor list
       cy.contains('There are no existing monitors');
 
