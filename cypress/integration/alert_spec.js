@@ -132,8 +132,10 @@ describe('Alerts', () => {
   describe("can be in 'Error' state", () => {
     before(() => {
       cy.deleteAllIndices();
-      // modify the JSON object to make the alert to make an error in the monitor
-      sampleMonitorWithAlwaysTrueTrigger.inputs[0].search.indices = ['non-existent_index'];
+      // modify the JSON object to make an error alert when executing the monitor
+      sampleMonitorWithAlwaysTrueTrigger.triggers[0].actions = [
+        { name: '', destination_id: '', message_template: { source: '' } },
+      ];
       cy.createAndExecuteMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
