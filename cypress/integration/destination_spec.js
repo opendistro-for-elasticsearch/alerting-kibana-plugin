@@ -20,7 +20,7 @@ import sampleDestinationChime from '../fixtures/sample_destination_chime';
 const SAMPLE_DESTINATION = 'sample_destination';
 const SAMPLE_DESTINATION_WITH_ANOTHER_NAME = 'sample_destination_chime';
 const UPDATED_DESTINATION = 'updated_destination';
-const SAMPLE_URL = 'http://www.sample.com';
+const SAMPLE_URL = 'http://www.sampledestination.com';
 
 describe('Destinations', () => {
   beforeEach(() => {

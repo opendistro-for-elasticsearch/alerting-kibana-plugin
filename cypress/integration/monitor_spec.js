@@ -156,7 +156,7 @@ describe('Monitors', () => {
     });
   });
 
-  describe('can have triggers', () => {
+  describe.only('can have triggers', () => {
     before(() => {
       cy.deleteAllIndices();
       cy.createMonitor(sampleMonitor);
@@ -210,6 +210,7 @@ describe('Monitors', () => {
       // Click the combo box to list all the destinations
       cy.get('div[data-test-subj="comboBoxInput"]').click({ force: true });
 
+      cy.wait(500); // testing
       // Select a destination
       cy.get('button[type="custom_webhook"]').focus().click({ force: true });
 
