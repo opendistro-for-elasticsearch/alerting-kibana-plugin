@@ -156,14 +156,10 @@ describe('Monitors', () => {
     });
   });
 
-  describe.only('can have triggers', () => {
+  describe('can have triggers', () => {
     before(() => {
       cy.deleteAllIndices();
       cy.createMonitor(sampleMonitor);
-    });
-
-    beforeEach(() => {
-      cy.intercept('GET', '/monitors').as('getMonitors');
     });
 
     it('a trigger can be created', () => {
@@ -212,10 +208,10 @@ describe('Monitors', () => {
       cy.get('input[name="actions.0.name"]').type(SAMPLE_ACTION, { force: true });
 
       // Click the combo box to list all the destinations
-      cy.get('button[data-test-subj="comboBoxToggleListButton"]').click({ force: true });
-
-      // Select a destination
-      cy.get('button[type="custom_webhook"]').click({ force: true });
+      // Using key typing instead of clicking the menu option to avoid occasional failure
+      cy.get('div[data-test-subj="comboBoxInput"]')
+        .click({ force: true })
+        .type('{downarrow}{enter}');
 
       // Click Update button to update the monitor
       cy.get('button').contains('Update').click({ force: true });
@@ -228,11 +224,8 @@ describe('Monitors', () => {
       // Go to the Monitors list
       cy.get('a').contains('Monitors').click({ force: true });
 
-      // Wait for the request of getting all monitors to respond
-      cy.wait('@getMonitors');
-
       // Select the existing monitor
-      cy.get('a').contains(SAMPLE_MONITOR).click({ force: true });
+      cy.get('span > a').contains(SAMPLE_MONITOR).click({ force: true });
 
       // Select checkbox for the created trigger
       cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
