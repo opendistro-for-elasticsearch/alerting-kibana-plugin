@@ -14,7 +14,7 @@
  */
 
 import { PLUGIN_NAME } from '../support/constants';
-import sampleDestination from '../fixtures/sample_destination';
+import sampleDestination from '../fixtures/sample_destination_custom_webhook.json';
 import sampleDestinationChime from '../fixtures/sample_destination_chime';
 
 const SAMPLE_DESTINATION = 'sample_destination';

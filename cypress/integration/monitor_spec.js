@@ -16,7 +16,7 @@
 import { PLUGIN_NAME } from '../support/constants';
 import sampleMonitor from '../fixtures/sample_monitor';
 import sampleMonitorWithAlwaysTrueTrigger from '../fixtures/sample_monitor_with_always_true_trigger';
-import sampleDestination from '../fixtures/sample_destination.json';
+import sampleDestination from '../fixtures/sample_destination_custom_webhook.json';
 
 const SAMPLE_MONITOR = 'sample_monitor';
 const UPDATED_MONITOR = 'updated_monitor';
