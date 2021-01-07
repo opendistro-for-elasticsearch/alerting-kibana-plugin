@@ -78,6 +78,8 @@ jobs:
           working-directory: kibana/plugins/alerting-kibana-plugin
           command: yarn run cypress run
           wait-on: 'http://localhost:5601'
+          # wait for 2 minutes for the server to respond
+          wait-on-timeout: 120
           browser: chrome
       # Screenshots are only captured on failure, will change this once we do visual regression tests
       - uses: actions/upload-artifact@v1
