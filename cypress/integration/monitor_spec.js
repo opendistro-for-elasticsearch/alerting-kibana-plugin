@@ -162,6 +162,10 @@ describe('Monitors', () => {
       cy.createMonitor(sampleMonitor);
     });
 
+    beforeEach(() => {
+      cy.intercept('GET', '/monitors').as('getMonitors');
+    });
+
     it('a trigger can be created', () => {
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
@@ -208,11 +212,10 @@ describe('Monitors', () => {
       cy.get('input[name="actions.0.name"]').type(SAMPLE_ACTION, { force: true });
 
       // Click the combo box to list all the destinations
-      cy.get('div[data-test-subj="comboBoxInput"]').click({ force: true });
+      cy.get('button[data-test-subj="comboBoxToggleListButton"]').click({ force: true });
 
-      cy.wait(500); // testing
       // Select a destination
-      cy.get('button[type="custom_webhook"]').focus().click({ force: true });
+      cy.get('button[type="custom_webhook"]').click({ force: true });
 
       // Click Update button to update the monitor
       cy.get('button').contains('Update').click({ force: true });
@@ -224,6 +227,9 @@ describe('Monitors', () => {
       // This step is used to make the actions list of the trigger refresh
       // Go to the Monitors list
       cy.get('a').contains('Monitors').click({ force: true });
+
+      // Wait for the request of getting all monitors to respond
+      cy.wait('@getMonitors');
 
       // Select the existing monitor
       cy.get('a').contains(SAMPLE_MONITOR).click({ force: true });
