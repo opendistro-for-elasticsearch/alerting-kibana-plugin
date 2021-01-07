@@ -77,8 +77,7 @@ jobs:
         with:
           working-directory: kibana/plugins/alerting-kibana-plugin
           command: yarn run cypress run
-          wait-on: 'http-get://localhost:5601/app/opendistro-alerting'
-          wait-on-timeout: 300
+          wait-on: 'npx wait-on --timeout 30000 http-get://localhost:5601/app/opendistro-alerting'
 
       # Screenshots are only captured on failure, will change this once we do visual regression tests
       - uses: actions/upload-artifact@v1
