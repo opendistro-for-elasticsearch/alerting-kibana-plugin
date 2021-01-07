@@ -69,7 +69,7 @@ jobs:
       - name: Run Kibana server
         run: |
           cd kibana
-          yarn start --no-base-path --no-watch
+          yarn start --no-base-path --no-watch &
           timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:5601/api/status)" != "200" ]]; do sleep 5; done'
       # for now just chrome, use matrix to do all browsers later
       - name: Run Cypress tests
