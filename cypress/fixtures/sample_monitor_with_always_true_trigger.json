@@ -1,0 +1,37 @@
+{
+  "name": "sample_monitor_with_always_true_trigger",
+  "enabled": true,
+  "schedule": {
+    "period": {
+      "interval": "1",
+      "unit": "MINUTES"
+    }
+  },
+  "inputs": [
+    {
+      "search": {
+        "indices": ["*"],
+        "query": {
+          "query": {
+            "match_all": {}
+          }
+        }
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "name": "always_true_trigger",
+      "severity": "3",
+      "condition": {
+        "script": {
+          "source": "return true",
+          "lang": "painless"
+        }
+      }
+    }
+  ],
+  "ui_metadata": {
+    "schedule": {}
+  }
+}

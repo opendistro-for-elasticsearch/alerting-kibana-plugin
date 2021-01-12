@@ -1,0 +1,92 @@
+name: E2E Cypress tests
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tests:
+    name: Run Cypress E2E tests
+    runs-on: ubuntu-latest
+    env:
+      # prevents extra Cypress installation progress messages
+      CI: 1
+      # avoid warnings like "tput: No value for $TERM and no -T specified"
+      TERM: xterm
+    steps:
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          # TODO: Parse this from alerting plugin
+          java-version: 14
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: alerting
+          # TODO: Move this after Kibana plugin setup so we can pull down the correct branch to support all opendistro branches
+          repository: opendistro-for-elasticsearch/alerting
+      - name: Run Elasticsearch with plugin
+        run: |
+          cd alerting
+          ./gradlew run &
+          timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:9200)" != "200" ]]; do sleep 5; done'
+      - name: Checkout Alerting Kibana plugin
+        uses: actions/checkout@v2
+        with:
+          path: alerting-kibana-plugin
+      - name: Get Kibana version
+        id: kibana_version
+        run: |
+          echo "::set-output name=kibana_version::$(node -p "(require('./alerting-kibana-plugin/kibana.json').kibanaVersion).match(/[.0-9]+/)[0]")"
+      - name: Checkout Kibana
+        uses: actions/checkout@v2
+        with:
+          repository: opendistro-for-elasticsearch/kibana-oss
+          ref: ${{ steps.kibana_version.outputs.kibana_version }}
+          token: ${{ secrets.GITHUB_KIBANA_OSS }}
+          path: kibana
+      - name: Get node and yarn versions
+        id: versions
+        run: |
+          echo "::set-output name=node_version::$(node -p "(require('./kibana/package.json').engines.node).match(/[.0-9]+/)[0]")"
+          echo "::set-output name=yarn_version::$(node -p "(require('./kibana/package.json').engines.yarn).match(/[.0-9]+/)[0]")"
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.versions.outputs.node_version }}
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install correct yarn version for Kibana
+        run: |
+          npm uninstall -g yarn
+          echo "Installing yarn ${{ steps.versions_step.outputs.yarn_version }}"
+          npm i -g yarn@${{ steps.versions.outputs.yarn_version }}
+      - name: Bootstrap Kibana with plugin
+        run: |
+          mkdir -p kibana/plugins
+          mv alerting-kibana-plugin kibana/plugins
+          cd kibana/plugins/alerting-kibana-plugin
+          yarn kbn bootstrap
+      - name: Run Kibana server
+        run: |
+          cd kibana
+          yarn start --no-base-path --no-watch &
+          sleep 300
+        # timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:5601/api/status)" != "200" ]]; do sleep 5; done'
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: kibana/plugins/alerting-kibana-plugin
+          command: yarn run cypress run
+
+      # Screenshots are only captured on failure, will change this once we do visual regression tests
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: kibana/plugins/alerting-kibana-plugin/cypress/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: cypress-videos
+          path: kibana/plugins/alerting-kibana-plugin/cypress/videos

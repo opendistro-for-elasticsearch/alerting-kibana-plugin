@@ -1,0 +1,7 @@
+{
+  "name": "sample_destination_chime",
+  "type": "chime",
+  "chime": {
+    "url": "https://hooks.chime.aws/incomingwebhooks/XXX?token=XXX"
+  }
+}
