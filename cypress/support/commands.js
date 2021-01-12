@@ -41,6 +41,45 @@ const { API, INDEX } = require('./constants');
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+  if (Cypress.env('security_enabled')) {
+    const auth = {
+      username: 'admin',
+      password: 'admin',
+    };
+    if (options) {
+      options.auth = auth;
+    } else {
+      options = { auth };
+    }
+    return originalFn(url, options);
+  } else {
+    return originalFn(url, options);
+  }
+});
+
+Cypress.Commands.overwrite('request', (originalFn, ...args) => {
+  const defaults = {
+    auth: {
+      user: 'admin',
+      pass: 'admin',
+    },
+  };
+
+  let options = {};
+  if (typeof args[0] === 'object' && args[0] !== null) {
+    options = Object.assign({}, args[0]);
+  } else if (args.length === 1) {
+    [options.url] = args;
+  } else if (args.length === 2) {
+    [options.method, options.url] = args;
+  } else if (args.length === 3) {
+    [options.method, options.url, options.body] = args;
+  }
+
+  return originalFn(Object.assign({}, defaults, options));
+});
+
 Cypress.Commands.add('deleteAllIndices', () => {
   cy.request('DELETE', `${Cypress.env('elasticsearch')}/*?expand_wildcards=all`);
 });
@@ -56,17 +95,17 @@ Cypress.Commands.add('deleteAllMonitors', () => {
   );
 });
 
-Cypress.Commands.add('createMonitor', monitorJSON => {
+Cypress.Commands.add('createMonitor', (monitorJSON) => {
   cy.request('POST', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}`, monitorJSON);
 });
 
-Cypress.Commands.add('createDestination', destinationJSON => {
+Cypress.Commands.add('createDestination', (destinationJSON) => {
   cy.request('POST', `${Cypress.env('elasticsearch')}${API.DESTINATION_BASE}`, destinationJSON);
 });
 
-Cypress.Commands.add('createAndExecuteMonitor', monitorJSON => {
+Cypress.Commands.add('createAndExecuteMonitor', (monitorJSON) => {
   cy.request('POST', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}`, monitorJSON).then(
-    response => {
+    (response) => {
       // response.body is automatically serialized into JSON
       cy.request(
         'POST',
