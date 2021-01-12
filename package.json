@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "husky": "^3.0.0",
-    "lint-staged": "^9.2.0"
+    "lint-staged": "^9.2.0",
+    "cypress": "^6.0.0"
   },
   "dependencies": {
     "brace": "0.11.1",

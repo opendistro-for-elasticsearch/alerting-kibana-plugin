@@ -1,0 +1,10 @@
+{
+  "name": "sample_destination",
+  "type": "custom_webhook",
+  "custom_webhook": {
+    "header_params": {
+      "Content-Type": "application/json"
+    },
+    "url": "http://www.sampledestination.com"
+  }
+}

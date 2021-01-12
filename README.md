@@ -49,19 +49,37 @@ Example output: `./build/opendistroAlertingKibana-1.12.0.0.zip`
 
 - `yarn start`
 
-  Starts Kibana and includes this plugin. Kibana will be available on `localhost:5601`.
-  Please run in the Kibana root directory.
+  - Starts Kibana and includes this plugin. Kibana will be available on `localhost:5601`.
+  - Please run in the Kibana root directory
+  - You must have Elasticsearch running with the Alerting plugin
 
+## Test
+  
+  There are unit/stubbed integration tests and Cypress e2e/integration tests.
+  
 - `yarn test:jest`
 
-  Runs the plugin tests.
+  - Runs the plugin unit tests.
+
+- `yarn run cypress open`
+
+  - Opens the Cypress test runner.
+
+- `yarn run cypress run`
+
+  - Runs all Cypress tests headlessly in the Electron browser.
+
+ To run the Cypress tests, you must have both Elasticsearch and Kibana running with the Alerting plugin.
+  
+ If you are running Cypress tests with Kibana development server, pass these 2 options to `yarn start`: 
+  1. `--no-base-path`: opt out the BasePathProxy.
+  1. `--no-watch`: make sure your server is not restarted.
 
 
 ## Contributing to Open Distro for Elasticsearch Alerting Kibana
 
 - Refer to [CONTRIBUTING.md](./CONTRIBUTING.md).
 - Since this is a Kibana plugin, it can be useful to review the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) alongside the documentation around [Kibana plugins](https://www.elastic.co/guide/en/kibana/master/kibana-plugins.html) and [plugin development](https://www.elastic.co/guide/en/kibana/master/external-plugin-development.html).
-
 
 
 ## License
