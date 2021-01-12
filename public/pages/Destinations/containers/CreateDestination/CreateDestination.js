@@ -114,6 +114,7 @@ class CreateDestination extends React.Component {
         params: { destinationId },
       },
       history,
+      notifications,
     } = this.props;
     const { ifSeqNo, ifPrimaryTerm } = this.state;
     try {
@@ -124,6 +125,7 @@ class CreateDestination extends React.Component {
       if (resp.ok) {
         history.push(`/destinations`);
       } else {
+        backendErrorNotification(notifications, 'update', 'destination', resp.resp);
         // Handles stale Destination data.
         setSubmitting(false);
         this.getDestination(destinationId);
