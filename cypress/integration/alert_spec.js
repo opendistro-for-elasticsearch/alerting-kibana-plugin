@@ -94,7 +94,7 @@ describe('Alerts', () => {
   describe("can be in 'Completed' state", () => {
     before(() => {
       cy.deleteAllMonitors();
-      // Delete the indices for testing
+      // Delete the testing indices
       cy.deleteIndexByName('test*');
       Cypress.config('unique_number', `${Date.now()}`);
       // Modify the monitor name to be unique
@@ -124,12 +124,17 @@ describe('Alerts', () => {
       // Reload the page
       cy.reload();
 
+      // Type in monitor name in search box to filter out the alert
+      cy.get(`input[type="search"]`)
+        .focus()
+        .type(`${Cypress.config('unique_number')}`);
+
       // Confirm we can see the alert is in 'Completed' state
       cy.contains('Completed');
     });
 
     after(() => {
-      // Delete the indices for testing
+      // Delete the testing indices
       cy.deleteIndexByName('test*');
     });
   });
@@ -173,35 +178,14 @@ describe('Alerts', () => {
         .focus()
         .type(`${Cypress.config('unique_number')}`);
 
-      // Confirm we can see only one alert in the list
-      cy.get('tbody > tr').should(($tr) => {
-        expect($tr, '1 row').to.have.length(1);
-        expect($tr, 'item').to.contain(SAMPLE_MONITOR_TO_BE_DELETED);
-      });
-
       //Confirm there is an active alert
       cy.contains('Active');
 
-      // Click Monitors button to route to Monitors tab
-      cy.get('button').contains('Monitors').click({ force: true });
+      // Delete all existing monitors
+      cy.deleteAllMonitors();
 
-      // Confirm we can see a monitor in the list
-      cy.contains(SAMPLE_MONITOR_TO_BE_DELETED);
-
-      // Select checkbox for the existing monitor
-      cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
-
-      // Click Actions button to open the actions menu
-      cy.contains('Actions').click({ force: true });
-
-      // Click the Delete button
-      cy.contains('Delete').click({ force: true });
-
-      // Confirm we can see an empty monitor list
-      cy.contains('There are no existing monitors');
-
-      // Click Dashboard button to route to Dashboard tab
-      cy.get('button').contains('Dashboard').click({ force: true });
+      // Reload the page
+      cy.reload();
 
       // Type in monitor name in search box to filter out the alert
       cy.get(`input[type="search"]`)

@@ -77,6 +77,7 @@ describe('Destinations', () => {
       cy.get('button').contains('Edit').click({ force: true });
 
       // Wait for input to load and then type in the destination name
+      // should() is used to wait for input loading before clearing
       cy.get('input[name="name"]')
         .should('have.value', SAMPLE_DESTINATION)
         .clear()
