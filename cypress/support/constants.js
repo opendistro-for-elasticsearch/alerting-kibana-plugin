@@ -25,3 +25,8 @@ export const API = {
 };
 
 export const PLUGIN_NAME = 'opendistro-alerting';
+
+export const ADMIN_AUTH = {
+  username: 'admin',
+  password: 'admin',
+};

@@ -42,3 +42,11 @@ Cypress.on('uncaught:exception', (err) => {
     return false;
   }
 });
+
+// Switch the base URL of Elasticsearch when security enabled in the cluster
+if (Cypress.env('security_enabled')) {
+  Cypress.env('elasticsearch', 'https://localhost:9200');
+}
+
+// Generate a unique number by getting a unix timestamp in milliseconds ('Date' is not applicable in IE 8 and older)
+Cypress.config('unique_number', `${Date.now()}`);

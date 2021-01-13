@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-const { API, INDEX } = require('./constants');
+const { API, INDEX, ADMIN_AUTH } = require('./constants');
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -42,11 +42,14 @@ const { API, INDEX } = require('./constants');
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+  // Add the basic auth header when security enabled in the Elasticsearch cluster
+  // https://github.com/cypress-io/cypress/issues/1288
   if (Cypress.env('security_enabled')) {
     const auth = {
       username: 'admin',
       password: 'admin',
     };
+
     if (options) {
       options.auth = auth;
     } else {
@@ -58,13 +61,13 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   }
 });
 
+// Be able to add default options to cy.request(), https://github.com/cypress-io/cypress/issues/726
 Cypress.Commands.overwrite('request', (originalFn, ...args) => {
-  const defaults = {
-    auth: {
-      user: 'admin',
-      pass: 'admin',
-    },
-  };
+  let defaults = {};
+  // Add the basic auth header when security enabled in the Elasticsearch cluster
+  if (Cypress.env('security_enabled')) {
+    defaults.auth = ADMIN_AUTH;
+  }
 
   let options = {};
   if (typeof args[0] === 'object' && args[0] !== null) {

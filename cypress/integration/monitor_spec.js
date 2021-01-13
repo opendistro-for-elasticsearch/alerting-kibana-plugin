@@ -18,11 +18,13 @@ import sampleMonitor from '../fixtures/sample_monitor';
 import sampleMonitorWithAlwaysTrueTrigger from '../fixtures/sample_monitor_with_always_true_trigger';
 import sampleDestination from '../fixtures/sample_destination_custom_webhook.json';
 
-const SAMPLE_MONITOR = 'sample_monitor';
-const UPDATED_MONITOR = 'updated_monitor';
-const SAMPLE_MONITOR_WITH_ANOTHER_NAME = 'sample_monitor_with_always_true_trigger';
-const SAMPLE_TRIGGER = 'sample_trigger';
-const SAMPLE_ACTION = 'sample_action';
+const SAMPLE_MONITOR = `sample_monitor-${Cypress.config('unique_number')}`;
+const UPDATED_MONITOR = `updated_monitor-${Cypress.config('unique_number')}`;
+const SAMPLE_MONITOR_WITH_ANOTHER_NAME = `sample_monitor_with_always_true_trigger-${Cypress.config(
+  'unique_number'
+)}`;
+const SAMPLE_TRIGGER = `sample_trigger-${Cypress.config('unique_number')}`;
+const SAMPLE_ACTION = `sample_action-${Cypress.config('unique_number')}`;
 
 describe('Monitors', () => {
   beforeEach(() => {
@@ -36,14 +38,10 @@ describe('Monitors', () => {
     cy.contains('Create monitor', { timeout: 20000 });
   });
 
-  describe('can be created', () => {
-    before(() => {
-      cy.deleteAllIndices();
-    });
-
+  describe.only('can be created', () => {
     it('defining by extraction query', () => {
       // Confirm we loaded empty monitor list
-      cy.contains('There are no existing monitors');
+      // cy.contains('There are no existing monitors');
 
       // Route us to create monitor page
       cy.contains('Create monitor').click({ force: true });
@@ -73,7 +71,8 @@ describe('Monitors', () => {
 
   describe('can be updated', () => {
     before(() => {
-      cy.deleteAllIndices();
+      //cy.deleteAllIndices();
+      sampleMonitor.name = SAMPLE_MONITOR; // Modify the monitor's name to be unique
       cy.createMonitor(sampleMonitor);
     });
 
