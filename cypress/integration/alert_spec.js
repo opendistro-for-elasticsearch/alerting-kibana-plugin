@@ -183,6 +183,7 @@ describe('Alerts', () => {
 
   describe.only("can be in 'Deleted' state", () => {
     before(() => {
+      cy.deleteAllMonitors();
       Cypress.config('unique_number', `${Date.now()}`);
       // Modify the monitor's name to be unique
       sampleMonitorWithAlwaysTrueTrigger.name += `-${Cypress.config('unique_number')}`;
