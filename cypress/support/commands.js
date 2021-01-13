@@ -117,3 +117,44 @@ Cypress.Commands.add('createAndExecuteMonitor', (monitorJSON) => {
     }
   );
 });
+
+Cypress.Commands.add('deleteMonitorByName', (monitorName) => {
+  const body = {
+    query: {
+      match: {
+        'monitor.name': {
+          query: monitorName,
+          operator: 'and',
+        },
+      },
+    },
+  };
+  cy.request('GET', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/_search`, body).then(
+    (response) => {
+      // response.body is automatically serialized into JSON
+      cy.request(
+        'DELETE',
+        `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/${response.body.hits.hits[0]._id}`
+      );
+    }
+  );
+});
+
+Cypress.Commands.add('deleteAllMonitors2', (monitorName) => {
+  const body = {
+    query: {
+      match_all: {},
+    },
+  };
+  cy.request('GET', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/_search`, body).then(
+    (response) => {
+      // response.body is automatically serialized into JSON
+      for (let i = 0; i < response.body.hits.total.value; i++) {
+        cy.request(
+          'DELETE',
+          `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/${response.body.hits.hits[i]._id}`
+        );
+      }
+    }
+  );
+});

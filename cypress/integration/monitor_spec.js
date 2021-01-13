@@ -39,10 +39,11 @@ describe('Monitors', () => {
   });
 
   describe.only('can be created', () => {
-    it('defining by extraction query', () => {
-      // Confirm we loaded empty monitor list
-      // cy.contains('There are no existing monitors');
+    before(() => {
+      cy.deleteAllMonitors2();
+    });
 
+    it('defining by extraction query', () => {
       // Route us to create monitor page
       cy.contains('Create monitor').click({ force: true });
 
@@ -67,11 +68,15 @@ describe('Monitors', () => {
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
     });
+
+    after(() => {
+      cy.deleteMonitorByName(SAMPLE_MONITOR);
+    });
   });
 
   describe('can be updated', () => {
     before(() => {
-      //cy.deleteAllIndices();
+      cy.deleteAllMonitors2();
       sampleMonitor.name = SAMPLE_MONITOR; // Modify the monitor's name to be unique
       cy.createMonitor(sampleMonitor);
     });
@@ -101,11 +106,15 @@ describe('Monitors', () => {
       // Confirm we can see the updated monitor in the list
       cy.contains(UPDATED_MONITOR);
     });
+
+    after(() => {
+      cy.deleteMonitorByName(UPDATED_MONITOR);
+    });
   });
 
   describe('can be deleted', () => {
     before(() => {
-      cy.deleteAllIndices();
+      sampleMonitor.name = SAMPLE_MONITOR;
       cy.createMonitor(sampleMonitor);
     });
 
@@ -125,11 +134,17 @@ describe('Monitors', () => {
       // Confirm we can see an empty monitor list
       cy.contains('There are no existing monitors');
     });
+
+    // after(() => {
+    //   cy.deleteMonitorByName(SAMPLE_MONITOR);
+    // })
   });
 
   describe('can be searched', () => {
     before(() => {
-      cy.deleteAllIndices();
+      // Modify the monitor's name to be unique
+      sampleMonitor.name = SAMPLE_MONITOR;
+      sampleMonitorWithAlwaysTrueTrigger.name = SAMPLE_MONITOR_WITH_ANOTHER_NAME;
       // Create 21 monitors so that a monitor will not appear in the first page
       for (let i = 0; i < 20; i++) {
         cy.createMonitor(sampleMonitor);
@@ -153,11 +168,19 @@ describe('Monitors', () => {
         expect($tr, 'item').to.contain(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
       });
     });
+
+    after(() => {
+      for (let i = 0; i < 20; i++) {
+        cy.deleteMonitorByName(SAMPLE_MONITOR);
+      }
+      cy.deleteMonitorByName(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
+    });
   });
 
   describe('can have triggers', () => {
     before(() => {
-      cy.deleteAllIndices();
+      //cy.deleteAllIndices();
+      sampleMonitor.name = SAMPLE_MONITOR;
       cy.createMonitor(sampleMonitor);
     });
 
@@ -235,5 +258,9 @@ describe('Monitors', () => {
       // Confirm we can see the new action
       cy.contains(SAMPLE_ACTION);
     });
+
+    // after(() => {
+    //   cy.deleteMonitorByName(SAMPLE_MONITOR);
+    // })
   });
 });
