@@ -153,3 +153,19 @@ Cypress.Commands.add('deleteAllDestinations', () => {
     }
   );
 });
+
+Cypress.Commands.add('createIndexByName', (indexName) => {
+  cy.request('PUT', `${Cypress.env('elasticsearch')}/${indexName}`);
+});
+
+Cypress.Commands.add('deleteIndexByName', (indexName) => {
+  cy.request('DELETE', `${Cypress.env('elasticsearch')}/${indexName}`);
+});
+
+Cypress.Commands.add('insertDocumentToIndex', (indexName, documentId, documentBody) => {
+  cy.request(
+    'PUT',
+    `${Cypress.env('elasticsearch')}/${indexName}/_doc/${documentId}`,
+    documentBody
+  );
+});
