@@ -18,13 +18,11 @@ import sampleMonitor from '../fixtures/sample_monitor';
 import sampleMonitorWithAlwaysTrueTrigger from '../fixtures/sample_monitor_with_always_true_trigger';
 import sampleDestination from '../fixtures/sample_destination_custom_webhook.json';
 
-const SAMPLE_MONITOR = `sample_monitor-${Cypress.config('unique_number')}`;
-const UPDATED_MONITOR = `updated_monitor-${Cypress.config('unique_number')}`;
-const SAMPLE_MONITOR_WITH_ANOTHER_NAME = `sample_monitor_with_always_true_trigger-${Cypress.config(
-  'unique_number'
-)}`;
-const SAMPLE_TRIGGER = `sample_trigger-${Cypress.config('unique_number')}`;
-const SAMPLE_ACTION = `sample_action-${Cypress.config('unique_number')}`;
+const SAMPLE_MONITOR = 'sample_monitor';
+const UPDATED_MONITOR = 'updated_monitor';
+const SAMPLE_MONITOR_WITH_ANOTHER_NAME = 'sample_monitor_with_always_true_trigger';
+const SAMPLE_TRIGGER = 'sample_trigger';
+const SAMPLE_ACTION = 'sample_action';
 
 describe('Monitors', () => {
   beforeEach(() => {
@@ -38,12 +36,15 @@ describe('Monitors', () => {
     cy.contains('Create monitor', { timeout: 20000 });
   });
 
-  describe.only('can be created', () => {
+  describe('can be created', () => {
     before(() => {
-      cy.deleteAllMonitors2();
+      cy.deleteAllMonitors();
     });
 
     it('defining by extraction query', () => {
+      // Confirm we loaded empty monitor list
+      cy.contains('There are no existing monitors');
+
       // Route us to create monitor page
       cy.contains('Create monitor').click({ force: true });
 
@@ -68,16 +69,11 @@ describe('Monitors', () => {
       // Confirm we can see the created monitor in the list
       cy.contains(SAMPLE_MONITOR);
     });
-
-    after(() => {
-      cy.deleteMonitorByName(SAMPLE_MONITOR);
-    });
   });
 
   describe('can be updated', () => {
     before(() => {
-      cy.deleteAllMonitors2();
-      sampleMonitor.name = SAMPLE_MONITOR; // Modify the monitor's name to be unique
+      cy.deleteAllMonitors();
       cy.createMonitor(sampleMonitor);
     });
 
@@ -92,7 +88,10 @@ describe('Monitors', () => {
       cy.contains('Edit').click({ force: true });
 
       // Wait for input to load and then type in the new monitor name
-      cy.get('input[name="name"]').focus().clear().type(UPDATED_MONITOR, { force: true });
+      cy.get('input[name="name"]')
+        .should('have.value', SAMPLE_MONITOR)
+        .clear()
+        .type(UPDATED_MONITOR, { force: true });
 
       // Click Update button
       cy.get('button').contains('Update').last().click({ force: true });
@@ -106,15 +105,11 @@ describe('Monitors', () => {
       // Confirm we can see the updated monitor in the list
       cy.contains(UPDATED_MONITOR);
     });
-
-    after(() => {
-      cy.deleteMonitorByName(UPDATED_MONITOR);
-    });
   });
 
   describe('can be deleted', () => {
     before(() => {
-      sampleMonitor.name = SAMPLE_MONITOR;
+      cy.deleteAllMonitors();
       cy.createMonitor(sampleMonitor);
     });
 
@@ -134,17 +129,11 @@ describe('Monitors', () => {
       // Confirm we can see an empty monitor list
       cy.contains('There are no existing monitors');
     });
-
-    // after(() => {
-    //   cy.deleteMonitorByName(SAMPLE_MONITOR);
-    // })
   });
 
   describe('can be searched', () => {
     before(() => {
-      // Modify the monitor's name to be unique
-      sampleMonitor.name = SAMPLE_MONITOR;
-      sampleMonitorWithAlwaysTrueTrigger.name = SAMPLE_MONITOR_WITH_ANOTHER_NAME;
+      cy.deleteAllMonitors();
       // Create 21 monitors so that a monitor will not appear in the first page
       for (let i = 0; i < 20; i++) {
         cy.createMonitor(sampleMonitor);
@@ -168,19 +157,12 @@ describe('Monitors', () => {
         expect($tr, 'item').to.contain(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
       });
     });
-
-    after(() => {
-      for (let i = 0; i < 20; i++) {
-        cy.deleteMonitorByName(SAMPLE_MONITOR);
-      }
-      cy.deleteMonitorByName(SAMPLE_MONITOR_WITH_ANOTHER_NAME);
-    });
   });
 
   describe('can have triggers', () => {
     before(() => {
-      //cy.deleteAllIndices();
-      sampleMonitor.name = SAMPLE_MONITOR;
+      cy.deleteAllMonitors();
+      cy.deleteAllDestinations();
       cy.createMonitor(sampleMonitor);
     });
 
@@ -258,9 +240,11 @@ describe('Monitors', () => {
       // Confirm we can see the new action
       cy.contains(SAMPLE_ACTION);
     });
+  });
 
-    // after(() => {
-    //   cy.deleteMonitorByName(SAMPLE_MONITOR);
-    // })
+  after(() => {
+    // Delete all existing monitors and destinations
+    cy.deleteAllMonitors();
+    cy.deleteAllDestinations();
   });
 });

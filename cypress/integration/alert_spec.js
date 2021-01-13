@@ -34,7 +34,11 @@ describe('Alerts', () => {
 
   describe("can be in 'Active' state", () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
+      // Generate a unique number in every test by getting a unix timestamp in milliseconds
+      Cypress.config('unique_number', `${Date.now()}`);
+      // Modify the monitor's name to be unique
+      sampleMonitorWithAlwaysTrueTrigger.name += `-${Cypress.config('unique_number')}`;
       cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
@@ -44,6 +48,11 @@ describe('Alerts', () => {
 
       // Reload the page
       cy.reload();
+
+      // Type in monitor name in search box to filter out the alert
+      cy.get(`input[type="search"]`)
+        .focus()
+        .type(`${Cypress.config('unique_number')}`);
 
       // Confirm we can see one and only alert in Active state
       cy.get('tbody > tr').should(($tr) => {
@@ -55,16 +64,25 @@ describe('Alerts', () => {
 
   describe("can be in 'Acknowledged' state", () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
+      Cypress.config('unique_number', `${Date.now()}`);
+      // Modify the monitor's name to be unique
+      sampleMonitorWithAlwaysTrueTrigger.name += `-${Cypress.config('unique_number')}`;
       cy.createAndExecuteMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
     it('by clicking the button in Dashboard', () => {
+      // Type in monitor name in search box to filter out the alert
+      cy.get(`input[type="search"]`)
+        .focus()
+        .type(`${Cypress.config('unique_number')}`);
+
       //Confirm there is an active alert
       cy.contains('Active');
 
       // Select checkbox for the existing alert
-      cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
+      // There may be multiple alerts in the cluster, first() is used to get the active alert
+      cy.get('input[data-test-subj^="checkboxSelectRow-"]').first().click({ force: true });
 
       // Click Acknowledge button
       cy.get('button').contains('Acknowledge').click({ force: true });
@@ -76,17 +94,26 @@ describe('Alerts', () => {
 
   describe("can be in 'Completed' state", () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
       cy.createMonitor(sampleMonitorWithAlwaysTrueTrigger);
+      Cypress.config('unique_number', `${Date.now()}`);
+      // Modify the monitor's name to be unique
+      sampleMonitorWorkflow.name += `-${Cypress.config('unique_number')}`;
       cy.createAndExecuteMonitor(sampleMonitorWorkflow);
     });
 
     it('when the trigger condition is not met after met once', () => {
+      // Type in monitor name in search box to filter the alerts
+      cy.get(`input[type="search"]`)
+        .focus()
+        .type(`${Cypress.config('unique_number')}`);
+
       //Confirm there is an active alert
       cy.contains('Active');
 
       // Select checkbox for the existing alert
-      cy.get('input[data-test-subj^="checkboxSelectRow-"]').click({ force: true });
+      // There may be multiple alerts in the cluster, first() is used to get the active alert
+      cy.get('input[data-test-subj^="checkboxSelectRow-"]').first().click({ force: true });
 
       // Click Monitors button to route to Monitors tab
       cy.get('button').contains('Monitors').click({ force: true });
@@ -101,6 +128,7 @@ describe('Alerts', () => {
       });
 
       // Select checkbox for the existing monitor
+      // There are 2 monitors in the cluster, first() is used to get the first one
       cy.get('input[data-test-subj^="checkboxSelectRow-"]').first().click({ force: true });
 
       // Click Actions button to open the actions menu
@@ -131,27 +159,48 @@ describe('Alerts', () => {
 
   describe("can be in 'Error' state", () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
       // modify the JSON object to make an error alert when executing the monitor
       sampleMonitorWithAlwaysTrueTrigger.triggers[0].actions = [
         { name: '', destination_id: '', message_template: { source: '' } },
       ];
+      Cypress.config('unique_number', `${Date.now()}`);
+      // Modify the monitor's name to be unique
+      sampleMonitorWithAlwaysTrueTrigger.name += `-${Cypress.config('unique_number')}`;
       cy.createAndExecuteMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
     it('by using a wrong destination', () => {
+      // Type in monitor name in search box to filter out the alert
+      cy.get(`input[type="search"]`)
+        .focus()
+        .type(`${Cypress.config('unique_number')}`);
+
       // Confirm we can see the alert is in 'Error' state
       cy.contains('Error');
     });
   });
 
-  describe("can be in 'Deleted' state", () => {
+  describe.only("can be in 'Deleted' state", () => {
     before(() => {
-      cy.deleteAllIndices();
+      Cypress.config('unique_number', `${Date.now()}`);
+      // Modify the monitor's name to be unique
+      sampleMonitorWithAlwaysTrueTrigger.name += `-${Cypress.config('unique_number')}`;
       cy.createAndExecuteMonitor(sampleMonitorWithAlwaysTrueTrigger);
     });
 
     it('by deleting the monitor', () => {
+      // Type in monitor name in search box to filter out the alert
+      cy.get(`input[type="search"]`)
+        .focus()
+        .type(`${Cypress.config('unique_number')}`);
+
+      // Confirm we can see only one alert in the list
+      cy.get('tbody > tr').should(($tr) => {
+        expect($tr, '1 row').to.have.length(1);
+        expect($tr, 'item').to.contain(SAMPLE_MONITOR_TO_BE_DELETED);
+      });
+
       //Confirm there is an active alert
       cy.contains('Active');
 
@@ -176,8 +225,18 @@ describe('Alerts', () => {
       // Click Dashboard button to route to Dashboard tab
       cy.get('button').contains('Dashboard').click({ force: true });
 
+      // Type in monitor name in search box to filter out the alert
+      cy.get(`input[type="search"]`)
+        .focus()
+        .type(`${Cypress.config('unique_number')}`);
+
       // Confirm we can see the alert is in 'Deleted' state
       cy.contains('Deleted');
     });
+  });
+
+  after(() => {
+    // Delete all existing monitors
+    cy.deleteAllMonitors();
   });
 });

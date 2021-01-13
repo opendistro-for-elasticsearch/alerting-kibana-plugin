@@ -45,15 +45,10 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   // Add the basic auth header when security enabled in the Elasticsearch cluster
   // https://github.com/cypress-io/cypress/issues/1288
   if (Cypress.env('security_enabled')) {
-    const auth = {
-      username: 'admin',
-      password: 'admin',
-    };
-
     if (options) {
-      options.auth = auth;
+      options.auth = ADMIN_AUTH;
     } else {
-      options = { auth };
+      options = { auth: ADMIN_AUTH };
     }
     return originalFn(url, options);
   } else {
@@ -64,7 +59,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 // Be able to add default options to cy.request(), https://github.com/cypress-io/cypress/issues/726
 Cypress.Commands.overwrite('request', (originalFn, ...args) => {
   let defaults = {};
-  // Add the basic auth header when security enabled in the Elasticsearch cluster
+  // Add the basic authentication header when security enabled in the Elasticsearch cluster
   if (Cypress.env('security_enabled')) {
     defaults.auth = ADMIN_AUTH;
   }
@@ -83,21 +78,6 @@ Cypress.Commands.overwrite('request', (originalFn, ...args) => {
   return originalFn(Object.assign({}, defaults, options));
 });
 
-Cypress.Commands.add('deleteAllIndices', () => {
-  cy.request('DELETE', `${Cypress.env('elasticsearch')}/*?expand_wildcards=all`);
-});
-
-Cypress.Commands.add('deleteAllMonitors', () => {
-  const body = {
-    query: { exists: { field: 'monitor' } },
-  };
-  cy.request(
-    'POST',
-    `${Cypress.env('elasticsearch')}/${INDEX.OPENDISTRO_ALERTING_CONFIG}/_delete_by_query`,
-    body
-  );
-});
-
 Cypress.Commands.add('createMonitor', (monitorJSON) => {
   cy.request('POST', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}`, monitorJSON);
 });
@@ -109,7 +89,6 @@ Cypress.Commands.add('createDestination', (destinationJSON) => {
 Cypress.Commands.add('createAndExecuteMonitor', (monitorJSON) => {
   cy.request('POST', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}`, monitorJSON).then(
     (response) => {
-      // response.body is automatically serialized into JSON
       cy.request(
         'POST',
         `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/${response.body._id}/_execute`
@@ -131,7 +110,6 @@ Cypress.Commands.add('deleteMonitorByName', (monitorName) => {
   };
   cy.request('GET', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/_search`, body).then(
     (response) => {
-      // response.body is automatically serialized into JSON
       cy.request(
         'DELETE',
         `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/${response.body.hits.hits[0]._id}`
@@ -140,19 +118,36 @@ Cypress.Commands.add('deleteMonitorByName', (monitorName) => {
   );
 });
 
-Cypress.Commands.add('deleteAllMonitors2', (monitorName) => {
+Cypress.Commands.add('deleteAllMonitors', () => {
   const body = {
+    size: 200,
     query: {
-      match_all: {},
+      exists: {
+        field: 'monitor',
+      },
     },
   };
   cy.request('GET', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/_search`, body).then(
     (response) => {
-      // response.body is automatically serialized into JSON
       for (let i = 0; i < response.body.hits.total.value; i++) {
         cy.request(
           'DELETE',
           `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/${response.body.hits.hits[i]._id}`
+        );
+      }
+    }
+  );
+});
+
+Cypress.Commands.add('deleteAllDestinations', () => {
+  cy.request('GET', `${Cypress.env('elasticsearch')}${API.DESTINATION_BASE}?size=200`).then(
+    (response) => {
+      for (let i = 0; i < response.body.totalDestinations; i++) {
+        cy.request(
+          'DELETE',
+          `${Cypress.env('elasticsearch')}${API.DESTINATION_BASE}/${
+            response.body.destinations[i].id
+          }`
         );
       }
     }
