@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-const { API, INDEX, ADMIN_AUTH } = require('./constants');
+const { API, ADMIN_AUTH } = require('./constants');
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -127,21 +127,32 @@ Cypress.Commands.add('deleteAllMonitors', () => {
       },
     },
   };
-  cy.request('GET', `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/_search`, body).then(
-    (response) => {
+  cy.request({
+    method: 'GET',
+    url: `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/_search`,
+    failOnStatusCode: false, // In case there is no alerting config index in cluster, where the status code is 404
+    body,
+  }).then((response) => {
+    if (response.status === 200) {
       for (let i = 0; i < response.body.hits.total.value; i++) {
         cy.request(
           'DELETE',
           `${Cypress.env('elasticsearch')}${API.MONITOR_BASE}/${response.body.hits.hits[i]._id}`
         );
       }
+    } else {
+      cy.log('Failed to get all monitors.', response);
     }
-  );
+  });
 });
 
 Cypress.Commands.add('deleteAllDestinations', () => {
-  cy.request('GET', `${Cypress.env('elasticsearch')}${API.DESTINATION_BASE}?size=200`).then(
-    (response) => {
+  cy.request({
+    method: 'GET',
+    url: `${Cypress.env('elasticsearch')}${API.DESTINATION_BASE}?size=200`,
+    failOnStatusCode: false, // In case there is no alerting config index in cluster, where the status code is 404
+  }).then((response) => {
+    if (response.status === 200) {
       for (let i = 0; i < response.body.totalDestinations; i++) {
         cy.request(
           'DELETE',
@@ -150,8 +161,10 @@ Cypress.Commands.add('deleteAllDestinations', () => {
           }`
         );
       }
+    } else {
+      cy.log('Failed to get all destinations.', response);
     }
-  );
+  });
 });
 
 Cypress.Commands.add('createIndexByName', (indexName) => {
