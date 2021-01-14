@@ -18,7 +18,9 @@ import PropTypes from 'prop-types';
 import { Field } from 'formik';
 
 const FormikInputWrapper = ({ name, fieldProps, render }) => (
-  <Field name={name} {...fieldProps} render={({ field, form }) => render({ field, form })} />
+  <Field name={name} {...fieldProps}>
+    {({ field, form }) => render({ field, form })}
+  </Field>
 );
 
 FormikInputWrapper.propTypes = {

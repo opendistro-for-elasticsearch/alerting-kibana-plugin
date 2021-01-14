@@ -32,7 +32,7 @@ describe('TriggerExpressions', () => {
   });
 
   test('calls openExpression when clicking expression', () => {
-    const wrapper = mount(<Formik render={() => <TriggerExpressions {...props} />} />);
+    const wrapper = mount(<Formik children={() => <TriggerExpressions {...props} />} />);
     const openExpression = jest.spyOn(
       wrapper.find(TriggerExpressions).instance(),
       'openExpression'
@@ -48,7 +48,7 @@ describe('TriggerExpressions', () => {
   });
 
   test('calls closeExpression when closing popover', async () => {
-    const wrapper = mount(<Formik render={() => <TriggerExpressions {...props} />} />);
+    const wrapper = mount(<Formik children={() => <TriggerExpressions {...props} />} />);
     const openExpression = jest.spyOn(
       wrapper.find(TriggerExpressions).instance(),
       'openExpression'

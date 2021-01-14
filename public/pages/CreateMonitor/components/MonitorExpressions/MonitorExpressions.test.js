@@ -23,10 +23,9 @@ import MonitorExpressions from './MonitorExpressions';
 describe('MonitorExpressions', () => {
   test('renders', () => {
     const component = (
-      <Formik
-        initialValues={FORMIK_INITIAL_VALUES}
-        render={() => <MonitorExpressions onRunQuery={() => {}} dataTypes={[]} ofEnabled={false} />}
-      />
+      <Formik initialValues={FORMIK_INITIAL_VALUES}>
+        {() => <MonitorExpressions onRunQuery={() => {}} dataTypes={[]} ofEnabled={false} />}
+      </Formik>
     );
 
     expect(render(component)).toMatchSnapshot();

@@ -31,10 +31,9 @@ const runAllPromises = () => new Promise(setImmediate);
 
 function getMountWrapper(customProps = {}) {
   return mount(
-    <Formik
-      initialValues={FORMIK_INITIAL_VALUES}
-      render={() => <MonitorIndex httpClient={httpClientMock} {...customProps} />}
-    />
+    <Formik initialValues={FORMIK_INITIAL_VALUES}>
+      {() => <MonitorIndex httpClient={httpClientMock} {...customProps} />}
+    </Formik>
   );
 }
 

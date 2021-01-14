@@ -255,7 +255,8 @@ export default class ManageSenders extends React.Component {
           this.processSenders(values).then(() => onClickSave());
         }}
         validateOnChange={false}
-        render={({ values, handleSubmit, isSubmitting }) => (
+      >
+        {({ values, handleSubmit, isSubmitting }) => (
           <EuiOverlayMask>
             <EuiModal
               className="modal-manage-email"
@@ -269,10 +270,8 @@ export default class ManageSenders extends React.Component {
               <EuiHorizontalRule margin="s" />
 
               <EuiModalBody>
-                <FieldArray
-                  name="senders"
-                  validateOnChange={true}
-                  render={(arrayHelpers) =>
+                <FieldArray name="senders" validateOnChange={true}>
+                  {(arrayHelpers) =>
                     !isEmailAllowed || loadingSenders ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         {isEmailAllowed ? 'Loading Senders...' : 'Email is disallowed'}
@@ -281,7 +280,7 @@ export default class ManageSenders extends React.Component {
                       this.renderSenders({ values, arrayHelpers })
                     )
                   }
-                />
+                </FieldArray>
               </EuiModalBody>
 
               {this.hasSendersToProcess(values) ? (
@@ -304,7 +303,7 @@ export default class ManageSenders extends React.Component {
             </EuiModal>
           </EuiOverlayMask>
         )}
-      />
+      </Formik>
     ) : null;
   }
 }

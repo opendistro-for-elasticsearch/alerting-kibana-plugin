@@ -180,7 +180,8 @@ class CreateDestination extends React.Component {
           enableReinitialize={true}
           validateOnChange={false}
           onSubmit={this.handleSubmit}
-          render={({ values, handleSubmit, isSubmitting, errors, isValid }) => (
+        >
+          {({ values, handleSubmit, isSubmitting, errors, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Add'} destination</h1>
@@ -269,7 +270,7 @@ class CreateDestination extends React.Component {
               />
             </Fragment>
           )}
-        />
+        </Formik>
       </div>
     );
   }

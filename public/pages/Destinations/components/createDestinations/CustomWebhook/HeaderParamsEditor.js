@@ -63,13 +63,11 @@ const propTypes = {
 const HeaderParamsEditor = ({ type, headerParams }) => (
   <Fragment>
     <SubHeader title={<h6>Header information</h6>} description={''} />
-    <FieldArray
-      name={`${type}.headerParams`}
-      validateOnChange={true}
-      render={arrayHelpers => (
+    <FieldArray name={`${type}.headerParams`} validateOnChange={true}>
+      {(arrayHelpers) => (
         <AttributeEditor
           onAdd={() => arrayHelpers.push({ key: '', value: '' })}
-          onRemove={index => index !== 0 && arrayHelpers.remove(index)}
+          onRemove={(index) => index !== 0 && arrayHelpers.remove(index)}
           items={headerParams}
           name={`${type}.headerParams`}
           addButtonText="Add header"
@@ -78,7 +76,7 @@ const HeaderParamsEditor = ({ type, headerParams }) => (
           onRenderValueField={handleRenderValueField}
         />
       )}
-    />
+    </FieldArray>
   </Fragment>
 );
 
