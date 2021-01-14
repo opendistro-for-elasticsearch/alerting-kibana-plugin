@@ -17,7 +17,7 @@ import { PLUGIN_NAME } from '../support/constants';
 import sampleMonitorWithAlwaysTrueTrigger from '../fixtures/sample_monitor_with_always_true_trigger';
 import sampleMonitorWorkflow from '../fixtures/sample_monitor_workflow';
 
-const SAMPLE_MONITOR_TO_BE_DELETED = 'sample_monitor_with_always_true_trigger';
+const TESTING_INDEX = 'alerting_test';
 
 describe('Alerts', () => {
   beforeEach(() => {
@@ -94,8 +94,8 @@ describe('Alerts', () => {
   describe("can be in 'Completed' state", () => {
     before(() => {
       cy.deleteAllMonitors();
-      // Delete the testing indices
-      cy.deleteIndexByName('test*');
+      // Delete the target indices defined in 'sample_monitor_workflow.json'
+      cy.deleteIndexByName('alerting*');
       Cypress.config('unique_number', `${Date.now()}`);
       // Modify the monitor name to be unique
       sampleMonitorWorkflow.name += `-${Cypress.config('unique_number')}`;
@@ -111,10 +111,10 @@ describe('Alerts', () => {
       // Confirm there is an active alert
       cy.contains('Active');
 
-      // The trigger condition is: there is no document in the indices 'test*'
+      // The trigger condition is: there is no document in the indices 'alerting*'
       // The following commands create a document in the index to complete the alert
       // Create an index
-      cy.createIndexByName('test');
+      cy.createIndexByName(TESTING_INDEX);
 
       // Insert a document
       cy.insertDocumentToIndex('test', 1, {});
@@ -135,8 +135,8 @@ describe('Alerts', () => {
     });
 
     after(() => {
-      // Delete the testing indices
-      cy.deleteIndexByName('test*');
+      // Delete the testing index
+      cy.deleteIndexByName(TESTING_INDEX);
     });
   });
 

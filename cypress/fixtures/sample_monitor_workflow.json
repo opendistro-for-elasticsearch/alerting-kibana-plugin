@@ -10,7 +10,7 @@
   "inputs": [
     {
       "search": {
-        "indices": ["test*"],
+        "indices": ["alerting*"],
         "query": {
           "query": {
             "match_all": {}
