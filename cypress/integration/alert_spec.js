@@ -111,7 +111,8 @@ describe('Alerts', () => {
       // Confirm there is an active alert
       cy.contains('Active');
 
-      // The trigger condition is: there is no documents in the indices 'test*', so create one to complete the alert
+      // The trigger condition is: there is no document in the indices 'test*'
+      // The following commands create a document in the index to complete the alert
       // Create an index
       cy.createIndexByName('test');
 
