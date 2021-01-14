@@ -2,7 +2,6 @@
 
 exports[`MonitorIndex renders 1`] = `
 <Formik
-  enableReinitialize={false}
   initialValues={
     Object {
       "aggregationType": "count",
@@ -54,10 +53,7 @@ exports[`MonitorIndex renders 1`] = `
       },
     }
   }
-  isInitialValid={false}
   render={[Function]}
-  validateOnBlur={true}
-  validateOnChange={true}
 >
   <MonitorIndex
     httpClient={[MockFunction]}
@@ -115,20 +111,26 @@ exports[`MonitorIndex renders 1`] = `
         name="index"
         render={[Function]}
       >
-        <C
+        <Field
           name="index"
           render={[Function]}
           validate={[Function]}
         >
-          <FieldInner
-            formik={
+          <FormikFormRow
+            form={
               Object {
                 "dirty": false,
                 "errors": Object {},
+                "getFieldHelpers": [Function],
+                "getFieldMeta": [Function],
+                "getFieldProps": [Function],
                 "handleBlur": [Function],
                 "handleChange": [Function],
                 "handleReset": [Function],
                 "handleSubmit": [Function],
+                "initialErrors": Object {},
+                "initialStatus": undefined,
+                "initialTouched": Object {},
                 "initialValues": Object {
                   "aggregationType": "count",
                   "bucketUnitOfTime": "h",
@@ -179,11 +181,10 @@ exports[`MonitorIndex renders 1`] = `
                   },
                 },
                 "isSubmitting": false,
-                "isValid": false,
+                "isValid": true,
                 "isValidating": false,
                 "registerField": [Function],
                 "resetForm": [Function],
-                "setError": [Function],
                 "setErrors": [Function],
                 "setFieldError": [Function],
                 "setFieldTouched": [Function],
@@ -193,16 +194,16 @@ exports[`MonitorIndex renders 1`] = `
                 "setSubmitting": [Function],
                 "setTouched": [Function],
                 "setValues": [Function],
+                "status": undefined,
                 "submitCount": 0,
                 "submitForm": [Function],
                 "touched": Object {},
                 "unregisterField": [Function],
-                "validate": undefined,
                 "validateField": [Function],
                 "validateForm": [Function],
                 "validateOnBlur": true,
                 "validateOnChange": true,
-                "validationSchema": undefined,
+                "validateOnMount": false,
                 "values": Object {
                   "aggregationType": "count",
                   "bucketUnitOfTime": "h",
@@ -255,165 +256,38 @@ exports[`MonitorIndex renders 1`] = `
               }
             }
             name="index"
-            render={[Function]}
-            validate={[Function]}
-          >
-            <FormikFormRow
-              form={
-                Object {
-                  "dirty": false,
-                  "errors": Object {},
-                  "handleBlur": [Function],
-                  "handleChange": [Function],
-                  "handleReset": [Function],
-                  "handleSubmit": [Function],
-                  "initialValues": Object {
-                    "aggregationType": "count",
-                    "bucketUnitOfTime": "h",
-                    "bucketValue": 1,
-                    "cronExpression": "0 */1 * * *",
-                    "daily": 0,
-                    "detectorId": "",
-                    "disabled": false,
-                    "fieldName": Array [],
-                    "frequency": "interval",
-                    "groupedOverFieldName": "bytes",
-                    "groupedOverTop": 5,
-                    "index": Array [],
-                    "monthly": Object {
-                      "day": 1,
-                      "type": "day",
-                    },
-                    "name": "",
-                    "overDocuments": "all documents",
-                    "period": Object {
-                      "interval": 1,
-                      "unit": "MINUTES",
-                    },
-                    "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                    "searchType": "graph",
-                    "timeField": "",
-                    "timezone": Array [],
-                    "weekly": Object {
-                      "fri": false,
-                      "mon": false,
-                      "sat": false,
-                      "sun": false,
-                      "thur": false,
-                      "tue": false,
-                      "wed": false,
-                    },
-                    "where": Object {
-                      "fieldName": Array [],
-                      "fieldRangeEnd": 0,
-                      "fieldRangeStart": 0,
-                      "fieldValue": "",
-                      "operator": "is",
-                    },
-                  },
-                  "isSubmitting": false,
-                  "isValid": false,
-                  "isValidating": false,
-                  "registerField": [Function],
-                  "resetForm": [Function],
-                  "setError": [Function],
-                  "setErrors": [Function],
-                  "setFieldError": [Function],
-                  "setFieldTouched": [Function],
-                  "setFieldValue": [Function],
-                  "setFormikState": [Function],
-                  "setStatus": [Function],
-                  "setSubmitting": [Function],
-                  "setTouched": [Function],
-                  "setValues": [Function],
-                  "submitCount": 0,
-                  "submitForm": [Function],
-                  "touched": Object {},
-                  "unregisterField": [Function],
-                  "validateField": [Function],
-                  "validateForm": [Function],
-                  "validateOnBlur": true,
-                  "validateOnChange": true,
-                  "values": Object {
-                    "aggregationType": "count",
-                    "bucketUnitOfTime": "h",
-                    "bucketValue": 1,
-                    "cronExpression": "0 */1 * * *",
-                    "daily": 0,
-                    "detectorId": "",
-                    "disabled": false,
-                    "fieldName": Array [],
-                    "frequency": "interval",
-                    "groupedOverFieldName": "bytes",
-                    "groupedOverTop": 5,
-                    "index": Array [],
-                    "monthly": Object {
-                      "day": 1,
-                      "type": "day",
-                    },
-                    "name": "",
-                    "overDocuments": "all documents",
-                    "period": Object {
-                      "interval": 1,
-                      "unit": "MINUTES",
-                    },
-                    "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                    "searchType": "graph",
-                    "timeField": "",
-                    "timezone": Array [],
-                    "weekly": Object {
-                      "fri": false,
-                      "mon": false,
-                      "sat": false,
-                      "sun": false,
-                      "thur": false,
-                      "tue": false,
-                      "wed": false,
-                    },
-                    "where": Object {
-                      "fieldName": Array [],
-                      "fieldRangeEnd": 0,
-                      "fieldRangeStart": 0,
-                      "fieldValue": "",
-                      "operator": "is",
-                    },
-                  },
-                }
+            rowProps={
+              Object {
+                "error": [Function],
+                "helpText": "You can use a * as a wildcard in your index pattern",
+                "isInvalid": [Function],
+                "label": "Index",
+                "style": Object {
+                  "paddingLeft": "10px",
+                },
               }
-              name="index"
-              rowProps={
+            }
+          >
+            <EuiFormRow
+              describedByIds={Array []}
+              display="row"
+              fullWidth={false}
+              hasChildLabel={true}
+              hasEmptyLabelSpace={false}
+              helpText="You can use a * as a wildcard in your index pattern"
+              id="index-form-row"
+              isInvalid={false}
+              label="Index"
+              labelType="label"
+              style={
                 Object {
-                  "error": [Function],
-                  "helpText": "You can use a * as a wildcard in your index pattern",
-                  "isInvalid": [Function],
-                  "label": "Index",
-                  "style": Object {
-                    "paddingLeft": "10px",
-                  },
+                  "paddingLeft": "10px",
                 }
               }
             >
-              <EuiFormRow
-                describedByIds={Array []}
-                display="row"
-                fullWidth={false}
-                hasChildLabel={true}
-                hasEmptyLabelSpace={false}
-                helpText="You can use a * as a wildcard in your index pattern"
-                id="index-form-row"
-                isInvalid={false}
-                label="Index"
-                labelType="label"
+              <div
+                className="euiFormRow"
+                id="index-form-row-row"
                 style={
                   Object {
                     "paddingLeft": "10px",
@@ -421,441 +295,438 @@ exports[`MonitorIndex renders 1`] = `
                 }
               >
                 <div
-                  className="euiFormRow"
-                  id="index-form-row-row"
-                  style={
-                    Object {
-                      "paddingLeft": "10px",
-                    }
-                  }
+                  className="euiFormRow__labelWrapper"
                 >
-                  <div
-                    className="euiFormRow__labelWrapper"
+                  <EuiFormLabel
+                    aria-invalid={false}
+                    className="euiFormRow__label"
+                    htmlFor="index-form-row"
+                    isFocused={false}
+                    isInvalid={false}
+                    type="label"
                   >
-                    <EuiFormLabel
+                    <label
                       aria-invalid={false}
-                      className="euiFormRow__label"
+                      className="euiFormLabel euiFormRow__label"
                       htmlFor="index-form-row"
-                      isFocused={false}
-                      isInvalid={false}
-                      type="label"
                     >
-                      <label
-                        aria-invalid={false}
-                        className="euiFormLabel euiFormRow__label"
-                        htmlFor="index-form-row"
-                      >
-                        Index
-                      </label>
-                    </EuiFormLabel>
-                  </div>
-                  <div
-                    className="euiFormRow__fieldWrapper"
+                      Index
+                    </label>
+                  </EuiFormLabel>
+                </div>
+                <div
+                  className="euiFormRow__fieldWrapper"
+                >
+                  <ComboBox
+                    aria-describedby="index-form-row-help"
+                    field={
+                      Object {
+                        "name": "index",
+                        "onBlur": [Function],
+                        "onChange": [Function],
+                        "value": Array [],
+                      }
+                    }
+                    form={
+                      Object {
+                        "dirty": false,
+                        "errors": Object {},
+                        "getFieldHelpers": [Function],
+                        "getFieldMeta": [Function],
+                        "getFieldProps": [Function],
+                        "handleBlur": [Function],
+                        "handleChange": [Function],
+                        "handleReset": [Function],
+                        "handleSubmit": [Function],
+                        "initialErrors": Object {},
+                        "initialStatus": undefined,
+                        "initialTouched": Object {},
+                        "initialValues": Object {
+                          "aggregationType": "count",
+                          "bucketUnitOfTime": "h",
+                          "bucketValue": 1,
+                          "cronExpression": "0 */1 * * *",
+                          "daily": 0,
+                          "detectorId": "",
+                          "disabled": false,
+                          "fieldName": Array [],
+                          "frequency": "interval",
+                          "groupedOverFieldName": "bytes",
+                          "groupedOverTop": 5,
+                          "index": Array [],
+                          "monthly": Object {
+                            "day": 1,
+                            "type": "day",
+                          },
+                          "name": "",
+                          "overDocuments": "all documents",
+                          "period": Object {
+                            "interval": 1,
+                            "unit": "MINUTES",
+                          },
+                          "query": "{
+    \\"size\\": 0,
+    \\"query\\": {
+        \\"match_all\\": {}
+    }
+}",
+                          "searchType": "graph",
+                          "timeField": "",
+                          "timezone": Array [],
+                          "weekly": Object {
+                            "fri": false,
+                            "mon": false,
+                            "sat": false,
+                            "sun": false,
+                            "thur": false,
+                            "tue": false,
+                            "wed": false,
+                          },
+                          "where": Object {
+                            "fieldName": Array [],
+                            "fieldRangeEnd": 0,
+                            "fieldRangeStart": 0,
+                            "fieldValue": "",
+                            "operator": "is",
+                          },
+                        },
+                        "isSubmitting": false,
+                        "isValid": true,
+                        "isValidating": false,
+                        "registerField": [Function],
+                        "resetForm": [Function],
+                        "setErrors": [Function],
+                        "setFieldError": [Function],
+                        "setFieldTouched": [Function],
+                        "setFieldValue": [Function],
+                        "setFormikState": [Function],
+                        "setStatus": [Function],
+                        "setSubmitting": [Function],
+                        "setTouched": [Function],
+                        "setValues": [Function],
+                        "status": undefined,
+                        "submitCount": 0,
+                        "submitForm": [Function],
+                        "touched": Object {},
+                        "unregisterField": [Function],
+                        "validateField": [Function],
+                        "validateForm": [Function],
+                        "validateOnBlur": true,
+                        "validateOnChange": true,
+                        "validateOnMount": false,
+                        "values": Object {
+                          "aggregationType": "count",
+                          "bucketUnitOfTime": "h",
+                          "bucketValue": 1,
+                          "cronExpression": "0 */1 * * *",
+                          "daily": 0,
+                          "detectorId": "",
+                          "disabled": false,
+                          "fieldName": Array [],
+                          "frequency": "interval",
+                          "groupedOverFieldName": "bytes",
+                          "groupedOverTop": 5,
+                          "index": Array [],
+                          "monthly": Object {
+                            "day": 1,
+                            "type": "day",
+                          },
+                          "name": "",
+                          "overDocuments": "all documents",
+                          "period": Object {
+                            "interval": 1,
+                            "unit": "MINUTES",
+                          },
+                          "query": "{
+    \\"size\\": 0,
+    \\"query\\": {
+        \\"match_all\\": {}
+    }
+}",
+                          "searchType": "graph",
+                          "timeField": "",
+                          "timezone": Array [],
+                          "weekly": Object {
+                            "fri": false,
+                            "mon": false,
+                            "sat": false,
+                            "sun": false,
+                            "thur": false,
+                            "tue": false,
+                            "wed": false,
+                          },
+                          "where": Object {
+                            "fieldName": Array [],
+                            "fieldRangeEnd": 0,
+                            "fieldRangeStart": 0,
+                            "fieldValue": "",
+                            "operator": "is",
+                          },
+                        },
+                      }
+                    }
+                    id="index-form-row"
+                    inputProps={
+                      Object {
+                        "async": true,
+                        "data-test-subj": "indicesComboBox",
+                        "isClearable": true,
+                        "isLoading": true,
+                        "onBlur": [Function],
+                        "onChange": [Function],
+                        "onCreateOption": [Function],
+                        "onSearchChange": [Function],
+                        "options": Array [
+                          Object {
+                            "label": "Aliases",
+                            "options": Array [],
+                          },
+                          Object {
+                            "label": "Indices",
+                            "options": Array [],
+                          },
+                        ],
+                        "placeholder": "Select indices",
+                        "renderOption": [Function],
+                      }
+                    }
+                    name="index"
+                    onBlur={[Function]}
+                    onFocus={[Function]}
                   >
-                    <ComboBox
-                      aria-describedby="index-form-row-help"
-                      field={
-                        Object {
-                          "name": "index",
-                          "onBlur": [Function],
-                          "onChange": [Function],
-                          "value": Array [],
-                        }
-                      }
-                      form={
-                        Object {
-                          "dirty": false,
-                          "errors": Object {},
-                          "handleBlur": [Function],
-                          "handleChange": [Function],
-                          "handleReset": [Function],
-                          "handleSubmit": [Function],
-                          "initialValues": Object {
-                            "aggregationType": "count",
-                            "bucketUnitOfTime": "h",
-                            "bucketValue": 1,
-                            "cronExpression": "0 */1 * * *",
-                            "daily": 0,
-                            "detectorId": "",
-                            "disabled": false,
-                            "fieldName": Array [],
-                            "frequency": "interval",
-                            "groupedOverFieldName": "bytes",
-                            "groupedOverTop": 5,
-                            "index": Array [],
-                            "monthly": Object {
-                              "day": 1,
-                              "type": "day",
-                            },
-                            "name": "",
-                            "overDocuments": "all documents",
-                            "period": Object {
-                              "interval": 1,
-                              "unit": "MINUTES",
-                            },
-                            "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                            "searchType": "graph",
-                            "timeField": "",
-                            "timezone": Array [],
-                            "weekly": Object {
-                              "fri": false,
-                              "mon": false,
-                              "sat": false,
-                              "sun": false,
-                              "thur": false,
-                              "tue": false,
-                              "wed": false,
-                            },
-                            "where": Object {
-                              "fieldName": Array [],
-                              "fieldRangeEnd": 0,
-                              "fieldRangeStart": 0,
-                              "fieldValue": "",
-                              "operator": "is",
-                            },
-                          },
-                          "isSubmitting": false,
-                          "isValid": false,
-                          "isValidating": false,
-                          "registerField": [Function],
-                          "resetForm": [Function],
-                          "setError": [Function],
-                          "setErrors": [Function],
-                          "setFieldError": [Function],
-                          "setFieldTouched": [Function],
-                          "setFieldValue": [Function],
-                          "setFormikState": [Function],
-                          "setStatus": [Function],
-                          "setSubmitting": [Function],
-                          "setTouched": [Function],
-                          "setValues": [Function],
-                          "submitCount": 0,
-                          "submitForm": [Function],
-                          "touched": Object {},
-                          "unregisterField": [Function],
-                          "validateField": [Function],
-                          "validateForm": [Function],
-                          "validateOnBlur": true,
-                          "validateOnChange": true,
-                          "values": Object {
-                            "aggregationType": "count",
-                            "bucketUnitOfTime": "h",
-                            "bucketValue": 1,
-                            "cronExpression": "0 */1 * * *",
-                            "daily": 0,
-                            "detectorId": "",
-                            "disabled": false,
-                            "fieldName": Array [],
-                            "frequency": "interval",
-                            "groupedOverFieldName": "bytes",
-                            "groupedOverTop": 5,
-                            "index": Array [],
-                            "monthly": Object {
-                              "day": 1,
-                              "type": "day",
-                            },
-                            "name": "",
-                            "overDocuments": "all documents",
-                            "period": Object {
-                              "interval": 1,
-                              "unit": "MINUTES",
-                            },
-                            "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                            "searchType": "graph",
-                            "timeField": "",
-                            "timezone": Array [],
-                            "weekly": Object {
-                              "fri": false,
-                              "mon": false,
-                              "sat": false,
-                              "sun": false,
-                              "thur": false,
-                              "tue": false,
-                              "wed": false,
-                            },
-                            "where": Object {
-                              "fieldName": Array [],
-                              "fieldRangeEnd": 0,
-                              "fieldRangeStart": 0,
-                              "fieldValue": "",
-                              "operator": "is",
-                            },
-                          },
-                        }
-                      }
-                      id="index-form-row"
-                      inputProps={
-                        Object {
-                          "async": true,
-                          "data-test-subj": "indicesComboBox",
-                          "isClearable": true,
-                          "isLoading": true,
-                          "onBlur": [Function],
-                          "onChange": [Function],
-                          "onCreateOption": [Function],
-                          "onSearchChange": [Function],
-                          "options": Array [
-                            Object {
-                              "label": "Aliases",
-                              "options": Array [],
-                            },
-                            Object {
-                              "label": "Indices",
-                              "options": Array [],
-                            },
-                          ],
-                          "placeholder": "Select indices",
-                          "renderOption": [Function],
-                        }
-                      }
+                    <EuiComboBox
+                      async={true}
+                      compressed={false}
+                      data-test-subj="indicesComboBox"
+                      fullWidth={false}
+                      id="index"
+                      isClearable={true}
+                      isLoading={true}
                       name="index"
                       onBlur={[Function]}
-                      onFocus={[Function]}
+                      onChange={[Function]}
+                      onCreateOption={[Function]}
+                      onSearchChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "label": "Aliases",
+                            "options": Array [],
+                          },
+                          Object {
+                            "label": "Indices",
+                            "options": Array [],
+                          },
+                        ]
+                      }
+                      placeholder="Select indices"
+                      renderOption={[Function]}
+                      selectedOptions={Array []}
+                      singleSelection={false}
+                      sortMatchesBy="none"
                     >
-                      <EuiComboBox
-                        async={true}
-                        compressed={false}
+                      <div
+                        aria-expanded={false}
+                        aria-haspopup="listbox"
+                        className="euiComboBox"
                         data-test-subj="indicesComboBox"
-                        fullWidth={false}
-                        id="index"
-                        isClearable={true}
-                        isLoading={true}
                         name="index"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onCreateOption={[Function]}
-                        onSearchChange={[Function]}
-                        options={
-                          Array [
-                            Object {
-                              "label": "Aliases",
-                              "options": Array [],
-                            },
-                            Object {
-                              "label": "Indices",
-                              "options": Array [],
-                            },
-                          ]
-                        }
-                        placeholder="Select indices"
-                        renderOption={[Function]}
-                        selectedOptions={Array []}
-                        singleSelection={false}
-                        sortMatchesBy="none"
+                        onKeyDown={[Function]}
+                        role="combobox"
                       >
-                        <div
-                          aria-expanded={false}
-                          aria-haspopup="listbox"
-                          className="euiComboBox"
-                          data-test-subj="indicesComboBox"
-                          name="index"
-                          onKeyDown={[Function]}
-                          role="combobox"
+                        <EuiComboBoxInput
+                          autoSizeInputRef={[Function]}
+                          compressed={false}
+                          fullWidth={false}
+                          hasSelectedOptions={false}
+                          id="index"
+                          inputRef={[Function]}
+                          isListOpen={false}
+                          isLoading={true}
+                          noIcon={false}
+                          onChange={[Function]}
+                          onClear={[Function]}
+                          onClick={[Function]}
+                          onCloseListClick={[Function]}
+                          onFocus={[Function]}
+                          onOpenListClick={[Function]}
+                          onRemoveOption={[Function]}
+                          placeholder="Select indices"
+                          rootId={[Function]}
+                          searchValue=""
+                          selectedOptions={Array []}
+                          singleSelection={false}
+                          toggleButtonRef={[Function]}
+                          updatePosition={[Function]}
+                          value=""
                         >
-                          <EuiComboBoxInput
-                            autoSizeInputRef={[Function]}
+                          <EuiFormControlLayout
                             compressed={false}
                             fullWidth={false}
-                            hasSelectedOptions={false}
-                            id="index"
-                            inputRef={[Function]}
-                            isListOpen={false}
-                            isLoading={true}
-                            noIcon={false}
-                            onChange={[Function]}
-                            onClear={[Function]}
-                            onClick={[Function]}
-                            onCloseListClick={[Function]}
-                            onFocus={[Function]}
-                            onOpenListClick={[Function]}
-                            onRemoveOption={[Function]}
-                            placeholder="Select indices"
-                            rootId={[Function]}
-                            searchValue=""
-                            selectedOptions={Array []}
-                            singleSelection={false}
-                            toggleButtonRef={[Function]}
-                            updatePosition={[Function]}
-                            value=""
-                          >
-                            <EuiFormControlLayout
-                              compressed={false}
-                              fullWidth={false}
-                              icon={
-                                Object {
-                                  "aria-label": "Open list of options",
-                                  "data-test-subj": "comboBoxToggleListButton",
-                                  "disabled": undefined,
-                                  "onClick": [Function],
-                                  "ref": [Function],
-                                  "side": "right",
-                                  "type": "arrowDown",
-                                }
+                            icon={
+                              Object {
+                                "aria-label": "Open list of options",
+                                "data-test-subj": "comboBoxToggleListButton",
+                                "disabled": undefined,
+                                "onClick": [Function],
+                                "ref": [Function],
+                                "side": "right",
+                                "type": "arrowDown",
                               }
-                              isLoading={true}
+                            }
+                            isLoading={true}
+                          >
+                            <div
+                              className="euiFormControlLayout"
                             >
                               <div
-                                className="euiFormControlLayout"
+                                className="euiFormControlLayout__childrenWrapper"
                               >
                                 <div
-                                  className="euiFormControlLayout__childrenWrapper"
+                                  className="euiComboBox__inputWrap euiComboBox__inputWrap-isLoading euiComboBox__inputWrap-isClearable"
+                                  data-test-subj="comboBoxInput"
+                                  onClick={[Function]}
+                                  tabIndex={-1}
                                 >
-                                  <div
-                                    className="euiComboBox__inputWrap euiComboBox__inputWrap-isLoading euiComboBox__inputWrap-isClearable"
-                                    data-test-subj="comboBoxInput"
-                                    onClick={[Function]}
-                                    tabIndex={-1}
+                                  <p
+                                    className="euiComboBoxPlaceholder"
                                   >
-                                    <p
-                                      className="euiComboBoxPlaceholder"
-                                    >
-                                      Select indices
-                                    </p>
-                                    <AutosizeInput
-                                      aria-controls=""
+                                    Select indices
+                                  </p>
+                                  <AutosizeInput
+                                    aria-controls=""
+                                    className="euiComboBox__input"
+                                    data-test-subj="comboBoxSearchInput"
+                                    id="index"
+                                    injectStyles={true}
+                                    inputRef={[Function]}
+                                    minWidth={1}
+                                    onBlur={[Function]}
+                                    onChange={[Function]}
+                                    onFocus={[Function]}
+                                    role="textbox"
+                                    style={
+                                      Object {
+                                        "fontSize": 14,
+                                      }
+                                    }
+                                    value=""
+                                  >
+                                    <div
                                       className="euiComboBox__input"
-                                      data-test-subj="comboBoxSearchInput"
-                                      id="index"
-                                      injectStyles={true}
-                                      inputRef={[Function]}
-                                      minWidth={1}
-                                      onBlur={[Function]}
-                                      onChange={[Function]}
-                                      onFocus={[Function]}
-                                      role="textbox"
                                       style={
                                         Object {
+                                          "display": "inline-block",
                                           "fontSize": 14,
                                         }
                                       }
-                                      value=""
                                     >
-                                      <div
-                                        className="euiComboBox__input"
+                                      <input
+                                        aria-controls=""
+                                        data-test-subj="comboBoxSearchInput"
+                                        id="index"
+                                        onBlur={[Function]}
+                                        onChange={[Function]}
+                                        onFocus={[Function]}
+                                        role="textbox"
                                         style={
                                           Object {
-                                            "display": "inline-block",
-                                            "fontSize": 14,
+                                            "boxSizing": "content-box",
+                                            "width": "2px",
                                           }
                                         }
-                                      >
-                                        <input
-                                          aria-controls=""
-                                          data-test-subj="comboBoxSearchInput"
-                                          id="index"
-                                          onBlur={[Function]}
-                                          onChange={[Function]}
-                                          onFocus={[Function]}
-                                          role="textbox"
-                                          style={
-                                            Object {
-                                              "boxSizing": "content-box",
-                                              "width": "2px",
-                                            }
+                                        value=""
+                                      />
+                                      <div
+                                        style={
+                                          Object {
+                                            "height": 0,
+                                            "left": 0,
+                                            "overflow": "scroll",
+                                            "position": "absolute",
+                                            "top": 0,
+                                            "visibility": "hidden",
+                                            "whiteSpace": "pre",
                                           }
-                                          value=""
-                                        />
-                                        <div
-                                          style={
-                                            Object {
-                                              "height": 0,
-                                              "left": 0,
-                                              "overflow": "scroll",
-                                              "position": "absolute",
-                                              "top": 0,
-                                              "visibility": "hidden",
-                                              "whiteSpace": "pre",
-                                            }
-                                          }
-                                        />
-                                      </div>
-                                    </AutosizeInput>
-                                  </div>
-                                  <EuiFormControlLayoutIcons
-                                    icon={
-                                      Object {
-                                        "aria-label": "Open list of options",
-                                        "data-test-subj": "comboBoxToggleListButton",
-                                        "disabled": undefined,
-                                        "onClick": [Function],
-                                        "ref": [Function],
-                                        "side": "right",
-                                        "type": "arrowDown",
-                                      }
-                                    }
-                                    isLoading={true}
-                                  >
-                                    <div
-                                      className="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
-                                    >
-                                      <EuiLoadingSpinner
-                                        size="m"
-                                      >
-                                        <span
-                                          className="euiLoadingSpinner euiLoadingSpinner--medium"
-                                        />
-                                      </EuiLoadingSpinner>
-                                      <EuiFormControlLayoutCustomIcon
-                                        aria-label="Open list of options"
-                                        data-test-subj="comboBoxToggleListButton"
-                                        iconRef={[Function]}
-                                        onClick={[Function]}
-                                        type="arrowDown"
-                                      >
-                                        <button
-                                          aria-label="Open list of options"
-                                          className="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
-                                          data-test-subj="comboBoxToggleListButton"
-                                          onClick={[Function]}
-                                          type="button"
-                                        >
-                                          <EuiIcon
-                                            aria-hidden="true"
-                                            className="euiFormControlLayoutCustomIcon__icon"
-                                            type="arrowDown"
-                                          >
-                                            <div>
-                                              EuiIconMock
-                                            </div>
-                                          </EuiIcon>
-                                        </button>
-                                      </EuiFormControlLayoutCustomIcon>
+                                        }
+                                      />
                                     </div>
-                                  </EuiFormControlLayoutIcons>
+                                  </AutosizeInput>
                                 </div>
+                                <EuiFormControlLayoutIcons
+                                  icon={
+                                    Object {
+                                      "aria-label": "Open list of options",
+                                      "data-test-subj": "comboBoxToggleListButton",
+                                      "disabled": undefined,
+                                      "onClick": [Function],
+                                      "ref": [Function],
+                                      "side": "right",
+                                      "type": "arrowDown",
+                                    }
+                                  }
+                                  isLoading={true}
+                                >
+                                  <div
+                                    className="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+                                  >
+                                    <EuiLoadingSpinner
+                                      size="m"
+                                    >
+                                      <span
+                                        className="euiLoadingSpinner euiLoadingSpinner--medium"
+                                      />
+                                    </EuiLoadingSpinner>
+                                    <EuiFormControlLayoutCustomIcon
+                                      aria-label="Open list of options"
+                                      data-test-subj="comboBoxToggleListButton"
+                                      iconRef={[Function]}
+                                      onClick={[Function]}
+                                      type="arrowDown"
+                                    >
+                                      <button
+                                        aria-label="Open list of options"
+                                        className="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
+                                        data-test-subj="comboBoxToggleListButton"
+                                        onClick={[Function]}
+                                        type="button"
+                                      >
+                                        <EuiIcon
+                                          aria-hidden="true"
+                                          className="euiFormControlLayoutCustomIcon__icon"
+                                          type="arrowDown"
+                                        >
+                                          <div>
+                                            EuiIconMock
+                                          </div>
+                                        </EuiIcon>
+                                      </button>
+                                    </EuiFormControlLayoutCustomIcon>
+                                  </div>
+                                </EuiFormControlLayoutIcons>
                               </div>
-                            </EuiFormControlLayout>
-                          </EuiComboBoxInput>
-                        </div>
-                      </EuiComboBox>
-                    </ComboBox>
-                    <EuiFormHelpText
-                      className="euiFormRow__text"
+                            </div>
+                          </EuiFormControlLayout>
+                        </EuiComboBoxInput>
+                      </div>
+                    </EuiComboBox>
+                  </ComboBox>
+                  <EuiFormHelpText
+                    className="euiFormRow__text"
+                    id="index-form-row-help"
+                  >
+                    <div
+                      className="euiFormHelpText euiFormRow__text"
                       id="index-form-row-help"
                     >
-                      <div
-                        className="euiFormHelpText euiFormRow__text"
-                        id="index-form-row-help"
-                      >
-                        You can use a * as a wildcard in your index pattern
-                      </div>
-                    </EuiFormHelpText>
-                  </div>
+                      You can use a * as a wildcard in your index pattern
+                    </div>
+                  </EuiFormHelpText>
                 </div>
-              </EuiFormRow>
-            </FormikFormRow>
-          </FieldInner>
-        </C>
+              </div>
+            </EuiFormRow>
+          </FormikFormRow>
+        </Field>
       </FormikInputWrapper>
     </FormikComboBox>
   </MonitorIndex>
