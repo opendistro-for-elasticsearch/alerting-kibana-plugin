@@ -14,7 +14,7 @@
  */
 
 import { PLUGIN_NAME } from '../support/constants';
-import sampleDestination from '../fixtures/sample_destination_custom_webhook.json';
+import sampleDestination from '../fixtures/sample_destination_custom_webhook';
 import sampleDestinationChime from '../fixtures/sample_destination_chime';
 
 const SAMPLE_DESTINATION = 'sample_destination';
@@ -36,7 +36,7 @@ describe('Destinations', () => {
 
   describe('can be created', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllDestinations();
     });
 
     it('with a custom webhook', () => {
@@ -65,7 +65,7 @@ describe('Destinations', () => {
 
   describe('can be updated', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllDestinations();
       cy.createDestination(sampleDestination);
     });
 
@@ -77,7 +77,11 @@ describe('Destinations', () => {
       cy.get('button').contains('Edit').click({ force: true });
 
       // Wait for input to load and then type in the destination name
-      cy.get('input[name="name"]').focus().clear().type(UPDATED_DESTINATION, { force: true });
+      // should() is used to wait for input loading before clearing
+      cy.get('input[name="name"]')
+        .should('have.value', SAMPLE_DESTINATION)
+        .clear()
+        .type(UPDATED_DESTINATION, { force: true });
 
       // Click the create button
       cy.get('button').contains('Update').click({ force: true });
@@ -89,7 +93,7 @@ describe('Destinations', () => {
 
   describe('can be deleted', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllDestinations();
       cy.createDestination(sampleDestination);
     });
 
@@ -110,7 +114,7 @@ describe('Destinations', () => {
 
   describe('can be searched', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllDestinations();
       // Create 21 destinations so that a monitor will not appear in the first page
       for (let i = 0; i < 20; i++) {
         cy.createDestination(sampleDestination);
@@ -134,5 +138,10 @@ describe('Destinations', () => {
         expect($tr, 'item').to.contain(SAMPLE_DESTINATION_WITH_ANOTHER_NAME);
       });
     });
+  });
+
+  after(() => {
+    // Delete all existing destinations
+    cy.deleteAllDestinations();
   });
 });

@@ -10,10 +10,10 @@
   "inputs": [
     {
       "search": {
-        "indices": [".*"],
+        "indices": ["alerting*"],
         "query": {
           "query": {
-            "term": { "monitor.type": "monitor" }
+            "match_all": {}
           }
         }
       }
@@ -25,7 +25,7 @@
       "severity": "3",
       "condition": {
         "script": {
-          "source": "ctx.results[0].hits.total.value > 1",
+          "source": "ctx.results[0].hits.total.value < 1",
           "lang": "painless"
         }
       },
