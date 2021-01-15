@@ -166,6 +166,9 @@ describe('MonitorIndex', () => {
       .simulate('keyDown', { key: 'ArrowDown' })
       .simulate('keyDown', { key: 'Enter' });
 
-    expect(wrapper.instance().state.values.index).toEqual([{ label: 'logstash-0' }]);
+    // TODO: Remove 'EuiIconMock' after the mock for EuiIcon is removed from setup.test.js
+    expect(wrapper.find('[data-test-subj="comboBoxInput"]').text()).toEqual(
+      'logstash-0EuiIconMock'
+    );
   });
 });

@@ -260,7 +260,7 @@ export default class ManageEmailGroups extends React.Component {
     const { initialValues, loadingEmailGroups } = this.state;
     return isVisible ? (
       <Formik
-        initialValues={initialValues}
+        initialValues={initialValues || {}}
         onSubmit={(values, formikBag) => {
           this.processEmailGroups(values).then(() => onClickSave());
         }}

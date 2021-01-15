@@ -64,7 +64,11 @@ describe('AnomalyDetectors', () => {
         .simulate('change', { target: { value: 'sample-detector' } })
         .simulate('keyDown', { key: 'ArrowDown' })
         .simulate('keyDown', { key: 'Enter' });
-      expect(wrapper.instance().state.values.detectorId).toEqual('sample-id');
+      // wip
+      expect(wrapper.find('[data-test-subj="comboBoxSearchInput"]').hostNodes().text()).toEqual(
+        'sample-id'
+      );
+      //expect(wrapper.find(AnomalyDetectors).instance().state.detectorOptions[0].value).toEqual('sample-id');
       done();
     });
   });
