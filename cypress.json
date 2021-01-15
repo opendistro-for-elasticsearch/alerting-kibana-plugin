@@ -2,6 +2,7 @@
   "defaultCommandTimeout": 10000,
   "env": {
     "elasticsearch": "localhost:9200",
-    "kibana": "localhost:5601"
+    "kibana": "localhost:5601",
+    "security_enabled": false
   }
 }

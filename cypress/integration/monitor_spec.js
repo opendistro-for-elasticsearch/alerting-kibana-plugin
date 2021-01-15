@@ -38,7 +38,7 @@ describe('Monitors', () => {
 
   describe('can be created', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
     });
 
     it('defining by extraction query', () => {
@@ -73,7 +73,7 @@ describe('Monitors', () => {
 
   describe('can be updated', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
       cy.createMonitor(sampleMonitor);
     });
 
@@ -88,7 +88,10 @@ describe('Monitors', () => {
       cy.contains('Edit').click({ force: true });
 
       // Wait for input to load and then type in the new monitor name
-      cy.get('input[name="name"]').focus().clear().type(UPDATED_MONITOR, { force: true });
+      cy.get('input[name="name"]')
+        .should('have.value', SAMPLE_MONITOR)
+        .clear()
+        .type(UPDATED_MONITOR, { force: true });
 
       // Click Update button
       cy.get('button').contains('Update').last().click({ force: true });
@@ -106,7 +109,7 @@ describe('Monitors', () => {
 
   describe('can be deleted', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
       cy.createMonitor(sampleMonitor);
     });
 
@@ -130,7 +133,7 @@ describe('Monitors', () => {
 
   describe('can be searched', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
       // Create 21 monitors so that a monitor will not appear in the first page
       for (let i = 0; i < 20; i++) {
         cy.createMonitor(sampleMonitor);
@@ -158,7 +161,8 @@ describe('Monitors', () => {
 
   describe('can have triggers', () => {
     before(() => {
-      cy.deleteAllIndices();
+      cy.deleteAllMonitors();
+      cy.deleteAllDestinations();
       cy.createMonitor(sampleMonitor);
     });
 
@@ -236,5 +240,11 @@ describe('Monitors', () => {
       // Confirm we can see the new action
       cy.contains(SAMPLE_ACTION);
     });
+  });
+
+  after(() => {
+    // Delete all existing monitors and destinations
+    cy.deleteAllMonitors();
+    cy.deleteAllDestinations();
   });
 });

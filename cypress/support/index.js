@@ -42,3 +42,8 @@ Cypress.on('uncaught:exception', (err) => {
     return false;
   }
 });
+
+// Switch the base URL of Elasticsearch when security enabled in the cluster
+if (Cypress.env('security_enabled')) {
+  Cypress.env('elasticsearch', 'https://localhost:9200');
+}
