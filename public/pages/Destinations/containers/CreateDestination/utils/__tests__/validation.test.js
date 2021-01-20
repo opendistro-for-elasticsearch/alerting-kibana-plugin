@@ -32,13 +32,13 @@ describe('destinations Validations', () => {
       ).resolves.toBeUndefined();
     });
     test('should reject if name is empty', () => {
-      return expect(validateDestinationName(httpClient, null)('')).rejects.toEqual('Required');
+      return expect(validateDestinationName(httpClient, null)('')).resolves.toEqual('Required');
     });
     test('should reject if name already is being in used', () => {
       httpClient.post.mockResolvedValue({
         resp: { hits: { total: { value: 1, relation: 'eq' } } },
       });
-      return expect(validateDestinationName(httpClient, null)('destinationName')).rejects.toEqual(
+      return expect(validateDestinationName(httpClient, null)('destinationName')).resolves.toEqual(
         'Destination name is already used'
       );
     });
@@ -48,13 +48,13 @@ describe('destinations Validations', () => {
       });
       return expect(
         validateDestinationName(httpClient, { name: 'destinationName' })('destinationName Existing')
-      ).rejects.toEqual('Destination name is already used');
+      ).resolves.toEqual('Destination name is already used');
     });
     test('should rejects if network request has some error', () => {
       httpClient.post.mockRejectedValue({
         resp: { ok: false, error: 'There was an issue' },
       });
-      return expect(validateDestinationName(httpClient, null)('destinationName')).rejects.toEqual(
+      return expect(validateDestinationName(httpClient, null)('destinationName')).resolves.toEqual(
         'There was a problem validating destination name. Please try again.'
       );
     });

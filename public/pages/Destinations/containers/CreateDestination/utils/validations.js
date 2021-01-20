@@ -35,8 +35,8 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
     }
     // TODO: Handle the situation that destinations with a same name can be created when user don't have the permission of 'cluster:admin/opendistro/alerting/monitor/search'
   } catch (err) {
-    if (typeof err === 'string') throw err;
-    throw 'There was a problem validating destination name. Please try again.';
+    if (typeof err === 'string') return err;
+    return 'There was a problem validating destination name. Please try again.';
   }
 };
 
