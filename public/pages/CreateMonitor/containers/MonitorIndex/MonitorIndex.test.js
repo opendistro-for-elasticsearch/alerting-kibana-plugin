@@ -144,7 +144,7 @@ describe('MonitorIndex', () => {
     expect(wrapper.instance().state.touched).toEqual({ index: true });
   });
 
-  test('sets option when calling onCreateOption', () => {
+  test('sets option when calling onCreateOption', async () => {
     httpClientMock.post.mockResolvedValue({
       ok: true,
       resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
@@ -155,6 +155,12 @@ describe('MonitorIndex', () => {
       .find('[data-test-subj="comboBoxSearchInput"]')
       .hostNodes()
       .simulate('change', { target: { value: 'logstash-0' } });
+
+    // Enzyme's change event is synchronous and Formik's handlers are asynchronous
+    // https://github.com/formium/formik/issues/937
+    await new Promise((resolve) => {
+      setTimeout(resolve);
+    });
 
     wrapper
       .find('[data-test-subj="comboBoxInput"]')
@@ -167,8 +173,6 @@ describe('MonitorIndex', () => {
       wrapper.find('[data-test-subj="comboBoxSearchInput"]').hostNodes().props().value
     ).toEqual('');
     // Validate the specific index is in the input field
-    expect(wrapper.find('[data-test-subj="comboBoxInput"]').text()).toEqual(
-      'logstash-0EuiIconMock'
-    );
+    expect(wrapper.find('[data-test-subj="comboBoxInput"]').text()).toEqual('logstashEuiIconMock');
   });
 });
