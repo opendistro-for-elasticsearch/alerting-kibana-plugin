@@ -141,13 +141,7 @@ describe('MonitorIndex', () => {
       .simulate('change', { target: { value: 'l' } })
       .simulate('blur');
 
-    //await new Promise(resolve => { setTimeout(resolve); });
-    //console.log(wrapper.find(MonitorIndex).instance().state)
-    //console.log(wrapper.find('label[htmlFor="index-form-row"]').hostNodes().props()['aria-invalid'])
-    //expect(wrapper.find('label[htmlFor="index-form-row"]').hostNodes().props()['aria-invalid']).toEqual(null)
-
-    // The combobox is expected to only have place holder text
-    //expect(wrapper.find('[data-test-subj="comboBoxInput"]').text()).toEqual('Select indices');
+    expect(wrapper.instance().state.touched).toEqual({ index: true });
   });
 
   test('sets option when calling onCreateOption', () => {
@@ -173,7 +167,6 @@ describe('MonitorIndex', () => {
       wrapper.find('[data-test-subj="comboBoxSearchInput"]').hostNodes().props().value
     ).toEqual('');
     // Validate the specific index is in the input field
-    // TODO: Remove 'EuiIconMock' after the mock for EuiIcon is removed from setup.test.js
     expect(wrapper.find('[data-test-subj="comboBoxInput"]').text()).toEqual(
       'logstash-0EuiIconMock'
     );
