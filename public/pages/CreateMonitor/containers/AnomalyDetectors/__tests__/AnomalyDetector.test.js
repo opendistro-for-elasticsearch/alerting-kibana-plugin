@@ -14,6 +14,7 @@
  */
 
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { Formik } from 'formik';
 import { mount } from 'enzyme';
 
@@ -46,7 +47,7 @@ describe('AnomalyDetectors', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('should be able to select the detector', (done) => {
+  test('should be able to select the detector', async () => {
     httpClientMock.post.mockResolvedValueOnce({
       ok: true,
       detectors: [{ name: 'sample-detector', id: 'sample-id', feature_attributes: [] }],
@@ -57,19 +58,39 @@ describe('AnomalyDetectors', () => {
       response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
     });
     const wrapper = getMountWrapper();
-    setTimeout(() => {
-      wrapper
-        .find('[data-test-subj="comboBoxSearchInput"]')
-        .hostNodes()
-        .simulate('change', { target: { value: 'sample-detector' } })
-        .simulate('keyDown', { key: 'ArrowDown' })
-        .simulate('keyDown', { key: 'Enter' });
-      // wip
-      expect(wrapper.find('[data-test-subj="comboBoxSearchInput"]').hostNodes().text()).toEqual(
-        'sample-id'
-      );
-      //expect(wrapper.find(AnomalyDetectors).instance().state.detectorOptions[0].value).toEqual('sample-id');
-      done();
+
+    wrapper
+      .find('[data-test-subj="comboBoxSearchInput"]')
+      .hostNodes()
+      .simulate('change', { target: { value: 'sample-detector' } });
+
+    // Enzyme's change event is synchronous and Formik's handlers are asynchronous
+    // https://github.com/formium/formik/issues/937
+    await new Promise((resolve) => {
+      setTimeout(resolve);
     });
+
+    wrapper
+      .find('[data-test-subj="comboBoxInput"]')
+      .hostNodes()
+      .simulate('keyDown', { key: 'ArrowDown' })
+      .simulate('keyDown', { key: 'Enter' });
+
+    // Validate nothing is in the search input field
+    expect(
+      wrapper.find('[data-test-subj="comboBoxSearchInput"]').hostNodes().props().value
+    ).toEqual('');
+    // Validate the specific detector is in the input field
+    expect(wrapper.find('[data-test-subj="comboBoxInput"]').hostNodes().text()).toEqual(
+      'sample-detector'
+    );
   });
 });
+
+const runAllPromises = () => {
+  return new Promise((resolve) => {
+    setImmediate(() => {
+      resolve();
+    });
+  });
+};
