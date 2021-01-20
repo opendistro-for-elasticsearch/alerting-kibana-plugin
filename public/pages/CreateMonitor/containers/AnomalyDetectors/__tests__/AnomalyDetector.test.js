@@ -14,7 +14,6 @@
  */
 
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { Formik } from 'formik';
 import { mount } from 'enzyme';
 
@@ -22,6 +21,9 @@ import { FORMIK_INITIAL_VALUES } from '../../CreateMonitor/utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors';
 import { httpClientMock } from '../../../../../../test/mocks';
 import { CoreContext } from '../../../../../utils/CoreContext';
+
+// Used to wait until all of the promises have cleared, especially waiting for asynchronous Formik's handlers.
+const runAllPromises = () => new Promise(setImmediate);
 
 const renderEmptyMessage = jest.fn();
 function getMountWrapper() {
@@ -62,13 +64,9 @@ describe('AnomalyDetectors', () => {
     wrapper
       .find('[data-test-subj="comboBoxSearchInput"]')
       .hostNodes()
-      .simulate('change', { target: { value: 'sample-detector' } });
+      .simulate('change', { target: { value: 'sample-' } });
 
-    // Enzyme's change event is synchronous and Formik's handlers are asynchronous
-    // https://github.com/formium/formik/issues/937
-    await new Promise((resolve) => {
-      setTimeout(resolve);
-    });
+    await runAllPromises();
 
     wrapper
       .find('[data-test-subj="comboBoxInput"]')
@@ -76,21 +74,9 @@ describe('AnomalyDetectors', () => {
       .simulate('keyDown', { key: 'ArrowDown' })
       .simulate('keyDown', { key: 'Enter' });
 
-    // Validate nothing is in the search input field
-    expect(
-      wrapper.find('[data-test-subj="comboBoxSearchInput"]').hostNodes().props().value
-    ).toEqual('');
     // Validate the specific detector is in the input field
     expect(wrapper.find('[data-test-subj="comboBoxInput"]').hostNodes().text()).toEqual(
       'sample-detector'
     );
   });
 });
-
-const runAllPromises = () => {
-  return new Promise((resolve) => {
-    setImmediate(() => {
-      resolve();
-    });
-  });
-};

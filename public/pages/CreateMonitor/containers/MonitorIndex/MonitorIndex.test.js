@@ -24,6 +24,10 @@ import { httpClientMock } from '../../../../../test/mocks';
 helpers.createReasonableWait = jest.fn((cb) => cb());
 httpClientMock.post.mockResolvedValue({ ok: true, resp: [] });
 
+// Enzyme's change event is synchronous and Formik's handlers are asynchronous
+// https://github.com/formium/formik/issues/937, https://www.benmvp.com/blog/asynchronous-testing-with-enzyme-react-jest/
+const runAllPromises = () => new Promise(setImmediate);
+
 function getMountWrapper(customProps = {}) {
   return mount(
     <Formik
@@ -156,11 +160,7 @@ describe('MonitorIndex', () => {
       .hostNodes()
       .simulate('change', { target: { value: 'logstash-0' } });
 
-    // Enzyme's change event is synchronous and Formik's handlers are asynchronous
-    // https://github.com/formium/formik/issues/937
-    await new Promise((resolve) => {
-      setTimeout(resolve);
-    });
+    await runAllPromises();
 
     wrapper
       .find('[data-test-subj="comboBoxInput"]')
@@ -168,10 +168,6 @@ describe('MonitorIndex', () => {
       .simulate('keyDown', { key: 'ArrowDown' })
       .simulate('keyDown', { key: 'Enter' });
 
-    // Validate nothing is in the search input field
-    expect(
-      wrapper.find('[data-test-subj="comboBoxSearchInput"]').hostNodes().props().value
-    ).toEqual('');
     // Validate the specific index is in the input field
     expect(wrapper.find('[data-test-subj="comboBoxInput"]').text()).toEqual('logstashEuiIconMock');
   });
