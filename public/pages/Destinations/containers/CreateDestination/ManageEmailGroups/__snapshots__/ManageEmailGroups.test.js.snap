@@ -19,11 +19,9 @@ exports[`ManageEmailGroups renders when email is disallowed 1`] = `
   onClickSave={[MockFunction]}
 >
   <Formik
-    enableReinitialize={false}
-    isInitialValid={false}
+    initialValues={Object {}}
     onSubmit={[Function]}
     render={[Function]}
-    validateOnBlur={true}
     validateOnChange={false}
   >
     <EuiOverlayMask>
@@ -556,7 +554,7 @@ exports[`ManageEmailGroups renders when email is disallowed 1`] = `
                               <div
                                 className="euiModalBody__overflow"
                               >
-                                <C
+                                <FormikConnect(FieldArrayInner)
                                   name="emailGroups"
                                   render={[Function]}
                                   validateOnChange={true}
@@ -566,17 +564,22 @@ exports[`ManageEmailGroups renders when email is disallowed 1`] = `
                                       Object {
                                         "dirty": false,
                                         "errors": Object {},
+                                        "getFieldHelpers": [Function],
+                                        "getFieldMeta": [Function],
+                                        "getFieldProps": [Function],
                                         "handleBlur": [Function],
                                         "handleChange": [Function],
                                         "handleReset": [Function],
                                         "handleSubmit": [Function],
+                                        "initialErrors": Object {},
+                                        "initialStatus": undefined,
+                                        "initialTouched": Object {},
                                         "initialValues": Object {},
                                         "isSubmitting": false,
-                                        "isValid": false,
+                                        "isValid": true,
                                         "isValidating": false,
                                         "registerField": [Function],
                                         "resetForm": [Function],
-                                        "setError": [Function],
                                         "setErrors": [Function],
                                         "setFieldError": [Function],
                                         "setFieldTouched": [Function],
@@ -586,16 +589,16 @@ exports[`ManageEmailGroups renders when email is disallowed 1`] = `
                                         "setSubmitting": [Function],
                                         "setTouched": [Function],
                                         "setValues": [Function],
+                                        "status": undefined,
                                         "submitCount": 0,
                                         "submitForm": [Function],
                                         "touched": Object {},
                                         "unregisterField": [Function],
-                                        "validate": undefined,
                                         "validateField": [Function],
                                         "validateForm": [Function],
                                         "validateOnBlur": true,
                                         "validateOnChange": false,
-                                        "validationSchema": undefined,
+                                        "validateOnMount": false,
                                         "values": Object {},
                                       }
                                     }
@@ -614,7 +617,7 @@ exports[`ManageEmailGroups renders when email is disallowed 1`] = `
                                       Email is disallowed
                                     </div>
                                   </FieldArrayInner>
-                                </C>
+                                </FormikConnect(FieldArrayInner)>
                               </div>
                             </div>
                           </EuiModalBody>
@@ -705,11 +708,9 @@ exports[`ManageEmailGroups renders when visible 1`] = `
   onClickSave={[MockFunction]}
 >
   <Formik
-    enableReinitialize={false}
-    isInitialValid={false}
+    initialValues={Object {}}
     onSubmit={[Function]}
     render={[Function]}
-    validateOnBlur={true}
     validateOnChange={false}
   >
     <EuiOverlayMask>
@@ -1242,7 +1243,7 @@ exports[`ManageEmailGroups renders when visible 1`] = `
                               <div
                                 className="euiModalBody__overflow"
                               >
-                                <C
+                                <FormikConnect(FieldArrayInner)
                                   name="emailGroups"
                                   render={[Function]}
                                   validateOnChange={true}
@@ -1252,17 +1253,22 @@ exports[`ManageEmailGroups renders when visible 1`] = `
                                       Object {
                                         "dirty": false,
                                         "errors": Object {},
+                                        "getFieldHelpers": [Function],
+                                        "getFieldMeta": [Function],
+                                        "getFieldProps": [Function],
                                         "handleBlur": [Function],
                                         "handleChange": [Function],
                                         "handleReset": [Function],
                                         "handleSubmit": [Function],
+                                        "initialErrors": Object {},
+                                        "initialStatus": undefined,
+                                        "initialTouched": Object {},
                                         "initialValues": Object {},
                                         "isSubmitting": false,
-                                        "isValid": false,
+                                        "isValid": true,
                                         "isValidating": false,
                                         "registerField": [Function],
                                         "resetForm": [Function],
-                                        "setError": [Function],
                                         "setErrors": [Function],
                                         "setFieldError": [Function],
                                         "setFieldTouched": [Function],
@@ -1272,16 +1278,16 @@ exports[`ManageEmailGroups renders when visible 1`] = `
                                         "setSubmitting": [Function],
                                         "setTouched": [Function],
                                         "setValues": [Function],
+                                        "status": undefined,
                                         "submitCount": 0,
                                         "submitForm": [Function],
                                         "touched": Object {},
                                         "unregisterField": [Function],
-                                        "validate": undefined,
                                         "validateField": [Function],
                                         "validateForm": [Function],
                                         "validateOnBlur": true,
                                         "validateOnChange": false,
-                                        "validationSchema": undefined,
+                                        "validateOnMount": false,
                                         "values": Object {},
                                       }
                                     }
@@ -1300,7 +1306,7 @@ exports[`ManageEmailGroups renders when visible 1`] = `
                                       Loading Email Groups...
                                     </div>
                                   </FieldArrayInner>
-                                </C>
+                                </FormikConnect(FieldArrayInner)>
                               </div>
                             </div>
                           </EuiModalBody>
