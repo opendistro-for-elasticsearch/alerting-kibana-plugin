@@ -56,6 +56,7 @@ export default class ManageSenders extends React.Component {
     super(props);
 
     this.state = {
+      initialValues: {},
       sendersToDelete: [],
       loadingSenders: true,
       failedSenders: false,
