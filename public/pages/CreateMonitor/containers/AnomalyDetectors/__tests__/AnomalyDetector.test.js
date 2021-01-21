@@ -64,7 +64,7 @@ describe('AnomalyDetectors', () => {
     wrapper
       .find('[data-test-subj="comboBoxSearchInput"]')
       .hostNodes()
-      .simulate('change', { target: { value: 'sample-' } });
+      .simulate('change', { target: { value: 'sample-detect' } });
 
     await runAllPromises();
 
@@ -74,6 +74,7 @@ describe('AnomalyDetectors', () => {
       .simulate('keyDown', { key: 'ArrowDown' })
       .simulate('keyDown', { key: 'Enter' });
 
+    console.log(wrapper.instance());
     // Validate the specific detector is in the input field
     expect(wrapper.find('[data-test-subj="comboBoxInput"]').hostNodes().text()).toEqual(
       'sample-detector'
