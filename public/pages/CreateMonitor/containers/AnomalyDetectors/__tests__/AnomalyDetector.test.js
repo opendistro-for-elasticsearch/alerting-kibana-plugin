@@ -74,7 +74,6 @@ describe('AnomalyDetectors', () => {
       .simulate('keyDown', { key: 'ArrowDown' })
       .simulate('keyDown', { key: 'Enter' });
 
-    console.log(wrapper.instance());
     // Validate the specific detector is in the input field
     expect(wrapper.find('[data-test-subj="comboBoxInput"]').hostNodes().text()).toEqual(
       'sample-detector'
