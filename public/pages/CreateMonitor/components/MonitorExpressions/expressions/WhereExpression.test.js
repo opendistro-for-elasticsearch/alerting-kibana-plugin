@@ -28,6 +28,9 @@ const dataTypes = {
   text: new Set(['cityName']),
   keyword: new Set(['cityName.keyword']),
 };
+// Used to wait until all of the promises have cleared, especially waiting for asynchronous Formik's handlers.
+const runAllPromises = () => new Promise(setImmediate);
+
 const openExpression = jest.fn();
 const closeExpression = jest.fn();
 const getMountWrapper = (state = false) => (
@@ -67,7 +70,7 @@ describe('WhereExpression', () => {
     button.simulate('keyDown', { keyCode: 27 });
     expect(closeExpression).toHaveBeenCalled();
   });
-  test('should render text input for the text data types', () => {
+  test('should render text input for the text data types', async () => {
     const wrapper = mount(getMountWrapper(true));
     wrapper
       .find('[data-test-subj="comboBoxSearchInput"]')
@@ -77,6 +80,7 @@ describe('WhereExpression', () => {
       .simulate('keyDown', { key: 'Enter' })
       .simulate('blur');
 
+    await runAllPromises();
     wrapper.update();
     const values = wrapper.find(WhereExpression).props().formik.values;
     expect(values.where.fieldName).toEqual([{ label: 'cityName', type: 'text' }]);
