@@ -16,6 +16,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { mount } from 'enzyme';
+
 import { FORMIK_INITIAL_VALUES } from '../CreateMonitor/utils/constants';
 import MonitorIndex from './MonitorIndex';
 import * as helpers from './utils/helpers';
