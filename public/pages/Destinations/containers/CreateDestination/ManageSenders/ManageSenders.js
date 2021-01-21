@@ -56,6 +56,7 @@ export default class ManageSenders extends React.Component {
     super(props);
 
     this.state = {
+      // initialValues is required in Formik v2, https://github.com/formium/formik/issues/1967
       initialValues: {},
       sendersToDelete: [],
       loadingSenders: true,
