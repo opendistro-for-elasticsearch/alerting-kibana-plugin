@@ -9,7 +9,6 @@ exports[`CreateMonitor renders 1`] = `
   }
 >
   <Formik
-    enableReinitialize={false}
     initialValues={
       Object {
         "aggregationType": "count",
@@ -61,10 +60,8 @@ exports[`CreateMonitor renders 1`] = `
         },
       }
     }
-    isInitialValid={false}
     onSubmit={[Function]}
     render={[Function]}
-    validateOnBlur={true}
     validateOnChange={false}
   />
 </div>

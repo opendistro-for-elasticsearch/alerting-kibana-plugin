@@ -19,7 +19,7 @@ import { getAllowList } from '../../../utils/helpers';
 
 export const validateDestinationName = (httpClient, destinationToEdit) => async (value) => {
   try {
-    if (!value) throw 'Required';
+    if (!value) return 'Required';
     const options = {
       index: INDEX.SCHEDULED_JOBS,
       query: { query: { term: { 'destination.name.keyword': value } } },
@@ -28,15 +28,15 @@ export const validateDestinationName = (httpClient, destinationToEdit) => async 
       body: JSON.stringify(options),
     });
     if (_.get(response, 'resp.hits.total.value', 0)) {
-      if (!destinationToEdit) throw 'Destination name is already used';
+      if (!destinationToEdit) return 'Destination name is already used';
       if (destinationToEdit && destinationToEdit.name !== value) {
-        throw 'Destination name is already used';
+        return 'Destination name is already used';
       }
     }
     // TODO: Handle the situation that destinations with a same name can be created when user don't have the permission of 'cluster:admin/opendistro/alerting/monitor/search'
   } catch (err) {
-    if (typeof err === 'string') throw err;
-    throw 'There was a problem validating destination name. Please try again.';
+    if (typeof err === 'string') return err;
+    return 'There was a problem validating destination name. Please try again.';
   }
 };
 
