@@ -21,7 +21,6 @@ exports[`ManageSenders renders when email is disallowed 1`] = `
   <Formik
     initialValues={Object {}}
     onSubmit={[Function]}
-    render={[Function]}
     validateOnChange={false}
   >
     <EuiOverlayMask>
@@ -556,7 +555,6 @@ exports[`ManageSenders renders when email is disallowed 1`] = `
                               >
                                 <FormikConnect(FieldArrayInner)
                                   name="senders"
-                                  render={[Function]}
                                   validateOnChange={true}
                                 >
                                   <FieldArrayInner
@@ -603,7 +601,6 @@ exports[`ManageSenders renders when email is disallowed 1`] = `
                                       }
                                     }
                                     name="senders"
-                                    render={[Function]}
                                     validateOnChange={true}
                                   >
                                     <div
@@ -710,7 +707,6 @@ exports[`ManageSenders renders when visible 1`] = `
   <Formik
     initialValues={Object {}}
     onSubmit={[Function]}
-    render={[Function]}
     validateOnChange={false}
   >
     <EuiOverlayMask>
@@ -1245,7 +1241,6 @@ exports[`ManageSenders renders when visible 1`] = `
                               >
                                 <FormikConnect(FieldArrayInner)
                                   name="senders"
-                                  render={[Function]}
                                   validateOnChange={true}
                                 >
                                   <FieldArrayInner
@@ -1292,7 +1287,6 @@ exports[`ManageSenders renders when visible 1`] = `
                                       }
                                     }
                                     name="senders"
-                                    render={[Function]}
                                     validateOnChange={true}
                                   >
                                     <div
