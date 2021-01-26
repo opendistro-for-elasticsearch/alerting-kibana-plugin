@@ -2,7 +2,6 @@
 
 exports[`AnomalyDetectors renders 1`] = `
 <Formik
-  enableReinitialize={false}
   initialValues={
     Object {
       "aggregationType": "count",
@@ -54,10 +53,7 @@ exports[`AnomalyDetectors renders 1`] = `
       },
     }
   }
-  isInitialValid={false}
   render={[Function]}
-  validateOnBlur={true}
-  validateOnChange={true}
 >
   <AnomalyDetectors
     renderEmptyMessage={[MockFunction]}
@@ -158,20 +154,26 @@ exports[`AnomalyDetectors renders 1`] = `
           name="detectorId"
           render={[Function]}
         >
-          <C
+          <Field
             name="detectorId"
             render={[Function]}
             validate={[Function]}
           >
-            <FieldInner
-              formik={
+            <FormikFormRow
+              form={
                 Object {
                   "dirty": false,
                   "errors": Object {},
+                  "getFieldHelpers": [Function],
+                  "getFieldMeta": [Function],
+                  "getFieldProps": [Function],
                   "handleBlur": [Function],
                   "handleChange": [Function],
                   "handleReset": [Function],
                   "handleSubmit": [Function],
+                  "initialErrors": Object {},
+                  "initialStatus": undefined,
+                  "initialTouched": Object {},
                   "initialValues": Object {
                     "aggregationType": "count",
                     "bucketUnitOfTime": "h",
@@ -222,11 +224,10 @@ exports[`AnomalyDetectors renders 1`] = `
                     },
                   },
                   "isSubmitting": false,
-                  "isValid": false,
+                  "isValid": true,
                   "isValidating": false,
                   "registerField": [Function],
                   "resetForm": [Function],
-                  "setError": [Function],
                   "setErrors": [Function],
                   "setFieldError": [Function],
                   "setFieldTouched": [Function],
@@ -236,16 +237,16 @@ exports[`AnomalyDetectors renders 1`] = `
                   "setSubmitting": [Function],
                   "setTouched": [Function],
                   "setValues": [Function],
+                  "status": undefined,
                   "submitCount": 0,
                   "submitForm": [Function],
                   "touched": Object {},
                   "unregisterField": [Function],
-                  "validate": undefined,
                   "validateField": [Function],
                   "validateForm": [Function],
                   "validateOnBlur": true,
                   "validateOnChange": true,
-                  "validationSchema": undefined,
+                  "validateOnMount": false,
                   "values": Object {
                     "aggregationType": "count",
                     "bucketUnitOfTime": "h",
@@ -298,549 +299,419 @@ exports[`AnomalyDetectors renders 1`] = `
                 }
               }
               name="detectorId"
-              render={[Function]}
-              validate={[Function]}
+              rowProps={
+                Object {
+                  "error": [Function],
+                  "isInvalid": [Function],
+                  "label": "Detector",
+                }
+              }
             >
-              <FormikFormRow
-                form={
-                  Object {
-                    "dirty": false,
-                    "errors": Object {},
-                    "handleBlur": [Function],
-                    "handleChange": [Function],
-                    "handleReset": [Function],
-                    "handleSubmit": [Function],
-                    "initialValues": Object {
-                      "aggregationType": "count",
-                      "bucketUnitOfTime": "h",
-                      "bucketValue": 1,
-                      "cronExpression": "0 */1 * * *",
-                      "daily": 0,
-                      "detectorId": "",
-                      "disabled": false,
-                      "fieldName": Array [],
-                      "frequency": "interval",
-                      "groupedOverFieldName": "bytes",
-                      "groupedOverTop": 5,
-                      "index": Array [],
-                      "monthly": Object {
-                        "day": 1,
-                        "type": "day",
-                      },
-                      "name": "",
-                      "overDocuments": "all documents",
-                      "period": Object {
-                        "interval": 1,
-                        "unit": "MINUTES",
-                      },
-                      "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                      "searchType": "graph",
-                      "timeField": "",
-                      "timezone": Array [],
-                      "weekly": Object {
-                        "fri": false,
-                        "mon": false,
-                        "sat": false,
-                        "sun": false,
-                        "thur": false,
-                        "tue": false,
-                        "wed": false,
-                      },
-                      "where": Object {
-                        "fieldName": Array [],
-                        "fieldRangeEnd": 0,
-                        "fieldRangeStart": 0,
-                        "fieldValue": "",
-                        "operator": "is",
-                      },
-                    },
-                    "isSubmitting": false,
-                    "isValid": false,
-                    "isValidating": false,
-                    "registerField": [Function],
-                    "resetForm": [Function],
-                    "setError": [Function],
-                    "setErrors": [Function],
-                    "setFieldError": [Function],
-                    "setFieldTouched": [Function],
-                    "setFieldValue": [Function],
-                    "setFormikState": [Function],
-                    "setStatus": [Function],
-                    "setSubmitting": [Function],
-                    "setTouched": [Function],
-                    "setValues": [Function],
-                    "submitCount": 0,
-                    "submitForm": [Function],
-                    "touched": Object {},
-                    "unregisterField": [Function],
-                    "validateField": [Function],
-                    "validateForm": [Function],
-                    "validateOnBlur": true,
-                    "validateOnChange": true,
-                    "values": Object {
-                      "aggregationType": "count",
-                      "bucketUnitOfTime": "h",
-                      "bucketValue": 1,
-                      "cronExpression": "0 */1 * * *",
-                      "daily": 0,
-                      "detectorId": "",
-                      "disabled": false,
-                      "fieldName": Array [],
-                      "frequency": "interval",
-                      "groupedOverFieldName": "bytes",
-                      "groupedOverTop": 5,
-                      "index": Array [],
-                      "monthly": Object {
-                        "day": 1,
-                        "type": "day",
-                      },
-                      "name": "",
-                      "overDocuments": "all documents",
-                      "period": Object {
-                        "interval": 1,
-                        "unit": "MINUTES",
-                      },
-                      "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                      "searchType": "graph",
-                      "timeField": "",
-                      "timezone": Array [],
-                      "weekly": Object {
-                        "fri": false,
-                        "mon": false,
-                        "sat": false,
-                        "sun": false,
-                        "thur": false,
-                        "tue": false,
-                        "wed": false,
-                      },
-                      "where": Object {
-                        "fieldName": Array [],
-                        "fieldRangeEnd": 0,
-                        "fieldRangeStart": 0,
-                        "fieldValue": "",
-                        "operator": "is",
-                      },
-                    },
-                  }
-                }
-                name="detectorId"
-                rowProps={
-                  Object {
-                    "error": [Function],
-                    "isInvalid": [Function],
-                    "label": "Detector",
-                  }
-                }
+              <EuiFormRow
+                describedByIds={Array []}
+                display="row"
+                fullWidth={false}
+                hasChildLabel={true}
+                hasEmptyLabelSpace={false}
+                id="detectorId-form-row"
+                isInvalid={false}
+                label="Detector"
+                labelType="label"
               >
-                <EuiFormRow
-                  describedByIds={Array []}
-                  display="row"
-                  fullWidth={false}
-                  hasChildLabel={true}
-                  hasEmptyLabelSpace={false}
-                  id="detectorId-form-row"
-                  isInvalid={false}
-                  label="Detector"
-                  labelType="label"
+                <div
+                  className="euiFormRow"
+                  id="detectorId-form-row-row"
                 >
                   <div
-                    className="euiFormRow"
-                    id="detectorId-form-row-row"
+                    className="euiFormRow__labelWrapper"
                   >
-                    <div
-                      className="euiFormRow__labelWrapper"
+                    <EuiFormLabel
+                      aria-invalid={false}
+                      className="euiFormRow__label"
+                      htmlFor="detectorId-form-row"
+                      isFocused={false}
+                      isInvalid={false}
+                      type="label"
                     >
-                      <EuiFormLabel
+                      <label
                         aria-invalid={false}
-                        className="euiFormRow__label"
+                        className="euiFormLabel euiFormRow__label"
                         htmlFor="detectorId-form-row"
-                        isFocused={false}
-                        isInvalid={false}
-                        type="label"
                       >
-                        <label
-                          aria-invalid={false}
-                          className="euiFormLabel euiFormRow__label"
-                          htmlFor="detectorId-form-row"
-                        >
-                          Detector
-                        </label>
-                      </EuiFormLabel>
-                    </div>
-                    <div
-                      className="euiFormRow__fieldWrapper"
+                        Detector
+                      </label>
+                    </EuiFormLabel>
+                  </div>
+                  <div
+                    className="euiFormRow__fieldWrapper"
+                  >
+                    <ComboBox
+                      field={
+                        Object {
+                          "name": "detectorId",
+                          "onBlur": [Function],
+                          "onChange": [Function],
+                          "value": "",
+                        }
+                      }
+                      form={
+                        Object {
+                          "dirty": false,
+                          "errors": Object {},
+                          "getFieldHelpers": [Function],
+                          "getFieldMeta": [Function],
+                          "getFieldProps": [Function],
+                          "handleBlur": [Function],
+                          "handleChange": [Function],
+                          "handleReset": [Function],
+                          "handleSubmit": [Function],
+                          "initialErrors": Object {},
+                          "initialStatus": undefined,
+                          "initialTouched": Object {},
+                          "initialValues": Object {
+                            "aggregationType": "count",
+                            "bucketUnitOfTime": "h",
+                            "bucketValue": 1,
+                            "cronExpression": "0 */1 * * *",
+                            "daily": 0,
+                            "detectorId": "",
+                            "disabled": false,
+                            "fieldName": Array [],
+                            "frequency": "interval",
+                            "groupedOverFieldName": "bytes",
+                            "groupedOverTop": 5,
+                            "index": Array [],
+                            "monthly": Object {
+                              "day": 1,
+                              "type": "day",
+                            },
+                            "name": "",
+                            "overDocuments": "all documents",
+                            "period": Object {
+                              "interval": 1,
+                              "unit": "MINUTES",
+                            },
+                            "query": "{
+    \\"size\\": 0,
+    \\"query\\": {
+        \\"match_all\\": {}
+    }
+}",
+                            "searchType": "graph",
+                            "timeField": "",
+                            "timezone": Array [],
+                            "weekly": Object {
+                              "fri": false,
+                              "mon": false,
+                              "sat": false,
+                              "sun": false,
+                              "thur": false,
+                              "tue": false,
+                              "wed": false,
+                            },
+                            "where": Object {
+                              "fieldName": Array [],
+                              "fieldRangeEnd": 0,
+                              "fieldRangeStart": 0,
+                              "fieldValue": "",
+                              "operator": "is",
+                            },
+                          },
+                          "isSubmitting": false,
+                          "isValid": true,
+                          "isValidating": false,
+                          "registerField": [Function],
+                          "resetForm": [Function],
+                          "setErrors": [Function],
+                          "setFieldError": [Function],
+                          "setFieldTouched": [Function],
+                          "setFieldValue": [Function],
+                          "setFormikState": [Function],
+                          "setStatus": [Function],
+                          "setSubmitting": [Function],
+                          "setTouched": [Function],
+                          "setValues": [Function],
+                          "status": undefined,
+                          "submitCount": 0,
+                          "submitForm": [Function],
+                          "touched": Object {},
+                          "unregisterField": [Function],
+                          "validateField": [Function],
+                          "validateForm": [Function],
+                          "validateOnBlur": true,
+                          "validateOnChange": true,
+                          "validateOnMount": false,
+                          "values": Object {
+                            "aggregationType": "count",
+                            "bucketUnitOfTime": "h",
+                            "bucketValue": 1,
+                            "cronExpression": "0 */1 * * *",
+                            "daily": 0,
+                            "detectorId": "",
+                            "disabled": false,
+                            "fieldName": Array [],
+                            "frequency": "interval",
+                            "groupedOverFieldName": "bytes",
+                            "groupedOverTop": 5,
+                            "index": Array [],
+                            "monthly": Object {
+                              "day": 1,
+                              "type": "day",
+                            },
+                            "name": "",
+                            "overDocuments": "all documents",
+                            "period": Object {
+                              "interval": 1,
+                              "unit": "MINUTES",
+                            },
+                            "query": "{
+    \\"size\\": 0,
+    \\"query\\": {
+        \\"match_all\\": {}
+    }
+}",
+                            "searchType": "graph",
+                            "timeField": "",
+                            "timezone": Array [],
+                            "weekly": Object {
+                              "fri": false,
+                              "mon": false,
+                              "sat": false,
+                              "sun": false,
+                              "thur": false,
+                              "tue": false,
+                              "wed": false,
+                            },
+                            "where": Object {
+                              "fieldName": Array [],
+                              "fieldRangeEnd": 0,
+                              "fieldRangeStart": 0,
+                              "fieldValue": "",
+                              "operator": "is",
+                            },
+                          },
+                        }
+                      }
+                      id="detectorId-form-row"
+                      inputProps={
+                        Object {
+                          "isClearable": false,
+                          "onBlur": [Function],
+                          "onChange": [Function],
+                          "options": Array [],
+                          "placeholder": "Select a detector",
+                          "selectedOptions": Array [],
+                          "singleSelection": Object {
+                            "asPlaintext": true,
+                          },
+                        }
+                      }
+                      name="detectorId"
+                      onBlur={[Function]}
+                      onFocus={[Function]}
                     >
-                      <ComboBox
-                        field={
-                          Object {
-                            "name": "detectorId",
-                            "onBlur": [Function],
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
-                        form={
-                          Object {
-                            "dirty": false,
-                            "errors": Object {},
-                            "handleBlur": [Function],
-                            "handleChange": [Function],
-                            "handleReset": [Function],
-                            "handleSubmit": [Function],
-                            "initialValues": Object {
-                              "aggregationType": "count",
-                              "bucketUnitOfTime": "h",
-                              "bucketValue": 1,
-                              "cronExpression": "0 */1 * * *",
-                              "daily": 0,
-                              "detectorId": "",
-                              "disabled": false,
-                              "fieldName": Array [],
-                              "frequency": "interval",
-                              "groupedOverFieldName": "bytes",
-                              "groupedOverTop": 5,
-                              "index": Array [],
-                              "monthly": Object {
-                                "day": 1,
-                                "type": "day",
-                              },
-                              "name": "",
-                              "overDocuments": "all documents",
-                              "period": Object {
-                                "interval": 1,
-                                "unit": "MINUTES",
-                              },
-                              "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                              "searchType": "graph",
-                              "timeField": "",
-                              "timezone": Array [],
-                              "weekly": Object {
-                                "fri": false,
-                                "mon": false,
-                                "sat": false,
-                                "sun": false,
-                                "thur": false,
-                                "tue": false,
-                                "wed": false,
-                              },
-                              "where": Object {
-                                "fieldName": Array [],
-                                "fieldRangeEnd": 0,
-                                "fieldRangeStart": 0,
-                                "fieldValue": "",
-                                "operator": "is",
-                              },
-                            },
-                            "isSubmitting": false,
-                            "isValid": false,
-                            "isValidating": false,
-                            "registerField": [Function],
-                            "resetForm": [Function],
-                            "setError": [Function],
-                            "setErrors": [Function],
-                            "setFieldError": [Function],
-                            "setFieldTouched": [Function],
-                            "setFieldValue": [Function],
-                            "setFormikState": [Function],
-                            "setStatus": [Function],
-                            "setSubmitting": [Function],
-                            "setTouched": [Function],
-                            "setValues": [Function],
-                            "submitCount": 0,
-                            "submitForm": [Function],
-                            "touched": Object {},
-                            "unregisterField": [Function],
-                            "validateField": [Function],
-                            "validateForm": [Function],
-                            "validateOnBlur": true,
-                            "validateOnChange": true,
-                            "values": Object {
-                              "aggregationType": "count",
-                              "bucketUnitOfTime": "h",
-                              "bucketValue": 1,
-                              "cronExpression": "0 */1 * * *",
-                              "daily": 0,
-                              "detectorId": "",
-                              "disabled": false,
-                              "fieldName": Array [],
-                              "frequency": "interval",
-                              "groupedOverFieldName": "bytes",
-                              "groupedOverTop": 5,
-                              "index": Array [],
-                              "monthly": Object {
-                                "day": 1,
-                                "type": "day",
-                              },
-                              "name": "",
-                              "overDocuments": "all documents",
-                              "period": Object {
-                                "interval": 1,
-                                "unit": "MINUTES",
-                              },
-                              "query": "{
-    \\"size\\": 0,
-    \\"query\\": {
-        \\"match_all\\": {}
-    }
-}",
-                              "searchType": "graph",
-                              "timeField": "",
-                              "timezone": Array [],
-                              "weekly": Object {
-                                "fri": false,
-                                "mon": false,
-                                "sat": false,
-                                "sun": false,
-                                "thur": false,
-                                "tue": false,
-                                "wed": false,
-                              },
-                              "where": Object {
-                                "fieldName": Array [],
-                                "fieldRangeEnd": 0,
-                                "fieldRangeStart": 0,
-                                "fieldValue": "",
-                                "operator": "is",
-                              },
-                            },
-                          }
-                        }
-                        id="detectorId-form-row"
-                        inputProps={
-                          Object {
-                            "isClearable": false,
-                            "onBlur": [Function],
-                            "onChange": [Function],
-                            "options": Array [],
-                            "placeholder": "Select a detector",
-                            "selectedOptions": Array [],
-                            "singleSelection": Object {
-                              "asPlaintext": true,
-                            },
-                          }
-                        }
+                      <EuiComboBox
+                        async={false}
+                        compressed={false}
+                        fullWidth={false}
+                        id="detectorId"
+                        isClearable={false}
                         name="detectorId"
                         onBlur={[Function]}
-                        onFocus={[Function]}
-                      >
-                        <EuiComboBox
-                          async={false}
-                          compressed={false}
-                          fullWidth={false}
-                          id="detectorId"
-                          isClearable={false}
-                          name="detectorId"
-                          onBlur={[Function]}
-                          onChange={[Function]}
-                          options={Array []}
-                          placeholder="Select a detector"
-                          selectedOptions={Array []}
-                          singleSelection={
-                            Object {
-                              "asPlaintext": true,
-                            }
+                        onChange={[Function]}
+                        options={Array []}
+                        placeholder="Select a detector"
+                        selectedOptions={Array []}
+                        singleSelection={
+                          Object {
+                            "asPlaintext": true,
                           }
-                          sortMatchesBy="none"
+                        }
+                        sortMatchesBy="none"
+                      >
+                        <div
+                          aria-expanded={false}
+                          aria-haspopup="listbox"
+                          className="euiComboBox"
+                          name="detectorId"
+                          onKeyDown={[Function]}
+                          role="combobox"
                         >
-                          <div
-                            aria-expanded={false}
-                            aria-haspopup="listbox"
-                            className="euiComboBox"
-                            name="detectorId"
-                            onKeyDown={[Function]}
-                            role="combobox"
+                          <EuiComboBoxInput
+                            autoSizeInputRef={[Function]}
+                            compressed={false}
+                            fullWidth={false}
+                            hasSelectedOptions={false}
+                            id="detectorId"
+                            inputRef={[Function]}
+                            isListOpen={false}
+                            noIcon={false}
+                            onChange={[Function]}
+                            onClick={[Function]}
+                            onCloseListClick={[Function]}
+                            onFocus={[Function]}
+                            onOpenListClick={[Function]}
+                            onRemoveOption={[Function]}
+                            placeholder="Select a detector"
+                            rootId={[Function]}
+                            searchValue=""
+                            selectedOptions={Array []}
+                            singleSelection={
+                              Object {
+                                "asPlaintext": true,
+                              }
+                            }
+                            toggleButtonRef={[Function]}
+                            updatePosition={[Function]}
+                            value=""
                           >
-                            <EuiComboBoxInput
-                              autoSizeInputRef={[Function]}
+                            <EuiFormControlLayout
                               compressed={false}
                               fullWidth={false}
-                              hasSelectedOptions={false}
-                              id="detectorId"
-                              inputRef={[Function]}
-                              isListOpen={false}
-                              noIcon={false}
-                              onChange={[Function]}
-                              onClick={[Function]}
-                              onCloseListClick={[Function]}
-                              onFocus={[Function]}
-                              onOpenListClick={[Function]}
-                              onRemoveOption={[Function]}
-                              placeholder="Select a detector"
-                              rootId={[Function]}
-                              searchValue=""
-                              selectedOptions={Array []}
-                              singleSelection={
+                              icon={
                                 Object {
-                                  "asPlaintext": true,
+                                  "aria-label": "Open list of options",
+                                  "data-test-subj": "comboBoxToggleListButton",
+                                  "disabled": undefined,
+                                  "onClick": [Function],
+                                  "ref": [Function],
+                                  "side": "right",
+                                  "type": "arrowDown",
                                 }
                               }
-                              toggleButtonRef={[Function]}
-                              updatePosition={[Function]}
-                              value=""
                             >
-                              <EuiFormControlLayout
-                                compressed={false}
-                                fullWidth={false}
-                                icon={
-                                  Object {
-                                    "aria-label": "Open list of options",
-                                    "data-test-subj": "comboBoxToggleListButton",
-                                    "disabled": undefined,
-                                    "onClick": [Function],
-                                    "ref": [Function],
-                                    "side": "right",
-                                    "type": "arrowDown",
-                                  }
-                                }
+                              <div
+                                className="euiFormControlLayout"
                               >
                                 <div
-                                  className="euiFormControlLayout"
+                                  className="euiFormControlLayout__childrenWrapper"
                                 >
                                   <div
-                                    className="euiFormControlLayout__childrenWrapper"
+                                    className="euiComboBox__inputWrap euiComboBox__inputWrap--noWrap"
+                                    data-test-subj="comboBoxInput"
+                                    onClick={[Function]}
+                                    tabIndex={-1}
                                   >
-                                    <div
-                                      className="euiComboBox__inputWrap euiComboBox__inputWrap--noWrap"
-                                      data-test-subj="comboBoxInput"
-                                      onClick={[Function]}
-                                      tabIndex={-1}
+                                    <p
+                                      className="euiComboBoxPlaceholder"
                                     >
-                                      <p
-                                        className="euiComboBoxPlaceholder"
-                                      >
-                                        Select a detector
-                                      </p>
-                                      <AutosizeInput
-                                        aria-controls=""
+                                      Select a detector
+                                    </p>
+                                    <AutosizeInput
+                                      aria-controls=""
+                                      className="euiComboBox__input"
+                                      data-test-subj="comboBoxSearchInput"
+                                      id="detectorId"
+                                      injectStyles={true}
+                                      inputRef={[Function]}
+                                      minWidth={1}
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      role="textbox"
+                                      style={
+                                        Object {
+                                          "fontSize": 14,
+                                        }
+                                      }
+                                      value=""
+                                    >
+                                      <div
                                         className="euiComboBox__input"
-                                        data-test-subj="comboBoxSearchInput"
-                                        id="detectorId"
-                                        injectStyles={true}
-                                        inputRef={[Function]}
-                                        minWidth={1}
-                                        onBlur={[Function]}
-                                        onChange={[Function]}
-                                        onFocus={[Function]}
-                                        role="textbox"
                                         style={
                                           Object {
+                                            "display": "inline-block",
                                             "fontSize": 14,
                                           }
                                         }
-                                        value=""
                                       >
-                                        <div
-                                          className="euiComboBox__input"
+                                        <input
+                                          aria-controls=""
+                                          data-test-subj="comboBoxSearchInput"
+                                          id="detectorId"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          role="textbox"
                                           style={
                                             Object {
-                                              "display": "inline-block",
-                                              "fontSize": 14,
+                                              "boxSizing": "content-box",
+                                              "width": "2px",
                                             }
                                           }
-                                        >
-                                          <input
-                                            aria-controls=""
-                                            data-test-subj="comboBoxSearchInput"
-                                            id="detectorId"
-                                            onBlur={[Function]}
-                                            onChange={[Function]}
-                                            onFocus={[Function]}
-                                            role="textbox"
-                                            style={
-                                              Object {
-                                                "boxSizing": "content-box",
-                                                "width": "2px",
-                                              }
+                                          value=""
+                                        />
+                                        <div
+                                          style={
+                                            Object {
+                                              "height": 0,
+                                              "left": 0,
+                                              "overflow": "scroll",
+                                              "position": "absolute",
+                                              "top": 0,
+                                              "visibility": "hidden",
+                                              "whiteSpace": "pre",
                                             }
-                                            value=""
-                                          />
-                                          <div
-                                            style={
-                                              Object {
-                                                "height": 0,
-                                                "left": 0,
-                                                "overflow": "scroll",
-                                                "position": "absolute",
-                                                "top": 0,
-                                                "visibility": "hidden",
-                                                "whiteSpace": "pre",
-                                              }
-                                            }
-                                          />
-                                        </div>
-                                      </AutosizeInput>
-                                    </div>
-                                    <EuiFormControlLayoutIcons
-                                      icon={
-                                        Object {
-                                          "aria-label": "Open list of options",
-                                          "data-test-subj": "comboBoxToggleListButton",
-                                          "disabled": undefined,
-                                          "onClick": [Function],
-                                          "ref": [Function],
-                                          "side": "right",
-                                          "type": "arrowDown",
-                                        }
-                                      }
-                                    >
-                                      <div
-                                        className="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
-                                      >
-                                        <EuiFormControlLayoutCustomIcon
-                                          aria-label="Open list of options"
-                                          data-test-subj="comboBoxToggleListButton"
-                                          iconRef={[Function]}
-                                          onClick={[Function]}
-                                          type="arrowDown"
-                                        >
-                                          <button
-                                            aria-label="Open list of options"
-                                            className="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
-                                            data-test-subj="comboBoxToggleListButton"
-                                            onClick={[Function]}
-                                            type="button"
-                                          >
-                                            <EuiIcon
-                                              aria-hidden="true"
-                                              className="euiFormControlLayoutCustomIcon__icon"
-                                              type="arrowDown"
-                                            >
-                                              <div>
-                                                EuiIconMock
-                                              </div>
-                                            </EuiIcon>
-                                          </button>
-                                        </EuiFormControlLayoutCustomIcon>
+                                          }
+                                        />
                                       </div>
-                                    </EuiFormControlLayoutIcons>
+                                    </AutosizeInput>
                                   </div>
+                                  <EuiFormControlLayoutIcons
+                                    icon={
+                                      Object {
+                                        "aria-label": "Open list of options",
+                                        "data-test-subj": "comboBoxToggleListButton",
+                                        "disabled": undefined,
+                                        "onClick": [Function],
+                                        "ref": [Function],
+                                        "side": "right",
+                                        "type": "arrowDown",
+                                      }
+                                    }
+                                  >
+                                    <div
+                                      className="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"
+                                    >
+                                      <EuiFormControlLayoutCustomIcon
+                                        aria-label="Open list of options"
+                                        data-test-subj="comboBoxToggleListButton"
+                                        iconRef={[Function]}
+                                        onClick={[Function]}
+                                        type="arrowDown"
+                                      >
+                                        <button
+                                          aria-label="Open list of options"
+                                          className="euiFormControlLayoutCustomIcon euiFormControlLayoutCustomIcon--clickable"
+                                          data-test-subj="comboBoxToggleListButton"
+                                          onClick={[Function]}
+                                          type="button"
+                                        >
+                                          <EuiIcon
+                                            aria-hidden="true"
+                                            className="euiFormControlLayoutCustomIcon__icon"
+                                            type="arrowDown"
+                                          >
+                                            <div>
+                                              EuiIconMock
+                                            </div>
+                                          </EuiIcon>
+                                        </button>
+                                      </EuiFormControlLayoutCustomIcon>
+                                    </div>
+                                  </EuiFormControlLayoutIcons>
                                 </div>
-                              </EuiFormControlLayout>
-                            </EuiComboBoxInput>
-                          </div>
-                        </EuiComboBox>
-                      </ComboBox>
-                    </div>
+                              </div>
+                            </EuiFormControlLayout>
+                          </EuiComboBoxInput>
+                        </div>
+                      </EuiComboBox>
+                    </ComboBox>
                   </div>
-                </EuiFormRow>
-              </FormikFormRow>
-            </FieldInner>
-          </C>
+                </div>
+              </EuiFormRow>
+            </FormikFormRow>
+          </Field>
         </FormikInputWrapper>
       </FormikComboBox>
     </div>

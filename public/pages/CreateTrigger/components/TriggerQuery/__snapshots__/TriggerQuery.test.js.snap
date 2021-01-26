@@ -33,7 +33,7 @@ exports[`TriggerQuery renders 1`] = `
       </EuiFormRow>
     </EuiFlexItem>
     <EuiFlexItem>
-      <C
+      <Field
         name="script.source"
         render={[Function]}
       />

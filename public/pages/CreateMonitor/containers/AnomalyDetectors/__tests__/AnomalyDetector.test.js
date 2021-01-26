@@ -22,6 +22,9 @@ import AnomalyDetectors from '../AnomalyDetectors';
 import { httpClientMock } from '../../../../../../test/mocks';
 import { CoreContext } from '../../../../../utils/CoreContext';
 
+// Used to wait until all of the promises have cleared, especially waiting for asynchronous Formik's handlers.
+const runAllPromises = () => new Promise(setImmediate);
+
 const renderEmptyMessage = jest.fn();
 function getMountWrapper() {
   return mount(
@@ -46,7 +49,7 @@ describe('AnomalyDetectors', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('should be able to select the detector', (done) => {
+  test('should be able to select the detector', async () => {
     httpClientMock.post.mockResolvedValueOnce({
       ok: true,
       detectors: [{ name: 'sample-detector', id: 'sample-id', feature_attributes: [] }],
@@ -57,15 +60,23 @@ describe('AnomalyDetectors', () => {
       response: { anomalyResult: { anomalies: [], featureData: [] }, detector: {} },
     });
     const wrapper = getMountWrapper();
-    setTimeout(() => {
-      wrapper
-        .find('[data-test-subj="comboBoxSearchInput"]')
-        .hostNodes()
-        .simulate('change', { target: { value: 'sample-detector' } })
-        .simulate('keyDown', { key: 'ArrowDown' })
-        .simulate('keyDown', { key: 'Enter' });
-      expect(wrapper.instance().state.values.detectorId).toEqual('sample-id');
-      done();
-    });
+
+    wrapper
+      .find('[data-test-subj="comboBoxSearchInput"]')
+      .hostNodes()
+      .simulate('change', { target: { value: 'sample-detect' } });
+
+    await runAllPromises();
+
+    wrapper
+      .find('[data-test-subj="comboBoxInput"]')
+      .hostNodes()
+      .simulate('keyDown', { key: 'ArrowDown' })
+      .simulate('keyDown', { key: 'Enter' });
+
+    // Validate the specific detector is in the input field
+    expect(wrapper.find('[data-test-subj="comboBoxInput"]').hostNodes().text()).toEqual(
+      'sample-detector'
+    );
   });
 });

@@ -51,7 +51,7 @@ export const required = (value) => {
 
 export const validateMonitorName = (httpClient, monitorToEdit) => async (value) => {
   try {
-    if (!value) throw 'Required';
+    if (!value) return 'Required';
     const options = {
       index: INDEX.SCHEDULED_JOBS,
       query: { query: { term: { 'monitor.name.keyword': value } } },
@@ -60,9 +60,9 @@ export const validateMonitorName = (httpClient, monitorToEdit) => async (value) 
       body: JSON.stringify(options),
     });
     if (_.get(response, 'resp.hits.total.value', 0)) {
-      if (!monitorToEdit) throw 'Monitor name is already used';
+      if (!monitorToEdit) return 'Monitor name is already used';
       if (monitorToEdit && monitorToEdit.name !== value) {
-        throw 'Monitor name is already used';
+        return 'Monitor name is already used';
       }
     }
     // TODO: Handle the situation that monitors with a same name can be created when user don't have the permission of 'cluster:admin/opendistro/alerting/monitor/search'

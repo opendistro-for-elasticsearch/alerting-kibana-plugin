@@ -67,7 +67,7 @@ describe('WhereExpression', () => {
     button.simulate('keyDown', { keyCode: 27 });
     expect(closeExpression).toHaveBeenCalled();
   });
-  test('should render text input for the text data types', () => {
+  test('should render text input for the text data types', async () => {
     const wrapper = mount(getMountWrapper(true));
     wrapper
       .find('[data-test-subj="comboBoxSearchInput"]')

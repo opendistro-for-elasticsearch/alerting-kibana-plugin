@@ -59,7 +59,7 @@ exports[`TriggerExpressions renders 1`] = `
               }
             }
           >
-            <C
+            <Field
               render={[Function]}
             />
           </EuiFlexItem>
@@ -71,7 +71,7 @@ exports[`TriggerExpressions renders 1`] = `
               }
             }
           >
-            <C
+            <Field
               render={[Function]}
             />
           </EuiFlexItem>

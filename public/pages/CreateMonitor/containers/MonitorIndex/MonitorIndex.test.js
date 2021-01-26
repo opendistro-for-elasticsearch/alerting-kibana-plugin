@@ -25,6 +25,10 @@ import { httpClientMock } from '../../../../../test/mocks';
 helpers.createReasonableWait = jest.fn((cb) => cb());
 httpClientMock.post.mockResolvedValue({ ok: true, resp: [] });
 
+// Enzyme's change event is synchronous and Formik's handlers are asynchronous
+// https://github.com/formium/formik/issues/937, https://www.benmvp.com/blog/asynchronous-testing-with-enzyme-react-jest/
+const runAllPromises = () => new Promise(setImmediate);
+
 function getMountWrapper(customProps = {}) {
   return mount(
     <Formik
@@ -43,19 +47,16 @@ describe('MonitorIndex', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('calls onSearchChange when changing input value', async () => {
+  test('calls onSearchChange when changing input value', () => {
     const onSearchChange = jest.spyOn(MonitorIndex.prototype, 'onSearchChange');
     const wrapper = getMountWrapper();
     wrapper
       .find('[data-test-subj="comboBoxSearchInput"]')
       .hostNodes()
       .simulate('change', { target: { value: 'random-index' } });
-    setTimeout(() => {
-      wrapper.update();
-      expect(onSearchChange).toHaveBeenCalled();
-      expect(onSearchChange).toHaveBeenCalledWith('random-index');
-      done();
-    });
+
+    expect(onSearchChange).toHaveBeenCalled();
+    expect(onSearchChange).toHaveBeenCalledWith('random-index', false);
   });
 
   test('appends wildcard when search is one valid character', () => {
@@ -148,7 +149,7 @@ describe('MonitorIndex', () => {
     expect(wrapper.instance().state.touched).toEqual({ index: true });
   });
 
-  test('sets option when calling onCreateOption', () => {
+  test('sets option when calling onCreateOption', async () => {
     httpClientMock.post.mockResolvedValue({
       ok: true,
       resp: [{ health: 'green', status: 'open', index: 'logstash-0', alias: 'logstash' }],
@@ -160,12 +161,15 @@ describe('MonitorIndex', () => {
       .hostNodes()
       .simulate('change', { target: { value: 'logstash-0' } });
 
+    await runAllPromises();
+
     wrapper
       .find('[data-test-subj="comboBoxInput"]')
       .hostNodes()
       .simulate('keyDown', { key: 'ArrowDown' })
       .simulate('keyDown', { key: 'Enter' });
 
-    expect(wrapper.instance().state.values.index).toEqual([{ label: 'logstash-0' }]);
+    // Validate the specific index is in the input field
+    expect(wrapper.find('[data-test-subj="comboBoxInput"]').text()).toEqual('logstashEuiIconMock');
   });
 });
