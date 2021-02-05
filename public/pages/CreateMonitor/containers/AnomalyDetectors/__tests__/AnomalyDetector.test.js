@@ -29,12 +29,11 @@ const renderEmptyMessage = jest.fn();
 function getMountWrapper() {
   return mount(
     <CoreContext.Provider value={{ http: httpClientMock }}>
-      <Formik
-        initialValues={FORMIK_INITIAL_VALUES}
-        render={({ values }) => (
+      <Formik initialValues={FORMIK_INITIAL_VALUES}>
+        {({ values }) => (
           <AnomalyDetectors values={values} renderEmptyMessage={renderEmptyMessage} />
         )}
-      />
+      </Formik>
     </CoreContext.Provider>
   );
 }

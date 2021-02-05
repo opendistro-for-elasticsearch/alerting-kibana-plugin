@@ -53,7 +53,6 @@ exports[`AnomalyDetectors renders 1`] = `
       },
     }
   }
-  render={[Function]}
 >
   <AnomalyDetectors
     renderEmptyMessage={[MockFunction]}
@@ -156,7 +155,6 @@ exports[`AnomalyDetectors renders 1`] = `
         >
           <Field
             name="detectorId"
-            render={[Function]}
             validate={[Function]}
           >
             <FormikFormRow

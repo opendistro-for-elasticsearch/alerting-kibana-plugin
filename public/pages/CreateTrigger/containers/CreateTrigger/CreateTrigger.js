@@ -196,11 +196,8 @@ export default class CreateTrigger extends Component {
     return (
       <div style={{ padding: '25px 50px' }}>
         {this.renderSuccessCallOut()}
-        <Formik
-          initialValues={initialValues}
-          onSubmit={this.onSubmit}
-          validateOnChange={false}
-          render={({ values, handleSubmit, isSubmitting, errors, isValid }) => (
+        <Formik initialValues={initialValues} onSubmit={this.onSubmit} validateOnChange={false}>
+          {({ values, handleSubmit, isSubmitting, errors, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} trigger</h1>
@@ -217,10 +214,8 @@ export default class CreateTrigger extends Component {
                 isDarkMode={this.props.isDarkMode}
               />
               <EuiSpacer />
-              <FieldArray
-                name="actions"
-                validateOnChange={true}
-                render={(arrayHelpers) => (
+              <FieldArray name="actions" validateOnChange={true}>
+                {(arrayHelpers) => (
                   <ConfigureActions
                     arrayHelpers={arrayHelpers}
                     context={this.getTriggerContext(executeResponse, monitor, values)}
@@ -230,7 +225,7 @@ export default class CreateTrigger extends Component {
                     notifications={notifications}
                   />
                 )}
-              />
+              </FieldArray>
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>
@@ -255,7 +250,7 @@ export default class CreateTrigger extends Component {
               />
             </Fragment>
           )}
-        />
+        </Formik>
       </div>
     );
   }

@@ -22,9 +22,8 @@ import TimezoneComboBox from './TimezoneComboBox';
 const Daily = () => (
   <EuiFlexGroup direction="column" style={{ paddingLeft: '10px', marginTop: '5px' }}>
     <EuiFlexItem style={{ marginTop: '0px' }}>
-      <Field
-        name="daily"
-        render={({
+      <Field name="daily">
+        {({
           field: { value, onChange, onBlur, ...rest },
           form: { touched, errors, setFieldValue },
         }) => (
@@ -32,10 +31,8 @@ const Daily = () => (
             <EuiDatePicker
               showTimeSelect
               showTimeSelectOnly
-              selected={moment()
-                .hours(value)
-                .minutes(0)}
-              onChange={date => {
+              selected={moment().hours(value).minutes(0)}
+              onChange={(date) => {
                 setFieldValue('daily', date.hours());
               }}
               dateFormat="hh:mm A"
@@ -44,7 +41,7 @@ const Daily = () => (
             />
           </EuiFormRow>
         )}
-      />
+      </Field>
     </EuiFlexItem>
     <EuiFlexItem style={{ marginTop: '0px' }}>
       <TimezoneComboBox />

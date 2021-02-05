@@ -23,8 +23,8 @@ jest.mock('@elastic/eui/lib/components/form/form_row/make_id', () => () => 'test
 
 function getRenderWrapper(customProps = {}) {
   return render(
-    <Formik
-      render={() => (
+    <Formik>
+      {() => (
         <Message
           action={{
             message_template: {
@@ -39,7 +39,7 @@ function getRenderWrapper(customProps = {}) {
           setFlyout={jest.fn()}
         />
       )}
-    />
+    </Formik>
   );
 }
 

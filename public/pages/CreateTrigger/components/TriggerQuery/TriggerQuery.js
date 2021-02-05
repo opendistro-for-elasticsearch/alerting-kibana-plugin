@@ -31,7 +31,7 @@ import 'brace/snippets/javascript';
 import 'brace/ext/language_tools';
 import { formikToTrigger } from '../../containers/CreateTrigger/utils/formikToTrigger';
 
-export const getExecuteMessage = response => {
+export const getExecuteMessage = (response) => {
   if (!response) return 'No response';
   const triggerResults = _.get(response, 'trigger_results');
   if (!triggerResults) return 'No trigger results';
@@ -70,12 +70,8 @@ const TriggerQuery = ({
           </EuiFormRow>
         </EuiFlexItem>
         <EuiFlexItem>
-          <Field
-            name="script.source"
-            render={({
-              field: { value },
-              form: { errors, touched, setFieldValue, setFieldTouched },
-            }) => (
+          <Field name="script.source">
+            {({ field: { value }, form: { errors, touched, setFieldValue, setFieldTouched } }) => (
               <EuiFormRow
                 label={
                   <div>
@@ -101,7 +97,7 @@ const TriggerQuery = ({
                   theme={isDarkMode ? 'sense-dark' : 'github'}
                   height="200px"
                   width="100%"
-                  onChange={source => {
+                  onChange={(source) => {
                     setFieldValue('script.source', source);
                   }}
                   onBlur={() => setFieldTouched('script.source', true)}
@@ -109,7 +105,7 @@ const TriggerQuery = ({
                 />
               </EuiFormRow>
             )}
-          />
+          </Field>
         </EuiFlexItem>
         <EuiFlexItem grow={false}>
           <EuiFormRow label="Trigger condition response:" fullWidth>

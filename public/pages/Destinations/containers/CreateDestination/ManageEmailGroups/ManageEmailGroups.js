@@ -267,7 +267,8 @@ export default class ManageEmailGroups extends React.Component {
           this.processEmailGroups(values).then(() => onClickSave());
         }}
         validateOnChange={false}
-        render={({ values, handleSubmit, isSubmitting }) => (
+      >
+        {({ values, handleSubmit, isSubmitting }) => (
           <EuiOverlayMask>
             <EuiModal
               className="modal-manage-email"
@@ -281,10 +282,8 @@ export default class ManageEmailGroups extends React.Component {
               <EuiHorizontalRule margin="s" />
 
               <EuiModalBody>
-                <FieldArray
-                  name="emailGroups"
-                  validateOnChange={true}
-                  render={(arrayHelpers) =>
+                <FieldArray name="emailGroups" validateOnChange={true}>
+                  {(arrayHelpers) =>
                     !isEmailAllowed || loadingEmailGroups ? (
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         {isEmailAllowed ? 'Loading Email Groups...' : 'Email is disallowed'}
@@ -293,7 +292,7 @@ export default class ManageEmailGroups extends React.Component {
                       this.renderEmailGroups({ values, arrayHelpers })
                     )
                   }
-                />
+                </FieldArray>
               </EuiModalBody>
 
               {this.hasEmailGroupsToProcess(values) ? (
@@ -316,7 +315,7 @@ export default class ManageEmailGroups extends React.Component {
             </EuiModal>
           </EuiOverlayMask>
         )}
-      />
+      </Formik>
     ) : null;
   }
 }

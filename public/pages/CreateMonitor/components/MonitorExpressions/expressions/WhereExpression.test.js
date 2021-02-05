@@ -31,9 +31,8 @@ const dataTypes = {
 const openExpression = jest.fn();
 const closeExpression = jest.fn();
 const getMountWrapper = (state = false) => (
-  <Formik
-    initialValues={FORMIK_INITIAL_VALUES}
-    render={(props) => (
+  <Formik initialValues={FORMIK_INITIAL_VALUES}>
+    {(props) => (
       <WhereExpression
         formik={props}
         dataTypes={dataTypes}
@@ -43,7 +42,7 @@ const getMountWrapper = (state = false) => (
         onMadeChanges={jest.fn()}
       />
     )}
-  />
+  </Formik>
 );
 
 describe('WhereExpression', () => {
