@@ -507,6 +507,7 @@ exports[`ManageEmailGroups renders when email is disallowed 1`] = `
                             <button
                               aria-label="Closes this modal window"
                               className="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                              disabled={false}
                               onClick={[Function]}
                               type="button"
                             >
@@ -1193,6 +1194,7 @@ exports[`ManageEmailGroups renders when visible 1`] = `
                             <button
                               aria-label="Closes this modal window"
                               className="euiButtonIcon euiButtonIcon--text euiModal__closeIcon"
+                              disabled={false}
                               onClick={[Function]}
                               type="button"
                             >
