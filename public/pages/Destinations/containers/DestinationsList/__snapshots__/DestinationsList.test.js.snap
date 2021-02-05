@@ -185,14 +185,17 @@ exports[`DestinationsList renders 1`] = `
                                             onClick={[Function]}
                                           >
                                             <EuiButtonDisplay
+                                              disabled={false}
                                               element="button"
                                               iconSide="right"
                                               iconType="arrowDown"
+                                              isDisabled={false}
                                               onClick={[Function]}
                                               type="button"
                                             >
                                               <button
                                                 className="euiButton euiButton--primary"
+                                                disabled={false}
                                                 onClick={[Function]}
                                                 type="button"
                                               >
@@ -248,6 +251,7 @@ exports[`DestinationsList renders 1`] = `
                                       element="a"
                                       fill={true}
                                       href="opendistro-alerting#/create-destination"
+                                      isDisabled={false}
                                       rel="noreferrer"
                                     >
                                       <a
@@ -929,6 +933,7 @@ exports[`DestinationsList renders 1`] = `
                                         >
                                           <button
                                             className="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--xSmall euiButtonEmpty--flushRight"
+                                            disabled={false}
                                             onClick={[Function]}
                                             type="button"
                                           >
@@ -1290,6 +1295,7 @@ exports[`DestinationsList renders 1`] = `
                                               element="a"
                                               fill={true}
                                               href="opendistro-alerting#/create-destination"
+                                              isDisabled={false}
                                               rel="noreferrer"
                                             >
                                               <a
@@ -1496,6 +1502,7 @@ exports[`DestinationsList renders when email is disallowed 1`] = `
                                       element="a"
                                       fill={true}
                                       href="opendistro-alerting#/create-destination"
+                                      isDisabled={false}
                                       rel="noreferrer"
                                     >
                                       <a
@@ -2166,6 +2173,7 @@ exports[`DestinationsList renders when email is disallowed 1`] = `
                                         >
                                           <button
                                             className="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--xSmall euiButtonEmpty--flushRight"
+                                            disabled={false}
                                             onClick={[Function]}
                                             type="button"
                                           >
@@ -2527,6 +2535,7 @@ exports[`DestinationsList renders when email is disallowed 1`] = `
                                               element="a"
                                               fill={true}
                                               href="opendistro-alerting#/create-destination"
+                                              isDisabled={false}
                                               rel="noreferrer"
                                             >
                                               <a

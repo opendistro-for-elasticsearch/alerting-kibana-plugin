@@ -139,12 +139,15 @@ exports[`Dashboard renders 1`] = `
                           onClick={[Function]}
                         >
                           <EuiButtonDisplay
+                            disabled={false}
                             element="button"
+                            isDisabled={false}
                             onClick={[Function]}
                             type="button"
                           >
                             <button
                               className="euiButton euiButton--primary"
+                              disabled={false}
                               onClick={[Function]}
                               type="button"
                             >
@@ -1019,6 +1022,7 @@ exports[`Dashboard renders 1`] = `
                                         >
                                           <button
                                             className="euiButtonEmpty euiButtonEmpty--primary euiButtonEmpty--xSmall euiButtonEmpty--flushRight"
+                                            disabled={false}
                                             onClick={[Function]}
                                             type="button"
                                           >
@@ -1651,6 +1655,7 @@ exports[`Dashboard renders 1`] = `
                                               element="a"
                                               fill={true}
                                               href="opendistro-alerting#/create-monitor"
+                                              isDisabled={false}
                                               rel="noreferrer"
                                             >
                                               <a
