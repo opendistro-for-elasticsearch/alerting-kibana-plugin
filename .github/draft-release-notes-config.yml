@@ -6,7 +6,7 @@ template: |
   $CHANGES
 # Setting the formatting and sorting for the release notes body
 name-template: Version (set version here)
-change-template: '* $TITLE (#$NUMBER)'
+change-template: '* $TITLE ([#$NUMBER]($URL))'
 sort-by: merged_at
 sort-direction: ascending
 replacers:
