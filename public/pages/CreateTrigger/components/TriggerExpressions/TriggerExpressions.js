@@ -67,9 +67,8 @@ class TriggerExpressions extends Component {
           }}
         >
           <EuiFlexItem grow={false} style={{ width: 150 }}>
-            <Field
-              name={keyFieldName}
-              render={({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
+            <Field name={keyFieldName}>
+              {({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
                 <EuiFormRow
                   isInvalid={touched.thresholdEnum && !!errors.thresholdEnum}
                   error={errors.thresholdEnum}
@@ -77,13 +76,12 @@ class TriggerExpressions extends Component {
                   <EuiSelect options={THRESHOLD_ENUM_OPTIONS} {...rest} />
                 </EuiFormRow>
               )}
-            />
+            </Field>
           </EuiFlexItem>
 
           <EuiFlexItem grow={false} style={{ width: 100 }}>
-            <Field
-              name={valueFieldName}
-              render={({ field, form: { touched, errors } }) => (
+            <Field name={valueFieldName}>
+              {({ field, form: { touched, errors } }) => (
                 <EuiFormRow
                   style={{ paddingLeft: '10px' }}
                   isInvalid={touched.thresholdValue && !!errors.thresholdValue}
@@ -92,7 +90,7 @@ class TriggerExpressions extends Component {
                   <EuiFieldNumber {...field} />
                 </EuiFormRow>
               )}
-            />
+            </Field>
           </EuiFlexItem>
         </EuiFlexGroup>
       </div>

@@ -24,9 +24,8 @@ import { DEFAULT_CLOSED_STATES } from '../MonitorExpressions';
 describe('OfExpression', () => {
   test('renders', () => {
     const component = (
-      <Formik
-        initialValues={FORMIK_INITIAL_VALUES}
-        render={props => (
+      <Formik initialValues={FORMIK_INITIAL_VALUES}>
+        {(props) => (
           <OfExpression
             formik={props}
             openedStates={DEFAULT_CLOSED_STATES}
@@ -35,7 +34,7 @@ describe('OfExpression', () => {
             dataTypes={[]}
           />
         )}
-      />
+      </Formik>
     );
 
     expect(render(component)).toMatchSnapshot();

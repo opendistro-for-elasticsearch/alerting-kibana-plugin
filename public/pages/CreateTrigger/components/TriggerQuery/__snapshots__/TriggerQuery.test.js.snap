@@ -35,8 +35,9 @@ exports[`TriggerQuery renders 1`] = `
     <EuiFlexItem>
       <Field
         name="script.source"
-        render={[Function]}
-      />
+      >
+        <Component />
+      </Field>
     </EuiFlexItem>
     <EuiFlexItem
       grow={false}

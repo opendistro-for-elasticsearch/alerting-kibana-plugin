@@ -24,9 +24,8 @@ import { DEFAULT_CLOSED_STATES } from '../MonitorExpressions';
 describe('OverExpression', () => {
   test('renders', () => {
     const component = (
-      <Formik
-        initialValues={FORMIK_INITIAL_VALUES}
-        render={props => (
+      <Formik initialValues={FORMIK_INITIAL_VALUES}>
+        {(props) => (
           <OverExpression
             formik={props}
             openedStates={DEFAULT_CLOSED_STATES}
@@ -34,7 +33,7 @@ describe('OverExpression', () => {
             closeExpression={() => {}}
           />
         )}
-      />
+      </Formik>
     );
 
     expect(render(component)).toMatchSnapshot();

@@ -133,11 +133,8 @@ export default class CreateMonitor extends Component {
     const { edit, httpClient, monitorToEdit, notifications, isDarkMode } = this.props;
     return (
       <div style={{ padding: '25px 50px' }}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={this.onSubmit}
-          validateOnChange={false}
-          render={({ values, errors, handleSubmit, isSubmitting, isValid }) => (
+        <Formik initialValues={initialValues} onSubmit={this.onSubmit} validateOnChange={false}>
+          {({ values, errors, handleSubmit, isSubmitting, isValid }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
@@ -182,7 +179,7 @@ export default class CreateMonitor extends Component {
               />
             </Fragment>
           )}
-        />
+        </Formik>
       </div>
     );
   }

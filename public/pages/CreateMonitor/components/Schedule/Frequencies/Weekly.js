@@ -28,7 +28,7 @@ const checkboxFlexItem = (day, checked, setFieldValue, setFieldTouched) => (
       id={day}
       label={_.startCase(day)}
       checked={checked}
-      onChange={e => {
+      onChange={(e) => {
         setFieldValue(`weekly.${day}`, e.target.checked);
       }}
       onBlur={() => setFieldTouched('weekly')}
@@ -37,17 +37,15 @@ const checkboxFlexItem = (day, checked, setFieldValue, setFieldTouched) => (
   </EuiFlexItem>
 );
 
-const validate = value => {
+const validate = (value) => {
   const booleans = Object.values(value);
-  if (!booleans.some(bool => bool)) return 'Must select at least one weekday';
+  if (!booleans.some((bool) => bool)) return 'Must select at least one weekday';
 };
 
 const Weekly = () => (
   <Fragment>
-    <Field
-      name="weekly"
-      validate={validate}
-      render={({ field: { value }, form: { touched, errors, setFieldValue, setFieldTouched } }) => (
+    <Field name="weekly" validate={validate}>
+      {({ field: { value }, form: { touched, errors, setFieldValue, setFieldTouched } }) => (
         <EuiFormRow
           label="Every"
           isInvalid={touched.weekly && !!errors.weekly}
@@ -55,11 +53,11 @@ const Weekly = () => (
           style={{ paddingLeft: '10px', marginTop: '5px' }}
         >
           <EuiFlexGroup alignItems="center">
-            {days.map(day => checkboxFlexItem(day, value[day], setFieldValue, setFieldTouched))}
+            {days.map((day) => checkboxFlexItem(day, value[day], setFieldValue, setFieldTouched))}
           </EuiFlexGroup>
         </EuiFormRow>
       )}
-    />
+    </Field>
     <Daily />
   </Fragment>
 );

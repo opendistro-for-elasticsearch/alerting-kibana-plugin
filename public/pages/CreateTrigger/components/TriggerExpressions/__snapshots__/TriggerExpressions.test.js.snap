@@ -59,9 +59,9 @@ exports[`TriggerExpressions renders 1`] = `
               }
             }
           >
-            <Field
-              render={[Function]}
-            />
+            <Field>
+              <Component />
+            </Field>
           </EuiFlexItem>
           <EuiFlexItem
             grow={false}
@@ -71,9 +71,9 @@ exports[`TriggerExpressions renders 1`] = `
               }
             }
           >
-            <Field
-              render={[Function]}
-            />
+            <Field>
+              <Component />
+            </Field>
           </EuiFlexItem>
         </EuiFlexGroup>
       </div>
