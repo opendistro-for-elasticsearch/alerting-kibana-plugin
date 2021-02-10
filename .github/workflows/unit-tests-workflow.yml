@@ -2,7 +2,7 @@ name: Unit tests workflow
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   tests:
