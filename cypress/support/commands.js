@@ -50,6 +50,8 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
     } else {
       options = { auth: ADMIN_AUTH };
     }
+    // Add query parameters - select the default Kibana tenant
+    options.qs = { security_tenant: 'private' };
     return originalFn(url, options);
   } else {
     return originalFn(url, options);
