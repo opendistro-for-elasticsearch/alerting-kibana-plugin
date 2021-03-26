@@ -36,6 +36,7 @@ import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
 import { initializeFromQueryParams } from './utils/monitorQueryParams';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
+import MonitorDetails from '../MonitorDetails';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -139,6 +140,8 @@ export default class CreateMonitor extends Component {
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
               </EuiTitle>
+              <EuiSpacer />
+              <MonitorDetails httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
