@@ -20,8 +20,9 @@ import FormikFieldText from '../../../../components/FormControls/FormikFieldText
 import { hasError, isInvalid, required, validateMonitorName } from '../../../../utils/validate';
 import MonitorState from '../../components/MonitorState';
 import { FormikFieldRadio } from '../../../../components/FormControls';
+import Schedule from '../../components/Schedule';
 
-const MonitorDetails = ({ httpClient, monitorToEdit }) => (
+const MonitorDetails = ({ httpClient, monitorToEdit, isAd }) => (
   <ContentPanel title="Monitor details" titleSize="s" bodyStyles={{ padding: 'initial' }}>
     <FormikFieldText
       name="name"
@@ -45,6 +46,7 @@ const MonitorDetails = ({ httpClient, monitorToEdit }) => (
       }}
     />
     <EuiSpacer size="s" />
+    <Schedule isAd={isAd} />
   </ContentPanel>
 );
 
