@@ -75,8 +75,10 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
   const searchType = _.get(monitorUiMetadata, 'search.searchType', 'query');
   const aggregationType = _.get(monitorUiMetadata, 'search.aggregationType', 'count');
 
-  if (searchType === SEARCH_TYPE.QUERY) return { script: values.script };
+  if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.CLUSTER_API)
+    return { script: values.script };
   if (searchType === SEARCH_TYPE.AD) return getADCondition(values);
+
   const isCount = aggregationType === 'count';
   const resultsPath = getResultsPath(isCount);
   const operator = getOperator(thresholdEnum);

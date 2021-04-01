@@ -20,6 +20,7 @@ import { ES_AD_PLUGIN } from '../../../../utils/constants';
 const defaultSelectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
+  { value: 'clusterApi', text: 'Define using Cluster API endpoint' },
 ];
 
 const onChangeDefinition = (e, form, resetResponse) => {
@@ -28,7 +29,7 @@ const onChangeDefinition = (e, form, resetResponse) => {
   form.setFieldValue('searchType', type);
 };
 
-const selectDefinitions = plugins => {
+const selectDefinitions = (plugins) => {
   return plugins === undefined || plugins.indexOf(ES_AD_PLUGIN) == -1
     ? defaultSelectDefinitions
     : [...defaultSelectDefinitions, { value: 'ad', text: 'Define using anomaly detector' }];
