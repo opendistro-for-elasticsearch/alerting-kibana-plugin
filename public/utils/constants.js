@@ -32,6 +32,7 @@ export const SEARCH_TYPE = {
   GRAPH: 'graph',
   QUERY: 'query',
   AD: 'ad',
+  CLUSTER_API: 'clusterApi',
 };
 
 export const DESTINATION_ACTIONS = {

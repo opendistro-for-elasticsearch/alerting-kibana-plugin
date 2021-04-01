@@ -31,8 +31,35 @@ export default function monitorToFormik(monitor) {
   } = monitor;
   // Default searchType to query, because if there is no ui_metadata or search then it was created through API or overwritten by API
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
-  const { searchType = 'query', fieldName } = search;
-  const isAD = searchType === SEARCH_TYPE.AD;
+  let { searchType = 'query', fieldName } = search;
+  if (_.isEmpty(search) && 'uri' in inputs[0]) searchType = SEARCH_TYPE.CLUSTER_API;
+
+  function inputsToFormik() {
+    if (searchType === SEARCH_TYPE.CLUSTER_API) {
+      console.log('HURNEYT: monitorToFormik inputsToFormik inputs = ' + JSON.stringify(inputs));
+      console.log('HURNEYT: monitorToFormik inputsToFormik uri = ' + JSON.stringify(inputs[0].uri));
+      return {
+        uri: inputs[0].uri,
+      };
+    } else {
+      const {
+        search: { indices, query },
+      } = inputs[0];
+      if (searchType === SEARCH_TYPE.AD) {
+        return {
+          detectorId: _.get(inputs, INPUTS_DETECTOR_ID),
+          index: indices.map((index) => ({ label: index })),
+          query: JSON.stringify(query, null, 4),
+        };
+      } else {
+        // when searchType is Query or Graph
+        return {
+          index: indices.map((index) => ({ label: index })),
+          query: JSON.stringify(query, null, 4),
+        };
+      }
+    }
+  }
 
   return {
     /* INITIALIZE WITH DEFAULTS */
@@ -56,5 +83,6 @@ export default function monitorToFormik(monitor) {
     detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
     index: inputs[0].search.indices.map((index) => ({ label: index })),
     query: JSON.stringify(inputs[0].search.query, null, 4),
+    ...inputsToFormik(),
   };
 }

@@ -42,6 +42,7 @@ import { FORMIK_INITIAL_TRIGGER_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
+import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
 import DefineAggregationTrigger from '../DefineAggregationTrigger';
 import { getPathsPerDataType } from '../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
 
@@ -136,12 +137,29 @@ export default class CreateTrigger extends Component {
   onRunExecute = (triggers = []) => {
     const { httpClient, monitor, notifications } = this.props;
     const formikValues = monitorToFormik(monitor);
+    const searchType = formikValues.searchType;
     const monitorToExecute = _.cloneDeep(monitor);
     _.set(monitorToExecute, 'triggers', triggers);
-    if (formikValues.searchType !== SEARCH_TYPE.AD) {
+
+    if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH) {
       const searchRequest = buildSearchRequest(formikValues);
       _.set(monitorToExecute, 'inputs[0].search', searchRequest);
     }
+    if (searchType === SEARCH_TYPE.CLUSTER_API) {
+      const localUriRequest = buildLocalUriRequest(formikValues);
+      console.log('HURNEYT: CreateTrigger onRunExecute monitor = ' + JSON.stringify(monitor));
+      console.log(
+        'HURNEYT: CreateTrigger onRunExecute monitor clone = ' + JSON.stringify(monitorToExecute)
+      );
+      console.log(
+        'HURNEYT: CreateTrigger onRunExecute formikValues = ' + JSON.stringify(formikValues)
+      );
+      console.log(
+        'HURNEYT: CreateTrigger onRunExecute request = ' + JSON.stringify(localUriRequest)
+      );
+      _.set(monitorToExecute, 'inputs[0].uri', localUriRequest);
+    }
+
     httpClient
       .post('../api/alerting/monitors/_execute', { body: JSON.stringify(monitorToExecute) })
       .then((resp) => {

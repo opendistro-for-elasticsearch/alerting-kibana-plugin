@@ -32,6 +32,8 @@ import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import MonitorType from '../../components/MonitorType';
+import LocalUriInput from '../../components/LocalUriInput';
+import { buildLocalUriRequest } from './utils/localUriRequests';
 
 function renderEmptyMessage(message) {
   return (
@@ -76,6 +78,7 @@ class DefineMonitor extends Component {
     this.renderVisualMonitor = this.renderVisualMonitor.bind(this);
     this.renderExtractionQuery = this.renderExtractionQuery.bind(this);
     this.renderAnomalyDetector = this.renderAnomalyDetector.bind(this);
+    this.renderLocalUriInput = this.renderLocalUriInput.bind(this);
     this.getMonitorContent = this.getMonitorContent.bind(this);
     this.getPlugins = this.getPlugins.bind(this);
     this.showPluginWarning = this.showPluginWarning.bind(this);
@@ -176,20 +179,46 @@ class DefineMonitor extends Component {
     // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
     // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
     // If the query is an extraction query, we can use the same query for results and query performance
-    const searchRequests = [buildSearchRequest(values)];
-    if (values.searchType === SEARCH_TYPE.GRAPH) {
-      searchRequests.push(buildSearchRequest(values, false));
+    const searchType = values.searchType;
+    let requests;
+    switch (searchType) {
+      case SEARCH_TYPE.QUERY:
+        console.log('HURNEYT: Starting onRunQuery - query check');
+        requests = [buildSearchRequest(values)];
+        break;
+      case SEARCH_TYPE.GRAPH:
+        // If we are running a visual graph query, then we need to run two separate queries
+        // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
+        // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
+        // If the query is an extraction query, we can use the same query for results and query performance
+        console.log('HURNEYT: Starting onRunQuery - graph check');
+        requests = [buildSearchRequest(values)];
+        requests.push(buildSearchRequest(values, false));
+        break;
+      case SEARCH_TYPE.CLUSTER_API:
+        console.log('HURNEYT: Starting onRunQuery - buildLocalUriRequest');
+        requests = [buildLocalUriRequest(values)];
+        console.log('HURNEYT: Finishing onRunQuery - buildLocalUriRequest');
+        break;
     }
 
     try {
-      const promises = searchRequests.map((searchRequest) => {
+      const promises = requests.map((request) => {
         // Fill in monitor name in case it's empty (in create workflow)
         // Set triggers to empty array so they are not executed (if in edit workflow)
         // Set input search to query/graph query and then use execute API to fill in period_start/period_end
         const monitor = formikToMonitor(values);
         _.set(monitor, 'name', 'TEMP_MONITOR');
         _.set(monitor, 'triggers', []);
-        _.set(monitor, 'inputs[0].search', searchRequest);
+        if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH) {
+          console.log('HURNEYT: Starting onRunQuery - monitor query or graph check');
+          _.set(monitor, 'inputs[0].search', request);
+        } else if (searchType === SEARCH_TYPE.CLUSTER_API) {
+          console.log('HURNEYT: Starting onRunQuery - monitor API check');
+          _.set(monitor, 'inputs[0].uri', request);
+        }
+        console.log('HURNEYT: Starting onRunQuery - httpClient.post');
+        console.log('HURNEYT: requests JSON - ' + JSON.stringify(monitor));
         return httpClient.post('../api/alerting/monitors/_execute', {
           body: JSON.stringify(monitor),
         });
@@ -325,6 +354,31 @@ class DefineMonitor extends Component {
     };
   }
 
+  renderLocalUriInput() {
+    const { values } = this.props;
+    const { response } = this.state;
+    // Definition of when the "run" button should be disabled for LocalUri type.
+    console.log('HURNEYT: DefineMonitor renderLocalUriInput = ' + values.apiType);
+    const runIsDisabled = !values.apiType;
+    console.log('HURNEYT: DefineMonitor runIsDisabled = ' + runIsDisabled);
+    return {
+      actions: [
+        <EuiButton disabled={runIsDisabled} onClick={this.onRunQuery}>
+          Run
+        </EuiButton>,
+      ],
+      content: (
+        <React.Fragment>
+          <LocalUriInput
+            response={JSON.stringify(response || '', null, 4)}
+            isDarkMode={this.isDarkMode}
+            values={values}
+          />
+        </React.Fragment>
+      ),
+    };
+  }
+
   getMonitorContent() {
     const { values } = this.props;
     switch (values.searchType) {
@@ -332,6 +386,8 @@ class DefineMonitor extends Component {
         return this.renderAnomalyDetector();
       case SEARCH_TYPE.GRAPH:
         return this.renderVisualMonitor();
+      case SEARCH_TYPE.CLUSTER_API:
+        return this.renderLocalUriInput();
       default:
         return this.renderExtractionQuery();
     }

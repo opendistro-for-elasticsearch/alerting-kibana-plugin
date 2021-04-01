@@ -29,7 +29,7 @@ export function formikToMonitor(values) {
     monitor_type: values.monitor_type,
     enabled: !values.disabled,
     schedule,
-    inputs: [formikToSearch(values)],
+    inputs: [formikToInputs(values)],
     triggers: [],
     ui_metadata: {
       schedule: uiSchedule,
@@ -40,8 +40,14 @@ export function formikToMonitor(values) {
 }
 
 export function formikToInputs(values) {
-  const isAD = values.searchType === SEARCH_TYPE.AD;
-  return [isAD ? formikToAd(values) : formikToSearch(values)];
+  switch (values.searchType) {
+    case SEARCH_TYPE.AD:
+      return formikToAd(values);
+    case SEARCH_TYPE.CLUSTER_API:
+      return formikToLocalUri(values);
+    default:
+      return formikToSearch(values);
+  }
 }
 
 export function formikToSearch(values) {
@@ -98,6 +104,17 @@ export function formikToAd(values) {
   return {
     anomaly_detector: {
       detector_id: values.detectorId,
+    },
+  };
+}
+
+export function formikToLocalUri(values) {
+  return {
+    uri: {
+      scheme: 'http',
+      host: 'localhost',
+      port: '9200',
+      path: values.apiType,
     },
   };
 }
