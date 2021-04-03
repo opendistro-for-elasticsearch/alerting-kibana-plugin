@@ -16,29 +16,28 @@
 import React, { Fragment } from 'react';
 import { EuiSpacer, EuiFlexItem, EuiFlexGroup, EuiCodeEditor, EuiFormRow } from '@elastic/eui';
 import FormikSelect from '../../../../components/FormControls/FormikSelect';
-
-const supportedClusterApis = [
-  { value: '', text: '' },
-  { value: '/_cluster/health', text: 'Define using ClusterHealth endpoint' },
-  { value: '/_cluster/stats', text: 'Define using ClusterStats endpoint' },
-];
+import { hasError, isInvalid } from '../../../../utils/validate';
+import { FormikFieldText } from '../../../../components/FormControls';
 
 const LocalUriInput = ({ isDarkMode, response, values }) => (
   <Fragment>
     <EuiFlexGroup alignItems="flexStart">
       <EuiFlexItem>
         <EuiSpacer size="m" />
-        <FormikSelect
-          name={`${values.searchType}.apiType`}
+        <FormikFieldText
+          name={`${values.searchType}.path`}
           formRow
           rowProps={{
-            label: 'Select API',
+            label: 'Path',
+            helpText: 'Example path: "/_cluster/health/"',
             style: { paddingLeft: '10px' },
+            isInvalid,
+            error: hasError,
           }}
           inputProps={{
-            options: supportedClusterApis,
+            isInvalid,
             onChange: (e, field, form) => {
-              form.setFieldValue('apiType', e.target.value);
+              form.setFieldValue('uri.path', e.target.value);
             },
           }}
         />

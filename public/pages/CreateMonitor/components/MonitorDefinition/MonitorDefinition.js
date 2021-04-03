@@ -20,7 +20,7 @@ import { ES_AD_PLUGIN } from '../../../../utils/constants';
 const defaultSelectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
-  { value: 'clusterApi', text: 'Define using Cluster API endpoint' },
+  { value: 'localUri', text: 'Define using Local URI endpoint' },
 ];
 
 const onChangeDefinition = (e, form, resetResponse) => {

@@ -130,7 +130,7 @@ export default class CreateTrigger extends Component {
       const searchRequest = buildSearchRequest(formikValues);
       _.set(monitorToExecute, 'inputs[0].search', searchRequest);
     }
-    if (searchType === SEARCH_TYPE.CLUSTER_API) {
+    if (searchType === SEARCH_TYPE.LOCAL_URI) {
       const localUriRequest = buildLocalUriRequest(formikValues);
       console.log('HURNEYT: CreateTrigger onRunExecute monitor = ' + JSON.stringify(monitor));
       console.log(
