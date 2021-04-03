@@ -32,7 +32,7 @@ export const SEARCH_TYPE = {
   GRAPH: 'graph',
   QUERY: 'query',
   AD: 'ad',
-  CLUSTER_API: 'clusterApi',
+  LOCAL_URI: 'localUri',
 };
 
 export const DESTINATION_ACTIONS = {

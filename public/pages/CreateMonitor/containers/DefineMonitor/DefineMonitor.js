@@ -195,7 +195,7 @@ class DefineMonitor extends Component {
         requests = [buildSearchRequest(values)];
         requests.push(buildSearchRequest(values, false));
         break;
-      case SEARCH_TYPE.CLUSTER_API:
+      case SEARCH_TYPE.LOCAL_URI:
         console.log('HURNEYT: Starting onRunQuery - buildLocalUriRequest');
         requests = [buildLocalUriRequest(values)];
         console.log('HURNEYT: Finishing onRunQuery - buildLocalUriRequest');
@@ -213,7 +213,7 @@ class DefineMonitor extends Component {
         if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH) {
           console.log('HURNEYT: Starting onRunQuery - monitor query or graph check');
           _.set(monitor, 'inputs[0].search', request);
-        } else if (searchType === SEARCH_TYPE.CLUSTER_API) {
+        } else if (searchType === SEARCH_TYPE.LOCAL_URI) {
           console.log('HURNEYT: Starting onRunQuery - monitor API check');
           _.set(monitor, 'inputs[0].uri', request);
         }
@@ -358,8 +358,8 @@ class DefineMonitor extends Component {
     const { values } = this.props;
     const { response } = this.state;
     // Definition of when the "run" button should be disabled for LocalUri type.
-    console.log('HURNEYT: DefineMonitor renderLocalUriInput = ' + values.apiType);
-    const runIsDisabled = !values.apiType;
+    console.log('HURNEYT: DefineMonitor renderLocalUriInput = ' + values.uri.path);
+    const runIsDisabled = !values.uri.path;
     console.log('HURNEYT: DefineMonitor runIsDisabled = ' + runIsDisabled);
     return {
       actions: [
@@ -386,7 +386,7 @@ class DefineMonitor extends Component {
         return this.renderAnomalyDetector();
       case SEARCH_TYPE.GRAPH:
         return this.renderVisualMonitor();
-      case SEARCH_TYPE.CLUSTER_API:
+      case SEARCH_TYPE.LOCAL_URI:
         return this.renderLocalUriInput();
       default:
         return this.renderExtractionQuery();

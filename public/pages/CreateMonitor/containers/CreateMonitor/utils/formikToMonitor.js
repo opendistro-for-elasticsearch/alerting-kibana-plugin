@@ -43,7 +43,7 @@ export function formikToInputs(values) {
   switch (values.searchType) {
     case SEARCH_TYPE.AD:
       return formikToAd(values);
-    case SEARCH_TYPE.CLUSTER_API:
+    case SEARCH_TYPE.LOCAL_URI:
       return formikToLocalUri(values);
     default:
       return formikToSearch(values);
@@ -114,7 +114,7 @@ export function formikToLocalUri(values) {
       scheme: 'http',
       host: 'localhost',
       port: '9200',
-      path: values.apiType,
+      path: values.apiType ? values.apiType : values.uri.path,
     },
   };
 }

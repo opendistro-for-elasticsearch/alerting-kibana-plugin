@@ -32,10 +32,10 @@ export default function monitorToFormik(monitor) {
   // Default searchType to query, because if there is no ui_metadata or search then it was created through API or overwritten by API
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
   let { searchType = 'query', fieldName } = search;
-  if (_.isEmpty(search) && 'uri' in inputs[0]) searchType = SEARCH_TYPE.CLUSTER_API;
+  if (_.isEmpty(search) && 'uri' in inputs[0]) searchType = SEARCH_TYPE.LOCAL_URI;
 
   function inputsToFormik() {
-    if (searchType === SEARCH_TYPE.CLUSTER_API) {
+    if (searchType === SEARCH_TYPE.LOCAL_URI) {
       console.log('HURNEYT: monitorToFormik inputsToFormik inputs = ' + JSON.stringify(inputs));
       console.log('HURNEYT: monitorToFormik inputsToFormik uri = ' + JSON.stringify(inputs[0].uri));
       return {

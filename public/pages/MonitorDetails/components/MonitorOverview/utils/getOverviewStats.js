@@ -33,8 +33,8 @@ function getMonitorType(searchType) {
       return 'Visual Graph';
     case SEARCH_TYPE.AD:
       return 'Anomaly Detector';
-    case SEARCH_TYPE.CLUSTER_API:
-      return 'Cluster API';
+    case SEARCH_TYPE.LOCAL_URI:
+      return 'Local URI';
     default:
       return 'Extraction Query';
   }
@@ -43,7 +43,7 @@ function getMonitorType(searchType) {
 export default function getOverviewStats(monitor, monitorId, monitorVersion, activeCount) {
   let searchType = _.get(monitor, 'ui_metadata.search.searchType', 'query');
   if (_.has(monitor, 'inputs[0].uri')) {
-    searchType = SEARCH_TYPE.CLUSTER_API;
+    searchType = SEARCH_TYPE.LOCAL_URI;
   }
   return [
     {
