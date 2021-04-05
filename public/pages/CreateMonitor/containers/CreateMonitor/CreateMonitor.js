@@ -172,8 +172,6 @@ export default class CreateMonitor extends Component {
                 <DefineSchedule isAd={values.searchType === SEARCH_TYPE.AD} />
               </Fragment>
               <EuiSpacer />
-
-              <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>
                   <EuiButtonEmpty onClick={this.onCancel}>Cancel</EuiButtonEmpty>
