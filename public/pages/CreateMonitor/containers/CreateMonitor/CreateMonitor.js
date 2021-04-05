@@ -159,15 +159,6 @@ export default class CreateMonitor extends Component {
                 isDarkMode={isDarkMode}
               />
               <EuiSpacer />
-              {/*<Query*/}
-              {/*  values={values}*/}
-              {/*  errors={errors}*/}
-              {/*  httpClient={httpClient}*/}
-              {/*  detectorId={this.props.detectorId}*/}
-              {/*  notifications={notifications}*/}
-              {/*  isDarkMode={isDarkMode}*/}
-              {/*/>*/}
-              <EuiSpacer />
               <DefineMonitor
                 values={values}
                 errors={errors}
