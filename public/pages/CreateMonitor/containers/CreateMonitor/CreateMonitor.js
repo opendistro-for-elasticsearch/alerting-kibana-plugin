@@ -37,6 +37,7 @@ import { initializeFromQueryParams } from './utils/monitorQueryParams';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import MonitorDetails from '../MonitorDetails';
+import DataSource from '../DataSource';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -149,6 +150,24 @@ export default class CreateMonitor extends Component {
               <EuiSpacer />
               <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
               <EuiSpacer />
+              <DataSource
+                values={values}
+                errors={errors}
+                httpClient={httpClient}
+                detectorId={this.props.detectorId}
+                notifications={notifications}
+                isDarkMode={isDarkMode}
+              />
+              <EuiSpacer />
+              {/*<Query*/}
+              {/*  values={values}*/}
+              {/*  errors={errors}*/}
+              {/*  httpClient={httpClient}*/}
+              {/*  detectorId={this.props.detectorId}*/}
+              {/*  notifications={notifications}*/}
+              {/*  isDarkMode={isDarkMode}*/}
+              {/*/>*/}
+              <EuiSpacer />
               <DefineMonitor
                 values={values}
                 errors={errors}
@@ -162,6 +181,7 @@ export default class CreateMonitor extends Component {
                 <DefineSchedule isAd={values.searchType === SEARCH_TYPE.AD} />
               </Fragment>
               <EuiSpacer />
+
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>

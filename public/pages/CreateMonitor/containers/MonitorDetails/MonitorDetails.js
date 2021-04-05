@@ -14,16 +14,50 @@
  */
 
 import { React } from '@kbn/ui-shared-deps/entry';
-import { EuiSpacer } from '@elastic/eui';
+import { EuiSpacer, EuiFlexGroup, EuiFlexItem, EuiCheckableCard, EuiFormRow } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import FormikFieldText from '../../../../components/FormControls/FormikFieldText';
 import { hasError, isInvalid, required, validateMonitorName } from '../../../../utils/validate';
-import MonitorState from '../../components/MonitorState';
-import { FormikFieldRadio } from '../../../../components/FormControls';
 import Schedule from '../../components/Schedule';
+import { FormikFormRow } from '../../../../components/FormControls';
 
-const MonitorDetails = ({ httpClient, monitorToEdit, isAd }) => (
+const onChangeDefinition = (e, form, resetResponse) => {
+  const type = e.target.value;
+  resetResponse();
+  form.setFieldValue('searchType', type);
+};
+
+const MonitorDetails = ({ httpClient, monitorToEdit, isAd, resetResponse }) => (
   <ContentPanel title="Monitor details" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+    {/*TODO: Add label text to the definition options*/}
+    {/*TODO: Add onChange function to the checkable card group*/}
+    <EuiFlexGroup style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+      <EuiFlexItem>
+        <EuiCheckableCard
+          id="visualEditorRadioCard"
+          label="Visual editor"
+          data-test-subj="defineByVisualEditorRadioCard"
+        />
+      </EuiFlexItem>
+      <EuiFlexItem>
+        <EuiCheckableCard
+          id="extractionQueryEditorRadioCard"
+          label="Extraction query editor"
+          data-test-subj="defineByExtractionQueryEditorRadioCard"
+        />
+      </EuiFlexItem>
+      {/* TODO: only show the anomaly detector option when anomaly detection plugin is present */}
+      {/*{isAd && (*/}
+      <EuiFlexItem>
+        <EuiCheckableCard
+          id="anomalyDetectorRadioCard"
+          label="Anomaly detector"
+          data-test-subj="defineByAnomalyDetectorRadioCard"
+        />
+      </EuiFlexItem>
+      {/*)}*/}
+    </EuiFlexGroup>
+    <EuiSpacer size="s" />
     <FormikFieldText
       name="name"
       formRow
