@@ -171,8 +171,6 @@ class DefineMonitor extends Component {
     const { httpClient, values, notifications } = this.props;
     const formikSnapshot = _.cloneDeep(values);
 
-    console.log('HURNEYT: Starting onRunQuery');
-
     // If we are running a visual graph query, then we need to run two separate queries
     // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
     // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
@@ -181,7 +179,6 @@ class DefineMonitor extends Component {
     let requests;
     switch (searchType) {
       case SEARCH_TYPE.QUERY:
-        console.log('HURNEYT: Starting onRunQuery - query check');
         requests = [buildSearchRequest(values)];
         break;
       case SEARCH_TYPE.GRAPH:
@@ -189,14 +186,11 @@ class DefineMonitor extends Component {
         // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
         // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
         // If the query is an extraction query, we can use the same query for results and query performance
-        console.log('HURNEYT: Starting onRunQuery - graph check');
         requests = [buildSearchRequest(values)];
         requests.push(buildSearchRequest(values, false));
         break;
       case SEARCH_TYPE.LOCAL_URI:
-        console.log('HURNEYT: Starting onRunQuery - buildLocalUriRequest');
         requests = [buildLocalUriRequest(values)];
-        console.log('HURNEYT: Finishing onRunQuery - buildLocalUriRequest');
         break;
     }
 
@@ -206,28 +200,19 @@ class DefineMonitor extends Component {
         // Set triggers to empty array so they are not executed (if in edit workflow)
         // Set input search to query/graph query and then use execute API to fill in period_start/period_end
         const monitor = formikToMonitor(values);
-        console.log('HURNEYT: values.apiType - ' + values.apiType);
-        console.log('HURNEYT: monitor - ' + JSON.stringify(monitor.inputs[0].search));
         _.set(monitor, 'name', 'TEMP_MONITOR');
         _.set(monitor, 'triggers', []);
         if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH) {
-          console.log('HURNEYT: Starting onRunQuery - monitor query or graph check');
           _.set(monitor, 'inputs[0].search', request);
         } else if (searchType === SEARCH_TYPE.LOCAL_URI) {
-          console.log('HURNEYT: Starting onRunQuery - monitor API check');
           _.set(monitor, 'inputs[0].uri', request);
         }
-        console.log('HURNEYT: Starting onRunQuery - httpClient.post');
-        console.log('HURNEYT: requests JSON - ' + JSON.stringify(monitor));
         return httpClient.post('../api/alerting/monitors/_execute', {
           body: JSON.stringify(monitor),
         });
       });
-      console.log('HURNEYT: Finishing onRunQuery - httpClient.post');
 
       const [queryResponse, optionalResponse] = await Promise.all(promises);
-
-      console.log('HURNEYT: DefineMonitor queryResponse = ' + JSON.stringify(queryResponse));
 
       if (queryResponse.ok) {
         const response = _.get(queryResponse.resp, 'input_results.results[0]');
@@ -361,9 +346,7 @@ class DefineMonitor extends Component {
     const { values } = this.props;
     const { response } = this.state;
     // Definition of when the "run" button should be disabled for LocalUri type.
-    console.log('HURNEYT: DefineMonitor renderLocalUriInput = ' + values.uri.path);
     const runIsDisabled = !values.uri.path;
-    console.log('HURNEYT: DefineMonitor runIsDisabled = ' + runIsDisabled);
     return {
       actions: [
         <EuiButton disabled={runIsDisabled} onClick={this.onRunQuery}>

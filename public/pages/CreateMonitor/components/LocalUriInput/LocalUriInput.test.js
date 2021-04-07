@@ -12,12 +12,19 @@
  *   express or implied. See the License for the specific language governing
  *   permissions and limitations under the License.
  */
+import React from 'react';
+import { render } from 'enzyme';
+import { Formik } from 'formik';
 
-export function buildLocalUriRequest(values) {
-  return {
-    scheme: 'http',
-    host: '127.0.0.1',
-    port: '9200',
-    path: values.uri.path,
-  };
-}
+import LocalUriInput from './LocalUriInput';
+
+describe('LocalUriInput', () => {
+  test('renders', () => {
+    const component = (
+      <Formik>
+        <LocalUriInput values={{ searchType: 'localUri' }} />
+      </Formik>
+    );
+    expect(render(component)).toMatchSnapshot();
+  });
+});

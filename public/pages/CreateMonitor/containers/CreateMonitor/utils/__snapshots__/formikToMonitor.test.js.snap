@@ -91,6 +91,28 @@ Array [
 ]
 `;
 
+exports[`formikToInputs can call formikToLocalUri 1`] = `
+Object {
+  "uri": Object {
+    "host": "localhost",
+    "path": "",
+    "port": "9200",
+    "scheme": "http",
+  },
+}
+`;
+
+exports[`formikToLocalUri can build a LocalUriInput request 1`] = `
+Object {
+  "uri": Object {
+    "host": "localhost",
+    "path": "",
+    "port": "9200",
+    "scheme": "http",
+  },
+}
+`;
+
 exports[`formikToMonitor can build monitor 1`] = `
 Object {
   "enabled": false,

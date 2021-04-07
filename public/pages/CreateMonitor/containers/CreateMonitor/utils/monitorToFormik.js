@@ -35,8 +35,6 @@ export default function monitorToFormik(monitor) {
 
   function inputsToFormik() {
     if (searchType === SEARCH_TYPE.LOCAL_URI) {
-      console.log('HURNEYT: monitorToFormik inputsToFormik inputs = ' + JSON.stringify(inputs));
-      console.log('HURNEYT: monitorToFormik inputsToFormik uri = ' + JSON.stringify(inputs[0].uri));
       return {
         uri: inputs[0].uri,
       };
