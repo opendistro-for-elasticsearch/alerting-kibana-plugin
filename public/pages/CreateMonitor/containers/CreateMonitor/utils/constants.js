@@ -33,11 +33,9 @@ export const FORMIK_INITIAL_VALUES = {
 
   /* DEFINE MONITOR */
   searchType: 'graph',
-  path: '',
-  apiType: '',
   uri: {
     scheme: 'http',
-    host: '127.0.0.1',
+    host: 'localhost',
     port: '9200',
     path: '',
     url: '',

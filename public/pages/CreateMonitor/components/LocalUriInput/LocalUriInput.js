@@ -15,7 +15,6 @@
 
 import React, { Fragment } from 'react';
 import { EuiSpacer, EuiFlexItem, EuiFlexGroup, EuiCodeEditor, EuiFormRow } from '@elastic/eui';
-import FormikSelect from '../../../../components/FormControls/FormikSelect';
 import { hasError, isInvalid } from '../../../../utils/validate';
 import { FormikFieldText } from '../../../../components/FormControls';
 

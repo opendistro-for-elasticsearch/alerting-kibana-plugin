@@ -114,7 +114,7 @@ export function formikToLocalUri(values) {
       scheme: 'http',
       host: 'localhost',
       port: '9200',
-      path: values.apiType ? values.apiType : values.uri.path,
+      path: values.uri.path,
     },
   };
 }
