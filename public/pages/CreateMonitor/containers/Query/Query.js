@@ -257,10 +257,6 @@ class Query extends Component {
       actions: [],
       content: (
         <React.Fragment>
-          <MonitorIndex httpClient={httpClient} />
-          <MonitorTimeField dataTypes={dataTypes} />
-          <div style={{ padding: '0px 10px' }}>{content}</div>
-          <EuiSpacer size="m" />
           <QueryPerformance response={performanceResponse} />
         </React.Fragment>
       ),
@@ -293,9 +289,6 @@ class Query extends Component {
       ],
       content: (
         <React.Fragment>
-          <MonitorIndex httpClient={httpClient} />
-          <div style={{ padding: '0px 10px' }}>{content}</div>
-          <EuiSpacer size="m" />
           <QueryPerformance response={performanceResponse} />
         </React.Fragment>
       ),
