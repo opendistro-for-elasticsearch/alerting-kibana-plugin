@@ -22,8 +22,6 @@ import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
 import MonitorExpressions from '../../components/MonitorExpressions';
 import QueryPerformance from '../../components/QueryPerformance';
-import MonitorDefinition from '../../components/MonitorDefinition';
-import MonitorTimeField from '../../components/MonitorTimeField';
 import { formikToMonitor } from '../CreateMonitor/utils/formikToMonitor';
 import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
@@ -257,6 +255,8 @@ class Query extends Component {
       actions: [],
       content: (
         <React.Fragment>
+          <div style={{ padding: '0px 10px' }}>{content}</div>
+          <EuiSpacer size="m" />
           <QueryPerformance response={performanceResponse} />
         </React.Fragment>
       ),
@@ -289,6 +289,8 @@ class Query extends Component {
       ],
       content: (
         <React.Fragment>
+          <div style={{ padding: '0px 10px' }}>{content}</div>
+          <EuiSpacer size="m" />
           <QueryPerformance response={performanceResponse} />
         </React.Fragment>
       ),
