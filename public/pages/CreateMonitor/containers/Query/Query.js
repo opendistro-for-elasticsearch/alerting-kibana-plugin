@@ -147,6 +147,7 @@ class Query extends Component {
           dataTypes={this.state.dataTypes}
           ofEnabled={this.props.values.aggregationType !== 'count'}
         />
+        {/*TODO: Move these components to a sub component class*/}
         <EuiSpacer size="s" />
         {errors.where ? (
           renderEmptyMessage('Invalid input in WHERE filter. Remove WHERE filter or adjust filter ')
