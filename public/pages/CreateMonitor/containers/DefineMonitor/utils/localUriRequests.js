@@ -16,7 +16,7 @@
 export function buildLocalUriRequest(values) {
   return {
     scheme: 'http',
-    host: '127.0.0.1',
+    host: 'localhost',
     port: '9200',
     path: values.uri.path,
   };
