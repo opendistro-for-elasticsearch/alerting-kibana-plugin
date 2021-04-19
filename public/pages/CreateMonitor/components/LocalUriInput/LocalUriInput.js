@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ const LocalUriInput = ({ isDarkMode, response, values }) => (
           formRow
           rowProps={{
             label: 'Path',
-            helpText: 'Example path: "/_cluster/health/"',
+            helpText:
+              'The path associated with the REST API the monitor should call (e.g., "/_cluster/health").',
             style: { paddingLeft: '10px' },
             isInvalid,
             error: hasError,
