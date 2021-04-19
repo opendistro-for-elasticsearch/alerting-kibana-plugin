@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -171,10 +171,6 @@ class DefineMonitor extends Component {
     const { httpClient, values, notifications } = this.props;
     const formikSnapshot = _.cloneDeep(values);
 
-    // If we are running a visual graph query, then we need to run two separate queries
-    // 1. The actual query that will be saved on the monitor, to get accurate query performance stats
-    // 2. The UI generated query that gets [BUCKET_COUNT] times the aggregated buckets to show past history of query
-    // If the query is an extraction query, we can use the same query for results and query performance
     const searchType = values.searchType;
     let requests;
     switch (searchType) {

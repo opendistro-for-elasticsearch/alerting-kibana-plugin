@@ -46,7 +46,7 @@ exports[`LocalUriInput renders 1`] = `
           class="euiFormHelpText euiFormRow__text"
           id="localUri.path-form-row-help"
         >
-          Example path: "/_cluster/health/"
+          The path associated with the REST API the monitor should call (e.g., "/_cluster/health").
         </div>
       </div>
     </div>
