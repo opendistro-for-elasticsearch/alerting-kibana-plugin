@@ -1,7 +1,7 @@
 import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
 
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -33,6 +33,13 @@ export const FORMIK_INITIAL_VALUES = {
 
   /* DEFINE MONITOR */
   searchType: 'graph',
+  uri: {
+    scheme: 'http',
+    host: 'localhost',
+    port: '9200',
+    path: '',
+    url: '',
+  },
   index: [],
   timeField: '',
   query: MATCH_ALL_QUERY,

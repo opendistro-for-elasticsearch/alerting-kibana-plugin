@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ export function formikToMonitor(values) {
     type: 'monitor',
     enabled: !values.disabled,
     schedule,
-    inputs: [formikToSearch(values)],
+    inputs: [formikToInputs(values)],
     triggers: [],
     ui_metadata: {
       schedule: uiSchedule,
@@ -38,8 +38,14 @@ export function formikToMonitor(values) {
 }
 
 export function formikToInputs(values) {
-  const isAD = values.searchType === SEARCH_TYPE.AD;
-  return [isAD ? formikToAd(values) : formikToSearch(values)];
+  switch (values.searchType) {
+    case SEARCH_TYPE.AD:
+      return formikToAd(values);
+    case SEARCH_TYPE.LOCAL_URI:
+      return formikToLocalUri(values);
+    default:
+      return formikToSearch(values);
+  }
 }
 
 export function formikToSearch(values) {
@@ -99,6 +105,18 @@ export function formikToAd(values) {
     },
   };
 }
+
+export function formikToLocalUri(values) {
+  return {
+    uri: {
+      scheme: 'http',
+      host: 'localhost',
+      port: '9200',
+      path: values.uri.path,
+    },
+  };
+}
+
 export function formikToUiSearch(values) {
   const {
     searchType,

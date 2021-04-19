@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -30,8 +30,33 @@ export default function monitorToFormik(monitor) {
   } = monitor;
   // Default searchType to query, because if there is no ui_metadata or search then it was created through API or overwritten by API
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
-  const { searchType = 'query', fieldName } = search;
-  const isAD = searchType === SEARCH_TYPE.AD;
+  let { searchType = 'query', fieldName } = search;
+  if (_.isEmpty(search) && 'uri' in inputs[0]) searchType = SEARCH_TYPE.LOCAL_URI;
+
+  function inputsToFormik() {
+    if (searchType === SEARCH_TYPE.LOCAL_URI) {
+      return {
+        uri: inputs[0].uri,
+      };
+    } else {
+      const {
+        search: { indices, query },
+      } = inputs[0];
+      if (searchType === SEARCH_TYPE.AD) {
+        return {
+          detectorId: _.get(inputs, INPUTS_DETECTOR_ID),
+          index: indices.map((index) => ({ label: index })),
+          query: JSON.stringify(query, null, 4),
+        };
+      } else {
+        // when searchType is Query or Graph
+        return {
+          index: indices.map((index) => ({ label: index })),
+          query: JSON.stringify(query, null, 4),
+        };
+      }
+    }
+  }
 
   return {
     /* INITIALIZE WITH DEFAULTS */
@@ -51,8 +76,6 @@ export default function monitorToFormik(monitor) {
     fieldName: fieldName ? [{ label: fieldName }] : [],
     timezone: timezone ? [{ label: timezone }] : [],
 
-    detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
-    index: inputs[0].search.indices.map(index => ({ label: index })),
-    query: JSON.stringify(inputs[0].search.query, null, 4),
+    ...inputsToFormik(),
   };
 }
