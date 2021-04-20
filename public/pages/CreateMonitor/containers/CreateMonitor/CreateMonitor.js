@@ -144,6 +144,8 @@ export default class CreateMonitor extends Component {
               </EuiTitle>
               <EuiSpacer />
               <MonitorDetails
+                values={values}
+                errors={errors}
                 httpClient={httpClient}
                 monitorToEdit={monitorToEdit}
                 isAd={values.searchType === SEARCH_TYPE.AD}
