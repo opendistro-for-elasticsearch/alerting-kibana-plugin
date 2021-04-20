@@ -32,6 +32,12 @@ describe('validateUrl', () => {
     expect(
       validateUrl('https://opendistro.github.io/for-elasticsearch/news.html', typeFullUrl)
     ).toBeUndefined();
+    expect(
+      validateUrl('https://username:password@opendistro.github.io/for-elasticsearch/news.html', typeFullUrl)
+    ).toBeUndefined();
+    expect(
+      validateUrl('http://alerts-smtp-forwarder:8080/email', typeFullUrl)
+    ).toBeUndefined();
     expect(validateUrl('http://127.0.0.1:8080/', typeFullUrl)).toBeUndefined();
     expect(
       validateUrl('http://192.168.0.1/test.php?foo=bar&action=test', typeFullUrl)
@@ -67,6 +73,41 @@ describe('validateUrl', () => {
       validateUrl(
         'http://org.exampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexample',
         typeFullUrl
+      )
+    ).toBe(invalidText);
+  });
+});
+
+describe('validateHost', () => {
+  const typeAttributeUrl = { type: 'custom_webhook', custom_webhook: { urlType: URL_TYPE.ATTRIBUTE_URL } };
+
+  test('returns Required if is empty', () => {
+    expect(validateHost('', typeAttributeUrl)).toBe('Required');
+  });
+
+  test('returns undefined if valid', () => {
+    expect(
+      validateHost('opendistro.github.io', typeAttributeUrl)
+    ).toBeUndefined();
+    expect(
+      validateHost('alerts-smtp-forwarder', typeAttributeUrl)
+    ).toBeUndefined();
+    expect(validateHost('127.0.0.1', typeAttributeUrl)).toBeUndefined();
+    expect(
+      validateHost('2001:0db8:85a3:0000:0000:0000:0000:7344', typeAttributeUrl)
+    ).toBeUndefined();
+    expect(validateHost('2001:0db8:85a3:0:0:0:0:7344', typeAttributeUrl)).toBeUndefined();
+    expect(validateHost('2001:0db8:85a3::7344', typeAttributeUrl)).toBeUndefined();
+    expect(validateHost('::ff', typeAttributeUrl)).toBeUndefined();
+    expect(validateHost('org.example', typeAttributeUrl)).toBeUndefined();
+  });
+
+  test('returns error string if invalid', () => {
+    const invalidText = 'Invalid Host';
+    expect(
+      validateHost(
+        'org.exampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexampleexample',
+        typeAttributeUrl
       )
     ).toBe(invalidText);
   });
