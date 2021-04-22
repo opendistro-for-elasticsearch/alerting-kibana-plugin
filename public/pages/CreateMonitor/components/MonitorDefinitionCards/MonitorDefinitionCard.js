@@ -27,7 +27,7 @@ const onChangeDefinition = (e, form, resetResponse) => {
 
 const MonitorDefinitionCard = ({ resetResponse, plugins }) => (
   <div>
-    <EuiFlexGroup style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+    <EuiFlexGroup>
       <EuiFlexItem>
         <FormikCheckableCard
           name="searchType"
