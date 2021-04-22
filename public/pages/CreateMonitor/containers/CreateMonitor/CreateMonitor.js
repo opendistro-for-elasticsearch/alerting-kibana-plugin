@@ -38,6 +38,7 @@ import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import MonitorDetails from '../MonitorDetails';
 import DataSource from '../DataSource';
+import Query from '../Query';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -143,6 +144,8 @@ export default class CreateMonitor extends Component {
               </EuiTitle>
               <EuiSpacer />
               <MonitorDetails
+                values={values}
+                errors={errors}
                 httpClient={httpClient}
                 monitorToEdit={monitorToEdit}
                 isAd={values.searchType === SEARCH_TYPE.AD}
@@ -157,6 +160,13 @@ export default class CreateMonitor extends Component {
                 detectorId={this.props.detectorId}
                 notifications={notifications}
                 isDarkMode={isDarkMode}
+              />
+              <EuiSpacer />
+              <Query
+                values={values}
+                errors={errors}
+                httpClient={httpClient}
+                monitorToEdit={monitorToEdit}
               />
               <EuiSpacer />
               <DefineMonitor

@@ -52,8 +52,12 @@ class DataSource extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { index: prevIndex, timeField: prevTimeField } = prevProps.values;
-    const { index, timeField } = this.props.values;
+    const {
+      searchType: prevSearchType,
+      index: prevIndex,
+      timeField: prevTimeField,
+    } = prevProps.values;
+    const { searchType, index, timeField } = this.props.values;
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
     const hasIndices = !!index.length;
     // If customer is defining query through extraction query, then they are manually running their own queries
