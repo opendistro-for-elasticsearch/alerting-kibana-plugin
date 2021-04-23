@@ -23,6 +23,7 @@ import {
   WhenExpression,
   WhereExpression,
 } from './expressions';
+import MetricExpression from './expressions/MetricExpression';
 
 export const DEFAULT_CLOSED_STATES = {
   WHEN: false,
@@ -39,7 +40,7 @@ export default class MonitorExpressions extends Component {
     madeChanges: false,
   };
 
-  openExpression = expression => {
+  openExpression = (expression) => {
     this.setState({
       openedStates: {
         ...DEFAULT_CLOSED_STATES,
@@ -48,7 +49,7 @@ export default class MonitorExpressions extends Component {
     });
   };
 
-  closeExpression = expression => {
+  closeExpression = (expression) => {
     const { madeChanges, openedStates } = this.state;
     if (madeChanges && openedStates[expression]) {
       // if made changes and close expression that was currently open => run query
@@ -72,29 +73,32 @@ export default class MonitorExpressions extends Component {
   render() {
     const { dataTypes, ofEnabled } = this.props;
     return (
-      <EuiFlexGroup alignItems="center">
-        <EuiFlexItem grow={false}>
-          <WhenExpression {...this.getExpressionProps()} />
-        </EuiFlexItem>
-
-        {ofEnabled && (
+      <div>
+        <MetricExpression {...this.getExpressionProps()} />
+        <EuiFlexGroup alignItems="center">
           <EuiFlexItem grow={false}>
-            <OfExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
+            <WhenExpression {...this.getExpressionProps()} />
           </EuiFlexItem>
-        )}
 
-        <EuiFlexItem grow={false}>
-          <OverExpression {...this.getExpressionProps()} />
-        </EuiFlexItem>
+          {ofEnabled && (
+            <EuiFlexItem grow={false}>
+              <OfExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
+            </EuiFlexItem>
+          )}
 
-        <EuiFlexItem grow={false}>
-          <ForExpression {...this.getExpressionProps()} />
-        </EuiFlexItem>
+          <EuiFlexItem grow={false}>
+            <OverExpression {...this.getExpressionProps()} />
+          </EuiFlexItem>
 
-        <EuiFlexItem grow={false}>
-          <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-        </EuiFlexItem>
-      </EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <ForExpression {...this.getExpressionProps()} />
+          </EuiFlexItem>
+
+          <EuiFlexItem grow={false}>
+            <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </div>
     );
   }
 }
