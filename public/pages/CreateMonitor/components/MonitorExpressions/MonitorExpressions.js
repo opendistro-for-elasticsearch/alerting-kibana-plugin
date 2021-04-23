@@ -14,7 +14,7 @@
  */
 
 import React, { Component } from 'react';
-import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
+import { EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 
 import {
   ForExpression,
@@ -75,6 +75,13 @@ export default class MonitorExpressions extends Component {
     return (
       <div>
         <MetricExpression {...this.getExpressionProps()} />
+        <EuiSpacer size="xs" />
+        <ForExpression {...this.getExpressionProps()} />
+        <EuiSpacer size="xs" />
+        <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
+        <EuiSpacer size="xs" />
+
+        {/*TODO: Remove the following EuiFlexGroup since they are the old version of monitor expression*/}
         <EuiFlexGroup alignItems="center">
           <EuiFlexItem grow={false}>
             <WhenExpression {...this.getExpressionProps()} />
