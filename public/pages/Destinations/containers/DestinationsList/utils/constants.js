@@ -42,14 +42,23 @@ export const staticColumns = [
     sortable: true,
     textOnly: true,
     width: '100px',
-    render: value => {
+    render: (value) => {
       //TODO:: Convert this to proper map of text to avoid filters always
-      const actionType = DESTINATION_OPTIONS.filter(item => item.value === value);
+      const actionType = DESTINATION_OPTIONS.filter((item) => item.value === value);
       if (actionType.length > 0) {
         return actionType[0].text;
       } else {
         return 'Unsupported Type';
       }
     },
+  },
+  {
+    field: 'user',
+    name: 'Last updated by',
+    sortable: true,
+    truncateText: true,
+    textOnly: true,
+    width: '100px',
+    render: (value) => (value && value.name ? value.name : 'N/A'),
   },
 ];
