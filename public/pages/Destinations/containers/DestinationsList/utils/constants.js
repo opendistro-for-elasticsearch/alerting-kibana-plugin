@@ -59,6 +59,6 @@ export const staticColumns = [
     truncateText: true,
     textOnly: true,
     width: '100px',
-    render: (value) => (value && value.name ? value.name : 'N/A'),
+    render: (value) => (value && value.name ? value.name : '-'),
   },
 ];
