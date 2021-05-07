@@ -66,7 +66,7 @@ export default function getOverviewStats(monitor, monitorId, monitorVersion, act
          (`monitor.user.name`, `monitor.user.roles` are empty )
       3. Monitors are created when security plugin is enabled, these will have an User object. */
       header: 'Last updated by',
-      value: monitor.user && monitor.user.name ? monitor.user.name : 'N/A',
+      value: monitor.user && monitor.user.name ? monitor.user.name : '-',
     },
   ];
 }

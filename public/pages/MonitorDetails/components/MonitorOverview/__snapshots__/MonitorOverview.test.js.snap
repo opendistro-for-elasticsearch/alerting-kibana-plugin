@@ -145,7 +145,7 @@ exports[`MonitorOverview renders 1`] = `
             Last updated by
           </strong>
           <div>
-            N/A
+            -
           </div>
         </div>
       </div>
