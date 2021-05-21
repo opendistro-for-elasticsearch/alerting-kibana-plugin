@@ -15,11 +15,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import 'brace/mode/plain_text';
-import { hasError, isInvalid } from '../../../../utils/validate';
-import { TRIGGER_TYPE } from '../../../CreateTrigger/containers/CreateTrigger/utils/constants';
-import monitorToFormik from '../CreateMonitor/utils/monitorToFormik';
+import { EuiButton, EuiSpacer } from '@elastic/eui';
 import CustomTrigger from '../CustomTrigger';
 import ContentPanel from '../../../../components/ContentPanel';
 
@@ -45,7 +42,7 @@ const Triggers = ({
   isDarkMode,
 }) => {
   return (
-    <ContentPanel title="Triggers" titleSize="s" bodyStyles={{ padding: '20px 20px' }}>
+    <ContentPanel title="Triggers (count)" titleSize="s" bodyStyles={{ padding: '20px 20px' }}>
       <CustomTrigger
         context={context}
         executeResponse={executeResponse}
@@ -57,6 +54,7 @@ const Triggers = ({
         isDarkMode={isDarkMode}
       />
       <EuiSpacer />
+      <EuiButton>Add another trigger</EuiButton>
     </ContentPanel>
   );
 };
