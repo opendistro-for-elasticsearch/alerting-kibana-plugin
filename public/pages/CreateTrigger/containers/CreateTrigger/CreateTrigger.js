@@ -42,6 +42,7 @@ import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
+import CustomTrigger from '../../../CreateMonitor/containers/CustomTrigger/CustomTrigger';
 
 export default class CreateTrigger extends Component {
   constructor(props) {
@@ -204,6 +205,17 @@ export default class CreateTrigger extends Component {
               </EuiTitle>
               <EuiSpacer />
               <DefineTrigger
+                context={this.getTriggerContext(executeResponse, monitor, values)}
+                executeResponse={executeResponse}
+                monitorValues={monitorToFormik(monitor)}
+                onRun={this.onRunExecute}
+                setFlyout={setFlyout}
+                triggers={monitor.triggers}
+                triggerValues={values}
+                isDarkMode={this.props.isDarkMode}
+              />
+              <EuiSpacer />
+              <CustomTrigger
                 context={this.getTriggerContext(executeResponse, monitor, values)}
                 executeResponse={executeResponse}
                 monitorValues={monitorToFormik(monitor)}
