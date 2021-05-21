@@ -17,6 +17,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import 'brace/mode/plain_text';
+import { EuiButton } from '@elastic/eui';
 import { TRIGGER_TYPE } from '../../../CreateTrigger/containers/CreateTrigger/utils/constants';
 import { hasError, isInvalid } from '../../../../utils/validate';
 import TriggerQuery from '../../../CreateTrigger/components/TriggerQuery';
@@ -120,7 +121,12 @@ const CustomTrigger = ({
 
   return (
     //TODO: Change title accordingly when trigger name updates
-    <ContentPanel title="New trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+    <ContentPanel
+      title="New trigger"
+      titleSize="s"
+      bodyStyles={{ padding: 'initial' }}
+      actions={[<EuiButton color="danger">Remove trigger</EuiButton>]}
+    >
       <FormikFieldText
         name="name"
         fieldProps={{ validate: validateTriggerName(triggers, triggerValues) }}

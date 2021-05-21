@@ -216,17 +216,6 @@ export default class CreateTrigger extends Component {
                 isDarkMode={this.props.isDarkMode}
               />
               <EuiSpacer />
-              <CustomTrigger
-                context={this.getTriggerContext(executeResponse, monitor, values)}
-                executeResponse={executeResponse}
-                monitorValues={monitorToFormik(monitor)}
-                onRun={this.onRunExecute}
-                setFlyout={setFlyout}
-                triggers={monitor.triggers}
-                triggerValues={values}
-                isDarkMode={this.props.isDarkMode}
-              />
-              <EuiSpacer />
               <Triggers
                 context={this.getTriggerContext(executeResponse, monitor, values)}
                 executeResponse={executeResponse}
