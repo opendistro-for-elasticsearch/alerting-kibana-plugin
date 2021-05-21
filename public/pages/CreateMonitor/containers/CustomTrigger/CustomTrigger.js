@@ -119,7 +119,8 @@ const CustomTrigger = ({
   }
 
   return (
-    <ContentPanel title="Custom trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+    //TODO: Change title accordingly when trigger name updates
+    <ContentPanel title="New trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
       <FormikFieldText
         name="name"
         fieldProps={{ validate: validateTriggerName(triggers, triggerValues) }}
