@@ -42,7 +42,9 @@ const Triggers = ({
   isDarkMode,
 }) => {
   return (
+    // TODO: Add the number of triggers to match array size of triggers
     <ContentPanel title="Triggers (count)" titleSize="s" bodyStyles={{ padding: '20px 20px' }}>
+      {/*TODO: Follow ConfigureActions to render array of triggers.*/}
       <CustomTrigger
         context={context}
         executeResponse={executeResponse}
