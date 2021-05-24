@@ -16,7 +16,15 @@
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
+import {
+  EuiSpacer,
+  EuiButton,
+  EuiText,
+  EuiCallOut,
+  EuiButtonEmpty,
+  EuiFlexGroup,
+  EuiFlexItem,
+} from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
@@ -28,6 +36,12 @@ import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import { buildSearchRequest } from '../DefineMonitor/utils/searchRequests';
 import MonitorIndex from '../MonitorIndex';
+import {
+  EXPRESSION_STYLE,
+  Expressions,
+  UNITS_OF_TIME,
+} from '../../components/MonitorExpressions/expressions/utils/constants';
+import { FormikFieldNumber, FormikSelect } from '../../../../components/FormControls';
 
 function renderEmptyMessage(message) {
   return (
@@ -139,16 +153,36 @@ class Query extends Component {
     return (
       <Fragment>
         <EuiText size="xs">
-          <strong>Create a monitor for</strong>
+          <h4>Metrics</h4>
         </EuiText>
         <EuiSpacer size="s" />
-        <MonitorExpressions
-          onRunQuery={this.onRunQuery}
-          dataTypes={this.state.dataTypes}
-          ofEnabled={this.props.values.aggregationType !== 'count'}
-        />
-        {/*TODO: Move these components to a sub component class*/}
+        {/*EuiBadges to represent each metric defined*/}
+        <EuiButtonEmpty
+          size="xs"
+          data-test-subj="addMetricButton"
+          // onClick={}
+        >
+          + Add another metric
+        </EuiButtonEmpty>
         <EuiSpacer size="s" />
+        <EuiText size="xs">
+          <h4>For the last</h4>
+        </EuiText>
+        {/*TODO: Fix the alignment of the following definition to left side*/}
+        <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
+          <EuiFlexItem grow={false} style={{ width: 100 }}>
+            <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
+          </EuiFlexItem>
+          <EuiFlexItem grow={false} style={{ width: 150 }}>
+            <FormikSelect
+              name="bucketUnitOfTime"
+              inputProps={{
+                onChange: this.onChangeWrapper,
+                options: UNITS_OF_TIME,
+              }}
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>
         {errors.where ? (
           renderEmptyMessage('Invalid input in WHERE filter. Remove WHERE filter or adjust filter ')
         ) : (
