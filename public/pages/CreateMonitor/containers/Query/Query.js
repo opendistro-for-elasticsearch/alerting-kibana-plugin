@@ -165,7 +165,9 @@ class Query extends Component {
           + Add another metric
         </EuiButtonEmpty>
         <EuiSpacer size="s" />
+
         <EuiText size="xs">
+          {' '}
           <h4>For the last</h4>
         </EuiText>
         {/*TODO: Fix the alignment of the following definition to left side*/}
@@ -183,6 +185,37 @@ class Query extends Component {
             />
           </EuiFlexItem>
         </EuiFlexGroup>
+        <EuiSpacer size="s" />
+
+        <EuiText size="xs">
+          {' '}
+          <h4>Where</h4>{' '}
+        </EuiText>
+        <EuiButtonEmpty
+          size="xs"
+          data-test-subj="addFilterButton"
+          // onClick={}
+        >
+          + Add filter
+        </EuiButtonEmpty>
+
+        <EuiSpacer size="s" />
+
+        <EuiText size="xs">
+          {' '}
+          <h4>Group by</h4>{' '}
+        </EuiText>
+
+        <EuiButtonEmpty
+          size="xs"
+          data-test-subj="addGroupByButton"
+          // onClick={}
+        >
+          + Add another group by
+        </EuiButtonEmpty>
+
+        <EuiSpacer size="s" />
+
         {errors.where ? (
           renderEmptyMessage('Invalid input in WHERE filter. Remove WHERE filter or adjust filter ')
         ) : (
