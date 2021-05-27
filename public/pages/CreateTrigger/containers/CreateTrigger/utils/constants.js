@@ -18,7 +18,19 @@ export const TRIGGER_TYPE = {
   ALERT_TRIGGER: 'alerting_trigger',
 };
 
-export const FORMIK_INITIAL_VALUES = {
+export const FORMIK_INITIAL_TRIGGER_CONDITION_VALUES = {
+  thresholdValue: 10000,
+  thresholdEnum: 'ABOVE',
+  anomalyDetector: {
+    triggerType: TRIGGER_TYPE.AD,
+    anomalyGradeThresholdValue: 0.7,
+    anomalyGradeThresholdEnum: 'ABOVE',
+    anomalyConfidenceThresholdValue: 0.7,
+    anomalyConfidenceThresholdEnum: 'ABOVE',
+  },
+};
+
+export const FORMIK_INITIAL_TRIGGER_VALUES = {
   name: '',
   severity: '1',
   minTimeBetweenExecutions: null,
@@ -27,6 +39,7 @@ export const FORMIK_INITIAL_VALUES = {
     lang: 'painless',
     source: `ctx.results[0].hits.total.value > 0`,
   },
+  triggerConditions: undefined,
   thresholdValue: 10000,
   thresholdEnum: 'ABOVE',
   anomalyDetector: {
