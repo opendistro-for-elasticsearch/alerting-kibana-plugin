@@ -78,9 +78,7 @@ const propTypes = {
   isDarkMode: PropTypes.bool.isRequired,
 };
 
-const renderTriggerContents = (
-  arrayHelpers,
-  isTraditionalMonitor,
+const DefineTrigger = ({
   context,
   executeResponse,
   monitorValues,
@@ -89,22 +87,14 @@ const renderTriggerContents = (
   triggers,
   triggerValues,
   isDarkMode,
-  index
-) => {
+}) => {
   const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
   const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
   const detectorId = _.get(monitorValues, 'detectorId');
   const response = _.get(executeResponse, 'input_results.results[0]');
   const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
-  const thresholdEnum = isTraditionalMonitor
-    ? triggerValues.thresholdEnum
-    : triggerValues.triggerConditions[index].thresholdEnum;
-  const thresholdValue = isTraditionalMonitor
-    ? triggerValues.thresholdValue
-    : triggerValues.triggerConditions[index].thresholdValue;
-  const adValues = isTraditionalMonitor
-    ? triggerValues.anomalyDetector
-    : triggerValues.triggerConditions[index].anomalyDetector;
+  const thresholdEnum = triggerValues.thresholdEnum;
+  const thresholdValue = triggerValues.thresholdValue;
   const adTriggerType = triggerValues.anomalyDetector.triggerType;
 
   let triggerContent = (
@@ -120,12 +110,13 @@ const renderTriggerContents = (
     />
   );
   if (isAd && adTriggerType === TRIGGER_TYPE.AD) {
-    triggerContent = <AnomalyDetectorTrigger detectorId={detectorId} adValues={adValues} />;
+    triggerContent = (
+      <AnomalyDetectorTrigger detectorId={detectorId} adValues={triggerValues.anomalyDetector} />
+    );
   }
   if (isGraph) {
     triggerContent = (
       <TriggerGraph
-        index={index}
         monitorValues={monitorValues}
         response={response}
         thresholdEnum={thresholdEnum}
@@ -133,104 +124,6 @@ const renderTriggerContents = (
       />
     );
   }
-
-  return triggerContent;
-};
-
-const renderTriggerConditions = (
-  arrayHelpers,
-  isTraditionalMonitor,
-  context,
-  executeResponse,
-  monitorValues,
-  onRun,
-  setFlyout,
-  triggers,
-  triggerValues,
-  isDarkMode
-) => {
-  const hasTriggerConditions = !_.isEmpty(triggerValues.triggerConditions);
-
-  return hasTriggerConditions ? (
-    triggerValues.triggerConditions.map((trigCondition, index) => (
-      <EuiAccordion
-        key={`${index}`}
-        id={`${index}`}
-        initialIsOpen={hasTriggerConditions}
-        className={'trigger-condition-accordion'}
-        buttonContent={`Trigger condition ${index + 1}`}
-        extraAction={
-          <div style={{ paddingRight: '10px' }}>
-            <EuiButton
-              onClick={() => {
-                arrayHelpers.remove(index);
-              }}
-            >
-              Delete
-            </EuiButton>
-          </div>
-        }
-      >
-        {renderTriggerContents(
-          arrayHelpers,
-          isTraditionalMonitor,
-          context,
-          executeResponse,
-          monitorValues,
-          onRun,
-          setFlyout,
-          triggers,
-          triggerValues,
-          isDarkMode,
-          index
-        )}
-      </EuiAccordion>
-    ))
-  ) : (
-    <TriggerEmptyPrompt arrayHelpers={arrayHelpers} />
-  );
-};
-
-const DefineTrigger = ({
-  arrayHelpers,
-  monitor,
-  context,
-  executeResponse,
-  monitorValues,
-  onRun,
-  setFlyout,
-  triggers,
-  triggerValues,
-  isDarkMode,
-}) => {
-  const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
-  const isTraditionalMonitor = _.get(monitor, 'monitor_type') === 'traditional_monitor';
-
-  const triggerContents = isTraditionalMonitor
-    ? renderTriggerContents(
-        arrayHelpers,
-        isTraditionalMonitor,
-        context,
-        executeResponse,
-        monitorValues,
-        onRun,
-        setFlyout,
-        triggers,
-        triggerValues,
-        isDarkMode
-      )
-    : renderTriggerConditions(
-        arrayHelpers,
-        isTraditionalMonitor,
-        context,
-        executeResponse,
-        monitorValues,
-        onRun,
-        setFlyout,
-        triggers,
-        triggerValues,
-        isDarkMode
-      );
 
   return (
     <ContentPanel title="Define trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
@@ -260,12 +153,7 @@ const DefineTrigger = ({
           inputProps={{ options: triggerOptions }}
         />
       ) : null}
-      {triggerContents}
-      {!isTraditionalMonitor ? (
-        <div style={{ paddingLeft: '10px' }}>
-          <AddTriggerButton arrayHelpers={arrayHelpers} />
-        </div>
-      ) : null}
+      {triggerContent}
     </ContentPanel>
   );
 };
