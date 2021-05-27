@@ -89,7 +89,7 @@ export default class MonitorExpressions extends Component {
         <EuiButtonEmpty
           size="xs"
           data-test-subj="addGroupByButton"
-          // onClick={}
+          // onClick={arrayHelpers.push(_.cloneDeep({}))}
         >
           + Add another group by
         </EuiButtonEmpty>

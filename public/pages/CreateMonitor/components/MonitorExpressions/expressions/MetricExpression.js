@@ -14,12 +14,12 @@
  */
 
 import React, { Component } from 'react';
-import { connect } from 'formik';
+import { connect, FieldArray } from 'formik';
 
 import {
   EuiText,
   EuiPopover,
-  EuiExpression,
+  EuiBadge,
   EuiButtonEmpty,
   EuiFlexGroup,
   EuiFlexItem,
@@ -43,8 +43,13 @@ class MetricExpression extends Component {
   };
 
   onChangeFieldWrapper = (options, field, form) => {
+    const {
+      formik: { values },
+    } = this.props;
     this.props.onMadeChanges();
     form.setFieldValue('fieldName', options);
+    console.log(JSON.stringify(values));
+    //Debug use
   };
 
   renderPopover = (fieldOptions, expressionWidth) => (
@@ -96,6 +101,21 @@ class MetricExpression extends Component {
     </div>
   );
 
+  renderFieldItems = (arrayHelpers, fieldOptions, expressionWidth) => {
+    const {
+      formik: { values },
+    } = this.props;
+    return values.fieldName.map((fieldItem, index) => (
+      <EuiBadge
+        iconSide="right"
+        iconType="cross"
+        onClick={this.renderPopover(fieldOptions, expressionWidth)}
+      >
+        {fieldItem.label}
+      </EuiBadge>
+    ));
+  };
+
   render() {
     const {
       formik: { values },
@@ -104,10 +124,8 @@ class MetricExpression extends Component {
       openExpression,
       dataTypes,
     } = this.props;
-    //TODO: Generate correct fields options
 
     const fieldOptions = getIndexFields(dataTypes, getOfExpressionAllowedTypes(values));
-    // const fieldOptions = [];
     const expressionWidth =
       Math.max(
         ...fieldOptions.map(({ options }) =>
@@ -122,6 +140,10 @@ class MetricExpression extends Component {
           <h4>Metrics</h4>
         </EuiText>
         {/*TODO:Add badges here*/}
+        {/*values.*/}
+        <FieldArray name={'fieldName'} validateOnChange={false}>
+          {(arrayHelpers) => this.renderFieldItems(arrayHelpers, fieldOptions, expressionWidth)}
+        </FieldArray>
         <EuiPopover
           id="metric-popover"
           button={
