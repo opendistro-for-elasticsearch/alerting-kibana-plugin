@@ -38,7 +38,7 @@ import monitorToFormik from '../../../CreateMonitor/containers/CreateMonitor/uti
 import { buildSearchRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
 import { formikToTrigger, formikToTriggerUiMetadata } from './utils/formikToTrigger';
 import { triggerToFormik } from './utils/triggerToFormik';
-import { FORMIK_INITIAL_VALUES } from './utils/constants';
+import { FORMIK_INITIAL_TRIGGER_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
@@ -50,7 +50,7 @@ export default class CreateTrigger extends Component {
     const useTriggerToFormik = this.props.edit && this.props.triggerToEdit;
     const initialValues = useTriggerToFormik
       ? triggerToFormik(this.props.triggerToEdit, this.props.monitor)
-      : _.cloneDeep(FORMIK_INITIAL_VALUES);
+      : _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
 
     this.state = {
       triggerResponse: null,
@@ -203,16 +203,21 @@ export default class CreateTrigger extends Component {
                 <h1>{edit ? 'Edit' : 'Create'} trigger</h1>
               </EuiTitle>
               <EuiSpacer />
-              <DefineTrigger
-                context={this.getTriggerContext(executeResponse, monitor, values)}
-                executeResponse={executeResponse}
-                monitorValues={monitorToFormik(monitor)}
-                onRun={this.onRunExecute}
-                setFlyout={setFlyout}
-                triggers={monitor.triggers}
-                triggerValues={values}
-                isDarkMode={this.props.isDarkMode}
-              />
+              <FieldArray name={'triggerConditions'} validateOnChange={true}>
+                {(arrayHelpers) => (
+                  <DefineTrigger
+                    arrayHelpers={arrayHelpers}
+                    context={this.getTriggerContext(executeResponse, monitor, values)}
+                    executeResponse={executeResponse}
+                    monitorValues={monitorToFormik(monitor)}
+                    onRun={this.onRunExecute}
+                    setFlyout={setFlyout}
+                    triggers={monitor.triggers}
+                    triggerValues={values}
+                    isDarkMode={this.props.isDarkMode}
+                  />
+                )}
+              </FieldArray>
               <EuiSpacer />
               <FieldArray name="actions" validateOnChange={true}>
                 {(arrayHelpers) => (
