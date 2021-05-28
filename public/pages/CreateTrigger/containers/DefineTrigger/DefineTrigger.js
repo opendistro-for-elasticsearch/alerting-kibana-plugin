@@ -105,7 +105,9 @@ const renderTriggerContents = (
   const adValues = isTraditionalMonitor
     ? triggerValues.anomalyDetector
     : triggerValues.triggerConditions[index].anomalyDetector;
-  const adTriggerType = triggerValues.anomalyDetector.triggerType;
+  const adTriggerType = isTraditionalMonitor
+    ? triggerValues.anomalyDetector.triggerType
+    : triggerValues.triggerConditions[index].anomalyDetector.triggerType;
 
   let triggerContent = (
     <TriggerQuery
@@ -117,6 +119,7 @@ const renderTriggerContents = (
       setFlyout={setFlyout}
       triggerValues={triggerValues}
       isDarkMode={isDarkMode}
+      index={index}
     />
   );
   if (isAd && adTriggerType === TRIGGER_TYPE.AD) {

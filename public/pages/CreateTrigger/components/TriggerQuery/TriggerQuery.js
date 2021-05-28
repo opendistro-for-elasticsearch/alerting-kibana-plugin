@@ -52,9 +52,11 @@ const TriggerQuery = ({
   triggerValues,
   setFlyout,
   isDarkMode,
+  index,
 }) => {
   const trigger = { ...formikToTrigger(triggerValues), actions: [] };
   const formattedResponse = JSON.stringify(response, null, 4);
+  const fieldName = index === null ? 'script.source' : `triggerConditions[${index}].script.source`;
   return (
     <div style={{ padding: '0px 10px', marginTop: '0px' }}>
       <EuiFlexGroup direction="column">
@@ -70,7 +72,7 @@ const TriggerQuery = ({
           </EuiFormRow>
         </EuiFlexItem>
         <EuiFlexItem>
-          <Field name="script.source">
+          <Field name={fieldName}>
             {({ field: { value }, form: { errors, touched, setFieldValue, setFieldTouched } }) => (
               <EuiFormRow
                 label={
@@ -87,10 +89,8 @@ const TriggerQuery = ({
                   </div>
                 }
                 fullWidth
-                isInvalid={
-                  _.get(touched, 'script.source', false) && !!_.get(errors, 'script.source')
-                }
-                error={_.get(errors, 'script.source')}
+                isInvalid={_.get(touched, fieldName, false) && !!_.get(errors, fieldName)}
+                error={_.get(errors, fieldName)}
               >
                 <EuiCodeEditor
                   mode="plain_text"
@@ -98,9 +98,9 @@ const TriggerQuery = ({
                   height="200px"
                   width="100%"
                   onChange={(source) => {
-                    setFieldValue('script.source', source);
+                    setFieldValue(fieldName, source);
                   }}
-                  onBlur={() => setFieldTouched('script.source', true)}
+                  onBlur={() => setFieldTouched(fieldName, true)}
                   value={value}
                 />
               </EuiFormRow>

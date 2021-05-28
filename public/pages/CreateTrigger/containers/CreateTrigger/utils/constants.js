@@ -28,6 +28,10 @@ export const FORMIK_INITIAL_TRIGGER_CONDITION_VALUES = {
     anomalyConfidenceThresholdValue: 0.7,
     anomalyConfidenceThresholdEnum: 'ABOVE',
   },
+  script: {
+    lang: 'painless',
+    source: 'ctx.results[0].hits.total.value > 0',
+  },
 };
 
 export const FORMIK_INITIAL_TRIGGER_VALUES = {
