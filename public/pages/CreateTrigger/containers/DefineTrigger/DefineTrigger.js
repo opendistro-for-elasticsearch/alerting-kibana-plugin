@@ -102,12 +102,8 @@ const renderTriggerContents = (
   const thresholdValue = isTraditionalMonitor
     ? triggerValues.thresholdValue
     : triggerValues.triggerConditions[index].thresholdValue;
-  const adValues = isTraditionalMonitor
-    ? triggerValues.anomalyDetector
-    : triggerValues.triggerConditions[index].anomalyDetector;
-  const adTriggerType = isTraditionalMonitor
-    ? triggerValues.anomalyDetector.triggerType
-    : triggerValues.triggerConditions[index].anomalyDetector.triggerType;
+  const adValues = triggerValues.anomalyDetector;
+  const adTriggerType = triggerValues.anomalyDetector.triggerType;
 
   let triggerContent = (
     <TriggerQuery
