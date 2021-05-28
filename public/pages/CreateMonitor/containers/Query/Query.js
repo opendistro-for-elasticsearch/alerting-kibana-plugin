@@ -28,7 +28,6 @@ import {
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
-import MonitorExpressions from '../../components/MonitorExpressions';
 import QueryPerformance from '../../components/QueryPerformance';
 import { formikToMonitor } from '../CreateMonitor/utils/formikToMonitor';
 import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
@@ -42,6 +41,8 @@ import {
   UNITS_OF_TIME,
 } from '../../components/MonitorExpressions/expressions/utils/constants';
 import { FormikFieldNumber, FormikSelect } from '../../../../components/FormControls';
+import { MetricExpression } from '../../components/MonitorExpressions/expressions';
+import MultipleExpressions from '../../components/MonitorExpressions/MultipleExpressions';
 
 function renderEmptyMessage(message) {
   return (
@@ -96,7 +97,11 @@ class Query extends Component {
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
     const hasIndices = !!index.length;
     const hasTimeField = !!timeField;
+    //Debug
+    console.log('Has indices: ' + hasIndices + ' isGraph: ' + isGraph);
     if (isGraph && hasIndices) {
+      //Debug
+      console.log('Did go into queryMappings');
       this.onQueryMappings();
       if (hasTimeField) this.onRunQuery();
     }
@@ -111,6 +116,8 @@ class Query extends Component {
     const { searchType, index, timeField } = this.props.values;
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
     const hasIndices = !!index.length;
+    //Debug
+    console.log('In update, hasIndices: ' + hasIndices + ' isGraph: ' + isGraph);
     // If customer is defining query through extraction query, then they are manually running their own queries
     // Below logic is for customers defining queries through graph/visual way.
     if (isGraph && hasIndices) {
@@ -120,6 +127,8 @@ class Query extends Component {
       const wasQuery = prevSearchType === SEARCH_TYPE.QUERY;
       const diffIndices = prevIndex !== index;
       if (wasQuery || diffIndices) {
+        //Debug
+        console.log('Query mapping in update...');
         this.onQueryMappings();
       }
       // If there is a timeField selected, then we want to run the query if
@@ -152,54 +161,11 @@ class Query extends Component {
     const { errors } = this.props;
     return (
       <Fragment>
-        <EuiText size="xs">
-          <h4>Metrics</h4>
-        </EuiText>
-        <EuiSpacer size="s" />
-        {/*EuiBadges to represent each metric defined*/}
-        <EuiButtonEmpty
-          size="xs"
-          data-test-subj="addMetricButton"
-          // onClick={}
-        >
-          + Add another metric
-        </EuiButtonEmpty>
-        <EuiSpacer size="s" />
-
-        <EuiText size="xs">
-          {' '}
-          <h4>For the last</h4>
-        </EuiText>
-        {/*TODO: Fix the alignment of the following definition to left side*/}
-        <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
-          <EuiFlexItem grow={false} style={{ width: 100 }}>
-            <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
-          </EuiFlexItem>
-          <EuiFlexItem grow={false} style={{ width: 150 }}>
-            <FormikSelect
-              name="bucketUnitOfTime"
-              inputProps={{
-                onChange: this.onChangeWrapper,
-                options: UNITS_OF_TIME,
-              }}
-            />
-          </EuiFlexItem>
-        </EuiFlexGroup>
-        <EuiSpacer size="s" />
-
-        <EuiText size="xs">
-          {' '}
-          <h4>Where</h4>{' '}
-        </EuiText>
-        <EuiButtonEmpty
-          size="xs"
-          data-test-subj="addFilterButton"
-          // onClick={}
-        >
-          + Add filter
-        </EuiButtonEmpty>
-
-        <EuiSpacer size="s" />
+        <MultipleExpressions
+          onRunQuery={this.onRunQuery}
+          dataTypes={this.state.dataTypes}
+          ofEnabled={this.props.values.aggregationType !== 'count'}
+        />
 
         <EuiText size="xs">
           {' '}

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  */
 
 import React, { Component } from 'react';
-import { EuiFlexGroup, EuiFlexItem, EuiSpacer, EuiText, EuiButtonEmpty } from '@elastic/eui';
+import { EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 
 import {
   ForExpression,
@@ -34,7 +34,7 @@ export const DEFAULT_CLOSED_STATES = {
   WHERE: false,
 };
 
-export default class MonitorExpressions extends Component {
+export default class MultipleExpressions extends Component {
   state = {
     openedStates: DEFAULT_CLOSED_STATES,
     madeChanges: false,
@@ -81,45 +81,8 @@ export default class MonitorExpressions extends Component {
         <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
         <EuiSpacer size="xs" />
 
-        <EuiText size="xs">
-          {' '}
-          <h4>Group by</h4>{' '}
-        </EuiText>
-
-        <EuiButtonEmpty
-          size="xs"
-          data-test-subj="addGroupByButton"
-          // onClick={arrayHelpers.push(_.cloneDeep({}))}
-        >
-          + Add another group by
-        </EuiButtonEmpty>
-
-        <EuiSpacer size="s" />
-
-        {/*TODO: Remove the following EuiFlexGroup since they are the old version of monitor expression*/}
-        <EuiFlexGroup alignItems="center">
-          <EuiFlexItem grow={false}>
-            <WhenExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          {ofEnabled && (
-            <EuiFlexItem grow={false}>
-              <OfExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-            </EuiFlexItem>
-          )}
-
-          <EuiFlexItem grow={false}>
-            <OverExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false}>
-            <ForExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false}>
-            <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-          </EuiFlexItem>
-        </EuiFlexGroup>
+        {/*TODO: Remove the following old version of monitor expression*/}
+        <OfExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
       </div>
     );
   }
