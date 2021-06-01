@@ -144,7 +144,7 @@ class DefineMonitor extends Component {
         {/*<EuiText size="xs">*/}
         {/*  <strong>Create a monitor for</strong>*/}
         {/*</EuiText>*/}
-        {/*<EuiSpacer size="s" />*/}
+        <EuiSpacer size="s" />
         <MonitorExpressions
           onRunQuery={this.onRunQuery}
           dataTypes={this.state.dataTypes}

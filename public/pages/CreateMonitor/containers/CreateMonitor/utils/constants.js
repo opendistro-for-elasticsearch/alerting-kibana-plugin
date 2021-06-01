@@ -38,6 +38,7 @@ export const FORMIK_INITIAL_VALUES = {
   query: MATCH_ALL_QUERY,
   aggregationType: 'count',
   fieldName: [],
+  aggregations: [],
   overDocuments: 'all documents',
   groupedOverTop: 5,
   groupedOverFieldName: 'bytes',
@@ -51,4 +52,9 @@ export const FORMIK_INITIAL_VALUES = {
     fieldRangeEnd: 0,
   },
   detectorId: '',
+};
+
+export const FORMIK_INITIAL_AGG_VALUES = {
+  aggregationType: 'count',
+  fieldName: '',
 };

@@ -24,8 +24,10 @@ import {
   WhereExpression,
 } from './expressions';
 import MetricExpression from './expressions/MetricExpression';
+import { FieldArray } from 'formik';
 
 export const DEFAULT_CLOSED_STATES = {
+  METRICS: false,
   WHEN: false,
   OF_FIELD: false,
   THRESHOLD: false,
@@ -74,7 +76,15 @@ export default class MonitorExpressions extends Component {
     const { dataTypes, ofEnabled } = this.props;
     return (
       <div>
-        <MetricExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
+        <FieldArray name={'aggregations'} validateOnChange={false}>
+          {(arrayHelpers) => (
+            <MetricExpression
+              {...this.getExpressionProps()}
+              arrayHelpers={arrayHelpers}
+              dataTypes={dataTypes}
+            />
+          )}
+        </FieldArray>
         <EuiSpacer size="xs" />
         <ForExpression {...this.getExpressionProps()} />
         <EuiSpacer size="xs" />
