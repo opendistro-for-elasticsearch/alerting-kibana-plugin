@@ -107,16 +107,7 @@ class MetricExpression extends Component {
           <EuiButton
             fill
             onClick={() => {
-              arrayHelpers.push({
-                aggregationType: 'count',
-                fieldName: '',
-              });
               closeExpression(Expressions.METRICS[index]);
-              //Debug use
-              // console.log(
-              //   'After clicking save button the values look like: ' + JSON.stringify(values)
-              // );
-              // console.log("After clicking save button the aggs look like: "+JSON.stringify(values.aggregations));
             }}
           >
             Save
