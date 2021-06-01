@@ -147,7 +147,7 @@ class MetricExpression extends Component {
             <div>
               <EuiBadge
                 iconSide="right"
-                iconType="cross"
+                iconType={index ? 'cross' : ''}
                 iconOnClick={() => arrayHelpers.remove(index)}
                 onClick={() => {
                   openExpression(Expressions.METRICS[index]);
