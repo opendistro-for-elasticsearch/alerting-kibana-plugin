@@ -99,15 +99,13 @@ class MetricExpression extends Component {
       <EuiSpacer size="l" />
       <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
         <EuiFlexItem>
-          <EuiButtonEmpty onClick={() => closeExpression(Expressions.METRICS[index])}>
-            Cancel
-          </EuiButtonEmpty>
+          <EuiButtonEmpty onClick={() => closeExpression()}>Cancel</EuiButtonEmpty>
         </EuiFlexItem>
         <EuiFlexItem>
           <EuiButton
             fill
             onClick={() => {
-              closeExpression(Expressions.METRICS[index]);
+              closeExpression();
             }}
           >
             Save
@@ -127,8 +125,7 @@ class MetricExpression extends Component {
     const {
       formik: { values },
     } = this.props;
-    let isOpen = false;
-    //TODO: Add isOpen property here for individual agg
+
     return values.aggregations.map((aggregation, index) => {
       let isOpen = false;
       return (
@@ -140,19 +137,14 @@ class MetricExpression extends Component {
                 iconSide="right"
                 iconType={index ? 'cross' : ''}
                 iconOnClick={() => arrayHelpers.remove(index)}
+                iconOnClickAriaLabel="Remove metric"
                 onClick={() => {
-                  openExpression(Expressions.METRICS[index]);
-                  this.renderPopover(
-                    fieldOptions,
-                    closeExpression,
-                    expressionWidth,
-                    arrayHelpers,
-                    index
-                  );
+                  isOpen = true;
                 }}
+                onClickAriaLabel="Edit metric"
               >
                 {aggregation.aggregationType} of {aggregation.fieldName}
-              </EuiBadge>
+              </EuiBadge>{' '}
             </div>
           }
           isOpen
@@ -164,7 +156,7 @@ class MetricExpression extends Component {
         >
           {this.renderPopover(
             fieldOptions,
-            closeExpression,
+            () => (isOpen = false),
             expressionWidth,
             arrayHelpers,
             values.aggregations.length
@@ -206,39 +198,24 @@ class MetricExpression extends Component {
           closeExpression,
           expressionWidth
         )}
-        <EuiPopover
-          id="metric-popover"
-          button={
-            <div>
-              <EuiButtonEmpty
-                size="xs"
-                onClick={() => {
-                  openExpression(Expressions.METRICS[values.aggregations.length]);
-                  arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
-                  //Debug
-                  console.log('Aggs: ' + JSON.stringify(values));
-                }}
-                data-test-subj="addMetricButton"
-              >
-                + Add metric
-              </EuiButtonEmpty>
-            </div>
-          }
-          isOpen={openedStates.METRICS}
-          closePopover={() => closeExpression(Expressions.METRICS[values.aggregations.length])}
-          panelPaddingSize="none"
-          ownFocus
-          withTitle
-          anchorPosition="downLeft"
+        <EuiButtonEmpty
+          size="xs"
+          onClick={() => {
+            //Debug use
+            console.log('openStates: ' + JSON.stringify(openedStates));
+
+            // console.log("openStates for this index: "+ JSON.stringify(openedStates))
+
+            openExpression(Expressions.METRICS);
+            console.log('openStates: ' + JSON.stringify(openedStates));
+            arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
+            //Debug
+            console.log('Aggs: ' + JSON.stringify(values));
+          }}
+          data-test-subj="addMetricButton"
         >
-          {this.renderPopover(
-            fieldOptions,
-            closeExpression,
-            expressionWidth,
-            arrayHelpers,
-            values.aggregations.length
-          )}
-        </EuiPopover>
+          + Add metric
+        </EuiButtonEmpty>
       </div>
     );
   }
