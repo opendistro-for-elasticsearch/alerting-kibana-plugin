@@ -34,123 +34,153 @@ import _ from 'lodash';
 import { FORMIK_INITIAL_AGG_VALUES } from '../../../containers/CreateMonitor/utils/constants';
 
 class MetricExpression extends Component {
-  onChangeWrapper = (e, field, form, arrayHelpers) => {
-    //Debug
-    console.log('field in changeWrapper: ' + JSON.stringify(field));
+  onChangeWrapper = (e, field, form, arrayHelpers, index) => {
+    const {
+      formik: { values },
+    } = this.props;
     this.props.onMadeChanges();
-    form.setFieldValue(`aggregations[${index}].aggregationType`, options);
+    if (values.aggregations.length <= index)
+      arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
     field.onChange(e);
   };
 
   onChangeFieldWrapper = (options, field, form, index) => {
-    const {
-      formik: { values },
-    } = this.props;
     this.props.onMadeChanges();
-    //TODO Change this to only change value for the corresponding index
     form.setFieldValue(`aggregations[${index}].fieldName`, options);
-    console.log(JSON.stringify(values));
-    //Debug use
   };
 
-  renderPopover = (fieldOptions, closeExpression, expressionWidth, arrayHelpers, index) => {
-    //Debug use
+  renderPopover = (options, closeExpression, expressionWidth, arrayHelpers, index) => (
+    <div
+      style={{
+        width: Math.max(expressionWidth, 180),
+        height: 220,
+        ...POPOVER_STYLE,
+        ...EXPRESSION_STYLE,
+      }}
+    >
+      <EuiFlexGroup direction="column" gutterSize="xs">
+        <EuiFlexItem>
+          <EuiText size="xs">
+            <h4>Aggregation</h4>
+          </EuiText>
+        </EuiFlexItem>
+        <EuiFlexItem>
+          <FormikSelect
+            name={`aggregations[${index}].aggregationType`}
+            inputProps={{
+              arrayHelpers,
+              index,
+              onChange: this.onChangeWrapper,
+              options: AGGREGATION_TYPES,
+            }}
+          />
+        </EuiFlexItem>
+      </EuiFlexGroup>
+      <EuiFlexGroup direction="column" gutterSize="xs">
+        <EuiFlexItem>
+          <EuiText size="xs">
+            <h4>Field</h4>
+          </EuiText>
+        </EuiFlexItem>
+        <EuiFlexItem>
+          <FormikComboBox
+            name={`aggregations[${index}].fieldName`}
+            inputProps={{
+              placeholder: 'Select a field',
+              options,
+              onChange: this.onChangeFieldWrapper,
+              isClearable: false,
+              singleSelection: { asPlainText: true },
+              'data-test-subj': 'ofFieldComboBox',
+            }}
+          />
+        </EuiFlexItem>
+      </EuiFlexGroup>
+      <EuiSpacer size="l" />
+      <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
+        <EuiFlexItem>
+          <EuiButtonEmpty onClick={() => closeExpression(Expressions.METRICS[index])}>
+            Cancel
+          </EuiButtonEmpty>
+        </EuiFlexItem>
+        <EuiFlexItem>
+          <EuiButton
+            fill
+            onClick={() => {
+              arrayHelpers.push({
+                aggregationType: 'count',
+                fieldName: '',
+              });
+              closeExpression(Expressions.METRICS[index]);
+              //Debug use
+              // console.log(
+              //   'After clicking save button the values look like: ' + JSON.stringify(values)
+              // );
+              // console.log("After clicking save button the aggs look like: "+JSON.stringify(values.aggregations));
+            }}
+          >
+            Save
+          </EuiButton>
+        </EuiFlexItem>
+      </EuiFlexGroup>
+    </div>
+  );
+
+  renderFieldItems = (
+    arrayHelpers,
+    fieldOptions,
+    openExpression,
+    closeExpression,
+    expressionWidth
+  ) => {
     const {
       formik: { values },
     } = this.props;
-    console.log('Index: ' + index);
-    return (
-      <div
-        style={{
-          width: Math.max(expressionWidth, 180),
-          height: 220,
-          ...POPOVER_STYLE,
-          ...EXPRESSION_STYLE,
-        }}
-      >
-        <EuiFlexGroup direction="column" gutterSize="xs">
-          <EuiFlexItem>
-            <EuiText size="xs">
-              <h4>Aggregation</h4>
-            </EuiText>
-          </EuiFlexItem>
-          <EuiFlexItem>
-            <FormikSelect
-              name="aggregationType"
-              inputProps={{
-                onChange: (e) =>
-                  this.onChangeWrapper(e, `aggregations[${index}].aggregationType`, arrayHelpers),
-                options: AGGREGATION_TYPES,
-              }}
-            />
-          </EuiFlexItem>
-        </EuiFlexGroup>
-        <EuiFlexGroup direction="column" gutterSize="xs">
-          <EuiFlexItem>
-            <EuiText size="xs">
-              <h4>Field</h4>
-            </EuiText>
-          </EuiFlexItem>
-          <EuiFlexItem>
-            <FormikComboBox
-              name={`aggregations[${index}].fieldName`}
-              inputProps={{
-                placeholder: 'Select a field',
-                options: fieldOptions,
-                onChange: this.onChangeFieldWrapper,
-                isClearable: false,
-                singleSelection: { asPlainText: true },
-                'data-test-subj': 'ofFieldComboBox',
-              }}
-            />
-          </EuiFlexItem>
-        </EuiFlexGroup>
-        <EuiSpacer size="l" />
-        <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
-          <EuiFlexItem>
-            <EuiButtonEmpty onClick={() => closeExpression(Expressions.METRICS)}>
-              Cancel
-            </EuiButtonEmpty>
-          </EuiFlexItem>
-          <EuiFlexItem>
-            <EuiButton
-              fill
-              onClick={() => {
-                arrayHelpers.replace({
-                  aggregationType: 'count',
-                  fieldName: '',
-                });
-                closeExpression(Expressions.METRICS);
-                //Debug use
-                console.log(
-                  'After clicking save button the values look like: ' + JSON.stringify(values)
-                );
-                // console.log("After clicking save button the aggs look like: "+JSON.stringify(values.aggregations));
-              }}
-            >
-              Save
-            </EuiButton>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </div>
-    );
-  };
-
-  renderFieldItems = (arrayHelpers, fieldOptions, closeExpression, expressionWidth) => {
-    const {
-      formik: { values },
-    } = this.props;
+    let isOpen = false;
     //TODO: Add isOpen property here for individual agg
-    return values.aggregations.map((aggregation, index) => (
-      <EuiBadge
-        iconSide="right"
-        iconType="cross"
-        iconOnClick={arrayHelpers.remove(index)}
-        // onClick={this.renderPopover(fieldOptions, closeExpression, expressionWidth, arrayHelpers, index)}
-      >
-        {aggregation.fieldName}
-      </EuiBadge>
-    ));
+    return values.aggregations.map((aggregation, index) => {
+      let isOpen = false;
+      return (
+        <EuiPopover
+          id="metric-badge-popover"
+          button={
+            <div>
+              <EuiBadge
+                iconSide="right"
+                iconType="cross"
+                iconOnClick={() => arrayHelpers.remove(index)}
+                onClick={() => {
+                  openExpression(Expressions.METRICS[index]);
+                  this.renderPopover(
+                    fieldOptions,
+                    closeExpression,
+                    expressionWidth,
+                    arrayHelpers,
+                    index
+                  );
+                }}
+              >
+                {aggregation.aggregationType} of {aggregation.fieldName}
+              </EuiBadge>
+            </div>
+          }
+          isOpen
+          closePopover={() => (isOpen = false)}
+          panelPaddingSize="none"
+          ownFocus
+          withTitle
+          anchorPosition="downLeft"
+        >
+          {this.renderPopover(
+            fieldOptions,
+            closeExpression,
+            expressionWidth,
+            arrayHelpers,
+            values.aggregations.length
+          )}
+        </EuiPopover>
+      );
+    });
   };
 
   render() {
@@ -178,7 +208,13 @@ class MetricExpression extends Component {
           <h4>Metrics</h4>
         </EuiText>
         {/*TODO:Add badges here*/}
-        {this.renderFieldItems(arrayHelpers, fieldOptions, closeExpression, expressionWidth)}
+        {this.renderFieldItems(
+          arrayHelpers,
+          fieldOptions,
+          openExpression,
+          closeExpression,
+          expressionWidth
+        )}
         <EuiPopover
           id="metric-popover"
           button={
@@ -186,11 +222,10 @@ class MetricExpression extends Component {
               <EuiButtonEmpty
                 size="xs"
                 onClick={() => {
-                  // openedStates.METRICS.push(false);
-                  openExpression(Expressions.METRICS);
+                  openExpression(Expressions.METRICS[values.aggregations.length]);
                   arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
                   //Debug
-                  console.log('Aggs: ' + JSON.stringify(values.aggregations));
+                  console.log('Aggs: ' + JSON.stringify(values));
                 }}
                 data-test-subj="addMetricButton"
               >
@@ -199,7 +234,7 @@ class MetricExpression extends Component {
             </div>
           }
           isOpen={openedStates.METRICS}
-          closePopover={() => closeExpression(Expressions.METRICS)}
+          closePopover={() => closeExpression(Expressions.METRICS[values.aggregations.length])}
           panelPaddingSize="none"
           ownFocus
           withTitle

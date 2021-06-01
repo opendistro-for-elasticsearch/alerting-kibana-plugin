@@ -38,7 +38,12 @@ export const FORMIK_INITIAL_VALUES = {
   query: MATCH_ALL_QUERY,
   aggregationType: 'count',
   fieldName: [],
-  aggregations: [],
+  aggregations: [
+    {
+      aggregationType: 'count',
+      fieldName: 'all documents',
+    },
+  ],
   overDocuments: 'all documents',
   groupedOverTop: 5,
   groupedOverFieldName: 'bytes',
