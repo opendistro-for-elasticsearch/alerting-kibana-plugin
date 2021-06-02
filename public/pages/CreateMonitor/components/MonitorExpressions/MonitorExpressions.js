@@ -109,24 +109,6 @@ export default class MonitorExpressions extends Component {
         {/*TODO: Remove the following EuiFlexGroup since they are the old version of monitor expression*/}
         <EuiFlexGroup alignItems="center">
           <EuiFlexItem grow={false}>
-            <WhenExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          {ofEnabled && (
-            <EuiFlexItem grow={false}>
-              <OfExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-            </EuiFlexItem>
-          )}
-
-          <EuiFlexItem grow={false}>
-            <OverExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false}>
-            <ForExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false}>
             <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
           </EuiFlexItem>
         </EuiFlexGroup>
