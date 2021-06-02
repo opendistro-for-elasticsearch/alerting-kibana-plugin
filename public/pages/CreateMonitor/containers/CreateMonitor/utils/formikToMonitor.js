@@ -141,7 +141,7 @@ export function formikToExtractionQuery(values) {
 
 export function formikToGraphQuery(values) {
   const { bucketValue, bucketUnitOfTime } = values;
-  const whenAggregation = formikToWhenAggregation(values);
+  const aggregation = formikToAggregation(values);
   const timeField = values.timeField;
   const filters = [
     {
@@ -160,7 +160,7 @@ export function formikToGraphQuery(values) {
   }
   return {
     size: 0,
-    aggregations: whenAggregation,
+    aggregations: aggregation,
     query: {
       bool: {
         filter: filters,
@@ -234,6 +234,20 @@ export function formikToWhenAggregation(values) {
   } = values;
   if (aggregationType === 'count' || !field) return {};
   return { when: { [aggregationType]: { field } } };
+}
+
+export function formikToAggregation(values) {
+  const { aggregations } = values;
+
+  let aggs = {};
+  aggregations.map((aggItem) => {
+    const name = `${aggItem.aggregationType}_${aggItem.fieldName}`;
+    const type = aggItem.aggregationType === 'count' ? 'value_count' : aggItem.aggregationType;
+    aggs[name] = {
+      [type]: { field: aggItem.fieldName },
+    };
+  });
+  return aggs;
 }
 
 export function formikToUiSchedule(values) {
