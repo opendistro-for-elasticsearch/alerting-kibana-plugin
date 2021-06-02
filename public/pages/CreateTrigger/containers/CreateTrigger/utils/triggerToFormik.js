@@ -14,7 +14,7 @@
  */
 
 import _ from 'lodash';
-import { FORMIK_INITIAL_VALUES, TRIGGER_TYPE } from './constants';
+import { FORMIK_INITIAL_TRIGGER_VALUES, TRIGGER_TYPE } from './constants';
 
 export function triggerToFormik(trigger, monitor) {
   const {
@@ -29,36 +29,36 @@ export function triggerToFormik(trigger, monitor) {
   const thresholdEnum = _.get(
     monitor,
     `ui_metadata.triggers[${name}].enum`,
-    FORMIK_INITIAL_VALUES.thresholdEnum
+    FORMIK_INITIAL_TRIGGER_VALUES.thresholdEnum
   );
   const thresholdValue = _.get(
     monitor,
     `ui_metadata.triggers[${name}].value`,
-    FORMIK_INITIAL_VALUES.thresholdValue
+    FORMIK_INITIAL_TRIGGER_VALUES.thresholdValue
   );
   const anomalyConfidenceThresholdValue = _.get(
     monitor,
     `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyConfidence.value`,
-    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyConfidenceThresholdValue
+    FORMIK_INITIAL_TRIGGER_VALUES.anomalyDetector.anomalyConfidenceThresholdValue
   );
   const anomalyConfidenceThresholdEnum = _.get(
     monitor,
     `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyConfidence.enum`,
-    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyConfidenceThresholdEnum
+    FORMIK_INITIAL_TRIGGER_VALUES.anomalyDetector.anomalyConfidenceThresholdEnum
   );
   const anomalyGradeThresholdValue = _.get(
     monitor,
     `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyGrade.value`,
-    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyGradeThresholdValue
+    FORMIK_INITIAL_TRIGGER_VALUES.anomalyDetector.anomalyGradeThresholdValue
   );
   const anomalyGradeThresholdEnum = _.get(
     monitor,
     `ui_metadata.triggers[${name}].adTriggerMetadata.anomalyGrade.enum`,
-    FORMIK_INITIAL_VALUES.anomalyDetector.anomalyGradeThresholdEnum
+    FORMIK_INITIAL_TRIGGER_VALUES.anomalyDetector.anomalyGradeThresholdEnum
   );
   const triggerType = _.get(monitor, `ui_metadata.triggers[${name}].adTriggerMetadata.triggerType`);
   return {
-    ..._.cloneDeep(FORMIK_INITIAL_VALUES),
+    ..._.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES),
     id,
     name,
     severity,

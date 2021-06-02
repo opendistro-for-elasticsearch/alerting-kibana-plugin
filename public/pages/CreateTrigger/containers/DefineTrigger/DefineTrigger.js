@@ -36,7 +36,10 @@ const defaultRowProps = {
 };
 const defaultInputProps = { isInvalid };
 
-const selectFieldProps = { validate: () => {} };
+const selectFieldProps = {
+  validate: () => {},
+};
+
 const selectRowProps = {
   label: 'Severity level',
   helpText: `Severity levels help you organize your triggers and actions. A trigger with a high severity level might page a specific individual, whereas a trigger with a low severity level might email a list.`,
