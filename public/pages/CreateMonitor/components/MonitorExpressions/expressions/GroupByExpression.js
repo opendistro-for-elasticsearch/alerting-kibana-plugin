@@ -16,33 +16,26 @@
 import React, { Component } from 'react';
 import { connect } from 'formik';
 
-import { EuiText, EuiButtonEmpty, EuiSpacer, EuiPopover } from '@elastic/eui';
+import { EuiText, EuiButtonEmpty, EuiSpacer } from '@elastic/eui';
 import { getIndexFields } from './utils/dataTypes';
-import { getMetricExpressionAllowedTypes, getOfExpressionAllowedTypes } from './utils/helpers';
-import _ from 'lodash';
-import {
-  FORMIK_INITIAL_AGG_VALUES,
-  FORMIK_INITIAL_VALUES,
-} from '../../../containers/CreateMonitor/utils/constants';
-import { MetricItem } from './index';
-import { Expressions } from './utils/constants';
-import MetricPopover from './MetricPopover';
+import { getGroupByExpressionAllowedTypes } from './utils/helpers';
+import GroupByItem from './GroupByItem';
 
-class MetricExpression extends Component {
+class GroupByExpression extends Component {
   renderFieldItems = (arrayHelpers, fieldOptions, expressionWidth) => {
     const {
       formik: { values },
       onMadeChanges,
     } = this.props;
-    return values.aggregations.map((aggregation, index) => {
+    return values.groupBy.map((groupByItem, index) => {
       return (
-        <MetricItem
+        <GroupByItem
           values={values}
           onMadeChanges={onMadeChanges}
           arrayHelpers={arrayHelpers}
           fieldOptions={fieldOptions}
           expressionWidth={expressionWidth}
-          aggregation={aggregation}
+          groupByItem={groupByItem}
           index={index}
         />
       );
@@ -53,12 +46,10 @@ class MetricExpression extends Component {
     const {
       formik: { values },
       arrayHelpers,
-      closeExpression,
-      openExpression,
       dataTypes,
     } = this.props;
 
-    const fieldOptions = getIndexFields(dataTypes, getMetricExpressionAllowedTypes(values));
+    const fieldOptions = getIndexFields(dataTypes, getGroupByExpressionAllowedTypes(values));
     const expressionWidth =
       Math.max(
         ...fieldOptions.map(({ options }) =>
@@ -70,29 +61,22 @@ class MetricExpression extends Component {
     return (
       <div>
         <EuiText size="xs">
-          <h4>Metrics</h4>
+          <h4>Group by</h4>
         </EuiText>
-        <EuiSpacer size="s" />
-        {this.renderFieldItems(
-          arrayHelpers,
-          fieldOptions,
-          openExpression,
-          closeExpression,
-          expressionWidth
-        )}
+        {this.renderFieldItems(arrayHelpers, fieldOptions, expressionWidth)}
         <EuiSpacer size="xs" />
         <EuiButtonEmpty
           size="xs"
           onClick={() => {
-            arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
+            arrayHelpers.push('');
           }}
-          data-test-subj="addMetricButton"
+          data-test-subj="addGroupByButton"
         >
-          + Add metric
+          + Add another group by
         </EuiButtonEmpty>
       </div>
     );
   }
 }
 
-export default connect(MetricExpression);
+export default connect(GroupByExpression);

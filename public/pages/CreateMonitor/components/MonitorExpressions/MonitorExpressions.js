@@ -24,8 +24,11 @@ import {
   WhereExpression,
 } from './expressions';
 import MetricExpression from './expressions/MetricExpression';
+import { FieldArray } from 'formik';
+import GroupByExpression from './expressions/GroupByExpression';
 
 export const DEFAULT_CLOSED_STATES = {
+  METRICS: false,
   WHEN: false,
   OF_FIELD: false,
   THRESHOLD: false,
@@ -74,52 +77,30 @@ export default class MonitorExpressions extends Component {
     const { dataTypes, ofEnabled } = this.props;
     return (
       <div>
-        <MetricExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
+        <FieldArray name="aggregations" validateOnChange={false}>
+          {(arrayHelpers) => (
+            <MetricExpression
+              {...this.getExpressionProps()}
+              arrayHelpers={arrayHelpers}
+              dataTypes={dataTypes}
+            />
+          )}
+        </FieldArray>
         <EuiSpacer size="xs" />
         <ForExpression {...this.getExpressionProps()} />
         <EuiSpacer size="xs" />
         <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-        <EuiSpacer size="xs" />
-
-        <EuiText size="xs">
-          {' '}
-          <h4>Group by</h4>{' '}
-        </EuiText>
-
-        <EuiButtonEmpty
-          size="xs"
-          data-test-subj="addGroupByButton"
-          // onClick={arrayHelpers.push(_.cloneDeep({}))}
-        >
-          + Add another group by
-        </EuiButtonEmpty>
-
         <EuiSpacer size="s" />
-
-        {/*TODO: Remove the following EuiFlexGroup since they are the old version of monitor expression*/}
-        <EuiFlexGroup alignItems="center">
-          <EuiFlexItem grow={false}>
-            <WhenExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          {ofEnabled && (
-            <EuiFlexItem grow={false}>
-              <OfExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-            </EuiFlexItem>
+        <FieldArray name="groupBy" validateOnChange={false}>
+          {(arrayHelpers) => (
+            <GroupByExpression
+              {...this.getExpressionProps()}
+              arrayHelpers={arrayHelpers}
+              dataTypes={dataTypes}
+            />
           )}
-
-          <EuiFlexItem grow={false}>
-            <OverExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false}>
-            <ForExpression {...this.getExpressionProps()} />
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false}>
-            <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-          </EuiFlexItem>
-        </EuiFlexGroup>
+        </FieldArray>
+        <EuiSpacer size="xs" />
       </div>
     );
   }

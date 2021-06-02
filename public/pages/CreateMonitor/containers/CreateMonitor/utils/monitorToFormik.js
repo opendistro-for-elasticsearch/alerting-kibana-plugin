@@ -23,6 +23,7 @@ export default function monitorToFormik(monitor) {
   if (!monitor) return formikValues;
   const {
     name,
+    monitor_type,
     enabled,
     schedule: { cron: { expression: cronExpression = formikValues.cronExpression, timezone } = {} },
     inputs,
@@ -46,13 +47,14 @@ export default function monitorToFormik(monitor) {
     cronExpression,
 
     /* DEFINE MONITOR */
+    monitor_type,
     ...search,
     searchType,
     fieldName: fieldName ? [{ label: fieldName }] : [],
     timezone: timezone ? [{ label: timezone }] : [],
 
     detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
-    index: inputs[0].search.indices.map(index => ({ label: index })),
+    index: inputs[0].search.indices.map((index) => ({ label: index })),
     query: JSON.stringify(inputs[0].search.query, null, 4),
   };
 }
