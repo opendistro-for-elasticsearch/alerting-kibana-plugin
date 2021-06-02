@@ -100,6 +100,7 @@ export function formikToAd(values) {
     },
   };
 }
+
 export function formikToUiSearch(values) {
   const {
     searchType,
@@ -142,7 +143,10 @@ export function formikToExtractionQuery(values) {
 
 export function formikToGraphQuery(values) {
   const { bucketValue, bucketUnitOfTime } = values;
-  const aggregation = formikToAggregation(values);
+  const hasGroupBy = values.groupBy.length;
+  const aggregation = hasGroupBy
+    ? formikToCompositeAggregation(values)
+    : formikToAggregation(values);
   const timeField = values.timeField;
   const filters = [
     {
@@ -235,6 +239,35 @@ export function formikToWhenAggregation(values) {
   } = values;
   if (aggregationType === 'count' || !field) return {};
   return { when: { [aggregationType]: { field } } };
+}
+
+export function formikToCompositeAggregation(values) {
+  const { aggregations, groupBy } = values;
+
+  let aggs = {};
+  aggregations.map((aggItem) => {
+    const name = `${aggItem.aggregationType}_${aggItem.fieldName}`;
+    const type = aggItem.aggregationType === 'count' ? 'value_count' : aggItem.aggregationType;
+    aggs[name] = {
+      [type]: { field: aggItem.fieldName },
+    };
+  });
+  let sources = [];
+  groupBy.map((groupByItem) =>
+    sources.push({
+      [groupByItem]: {
+        terms: {
+          field: groupByItem,
+        },
+      },
+    })
+  );
+  return {
+    composite_agg: {
+      composite: { sources },
+      aggs,
+    },
+  };
 }
 
 export function formikToAggregation(values) {
