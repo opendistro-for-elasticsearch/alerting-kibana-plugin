@@ -90,7 +90,7 @@ export default class MonitorExpressions extends Component {
         <ForExpression {...this.getExpressionProps()} />
         <EuiSpacer size="xs" />
         <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-        <EuiSpacer size="xs" />
+        <EuiSpacer size="s" />
         <FieldArray name="groupBy" validateOnChange={false}>
           {(arrayHelpers) => (
             <GroupByExpression
