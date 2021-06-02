@@ -31,6 +31,7 @@ import { buildSearchRequest } from './utils/searchRequests';
 import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
 import { backendErrorNotification } from '../../../../utils/helpers';
+import MonitorType from '../../components/MonitorType';
 
 function renderEmptyMessage(message) {
   return (
@@ -358,6 +359,8 @@ class DefineMonitor extends Component {
               <EuiSpacer size="s" />,
             ]
           : null}
+        <MonitorType resetResponse={this.resetResponse} />
+        <EuiSpacer size="m" />
         <MonitorDefinition resetResponse={this.resetResponse} plugins={this.state.plugins} />
         {monitorContent.content}
       </ContentPanel>

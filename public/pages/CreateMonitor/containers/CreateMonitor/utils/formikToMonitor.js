@@ -26,6 +26,7 @@ export function formikToMonitor(values) {
   return {
     name: values.name,
     type: 'monitor',
+    monitor_type: values.monitor_type,
     enabled: !values.disabled,
     schedule,
     inputs: [formikToSearch(values)],
