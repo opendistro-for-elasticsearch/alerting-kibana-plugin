@@ -16,23 +16,17 @@
 import React, { Component } from 'react';
 import { connect } from 'formik';
 
-import {
-  EuiText,
-  EuiPopover,
-  EuiBadge,
-  EuiButton,
-  EuiButtonEmpty,
-  EuiFlexGroup,
-  EuiFlexItem,
-  EuiSpacer,
-} from '@elastic/eui';
-import { POPOVER_STYLE, AGGREGATION_TYPES, EXPRESSION_STYLE } from './utils/constants';
-import { FormikComboBox, FormikSelect } from '../../../../../components/FormControls';
+import { EuiText, EuiButtonEmpty, EuiSpacer, EuiPopover } from '@elastic/eui';
 import { getIndexFields } from './utils/dataTypes';
 import { getOfExpressionAllowedTypes } from './utils/helpers';
 import _ from 'lodash';
-import { FORMIK_INITIAL_AGG_VALUES } from '../../../containers/CreateMonitor/utils/constants';
+import {
+  FORMIK_INITIAL_AGG_VALUES,
+  FORMIK_INITIAL_VALUES,
+} from '../../../containers/CreateMonitor/utils/constants';
 import { MetricItem } from './index';
+import { Expressions } from './utils/constants';
+import MetricPopover from './MetricPopover';
 
 class MetricExpression extends Component {
   renderFieldItems = (arrayHelpers, fieldOptions, expressionWidth) => {
@@ -58,7 +52,9 @@ class MetricExpression extends Component {
   render() {
     const {
       formik: { values },
+      onMadeChanges,
       arrayHelpers,
+      openedStates,
       closeExpression,
       openExpression,
       dataTypes,
@@ -89,12 +85,36 @@ class MetricExpression extends Component {
         <EuiButtonEmpty
           size="xs"
           onClick={() => {
+            // openExpression(Expressions.METRICS);
             arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
           }}
           data-test-subj="addMetricButton"
         >
           + Add metric
         </EuiButtonEmpty>
+        {/*<EuiPopover*/}
+        {/*  id="metric-badge-popover"*/}
+        {/*  button={*/}
+
+        {/*//     }*/}
+        {/*//     isOpen={openedStates.METRICS}*/}
+        {/*//     closePopover={closeExpression(Expressions.METRICS)}*/}
+        {/*//     panelPaddingSize="none"*/}
+        {/*//     ownFocus*/}
+        {/*//     withTitle*/}
+        {/*//     anchorPosition="downLeft"*/}
+        {/*//   >*/}
+        {/*//     <MetricPopover*/}
+        {/*//       values={values}*/}
+        {/*//       onMadeChanges={onMadeChanges}*/}
+        {/*//       arrayHelpers={arrayHelpers}*/}
+        {/*//       options={fieldOptions}*/}
+        {/*//       closePopover={closeExpression(Expressions.METRICS)}*/}
+        {/*//       expressionWidth={expressionWidth}*/}
+        {/*//       aggregation={_.cloneDeep(FORMIK_INITIAL_AGG_VALUES)}*/}
+        {/*//       index={0}*/}
+        {/*//     />*/}
+        {/*// </EuiPopover>*/}
       </div>
     );
   }

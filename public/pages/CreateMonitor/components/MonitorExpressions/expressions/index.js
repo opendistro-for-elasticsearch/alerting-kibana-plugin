@@ -16,6 +16,7 @@
 import ForExpression from './ForExpression';
 import MetricExpression from './MetricExpression';
 import MetricItem from './MetricItem';
+import MetricPopover from './MetricPopover';
 import OfExpression from './OfExpression';
 import OverExpression from './OverExpression';
 import WhenExpression from './WhenExpression';
@@ -25,6 +26,7 @@ export {
   ForExpression,
   MetricExpression,
   MetricItem,
+  MetricPopover,
   OfExpression,
   OverExpression,
   WhenExpression,
