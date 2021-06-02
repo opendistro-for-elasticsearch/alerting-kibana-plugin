@@ -44,83 +44,84 @@ export default function MetricItem(
 
   const onChangeFieldWrapper = (options, field, form) => {
     onMadeChanges();
-    console.log('aggregations[' + index + +'].fieldName');
-    form.setFieldValue('aggregations[' + index + +'].fieldName', options);
+    form.setFieldValue('fieldName', options);
     // arrayHelpers.replace(index, {
     //   aggregationType: aggregation.aggregationType,
     //   fieldName: options,
     // });
   };
 
-  const renderPopover = (options, closeExpression, expressionWidth) => (
-    <div
-      style={{
-        width: Math.max(expressionWidth, 180),
-        height: 220,
-        ...POPOVER_STYLE,
-        ...EXPRESSION_STYLE,
-      }}
-    >
-      <EuiFlexGroup direction="column" gutterSize="xs">
-        <EuiFlexItem>
-          <EuiText size="xs">
-            <h4>Aggregation</h4>
-          </EuiText>
-        </EuiFlexItem>
-        <EuiFlexItem>
-          <FormikSelect
-            // name={`aggregations[${index}].aggregationType`}
-            name="aggregationType"
-            inputProps={{
-              onChange: onChangeWrapper,
-              options: AGGREGATION_TYPES,
-            }}
-          />
-        </EuiFlexItem>
-      </EuiFlexGroup>
-      <EuiFlexGroup direction="column" gutterSize="xs">
-        <EuiFlexItem>
-          <EuiText size="xs">
-            <h4>Field</h4>
-          </EuiText>
-        </EuiFlexItem>
-        <EuiFlexItem>
-          <FormikComboBox
-            name="fieldName"
-            inputProps={{
-              placeholder: 'Select a field',
-              options,
-              onChange: onChangeFieldWrapper,
-              isClearable: false,
-              singleSelection: { asPlainText: true },
-              'data-test-subj': 'ofFieldComboBox',
-            }}
-          />
-        </EuiFlexItem>
-      </EuiFlexGroup>
-      <EuiSpacer size="l" />
-      <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
-        <EuiFlexItem>
-          <EuiButtonEmpty onClick={closePopover}>Cancel</EuiButtonEmpty>
-        </EuiFlexItem>
-        <EuiFlexItem>
-          <EuiButton
-            fill
-            onClick={() => {
-              // arrayHelpers.replace(
-              //   index, {
-              //     aggregationType: aggregation.aggregationType,
-              //     fieldName: options,
-              //   });
-              closePopover();
-            }}
-          >
-            Save
-          </EuiButton>
-        </EuiFlexItem>
-      </EuiFlexGroup>
-    </div>
-  );
+  const renderPopover = (options, closeExpression, expressionWidth) => {
+    return (
+      <div
+        style={{
+          width: Math.max(expressionWidth, 180),
+          height: 220,
+          ...POPOVER_STYLE,
+          ...EXPRESSION_STYLE,
+        }}
+      >
+        <EuiFlexGroup direction="column" gutterSize="xs">
+          <EuiFlexItem>
+            <EuiText size="xs">
+              <h4>Aggregation</h4>
+            </EuiText>
+          </EuiFlexItem>
+          <EuiFlexItem>
+            <FormikSelect
+              name="aggregationType"
+              inputProps={{
+                onChange: onChangeWrapper,
+                options: AGGREGATION_TYPES,
+              }}
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>
+        <EuiFlexGroup direction="column" gutterSize="xs">
+          <EuiFlexItem>
+            <EuiText size="xs">
+              <h4>Field</h4>
+            </EuiText>
+          </EuiFlexItem>
+          <EuiFlexItem>
+            <FormikComboBox
+              name="fieldName"
+              inputProps={{
+                placeholder: 'Select a field',
+                options,
+                onChange: onChangeFieldWrapper,
+                isClearable: false,
+                singleSelection: { asPlainText: true },
+                'data-test-subj': 'ofFieldComboBox',
+              }}
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>
+        <EuiSpacer size="l" />
+        <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
+          <EuiFlexItem>
+            <EuiButtonEmpty onClick={closePopover}>Cancel</EuiButtonEmpty>
+          </EuiFlexItem>
+          <EuiFlexItem>
+            <EuiButton
+              fill
+              onClick={() => {
+                //Debug use
+                console.log('Values before save: ' + JSON.stringify(values));
+                arrayHelpers.replace(index, {
+                  aggregationType: values.aggregationType,
+                  fieldName: values.fieldName[0].label,
+                });
+                closePopover();
+              }}
+            >
+              Save
+            </EuiButton>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </div>
+    );
+  };
 
   //The first metric is read only
   if (index == 0)
