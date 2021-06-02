@@ -21,7 +21,7 @@ export default function GroupByItem(
   { values, onMadeChanges, arrayHelpers, fieldOptions, expressionWidth, groupByItem, index } = this
     .props
 ) {
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(true);
   const closePopover = () => setIsPopoverOpen(false);
 
   return (

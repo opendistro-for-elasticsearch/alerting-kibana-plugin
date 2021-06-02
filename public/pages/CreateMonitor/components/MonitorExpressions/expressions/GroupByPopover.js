@@ -25,22 +25,22 @@ import {
 } from '@elastic/eui';
 
 import { EXPRESSION_STYLE, POPOVER_STYLE } from './utils/constants';
-import { FormikSelect } from '../../../../../components/FormControls';
+import { FormikComboBox, FormikSelect } from '../../../../../components/FormControls';
 
 export default function GroupByPopover(
   { values, onMadeChanges, arrayHelpers, options, closePopover, expressionWidth, index } = this
     .props
 ) {
-  const onChangeWrapper = (e, field) => {
+  const onChangeFieldWrapper = (options, field, form) => {
     onMadeChanges();
-    field.onChange(e);
+    form.setFieldValue('groupByField', options);
   };
 
   return (
     <div
       style={{
         width: Math.max(expressionWidth, 180),
-        height: 220,
+        height: 150,
         ...POPOVER_STYLE,
         ...EXPRESSION_STYLE,
       }}
@@ -52,11 +52,15 @@ export default function GroupByPopover(
           </EuiText>
         </EuiFlexItem>
         <EuiFlexItem>
-          <FormikSelect
+          <FormikComboBox
             name="groupByField"
             inputProps={{
-              onChange: onChangeWrapper,
+              placeholder: 'Select a field',
               options,
+              onChange: onChangeFieldWrapper,
+              isClearable: false,
+              singleSelection: { asPlainText: true },
+              'data-test-subj': 'ofFieldComboBox',
             }}
           />
         </EuiFlexItem>
@@ -70,7 +74,7 @@ export default function GroupByPopover(
           <EuiButton
             fill
             onClick={() => {
-              arrayHelpers.replace(index, values.groupByField);
+              arrayHelpers.replace(index, values.groupByField[0].label);
               closePopover();
             }}
           >

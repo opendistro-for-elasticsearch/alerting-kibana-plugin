@@ -77,7 +77,7 @@ export default class MonitorExpressions extends Component {
     const { dataTypes, ofEnabled } = this.props;
     return (
       <div>
-        <FieldArray name={'aggregations'} validateOnChange={false}>
+        <FieldArray name="aggregations" validateOnChange={false}>
           {(arrayHelpers) => (
             <MetricExpression
               {...this.getExpressionProps()}
@@ -91,7 +91,7 @@ export default class MonitorExpressions extends Component {
         <EuiSpacer size="xs" />
         <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
         <EuiSpacer size="xs" />
-        <FieldArray name={'groupBy'} validateOnChange={false}>
+        <FieldArray name="groupBy" validateOnChange={false}>
           {(arrayHelpers) => (
             <GroupByExpression
               {...this.getExpressionProps()}
@@ -101,15 +101,6 @@ export default class MonitorExpressions extends Component {
           )}
         </FieldArray>
         <EuiSpacer size="xs" />
-
-        <EuiSpacer size="s" />
-
-        {/*TODO: Remove the following EuiFlexGroup since they are the old version of monitor expression*/}
-        <EuiFlexGroup alignItems="center">
-          <EuiFlexItem grow={false}>
-            <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-          </EuiFlexItem>
-        </EuiFlexGroup>
       </div>
     );
   }

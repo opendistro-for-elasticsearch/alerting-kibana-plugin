@@ -21,7 +21,7 @@ export default function MetricItem(
   { values, onMadeChanges, arrayHelpers, fieldOptions, expressionWidth, aggregation, index } = this
     .props
 ) {
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(true);
   const closePopover = () => setIsPopoverOpen(false);
 
   //The first metric is read only

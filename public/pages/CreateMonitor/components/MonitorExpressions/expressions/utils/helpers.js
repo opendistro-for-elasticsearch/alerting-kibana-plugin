@@ -32,6 +32,6 @@ export function getMetricExpressionAllowedTypes(values) {
 }
 
 export function getGroupByExpressionAllowedTypes() {
-  const types = ['keyword'];
+  const types = ['text', 'keyword'];
   return types;
 }
