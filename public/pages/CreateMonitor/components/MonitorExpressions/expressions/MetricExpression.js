@@ -74,6 +74,7 @@ class MetricExpression extends Component {
         <EuiText size="xs">
           <h4>Metrics</h4>
         </EuiText>
+        <EuiSpacer size="s" />
         {this.renderFieldItems(
           arrayHelpers,
           fieldOptions,
