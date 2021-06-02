@@ -52,9 +52,7 @@ class MetricExpression extends Component {
   render() {
     const {
       formik: { values },
-      onMadeChanges,
       arrayHelpers,
-      openedStates,
       closeExpression,
       openExpression,
       dataTypes,
@@ -86,36 +84,12 @@ class MetricExpression extends Component {
         <EuiButtonEmpty
           size="xs"
           onClick={() => {
-            // openExpression(Expressions.METRICS);
             arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
           }}
           data-test-subj="addMetricButton"
         >
           + Add metric
         </EuiButtonEmpty>
-        {/*<EuiPopover*/}
-        {/*  id="metric-badge-popover"*/}
-        {/*  button={*/}
-
-        {/*//     }*/}
-        {/*//     isOpen={openedStates.METRICS}*/}
-        {/*//     closePopover={closeExpression(Expressions.METRICS)}*/}
-        {/*//     panelPaddingSize="none"*/}
-        {/*//     ownFocus*/}
-        {/*//     withTitle*/}
-        {/*//     anchorPosition="downLeft"*/}
-        {/*//   >*/}
-        {/*//     <MetricPopover*/}
-        {/*//       values={values}*/}
-        {/*//       onMadeChanges={onMadeChanges}*/}
-        {/*//       arrayHelpers={arrayHelpers}*/}
-        {/*//       options={fieldOptions}*/}
-        {/*//       closePopover={closeExpression(Expressions.METRICS)}*/}
-        {/*//       expressionWidth={expressionWidth}*/}
-        {/*//       aggregation={_.cloneDeep(FORMIK_INITIAL_AGG_VALUES)}*/}
-        {/*//       index={0}*/}
-        {/*//     />*/}
-        {/*// </EuiPopover>*/}
       </div>
     );
   }
