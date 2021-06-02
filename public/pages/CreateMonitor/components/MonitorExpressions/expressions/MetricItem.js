@@ -43,6 +43,8 @@ export default function MetricItem(
             iconOnClick={() => arrayHelpers.remove(index)}
             iconOnClickAriaLabel="Remove metric"
             onClick={() => {
+              //TODO: Set options to the current agg values
+
               setIsPopoverOpen(true);
             }}
             onClickAriaLabel="Edit metric"
