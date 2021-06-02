@@ -16,7 +16,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { EuiAccordion, EuiButton } from '@elastic/eui';
 import 'brace/mode/plain_text';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
 import { isInvalid, hasError } from '../../../../utils/validate';
@@ -27,8 +26,6 @@ import { validateTriggerName } from './utils/validation';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { AnomalyDetectorTrigger } from './AnomalyDetectorTrigger';
 import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
-import AddTriggerButton from '../../components/AddTriggerButton';
-import TriggerEmptyPrompt from '../../components/TriggerEmptyPrompt';
 
 const defaultRowProps = {
   label: 'Trigger name',
@@ -96,7 +93,6 @@ const DefineTrigger = ({
   const thresholdEnum = triggerValues.thresholdEnum;
   const thresholdValue = triggerValues.thresholdValue;
   const adTriggerType = triggerValues.anomalyDetector.triggerType;
-
   let triggerContent = (
     <TriggerQuery
       context={context}
