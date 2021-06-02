@@ -16,7 +16,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
-import { EuiFlexGroup, EuiFlexItem, EuiPopover, EuiButtonEmpty, EuiText } from '@elastic/eui';
+import {
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiPopover,
+  EuiButtonEmpty,
+  EuiText,
+  EuiSpacer,
+  EuiBadge,
+} from '@elastic/eui';
 import _ from 'lodash';
 import {
   Expressions,
@@ -177,6 +185,19 @@ class WhereExpression extends Component {
         <EuiText size="xs">
           <h4>Where</h4>
         </EuiText>
+        <EuiSpacer size="s" />
+        <EuiBadge
+          iconSide="right"
+          iconType="cross"
+          iconOnClick={() => this.resetValues()}
+          iconOnClickAriaLabel="Remove where filter"
+          onClick={() => {
+            openExpression(Expressions.WHERE);
+          }}
+          onClickAriaLabel="Edit where filter"
+        >
+          {displayText(values.where)}
+        </EuiBadge>
         <EuiPopover
           id="where-popover"
           button={
@@ -185,7 +206,7 @@ class WhereExpression extends Component {
               data-test-subj="addFilterButton"
               onClick={() => openExpression(Expressions.WHERE)}
             >
-              + Add filter
+              Edit where filter
             </EuiButtonEmpty>
           }
           isOpen={openedStates.WHERE}
