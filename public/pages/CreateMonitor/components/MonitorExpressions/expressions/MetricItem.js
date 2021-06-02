@@ -44,12 +44,12 @@ export default function MetricItem(
 
   const onChangeFieldWrapper = (options, field, form) => {
     onMadeChanges();
-    form.setFieldValue(`aggregations[${index}].fieldName`, options);
-    arrayHelpers.replace(index, {
-      aggregationType: aggregation.aggregationType,
-      fieldName: options,
-    });
-    //Debug use
+    console.log('aggregations[' + index + +'].fieldName');
+    form.setFieldValue('aggregations[' + index + +'].fieldName', options);
+    // arrayHelpers.replace(index, {
+    //   aggregationType: aggregation.aggregationType,
+    //   fieldName: options,
+    // });
   };
 
   const renderPopover = (options, closeExpression, expressionWidth) => (
@@ -69,7 +69,8 @@ export default function MetricItem(
         </EuiFlexItem>
         <EuiFlexItem>
           <FormikSelect
-            name={`aggregations[${index}].aggregationType`}
+            // name={`aggregations[${index}].aggregationType`}
+            name="aggregationType"
             inputProps={{
               onChange: onChangeWrapper,
               options: AGGREGATION_TYPES,
@@ -85,7 +86,7 @@ export default function MetricItem(
         </EuiFlexItem>
         <EuiFlexItem>
           <FormikComboBox
-            name={`aggregations[${index}].fieldName`}
+            name="fieldName"
             inputProps={{
               placeholder: 'Select a field',
               options,
@@ -124,11 +125,9 @@ export default function MetricItem(
   //The first metric is read only
   if (index == 0)
     return (
-      <div>
-        <EuiBadge>
-          {aggregation.aggregationType} of {aggregation.fieldName}
-        </EuiBadge>
-      </div>
+      <EuiBadge>
+        {aggregation.aggregationType} of {aggregation.fieldName}
+      </EuiBadge>
     );
 
   return (
@@ -147,7 +146,7 @@ export default function MetricItem(
             onClickAriaLabel="Edit metric"
           >
             {aggregation.aggregationType} of {aggregation.fieldName}
-          </EuiBadge>{' '}
+          </EuiBadge>
         </div>
       }
       isOpen={isPopoverOpen}

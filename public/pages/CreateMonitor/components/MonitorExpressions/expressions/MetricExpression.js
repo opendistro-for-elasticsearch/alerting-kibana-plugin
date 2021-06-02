@@ -85,6 +85,7 @@ class MetricExpression extends Component {
           closeExpression,
           expressionWidth
         )}
+        <EuiSpacer size="xs" />
         <EuiButtonEmpty
           size="xs"
           onClick={() => {
