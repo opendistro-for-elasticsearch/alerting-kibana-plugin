@@ -18,7 +18,7 @@ import { connect } from 'formik';
 
 import { EuiText, EuiButtonEmpty, EuiSpacer } from '@elastic/eui';
 import { getIndexFields } from './utils/dataTypes';
-import { getOfExpressionAllowedTypes } from './utils/helpers';
+import { getGroupByExpressionAllowedTypes } from './utils/helpers';
 import GroupByItem from './GroupByItem';
 
 class GroupByExpression extends Component {
@@ -49,7 +49,7 @@ class GroupByExpression extends Component {
       dataTypes,
     } = this.props;
 
-    const fieldOptions = getIndexFields(dataTypes, getOfExpressionAllowedTypes(values));
+    const fieldOptions = getIndexFields(dataTypes, getGroupByExpressionAllowedTypes(values));
     const expressionWidth =
       Math.max(
         ...fieldOptions.map(({ options }) =>
