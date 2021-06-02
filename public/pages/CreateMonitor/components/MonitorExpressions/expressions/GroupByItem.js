@@ -15,41 +15,31 @@
 
 import React, { useState } from 'react';
 import { EuiPopover, EuiBadge } from '@elastic/eui';
-import MetricPopover from './MetricPopover';
+import { GroupByPopover } from './index';
 
-export default function MetricItem(
-  { values, onMadeChanges, arrayHelpers, fieldOptions, expressionWidth, aggregation, index } = this
+export default function GroupByItem(
+  { values, onMadeChanges, arrayHelpers, fieldOptions, expressionWidth, groupByItem, index } = this
     .props
 ) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const closePopover = () => setIsPopoverOpen(false);
 
-  //The first metric is read only
-  if (index == 0)
-    return (
-      <EuiBadge>
-        {aggregation.aggregationType} of {aggregation.fieldName}
-      </EuiBadge>
-    );
-
   return (
     <EuiPopover
-      id="metric-badge-popover"
+      id="groupBy-badge-popover"
       button={
         <div>
           <EuiBadge
             iconSide="right"
             iconType="cross"
             iconOnClick={() => arrayHelpers.remove(index)}
-            iconOnClickAriaLabel="Remove metric"
+            iconOnClickAriaLabel="Remove group by"
             onClick={() => {
-              //TODO: Set options to the current agg values
-
               setIsPopoverOpen(true);
             }}
-            onClickAriaLabel="Edit metric"
+            onClickAriaLabel="Edit group by"
           >
-            {aggregation.aggregationType} of {aggregation.fieldName}
+            {groupByItem}
           </EuiBadge>
         </div>
       }
@@ -60,14 +50,13 @@ export default function MetricItem(
       withTitle
       anchorPosition="downLeft"
     >
-      <MetricPopover
+      <GroupByPopover
         values={values}
         onMadeChanges={onMadeChanges}
         arrayHelpers={arrayHelpers}
         options={fieldOptions}
         closePopover={closePopover}
         expressionWidth={expressionWidth}
-        aggregation={aggregation}
         index={index}
       />
     </EuiPopover>

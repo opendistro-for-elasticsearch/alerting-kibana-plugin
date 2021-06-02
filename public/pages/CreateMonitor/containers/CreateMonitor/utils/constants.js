@@ -45,6 +45,7 @@ export const FORMIK_INITIAL_VALUES = {
     },
   ],
   groupBy: [],
+  groupByField: '',
   overDocuments: 'all documents',
   groupedOverTop: 5,
   groupedOverFieldName: 'bytes',

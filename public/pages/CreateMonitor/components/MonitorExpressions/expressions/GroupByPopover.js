@@ -24,29 +24,16 @@ import {
   EuiSpacer,
 } from '@elastic/eui';
 
-import { AGGREGATION_TYPES, EXPRESSION_STYLE, POPOVER_STYLE } from './utils/constants';
-import { FormikComboBox, FormikSelect } from '../../../../../components/FormControls';
+import { EXPRESSION_STYLE, POPOVER_STYLE } from './utils/constants';
+import { FormikSelect } from '../../../../../components/FormControls';
 
-export default function MetricPopover(
-  {
-    values,
-    onMadeChanges,
-    arrayHelpers,
-    options,
-    closePopover,
-    expressionWidth,
-    aggregation,
-    index,
-  } = this.props
+export default function GroupByPopover(
+  { values, onMadeChanges, arrayHelpers, options, closePopover, expressionWidth, index } = this
+    .props
 ) {
   const onChangeWrapper = (e, field) => {
     onMadeChanges();
     field.onChange(e);
-  };
-
-  const onChangeFieldWrapper = (options, field, form) => {
-    onMadeChanges();
-    form.setFieldValue('fieldName', options);
   };
 
   return (
@@ -61,35 +48,15 @@ export default function MetricPopover(
       <EuiFlexGroup direction="column" gutterSize="xs">
         <EuiFlexItem>
           <EuiText size="xs">
-            <h4>Aggregation</h4>
-          </EuiText>
-        </EuiFlexItem>
-        <EuiFlexItem>
-          <FormikSelect
-            name="aggregationType"
-            inputProps={{
-              onChange: onChangeWrapper,
-              options: AGGREGATION_TYPES,
-            }}
-          />
-        </EuiFlexItem>
-      </EuiFlexGroup>
-      <EuiFlexGroup direction="column" gutterSize="xs">
-        <EuiFlexItem>
-          <EuiText size="xs">
             <h4>Field</h4>
           </EuiText>
         </EuiFlexItem>
         <EuiFlexItem>
-          <FormikComboBox
-            name="fieldName"
+          <FormikSelect
+            name="groupByField"
             inputProps={{
-              placeholder: 'Select a field',
+              onChange: onChangeWrapper,
               options,
-              onChange: onChangeFieldWrapper,
-              isClearable: false,
-              singleSelection: { asPlainText: true },
-              'data-test-subj': 'ofFieldComboBox',
             }}
           />
         </EuiFlexItem>
@@ -103,10 +70,7 @@ export default function MetricPopover(
           <EuiButton
             fill
             onClick={() => {
-              arrayHelpers.replace(index, {
-                aggregationType: values.aggregationType,
-                fieldName: values.fieldName[0].label,
-              });
+              arrayHelpers.replace(index, values.groupByField);
               closePopover();
             }}
           >

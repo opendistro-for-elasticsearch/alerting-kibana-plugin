@@ -18,7 +18,7 @@ import { connect } from 'formik';
 
 import { EuiText, EuiButtonEmpty, EuiSpacer, EuiPopover } from '@elastic/eui';
 import { getIndexFields } from './utils/dataTypes';
-import { getOfExpressionAllowedTypes } from './utils/helpers';
+import { getMetricExpressionAllowedTypes, getOfExpressionAllowedTypes } from './utils/helpers';
 import _ from 'lodash';
 import {
   FORMIK_INITIAL_AGG_VALUES,
@@ -60,7 +60,7 @@ class MetricExpression extends Component {
       dataTypes,
     } = this.props;
 
-    const fieldOptions = getIndexFields(dataTypes, getOfExpressionAllowedTypes(values));
+    const fieldOptions = getIndexFields(dataTypes, getMetricExpressionAllowedTypes(values));
     const expressionWidth =
       Math.max(
         ...fieldOptions.map(({ options }) =>

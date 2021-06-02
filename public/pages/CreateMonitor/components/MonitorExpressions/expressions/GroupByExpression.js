@@ -19,9 +19,7 @@ import { connect } from 'formik';
 import { EuiText, EuiButtonEmpty, EuiSpacer } from '@elastic/eui';
 import { getIndexFields } from './utils/dataTypes';
 import { getOfExpressionAllowedTypes } from './utils/helpers';
-import _ from 'lodash';
-import { FORMIK_INITIAL_AGG_VALUES } from '../../../containers/CreateMonitor/utils/constants';
-import { MetricItem } from './index';
+import GroupByItem from './GroupByItem';
 
 class GroupByExpression extends Component {
   renderFieldItems = (arrayHelpers, fieldOptions, expressionWidth) => {
@@ -29,15 +27,15 @@ class GroupByExpression extends Component {
       formik: { values },
       onMadeChanges,
     } = this.props;
-    return values.aggregations.map((aggregation, index) => {
+    return values.groupBy.map((groupByItem, index) => {
       return (
-        <MetricItem
+        <GroupByItem
           values={values}
           onMadeChanges={onMadeChanges}
           arrayHelpers={arrayHelpers}
           fieldOptions={fieldOptions}
           expressionWidth={expressionWidth}
-          aggregation={aggregation}
+          groupByItem={groupByItem}
           index={index}
         />
       );
@@ -47,11 +45,7 @@ class GroupByExpression extends Component {
   render() {
     const {
       formik: { values },
-      onMadeChanges,
       arrayHelpers,
-      openedStates,
-      closeExpression,
-      openExpression,
       dataTypes,
     } = this.props;
 
@@ -69,13 +63,7 @@ class GroupByExpression extends Component {
         <EuiText size="xs">
           <h4>Group by</h4>
         </EuiText>
-        {this.renderFieldItems(
-          arrayHelpers,
-          fieldOptions,
-          openExpression,
-          closeExpression,
-          expressionWidth
-        )}
+        {this.renderFieldItems(arrayHelpers, fieldOptions, expressionWidth)}
         <EuiSpacer size="xs" />
         <EuiButtonEmpty
           size="xs"
