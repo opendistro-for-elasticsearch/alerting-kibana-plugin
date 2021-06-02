@@ -15,6 +15,7 @@
 
 import ForExpression from './ForExpression';
 import MetricExpression from './MetricExpression';
+import MetricItem from './MetricItem';
 import OfExpression from './OfExpression';
 import OverExpression from './OverExpression';
 import WhenExpression from './WhenExpression';
@@ -23,6 +24,7 @@ import WhereExpression from './WhereExpression';
 export {
   ForExpression,
   MetricExpression,
+  MetricItem,
   OfExpression,
   OverExpression,
   WhenExpression,

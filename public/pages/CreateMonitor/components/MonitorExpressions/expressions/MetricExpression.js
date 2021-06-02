@@ -32,6 +32,7 @@ import { getIndexFields } from './utils/dataTypes';
 import { getOfExpressionAllowedTypes } from './utils/helpers';
 import _ from 'lodash';
 import { FORMIK_INITIAL_AGG_VALUES } from '../../../containers/CreateMonitor/utils/constants';
+import { MetricItem } from './index';
 
 class MetricExpression extends Component {
   onChangeWrapper = (e, field, form, arrayHelpers, index) => {
@@ -115,53 +116,54 @@ class MetricExpression extends Component {
     </div>
   );
 
-  renderFieldItems = (
-    arrayHelpers,
-    fieldOptions,
-    openExpression,
-    closeExpression,
-    expressionWidth
-  ) => {
+  renderFieldItems = (arrayHelpers, fieldOptions, expressionWidth) => {
     const {
       formik: { values },
     } = this.props;
-
     return values.aggregations.map((aggregation, index) => {
-      let isOpen = false;
+      // let isOpen = false;
       return (
-        <EuiPopover
-          id="metric-badge-popover"
-          button={
-            <div>
-              <EuiBadge
-                iconSide="right"
-                iconType={index ? 'cross' : ''}
-                iconOnClick={() => arrayHelpers.remove(index)}
-                iconOnClickAriaLabel="Remove metric"
-                onClick={() => {
-                  isOpen = true;
-                }}
-                onClickAriaLabel="Edit metric"
-              >
-                {aggregation.aggregationType} of {aggregation.fieldName}
-              </EuiBadge>{' '}
-            </div>
-          }
-          isOpen
-          closePopover={() => (isOpen = false)}
-          panelPaddingSize="none"
-          ownFocus
-          withTitle
-          anchorPosition="downLeft"
-        >
-          {this.renderPopover(
-            fieldOptions,
-            () => (isOpen = false),
-            expressionWidth,
-            arrayHelpers,
-            values.aggregations.length
-          )}
-        </EuiPopover>
+        <MetricItem
+          values={values}
+          arrayHelpers={arrayHelpers}
+          fieldOptions={fieldOptions}
+          expressionWidth={expressionWidth}
+          aggregation={aggregation}
+          index={index}
+        />
+        // <EuiPopover
+        //   id="metric-badge-popover"
+        //   button={
+        //     <div>
+        //       <EuiBadge
+        //         iconSide="right"
+        //         iconType={index ? 'cross' : ''}
+        //         iconOnClick={() => arrayHelpers.remove(index)}
+        //         iconOnClickAriaLabel="Remove metric"
+        //         onClick={() => {
+        //           isOpen = true;
+        //         }}
+        //         onClickAriaLabel="Edit metric"
+        //       >
+        //         {aggregation.aggregationType} of {aggregation.fieldName}
+        //       </EuiBadge>{' '}
+        //     </div>
+        //   }
+        //   isOpen
+        //   closePopover={() => (isOpen = false)}
+        //   panelPaddingSize="none"
+        //   ownFocus
+        //   withTitle
+        //   anchorPosition="downLeft"
+        // >
+        //   {this.renderPopover(
+        //     fieldOptions,
+        //     () => (isOpen = false),
+        //     expressionWidth,
+        //     arrayHelpers,
+        //     values.aggregations.length
+        //   )}
+        // </EuiPopover>
       );
     });
   };
@@ -201,13 +203,7 @@ class MetricExpression extends Component {
         <EuiButtonEmpty
           size="xs"
           onClick={() => {
-            //Debug use
-            console.log('openStates: ' + JSON.stringify(openedStates));
-
-            // console.log("openStates for this index: "+ JSON.stringify(openedStates))
-
-            openExpression(Expressions.METRICS);
-            console.log('openStates: ' + JSON.stringify(openedStates));
+            // openExpression(Expressions.METRICS);
             arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
             //Debug
             console.log('Aggs: ' + JSON.stringify(values));
