@@ -141,10 +141,10 @@ class DefineMonitor extends Component {
     const { errors } = this.props;
     return (
       <Fragment>
-        <EuiText size="xs">
-          <strong>Create a monitor for</strong>
-        </EuiText>
-        <EuiSpacer size="s" />
+        {/*<EuiText size="xs">*/}
+        {/*  <strong>Create a monitor for</strong>*/}
+        {/*</EuiText>*/}
+        {/*<EuiSpacer size="s" />*/}
         <MonitorExpressions
           onRunQuery={this.onRunQuery}
           dataTypes={this.state.dataTypes}

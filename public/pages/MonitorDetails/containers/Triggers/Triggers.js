@@ -56,7 +56,7 @@ export default class Triggers extends Component {
       (map, item) => ({ ...map, [item.name]: true }),
       {}
     );
-    const shouldKeepTrigger = trigger => !triggersToDelete[trigger.name];
+    const shouldKeepTrigger = (trigger) => !triggersToDelete[trigger.name];
     const updatedTriggers = monitor.triggers.filter(shouldKeepTrigger);
     updateMonitor({ triggers: updatedTriggers });
   }
@@ -76,23 +76,24 @@ export default class Triggers extends Component {
   render() {
     const { direction, field, selectedItems, tableKey } = this.state;
     const { monitor, onCreateTrigger } = this.props;
+    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
 
     const columns = [
       {
-        field: 'name',
+        field: isAggregationMonitor ? 'aggregation_trigger.name' : 'name',
         name: 'Name',
         sortable: true,
         truncateText: true,
       },
       {
-        field: 'actions',
+        field: isAggregationMonitor ? 'aggregation_trigger.actions' : 'actions',
         name: 'Number of actions',
         sortable: true,
         truncateText: false,
-        render: actions => actions.length,
+        render: (actions) => actions.length,
       },
       {
-        field: 'severity',
+        field: isAggregationMonitor ? 'aggregation_trigger.severity' : 'severity',
         name: 'Severity',
         sortable: true,
         truncateText: false,

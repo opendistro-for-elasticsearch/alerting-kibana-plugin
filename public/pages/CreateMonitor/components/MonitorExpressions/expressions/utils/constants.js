@@ -22,6 +22,7 @@ export const Expressions = {
   OVER: 'OVER',
   FOR_THE_LAST: 'FOR_THE_LAST',
   WHERE: 'WHERE',
+  METRICS: 'METRICS',
 };
 export const NUMBER_TYPES = [
   'long',

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -13,18 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-import ForExpression from './ForExpression';
-import MetricExpression from './MetricExpression';
-import OfExpression from './OfExpression';
-import OverExpression from './OverExpression';
-import WhenExpression from './WhenExpression';
-import WhereExpression from './WhereExpression';
+import FormikCheckableCard from './FormikCheckableCard';
 
-export {
-  ForExpression,
-  MetricExpression,
-  OfExpression,
-  OverExpression,
-  WhenExpression,
-  WhereExpression,
-};
+export default FormikCheckableCard;

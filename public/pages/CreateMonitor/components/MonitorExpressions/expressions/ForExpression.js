@@ -16,7 +16,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
-import { EuiFlexGroup, EuiFlexItem, EuiPopover, EuiExpression } from '@elastic/eui';
+import { EuiText, EuiFlexGroup, EuiFlexItem, EuiPopover, EuiExpression } from '@elastic/eui';
 import { Expressions, POPOVER_STYLE, UNITS_OF_TIME, EXPRESSION_STYLE } from './utils/constants';
 import { selectOptionValueToText } from './utils/helpers';
 import { FormikFieldNumber, FormikSelect } from '../../../../../components/FormControls';
@@ -54,28 +54,25 @@ class ForExpression extends Component {
       openExpression,
     } = this.props;
     return (
-      <EuiPopover
-        id="for-popover"
-        button={
-          <EuiExpression
-            description="for the last"
-            value={`${values.bucketValue.toLocaleString()} ${selectOptionValueToText(
-              values.bucketUnitOfTime,
-              UNITS_OF_TIME
-            )}`}
-            isActive={openedStates.FOR_THE_LAST}
-            onClick={() => openExpression(Expressions.FOR_THE_LAST)}
-          />
-        }
-        isOpen={openedStates.FOR_THE_LAST}
-        closePopover={() => closeExpression(Expressions.FOR_THE_LAST)}
-        panelPaddingSize="none"
-        ownFocus
-        withTitle
-        anchorPosition="downLeft"
-      >
-        {this.renderPopover()}
-      </EuiPopover>
+      <div>
+        <EuiText size="xs">
+          <h4>For the last</h4>
+        </EuiText>
+        <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
+          <EuiFlexItem grow={false} style={{ width: 100 }}>
+            <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
+          </EuiFlexItem>
+          <EuiFlexItem grow={false} style={{ width: 150 }}>
+            <FormikSelect
+              name="bucketUnitOfTime"
+              inputProps={{
+                onChange: this.onChangeWrapper,
+                options: UNITS_OF_TIME,
+              }}
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </div>
     );
   }
 }

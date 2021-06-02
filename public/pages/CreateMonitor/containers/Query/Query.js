@@ -16,11 +16,18 @@
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
+import {
+  EuiSpacer,
+  EuiButton,
+  EuiText,
+  EuiCallOut,
+  EuiButtonEmpty,
+  EuiFlexGroup,
+  EuiFlexItem,
+} from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
 import ExtractionQuery from '../../components/ExtractionQuery';
-import MonitorExpressions from '../../components/MonitorExpressions';
 import QueryPerformance from '../../components/QueryPerformance';
 import { formikToMonitor } from '../CreateMonitor/utils/formikToMonitor';
 import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
@@ -28,6 +35,14 @@ import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import { buildSearchRequest } from '../DefineMonitor/utils/searchRequests';
 import MonitorIndex from '../MonitorIndex';
+import {
+  EXPRESSION_STYLE,
+  Expressions,
+  UNITS_OF_TIME,
+} from '../../components/MonitorExpressions/expressions/utils/constants';
+import { FormikFieldNumber, FormikSelect } from '../../../../components/FormControls';
+import { MetricExpression } from '../../components/MonitorExpressions/expressions';
+import MultipleExpressions from '../../components/MonitorExpressions/MultipleExpressions';
 
 function renderEmptyMessage(message) {
   return (
@@ -82,7 +97,11 @@ class Query extends Component {
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
     const hasIndices = !!index.length;
     const hasTimeField = !!timeField;
+    //Debug
+    console.log('Has indices: ' + hasIndices + ' isGraph: ' + isGraph);
     if (isGraph && hasIndices) {
+      //Debug
+      console.log('Did go into queryMappings');
       this.onQueryMappings();
       if (hasTimeField) this.onRunQuery();
     }
@@ -97,6 +116,8 @@ class Query extends Component {
     const { searchType, index, timeField } = this.props.values;
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
     const hasIndices = !!index.length;
+    //Debug
+    console.log('In update, hasIndices: ' + hasIndices + ' isGraph: ' + isGraph);
     // If customer is defining query through extraction query, then they are manually running their own queries
     // Below logic is for customers defining queries through graph/visual way.
     if (isGraph && hasIndices) {
@@ -106,6 +127,8 @@ class Query extends Component {
       const wasQuery = prevSearchType === SEARCH_TYPE.QUERY;
       const diffIndices = prevIndex !== index;
       if (wasQuery || diffIndices) {
+        //Debug
+        console.log('Query mapping in update...');
         this.onQueryMappings();
       }
       // If there is a timeField selected, then we want to run the query if
@@ -138,17 +161,27 @@ class Query extends Component {
     const { errors } = this.props;
     return (
       <Fragment>
-        <EuiText size="xs">
-          <strong>Create a monitor for</strong>
-        </EuiText>
-        <EuiSpacer size="s" />
-        <MonitorExpressions
+        <MultipleExpressions
           onRunQuery={this.onRunQuery}
           dataTypes={this.state.dataTypes}
           ofEnabled={this.props.values.aggregationType !== 'count'}
         />
-        {/*TODO: Move these components to a sub component class*/}
+
+        <EuiText size="xs">
+          {' '}
+          <h4>Group by</h4>{' '}
+        </EuiText>
+
+        <EuiButtonEmpty
+          size="xs"
+          data-test-subj="addGroupByButton"
+          // onClick={}
+        >
+          + Add another group by
+        </EuiButtonEmpty>
+
         <EuiSpacer size="s" />
+
         {errors.where ? (
           renderEmptyMessage('Invalid input in WHERE filter. Remove WHERE filter or adjust filter ')
         ) : (
