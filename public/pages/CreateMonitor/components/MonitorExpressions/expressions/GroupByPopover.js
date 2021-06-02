@@ -39,8 +39,8 @@ export default function GroupByPopover(
   return (
     <div
       style={{
-        width: Math.max(expressionWidth, 180),
-        height: 150,
+        width: Math.max(expressionWidth, 250),
+        height: 160,
         ...POPOVER_STYLE,
         ...EXPRESSION_STYLE,
       }}
@@ -67,10 +67,17 @@ export default function GroupByPopover(
       </EuiFlexGroup>
       <EuiSpacer size="l" />
       <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
-        <EuiFlexItem>
-          <EuiButtonEmpty onClick={closePopover}>Cancel</EuiButtonEmpty>
+        <EuiFlexItem grow={false}>
+          <EuiButtonEmpty
+            onClick={() => {
+              if (values.groupByField[0].label === '') arrayHelpers.remove(index);
+              closePopover();
+            }}
+          >
+            Cancel
+          </EuiButtonEmpty>
         </EuiFlexItem>
-        <EuiFlexItem>
+        <EuiFlexItem grow={false}>
           <EuiButton
             fill
             onClick={() => {

@@ -52,7 +52,7 @@ export default function MetricPopover(
   return (
     <div
       style={{
-        width: Math.max(expressionWidth, 180),
+        width: Math.max(expressionWidth, 280),
         height: 220,
         ...POPOVER_STYLE,
         ...EXPRESSION_STYLE,
