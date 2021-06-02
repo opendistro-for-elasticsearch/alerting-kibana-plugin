@@ -31,29 +31,28 @@ import { AGGREGATION_TYPES, EXPRESSION_STYLE, POPOVER_STYLE } from './utils/cons
 import { FormikComboBox, FormikSelect } from '../../../../../components/FormControls';
 
 export default function MetricItem(
-  { values, arrayHelpers, fieldOptions, expressionWidth, aggregation, index } = this.props
+  { values, onMadeChanges, arrayHelpers, fieldOptions, expressionWidth, aggregation, index } = this
+    .props
 ) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const closePopover = () => setIsPopoverOpen(false);
 
-  const onChangeWrapper = (e, field, form) => {
-    const {
-      formik: { values },
-      arrayHelpers,
-      index,
-    } = this.props;
-    this.props.onMadeChanges();
-    if (values.aggregations.length <= index)
-      arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_AGG_VALUES));
+  const onChangeWrapper = (e, field) => {
+    onMadeChanges();
     field.onChange(e);
   };
 
-  const onChangeFieldWrapper = (options, field, form, index) => {
-    this.props.onMadeChanges();
+  const onChangeFieldWrapper = (options, field, form) => {
+    onMadeChanges();
     form.setFieldValue(`aggregations[${index}].fieldName`, options);
+    arrayHelpers.replace(index, {
+      aggregationType: aggregation.aggregationType,
+      fieldName: options,
+    });
+    //Debug use
   };
 
-  const renderPopover = (options, closeExpression, expressionWidth, index) => (
+  const renderPopover = (options, closeExpression, expressionWidth) => (
     <div
       style={{
         width: Math.max(expressionWidth, 180),
@@ -104,13 +103,34 @@ export default function MetricItem(
           <EuiButtonEmpty onClick={closePopover}>Cancel</EuiButtonEmpty>
         </EuiFlexItem>
         <EuiFlexItem>
-          <EuiButton fill onClick={closePopover}>
+          <EuiButton
+            fill
+            onClick={() => {
+              // arrayHelpers.replace(
+              //   index, {
+              //     aggregationType: aggregation.aggregationType,
+              //     fieldName: options,
+              //   });
+              closePopover();
+            }}
+          >
             Save
           </EuiButton>
         </EuiFlexItem>
       </EuiFlexGroup>
     </div>
   );
+
+  //The first metric is read only
+  if (index == 0)
+    return (
+      <div>
+        <EuiBadge>
+          {aggregation.aggregationType} of {aggregation.fieldName}
+        </EuiBadge>
+      </div>
+    );
+
   return (
     <EuiPopover
       id="metric-badge-popover"
@@ -137,7 +157,7 @@ export default function MetricItem(
       withTitle
       anchorPosition="downLeft"
     >
-      {renderPopover(fieldOptions, closePopover, expressionWidth, index)}
+      {renderPopover(fieldOptions, closePopover, expressionWidth)}
     </EuiPopover>
   );
 }
