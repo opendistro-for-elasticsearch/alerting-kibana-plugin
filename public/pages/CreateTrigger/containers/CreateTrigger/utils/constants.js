@@ -47,7 +47,8 @@ export const FORMIK_INITIAL_TRIGGER_VALUES = {
     lang: 'painless',
     source: `ctx.results[0].hits.total.value > 0`,
   },
-  triggerConditions: undefined,
+  bucketSelector: undefined, // TODO: To be used for Aggregation Triggers defined by query
+  triggerConditions: [],
   thresholdValue: 10000,
   thresholdEnum: 'ABOVE',
   anomalyDetector: {

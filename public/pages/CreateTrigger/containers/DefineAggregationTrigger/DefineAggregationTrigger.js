@@ -99,15 +99,17 @@ const renderAggregationTriggerGraph = (index, monitor, monitorValues, response, 
   const thresholdEnum = triggerValues.triggerConditions[index].thresholdEnum;
   const thresholdValue = triggerValues.triggerConditions[index].thresholdValue;
 
-  const aggregations = _.keys(
+  const metricAggregations = _.keys(
     _.get(monitor, 'inputs[0].search.query.aggregations.composite_agg.aggregations', [])
-  );
-  const compositeAggregations = _.get(
-    monitor,
-    'inputs[0].search.query.aggregations.composite_agg.composite.sources',
-    []
-  ).flatMap((entry) => _.keys(entry));
-  const allAggregations = _.concat(aggregations, compositeAggregations);
+  ).map((metric) => {
+    return { value: metric, text: metric };
+  });
+  // TODO: Something like this needs to be passed into the WHERE of the Aggregation Trigger definition
+  // const compositeAggregations = _.get(
+  //   monitor,
+  //   'inputs[0].search.query.aggregations.composite_agg.composite.sources',
+  //   []
+  // ).flatMap((entry) => _.keys(entry));
 
   return (
     <AggregationTriggerGraph
@@ -116,7 +118,7 @@ const renderAggregationTriggerGraph = (index, monitor, monitorValues, response, 
       monitorValues={monitorValues}
       response={response}
       queryMetric={queryMetric}
-      queryMetrics={allAggregations}
+      queryMetrics={metricAggregations}
       thresholdEnum={thresholdEnum}
       thresholdValue={thresholdValue}
     />

@@ -25,6 +25,17 @@ import {
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 export function formikToTrigger(values, monitorUiMetadata = {}) {
+  // TODO: Should compare to this to some defined constant
+  const monitorType = _.get(monitorUiMetadata, 'monitor_type', 'traditional_monitor');
+  const isTraditionalMonitor = monitorType === 'traditional_monitor';
+  if (isTraditionalMonitor) {
+    return formikToTraditionalTrigger(values, monitorUiMetadata);
+  } else {
+    return formikToAggregationTrigger(values, monitorUiMetadata);
+  }
+}
+
+export function formikToTraditionalTrigger(values, monitorUiMetadata) {
   const condition = formikToCondition(values, monitorUiMetadata);
   const actions = formikToAction(values);
   return {
@@ -32,10 +43,25 @@ export function formikToTrigger(values, monitorUiMetadata = {}) {
     name: values.name,
     severity: values.severity,
     condition,
-    triggerConditions: values.triggerConditions,
     actions: actions,
     min_time_between_executions: values.minTimeBetweenExecutions,
     rolling_window_size: values.rollingWindowSize,
+  };
+}
+
+export function formikToAggregationTrigger(values, monitorUiMetadata) {
+  const condition = formikToAggregationTriggerCondition(values, monitorUiMetadata);
+  const actions = formikToAction(values);
+  return {
+    aggregation_trigger: {
+      id: values.id,
+      name: values.name,
+      severity: values.severity,
+      condition,
+      actions: actions,
+      min_time_between_executions: values.minTimeBetweenExecutions,
+      rolling_window_size: values.rollingWindowSize,
+    },
   };
 }
 
@@ -80,15 +106,23 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
   if (searchType === SEARCH_TYPE.AD) return getADCondition(values);
   const isCount = aggregationType === 'count';
   const resultsPath = getResultsPath(isCount);
-  const operator = getOperator(thresholdEnum);
+  const operator = getRelationalOperator(thresholdEnum);
   return getCondition(resultsPath, operator, thresholdValue, isCount);
+}
+
+export function formikToAggregationTriggerCondition(values, monitorUiMetadata = {}) {
+  const searchType = _.get(monitorUiMetadata, 'search.searchType', SEARCH_TYPE.QUERY);
+  if (searchType === SEARCH_TYPE.QUERY) return values.bucketSelector;
+  if (searchType === SEARCH_TYPE.GRAPH) return getAggregationTriggerCondition(values);
 }
 
 export function getADCondition(values) {
   const { anomalyDetector } = values;
   if (anomalyDetector.triggerType === TRIGGER_TYPE.AD) {
-    const anomalyGradeOperator = getOperator(anomalyDetector.anomalyGradeThresholdEnum);
-    const anomalyConfidenceOperator = getOperator(anomalyDetector.anomalyConfidenceThresholdEnum);
+    const anomalyGradeOperator = getRelationalOperator(anomalyDetector.anomalyGradeThresholdEnum);
+    const anomalyConfidenceOperator = getRelationalOperator(
+      anomalyDetector.anomalyConfidenceThresholdEnum
+    );
     return {
       script: {
         lang: 'painless',
@@ -110,10 +144,55 @@ export function getCondition(resultsPath, operator, value, isCount) {
   };
 }
 
+export function getAggregationTriggerCondition(values) {
+  const conditions = values.triggerConditions;
+  const bucketsPath = getBucketSelectorBucketsPath(conditions);
+  const scriptSource = getBucketSelectorScriptSource(conditions);
+  return {
+    parent_bucket_path: 'composite_agg',
+    buckets_path: bucketsPath,
+    script: {
+      source: scriptSource,
+    },
+    // TODO: Update this to use values.where
+    // composite_agg_filter: values.filter,
+  };
+}
+
+export function getBucketSelectorBucketsPath(conditions) {
+  const bucketsPath = {};
+  conditions.forEach((condition) => {
+    const { queryMetric } = condition;
+    bucketsPath[queryMetric] = queryMetric;
+  });
+  return bucketsPath;
+}
+
+export function getBucketSelectorScriptSource(conditions) {
+  const scriptSourceContents = [];
+  conditions.forEach((condition) => {
+    const { queryMetric, thresholdValue, thresholdEnum, andOrCondition } = condition;
+    if (andOrCondition) {
+      // TODO: If possible, adding parentheses around the AND statements of the resulting script
+      //  would improve readability but it shouldn't affect the logical result
+      const logicalOperator = getLogicalOperator(andOrCondition);
+      scriptSourceContents.push(logicalOperator);
+    }
+    const relationalOperator = getRelationalOperator(thresholdEnum);
+    const scriptCondition = `params.${queryMetric} ${relationalOperator} ${thresholdValue}`;
+    scriptSourceContents.push(scriptCondition);
+  });
+  return scriptSourceContents.join(' ');
+}
+
 export function getResultsPath(isCount) {
   return isCount ? HITS_TOTAL_RESULTS_PATH : AGGREGATION_RESULTS_PATH;
 }
 
-export function getOperator(thresholdEnum) {
+export function getRelationalOperator(thresholdEnum) {
   return { ABOVE: '>', BELOW: '<', EXACTLY: '==' }[thresholdEnum];
+}
+
+export function getLogicalOperator(logicalEnum) {
+  return { AND: '&&', OR: '||' }[logicalEnum];
 }

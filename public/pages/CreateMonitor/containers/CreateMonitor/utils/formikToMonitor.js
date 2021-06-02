@@ -34,6 +34,7 @@ export function formikToMonitor(values) {
     ui_metadata: {
       schedule: uiSchedule,
       search: uiSearch,
+      monitor_type: values.monitor_type,
     },
   };
 }

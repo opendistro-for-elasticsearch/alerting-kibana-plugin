@@ -254,9 +254,9 @@ export default class CreateTrigger extends Component {
   }
 
   async onQueryMappings() {
-    const index = this.props.values.index.map(({ label }) => label);
+    const indices = this.props.monitor.inputs[0].search.indices;
     try {
-      const mappings = await this.queryMappings(index);
+      const mappings = await this.queryMappings(indices);
       const dataTypes = getPathsPerDataType(mappings);
       this.setState({ dataTypes });
     } catch (err) {
