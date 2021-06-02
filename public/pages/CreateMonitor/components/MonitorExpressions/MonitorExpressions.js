@@ -25,6 +25,7 @@ import {
 } from './expressions';
 import MetricExpression from './expressions/MetricExpression';
 import { FieldArray } from 'formik';
+import GroupByExpression from './expressions/GroupByExpression';
 
 export const DEFAULT_CLOSED_STATES = {
   METRICS: false,
@@ -90,19 +91,16 @@ export default class MonitorExpressions extends Component {
         <EuiSpacer size="xs" />
         <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
         <EuiSpacer size="xs" />
-
-        <EuiText size="xs">
-          {' '}
-          <h4>Group by</h4>{' '}
-        </EuiText>
-
-        <EuiButtonEmpty
-          size="xs"
-          data-test-subj="addGroupByButton"
-          // onClick={arrayHelpers.push(_.cloneDeep({}))}
-        >
-          + Add another group by
-        </EuiButtonEmpty>
+        <FieldArray name={'groupBy'} validateOnChange={false}>
+          {(arrayHelpers) => (
+            <GroupByExpression
+              {...this.getExpressionProps()}
+              arrayHelpers={arrayHelpers}
+              dataTypes={dataTypes}
+            />
+          )}
+        </FieldArray>
+        <EuiSpacer size="xs" />
 
         <EuiSpacer size="s" />
 

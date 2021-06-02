@@ -14,6 +14,7 @@
  */
 
 import ForExpression from './ForExpression';
+import GroupByExpression from './GroupByExpression';
 import MetricExpression from './MetricExpression';
 import MetricItem from './MetricItem';
 import MetricPopover from './MetricPopover';
@@ -24,6 +25,7 @@ import WhereExpression from './WhereExpression';
 
 export {
   ForExpression,
+  GroupByExpression,
   MetricExpression,
   MetricItem,
   MetricPopover,
