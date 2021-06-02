@@ -42,6 +42,17 @@ import { FORMIK_INITIAL_TRIGGER_VALUES } from './utils/constants';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
+import DefineAggregationTrigger from '../DefineAggregationTrigger';
+import { getPathsPerDataType } from '../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
+
+export const DEFAULT_CLOSED_STATES = {
+  WHEN: false,
+  OF_FIELD: false,
+  THRESHOLD: false,
+  OVER: false,
+  FOR_THE_LAST: false,
+  WHERE: false,
+};
 
 export default class CreateTrigger extends Component {
   constructor(props) {
@@ -56,11 +67,15 @@ export default class CreateTrigger extends Component {
       triggerResponse: null,
       executeResponse: null,
       initialValues,
+      dataTypes: {},
+      openedStates: DEFAULT_CLOSED_STATES,
+      madeChanges: false,
     };
   }
 
   componentDidMount() {
     this.onRunExecute();
+    this.onQueryMappings();
   }
 
   componentWillUnmount() {
@@ -190,9 +205,70 @@ export default class CreateTrigger extends Component {
     monitor: monitor,
   });
 
+  openExpression = (expression) => {
+    this.setState({
+      openedStates: {
+        ...DEFAULT_CLOSED_STATES,
+        [expression]: true,
+      },
+    });
+  };
+
+  closeExpression = (expression) => {
+    const { madeChanges, openedStates } = this.state;
+    if (madeChanges && openedStates[expression]) {
+      // if made changes and close expression that was currently open => run query
+      this.props.onRunQuery();
+      this.setState({ madeChanges: false });
+    }
+    this.setState({ openedStates: { ...openedStates, [expression]: false } });
+  };
+
+  onMadeChanges = () => {
+    this.setState({ madeChanges: true });
+  };
+
+  getExpressionProps = () => ({
+    openedStates: this.state.openedStates,
+    closeExpression: this.closeExpression,
+    openExpression: this.openExpression,
+    onMadeChanges: this.onMadeChanges,
+  });
+
+  async queryMappings(index) {
+    if (!index.length) {
+      return {};
+    }
+
+    try {
+      const response = await this.props.httpClient.post('../api/alerting/_mappings', {
+        body: JSON.stringify({ index }),
+      });
+      if (response.ok) {
+        return response.resp;
+      }
+      return {};
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async onQueryMappings() {
+    const index = this.props.values.index.map(({ label }) => label);
+    try {
+      const mappings = await this.queryMappings(index);
+      const dataTypes = getPathsPerDataType(mappings);
+      this.setState({ dataTypes });
+    } catch (err) {
+      console.error('There was an error getting mappings for query', err);
+    }
+  }
+
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient, notifications } = this.props;
-    const { initialValues, executeResponse } = this.state;
+    const { dataTypes, initialValues, executeResponse } = this.state;
+    const isTraditionalMonitor = _.get(monitor, 'monitor_type') === 'traditional_monitor';
+
     return (
       <div style={{ padding: '25px 50px' }}>
         {this.renderSuccessCallOut()}
@@ -203,21 +279,40 @@ export default class CreateTrigger extends Component {
                 <h1>{edit ? 'Edit' : 'Create'} trigger</h1>
               </EuiTitle>
               <EuiSpacer />
-              <FieldArray name={'triggerConditions'} validateOnChange={true}>
-                {(arrayHelpers) => (
-                  <DefineTrigger
-                    arrayHelpers={arrayHelpers}
-                    context={this.getTriggerContext(executeResponse, monitor, values)}
-                    executeResponse={executeResponse}
-                    monitorValues={monitorToFormik(monitor)}
-                    onRun={this.onRunExecute}
-                    setFlyout={setFlyout}
-                    triggers={monitor.triggers}
-                    triggerValues={values}
-                    isDarkMode={this.props.isDarkMode}
-                  />
-                )}
-              </FieldArray>
+              {isTraditionalMonitor ? (
+                <DefineTrigger
+                  context={this.getTriggerContext(executeResponse, monitor, values)}
+                  executeResponse={executeResponse}
+                  monitorValues={monitorToFormik(monitor)}
+                  onRun={this.onRunExecute}
+                  setFlyout={setFlyout}
+                  triggers={monitor.triggers}
+                  triggerValues={values}
+                  isDarkMode={this.props.isDarkMode}
+                />
+              ) : (
+                <FieldArray name={'triggerConditions'} validateOnChange={true}>
+                  {(arrayHelpers) => (
+                    <DefineAggregationTrigger
+                      arrayHelpers={arrayHelpers}
+                      context={this.getTriggerContext(executeResponse, monitor, values)}
+                      executeResponse={executeResponse}
+                      monitor={monitor}
+                      monitorValues={monitorToFormik(monitor)}
+                      onRun={this.onRunExecute}
+                      setFlyout={setFlyout}
+                      triggers={monitor.triggers}
+                      triggerValues={values}
+                      isDarkMode={this.props.isDarkMode}
+                      openedStates={this.state.openedStates}
+                      closeExpression={this.closeExpression}
+                      openExpression={this.openExpression}
+                      onMadeChanges={this.onMadeChanges}
+                      dataTypes={dataTypes}
+                    />
+                  )}
+                </FieldArray>
+              )}
               <EuiSpacer />
               <FieldArray name="actions" validateOnChange={true}>
                 {(arrayHelpers) => (

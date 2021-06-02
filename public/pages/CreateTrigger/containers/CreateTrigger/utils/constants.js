@@ -13,6 +13,8 @@
  *   permissions and limitations under the License.
  */
 
+import { OPERATORS_MAP } from '../../../../CreateMonitor/components/MonitorExpressions/expressions/utils/constants';
+
 export const TRIGGER_TYPE = {
   AD: 'anomaly_detector_trigger',
   ALERT_TRIGGER: 'alerting_trigger',
@@ -32,6 +34,8 @@ export const FORMIK_INITIAL_TRIGGER_CONDITION_VALUES = {
     lang: 'painless',
     source: 'ctx.results[0].hits.total.value > 0',
   },
+  queryMetric: '',
+  andOrCondition: '',
 };
 
 export const FORMIK_INITIAL_TRIGGER_VALUES = {
@@ -52,6 +56,13 @@ export const FORMIK_INITIAL_TRIGGER_VALUES = {
     anomalyGradeThresholdEnum: 'ABOVE',
     anomalyConfidenceThresholdValue: 0.7,
     anomalyConfidenceThresholdEnum: 'ABOVE',
+  },
+  where: {
+    fieldName: [],
+    operator: OPERATORS_MAP.IS,
+    fieldValue: '',
+    fieldRangeStart: 0,
+    fieldRangeEnd: 0,
   },
   actions: undefined,
 };
