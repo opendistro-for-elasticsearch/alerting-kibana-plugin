@@ -107,7 +107,7 @@ export default function MetricPopover(
             onClick={() => {
               arrayHelpers.replace(index, {
                 aggregationType: values.aggregationType,
-                fieldName: values.fieldName,
+                fieldName: values.fieldName[0].label,
               });
               closePopover();
             }}
