@@ -52,11 +52,20 @@ export default class Triggers extends Component {
   onDelete() {
     const { selectedItems } = this.state;
     const { updateMonitor, monitor } = this.props;
+    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
     const triggersToDelete = selectedItems.reduce(
-      (map, item) => ({ ...map, [item.name]: true }),
+      (map, item) => ({
+        ...map,
+        [isAggregationMonitor
+          ? item.aggregation_trigger.name
+          : item.traditional_trigger.name]: true,
+      }),
       {}
     );
-    const shouldKeepTrigger = (trigger) => !triggersToDelete[trigger.name];
+    const shouldKeepTrigger = (trigger) =>
+      !triggersToDelete[
+        isAggregationMonitor ? trigger.aggregation_trigger.name : trigger.traditional_trigger.name
+      ];
     const updatedTriggers = monitor.triggers.filter(shouldKeepTrigger);
     updateMonitor({ triggers: updatedTriggers });
   }
@@ -80,20 +89,22 @@ export default class Triggers extends Component {
 
     const columns = [
       {
-        field: isAggregationMonitor ? 'aggregation_trigger.name' : 'name',
+        field: isAggregationMonitor ? 'aggregation_trigger.name' : 'traditional_trigger.name',
         name: 'Name',
         sortable: true,
         truncateText: true,
       },
       {
-        field: isAggregationMonitor ? 'aggregation_trigger.actions' : 'actions',
+        field: isAggregationMonitor ? 'aggregation_trigger.actions' : 'traditional_trigger.actions',
         name: 'Number of actions',
         sortable: true,
         truncateText: false,
         render: (actions) => actions.length,
       },
       {
-        field: isAggregationMonitor ? 'aggregation_trigger.severity' : 'severity',
+        field: isAggregationMonitor
+          ? 'aggregation_trigger.severity'
+          : 'traditional_trigger.severity',
         name: 'Severity',
         sortable: true,
         truncateText: false,
