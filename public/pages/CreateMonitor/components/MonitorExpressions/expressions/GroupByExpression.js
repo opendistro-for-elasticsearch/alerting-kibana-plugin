@@ -23,6 +23,9 @@ import GroupByItem from './GroupByItem';
 import { GROUP_BY_ERROR } from './utils/constants';
 
 class GroupByExpression extends Component {
+  state = {
+    addButtonTouched: false,
+  };
   renderFieldItems = (arrayHelpers, fieldOptions, expressionWidth) => {
     const {
       formik: { values },
@@ -61,7 +64,12 @@ class GroupByExpression extends Component {
       ) *
         8 +
       60;
-    if (touched.groupBy && !values.groupBy.length) errors.groupBy = GROUP_BY_ERROR;
+    if (
+      (this.state.addButtonTouched || touched.groupBy) &&
+      !values.groupBy.length &&
+      values.monitor_type === 'aggregation_monitor'
+    )
+      errors.groupBy = GROUP_BY_ERROR;
     return (
       <div>
         <EuiText size="xs">
@@ -72,6 +80,7 @@ class GroupByExpression extends Component {
         <EuiButtonEmpty
           size="xs"
           onClick={() => {
+            this.setState({ addButtonTouched: true });
             arrayHelpers.push('');
           }}
           data-test-subj="addGroupByButton"
