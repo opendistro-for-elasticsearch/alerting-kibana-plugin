@@ -181,7 +181,8 @@ export function convertToTriggerCondition(conditionArray, condition) {
     '==': 'EXACTLY',
   };
 
-  const queryMetric = conditionArray[0];
+  // TODO: Removing 'params'
+  const queryMetric = conditionArray[0].replace(/params\./g, '');
   const thresholdEnum = enumOptions[conditionArray[1]];
   const thresholdValue = conditionArray[2];
   const andOrCondition =
@@ -206,7 +207,10 @@ export function segmentArray(scriptSource, segmentSize) {
   const spaceRegex = /\s/;
   const conditions = scriptSource.split(spaceRegex);
   const output = [];
-  for (let i = 0; i < conditions.length; i += segmentSize) {
+  // TODO: Limiting the first segment since it should not include the and/or
+  //  condition but this should be moved elsewhere if segmentArray is to be kept generic
+  if (conditions.length > 0) output.push(conditions.slice(0, segmentSize - 1));
+  for (let i = 3; i < conditions.length; i += segmentSize) {
     const segment = conditions.slice(i, i + segmentSize);
     output.push(segment);
   }
