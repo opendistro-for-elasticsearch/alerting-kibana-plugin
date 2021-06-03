@@ -175,20 +175,34 @@ export function getAggregationTriggerConditions(condition) {
 
 export function convertToTriggerCondition(conditionArray, condition) {
   const { buckets_path, gap_policy, parent_bucket_path, script } = condition;
-  const enumOptions = {
+  // TODO: Should move this to utils somewhere
+  const relationalEnumOptions = {
     '>': 'ABOVE',
     '<': 'BELOW',
     '==': 'EXACTLY',
   };
+  const logicalEnumOptions = {
+    '&&': 'AND',
+    '||': 'OR',
+  };
 
-  // TODO: Removing 'params'
-  const queryMetric = conditionArray[0].replace(/params\./g, '');
-  const thresholdEnum = enumOptions[conditionArray[1]];
-  const thresholdValue = conditionArray[2];
-  const andOrCondition =
-    conditionArray.length === 4
-      ? conditionArray[4]
-      : FORMIK_INITIAL_TRIGGER_CONDITION_VALUES.andOrCondition;
+  let queryMetric;
+  let thresholdEnum;
+  let thresholdValue;
+  let andOrCondition;
+  if (conditionArray.length === 4) {
+    andOrCondition = logicalEnumOptions[conditionArray[0]];
+    // TODO: Removing 'params'
+    queryMetric = conditionArray[1].replace(/params\./g, '');
+    thresholdEnum = relationalEnumOptions[conditionArray[2]];
+    thresholdValue = conditionArray[3];
+  } else {
+    andOrCondition = FORMIK_INITIAL_TRIGGER_CONDITION_VALUES.andOrCondition;
+    // TODO: Removing 'params'
+    queryMetric = conditionArray[0].replace(/params\./g, '');
+    thresholdEnum = relationalEnumOptions[conditionArray[1]];
+    thresholdValue = conditionArray[2];
+  }
 
   return {
     ..._.cloneDeep(FORMIK_INITIAL_TRIGGER_CONDITION_VALUES),
