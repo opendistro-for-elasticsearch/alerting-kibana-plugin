@@ -13,11 +13,23 @@
  *   permissions and limitations under the License.
  */
 
-export const validateTriggerName = (triggers, triggerToEdit) => value => {
+import { FORMIK_INITIAL_TRIGGER_VALUES } from '../../CreateTrigger/utils/constants';
+
+export const validateTriggerName = (triggers, triggerToEdit) => (value) => {
   if (!value) return 'Required';
-  const nameExists = triggers.filter(
-    trigger => triggerToEdit.id !== trigger.id && trigger.name.toLowerCase() === value.toLowerCase()
-  );
+  const nameExists = triggers.filter((trigger) => {
+    const triggerId = _.get(
+      trigger,
+      'aggregation_trigger.id',
+      _.get(trigger, 'traditional_trigger.id')
+    );
+    const triggerName = _.get(
+      trigger,
+      'aggregation_trigger.name',
+      _.get(trigger, `traditional_trigger.name`, FORMIK_INITIAL_TRIGGER_VALUES.name)
+    );
+    return triggerToEdit.id !== triggerId && triggerName.toLowerCase() === value.toLowerCase();
+  });
   if (nameExists.length > 0) {
     return 'Trigger name already used';
   }

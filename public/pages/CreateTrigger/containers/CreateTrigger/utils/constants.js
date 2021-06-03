@@ -34,6 +34,9 @@ export const FORMIK_INITIAL_TRIGGER_CONDITION_VALUES = {
     lang: 'painless',
     source: 'ctx.results[0].hits.total.value > 0',
   },
+  buckets_path: {},
+  parent_bucket_path: 'composite_agg',
+  gap_policy: '',
   queryMetric: '',
   andOrCondition: '',
 };

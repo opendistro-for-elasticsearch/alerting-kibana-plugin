@@ -230,19 +230,20 @@ const DefineAggregationTrigger = ({
         inputProps={selectInputProps}
       />
       {aggregationTriggerContent}
-      <div style={{ paddingLeft: '10px' }}>
-        <AddTriggerButton arrayHelpers={arrayHelpers} />
-        <EuiSpacer />
-        {isGraph
-          ? renderWhereExpression(
-              openedStates,
-              closeExpression,
-              openExpression,
-              onMadeChanges,
-              dataTypes
-            )
-          : null}
-      </div>
+      {isGraph ? (
+        <div style={{ paddingLeft: '10px' }}>
+          <AddTriggerButton arrayHelpers={arrayHelpers} />
+          {/*<EuiSpacer />*/}
+          {/*// TODO: Implement WHERE filter logic*/}
+          {/*{renderWhereExpression(*/}
+          {/*    openedStates,*/}
+          {/*    closeExpression,*/}
+          {/*    openExpression,*/}
+          {/*    onMadeChanges,*/}
+          {/*    dataTypes*/}
+          {/*)}*/}
+        </div>
+      ) : null}
     </ContentPanel>
   );
 };
