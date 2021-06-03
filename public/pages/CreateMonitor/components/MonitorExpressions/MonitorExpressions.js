@@ -74,7 +74,7 @@ export default class MonitorExpressions extends Component {
   });
 
   render() {
-    const { dataTypes, ofEnabled } = this.props;
+    const { dataTypes, errors, touched } = this.props;
     return (
       <div>
         <FieldArray name="aggregations" validateOnChange={false}>
@@ -95,6 +95,8 @@ export default class MonitorExpressions extends Component {
           {(arrayHelpers) => (
             <GroupByExpression
               {...this.getExpressionProps()}
+              errors={errors}
+              touched={touched}
               arrayHelpers={arrayHelpers}
               dataTypes={dataTypes}
             />

@@ -34,6 +34,7 @@ export default function GroupByPopover(
   const onChangeFieldWrapper = (options, field, form) => {
     onMadeChanges();
     form.setFieldValue('groupByField', options);
+    form.setFieldError('groupBy', undefined);
   };
 
   return (

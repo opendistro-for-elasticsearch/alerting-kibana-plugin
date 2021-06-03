@@ -20,6 +20,7 @@ import { EuiText, EuiButtonEmpty, EuiSpacer } from '@elastic/eui';
 import { getIndexFields } from './utils/dataTypes';
 import { getGroupByExpressionAllowedTypes } from './utils/helpers';
 import GroupByItem from './GroupByItem';
+import { GROUP_BY_ERROR } from './utils/constants';
 
 class GroupByExpression extends Component {
   renderFieldItems = (arrayHelpers, fieldOptions, expressionWidth) => {
@@ -45,6 +46,8 @@ class GroupByExpression extends Component {
   render() {
     const {
       formik: { values },
+      errors,
+      touched,
       arrayHelpers,
       dataTypes,
     } = this.props;
@@ -58,6 +61,7 @@ class GroupByExpression extends Component {
       ) *
         8 +
       60;
+    if (touched.groupBy && !values.groupBy.length) errors.groupBy = GROUP_BY_ERROR;
     return (
       <div>
         <EuiText size="xs">
@@ -74,6 +78,9 @@ class GroupByExpression extends Component {
         >
           + Add another group by
         </EuiButtonEmpty>
+        <EuiText color="danger" size="xs">
+          {errors.groupBy}
+        </EuiText>
       </div>
     );
   }
