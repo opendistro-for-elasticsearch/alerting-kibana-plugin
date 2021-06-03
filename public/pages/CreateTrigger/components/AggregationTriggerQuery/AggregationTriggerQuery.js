@@ -56,7 +56,7 @@ const AggregationTriggerQuery = ({
 }) => {
   const trigger = { ...formikToTrigger(triggerValues), actions: [] };
   const formattedResponse = JSON.stringify(response, null, 4);
-  const fieldName = index === null ? 'script.source' : `triggerConditions[${index}].script.source`;
+  const fieldName = 'bucketSelector';
   return (
     <div style={{ padding: '0px 10px', marginTop: '0px' }}>
       <EuiFlexGroup direction="column">
@@ -77,7 +77,7 @@ const AggregationTriggerQuery = ({
               <EuiFormRow
                 label={
                   <div>
-                    <span>Trigger condition</span>
+                    <span>Bucket selector</span>
                     <EuiButtonEmpty
                       size="s"
                       onClick={() => {
@@ -107,27 +107,28 @@ const AggregationTriggerQuery = ({
             )}
           </Field>
         </EuiFlexItem>
-        <EuiFlexItem grow={false}>
-          <EuiFormRow label="Trigger condition response:" fullWidth>
-            <EuiCodeEditor
-              mode="plain_text"
-              theme={isDarkMode ? 'sense-dark' : 'github'}
-              width="100%"
-              height="200px"
-              value={getExecuteMessage(executeResponse)}
-              readOnly
-            />
-          </EuiFormRow>
-        </EuiFlexItem>
+        {/*<EuiFlexItem grow={false}>*/}
+        {/*  <EuiFormRow label="Trigger condition response:" fullWidth>*/}
+        {/*    <EuiCodeEditor*/}
+        {/*      mode="plain_text"*/}
+        {/*      theme={isDarkMode ? 'sense-dark' : 'github'}*/}
+        {/*      width="100%"*/}
+        {/*      height="200px"*/}
+        {/*      value={getExecuteMessage(executeResponse)}*/}
+        {/*      readOnly*/}
+        {/*    />*/}
+        {/*  </EuiFormRow>*/}
+        {/*</EuiFlexItem>*/}
       </EuiFlexGroup>
 
-      <EuiSpacer size="s" />
+      {/*// TODO: Reimplement Run button once backend logic is supported.*/}
+      {/*<EuiSpacer size="s" />*/}
 
-      <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
-        <EuiFlexItem grow={false}>
-          <EuiButton onClick={() => onRun([trigger])}>Run</EuiButton>
-        </EuiFlexItem>
-      </EuiFlexGroup>
+      {/*<EuiFlexGroup justifyContent="spaceBetween" alignItems="center">*/}
+      {/*  <EuiFlexItem grow={false}>*/}
+      {/*    <EuiButton onClick={() => onRun([trigger])}>Run</EuiButton>*/}
+      {/*  </EuiFlexItem>*/}
+      {/*</EuiFlexGroup>*/}
     </div>
   );
 };
