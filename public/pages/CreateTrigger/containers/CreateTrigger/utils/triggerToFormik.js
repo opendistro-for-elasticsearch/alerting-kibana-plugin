@@ -175,19 +175,34 @@ export function getAggregationTriggerConditions(condition) {
 
 export function convertToTriggerCondition(conditionArray, condition) {
   const { buckets_path, gap_policy, parent_bucket_path, script } = condition;
-  const enumOptions = {
+  // TODO: Should move this to utils somewhere
+  const relationalEnumOptions = {
     '>': 'ABOVE',
     '<': 'BELOW',
     '==': 'EXACTLY',
   };
+  const logicalEnumOptions = {
+    '&&': 'AND',
+    '||': 'OR',
+  };
 
-  const queryMetric = conditionArray[0];
-  const thresholdEnum = enumOptions[conditionArray[1]];
-  const thresholdValue = conditionArray[2];
-  const andOrCondition =
-    conditionArray.length === 4
-      ? conditionArray[4]
-      : FORMIK_INITIAL_TRIGGER_CONDITION_VALUES.andOrCondition;
+  let queryMetric;
+  let thresholdEnum;
+  let thresholdValue;
+  let andOrCondition;
+  if (conditionArray.length === 4) {
+    andOrCondition = logicalEnumOptions[conditionArray[0]];
+    // TODO: Removing 'params'
+    queryMetric = conditionArray[1].replace(/params\./g, '');
+    thresholdEnum = relationalEnumOptions[conditionArray[2]];
+    thresholdValue = conditionArray[3];
+  } else {
+    andOrCondition = FORMIK_INITIAL_TRIGGER_CONDITION_VALUES.andOrCondition;
+    // TODO: Removing 'params'
+    queryMetric = conditionArray[0].replace(/params\./g, '');
+    thresholdEnum = relationalEnumOptions[conditionArray[1]];
+    thresholdValue = conditionArray[2];
+  }
 
   return {
     ..._.cloneDeep(FORMIK_INITIAL_TRIGGER_CONDITION_VALUES),
@@ -206,7 +221,10 @@ export function segmentArray(scriptSource, segmentSize) {
   const spaceRegex = /\s/;
   const conditions = scriptSource.split(spaceRegex);
   const output = [];
-  for (let i = 0; i < conditions.length; i += segmentSize) {
+  // TODO: Limiting the first segment since it should not include the and/or
+  //  condition but this should be moved elsewhere if segmentArray is to be kept generic
+  if (conditions.length > 0) output.push(conditions.slice(0, segmentSize - 1));
+  for (let i = 3; i < conditions.length; i += segmentSize) {
     const segment = conditions.slice(i, i + segmentSize);
     output.push(segment);
   }

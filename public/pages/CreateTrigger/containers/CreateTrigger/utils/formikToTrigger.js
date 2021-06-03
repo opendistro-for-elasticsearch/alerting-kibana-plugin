@@ -38,6 +38,8 @@ export function formikToTrigger(values, monitorUiMetadata = {}) {
 export function formikToTraditionalTrigger(values, monitorUiMetadata) {
   const condition = formikToCondition(values, monitorUiMetadata);
   const actions = formikToAction(values);
+  // TODO: We probably also want to wrap this with 'traditional_trigger' after
+  //  confirming what will break in the frontend (when accessing the fields)
   return {
     id: values.id,
     name: values.name,

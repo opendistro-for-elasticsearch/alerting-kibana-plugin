@@ -56,9 +56,7 @@ export default class Triggers extends Component {
     const triggersToDelete = selectedItems.reduce(
       (map, item) => ({
         ...map,
-        [isAggregationMonitor
-          ? item.aggregation_trigger.name
-          : item.traditional_trigger.name]: true,
+        [item.name]: true,
       }),
       {}
     );
@@ -71,7 +69,17 @@ export default class Triggers extends Component {
   }
 
   onEdit() {
-    this.props.onEditTrigger(this.state.selectedItems[0]);
+    // TODO: Rewrapping the Trigger onEdit to avoid complicating triggerToFormik for now
+    const { monitor } = this.props;
+    const selectedTrigger = this.state.selectedItems[0];
+    const triggerType =
+      monitor.monitor_type === 'aggregation_monitor'
+        ? 'aggregation_trigger'
+        : 'traditional_trigger';
+    const wrappedTrigger = {
+      [triggerType]: selectedTrigger,
+    };
+    this.props.onEditTrigger(wrappedTrigger);
   }
 
   onSelectionChange(selectedItems) {
@@ -82,29 +90,39 @@ export default class Triggers extends Component {
     this.setState({ field, direction });
   }
 
+  // TODO: For now, unwrapping all the Triggers since it's conflicting with the table
+  //   retrieving the 'id' and causing it to behave strangely
+  getUnwrappedTriggers(monitor) {
+    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
+    return isAggregationMonitor
+      ? monitor.triggers.map((trigger) => {
+          return trigger.aggregation_trigger;
+        })
+      : monitor.triggers.map((trigger) => {
+          return trigger.traditional_trigger;
+        });
+  }
+
   render() {
     const { direction, field, selectedItems, tableKey } = this.state;
     const { monitor, onCreateTrigger } = this.props;
-    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
 
     const columns = [
       {
-        field: isAggregationMonitor ? 'aggregation_trigger.name' : 'traditional_trigger.name',
+        field: 'name',
         name: 'Name',
         sortable: true,
         truncateText: true,
       },
       {
-        field: isAggregationMonitor ? 'aggregation_trigger.actions' : 'traditional_trigger.actions',
+        field: 'actions',
         name: 'Number of actions',
         sortable: true,
         truncateText: false,
         render: (actions) => actions.length,
       },
       {
-        field: isAggregationMonitor
-          ? 'aggregation_trigger.severity'
-          : 'traditional_trigger.severity',
+        field: 'severity',
         name: 'Severity',
         sortable: true,
         truncateText: false,
@@ -137,7 +155,7 @@ export default class Triggers extends Component {
         ]}
       >
         <EuiInMemoryTable
-          items={monitor.triggers}
+          items={this.getUnwrappedTriggers(monitor)}
           itemId="id"
           key={tableKey}
           columns={columns}

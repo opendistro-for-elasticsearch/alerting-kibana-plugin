@@ -137,7 +137,7 @@ export default class CreateMonitor extends Component {
     return (
       <div style={{ padding: '25px 50px' }}>
         <Formik initialValues={initialValues} onSubmit={this.onSubmit} validateOnChange={false}>
-          {({ values, errors, handleSubmit, isSubmitting, isValid }) => (
+          {({ values, errors, handleSubmit, isSubmitting, isValid, touched }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
@@ -172,6 +172,7 @@ export default class CreateMonitor extends Component {
               <DefineMonitor
                 values={values}
                 errors={errors}
+                touched={touched}
                 httpClient={httpClient}
                 detectorId={this.props.detectorId}
                 notifications={notifications}

@@ -49,6 +49,7 @@ const propTypes = {
   values: PropTypes.object.isRequired,
   httpClient: PropTypes.object.isRequired,
   errors: PropTypes.object,
+  touched: PropTypes.object,
   notifications: PropTypes.object.isRequired,
 };
 const defaultProps = {
@@ -139,7 +140,7 @@ class DefineMonitor extends Component {
   }
 
   renderGraph() {
-    const { errors } = this.props;
+    const { errors, touched } = this.props;
     return (
       <Fragment>
         {/*<EuiText size="xs">*/}
@@ -147,6 +148,8 @@ class DefineMonitor extends Component {
         {/*</EuiText>*/}
         <EuiSpacer size="s" />
         <MonitorExpressions
+          errors={errors}
+          touched={touched}
           onRunQuery={this.onRunQuery}
           dataTypes={this.state.dataTypes}
           ofEnabled={this.props.values.aggregationType !== 'count'}

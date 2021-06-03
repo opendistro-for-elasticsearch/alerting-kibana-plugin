@@ -34,6 +34,7 @@ export default function GroupByPopover(
   const onChangeFieldWrapper = (options, field, form) => {
     onMadeChanges();
     form.setFieldValue('groupByField', options);
+    form.setFieldError('groupBy', undefined);
   };
 
   return (
@@ -81,7 +82,8 @@ export default function GroupByPopover(
           <EuiButton
             fill
             onClick={() => {
-              arrayHelpers.replace(index, values.groupByField[0].label);
+              if (values.groupByField[0].label === '') arrayHelpers.remove(index);
+              else arrayHelpers.replace(index, values.groupByField[0].label);
               closePopover();
             }}
           >
