@@ -77,7 +77,7 @@ const AggregationTriggerQuery = ({
               <EuiFormRow
                 label={
                   <div>
-                    <span>Bucket selector</span>
+                    <span>Trigger condition</span>
                     <EuiButtonEmpty
                       size="s"
                       onClick={() => {
