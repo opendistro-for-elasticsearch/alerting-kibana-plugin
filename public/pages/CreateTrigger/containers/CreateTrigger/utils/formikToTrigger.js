@@ -46,7 +46,6 @@ export function formikToTraditionalTrigger(values, monitorUiMetadata) {
     name: values.name,
     severity: values.severity,
     condition,
-    triggerConditions: values.triggerConditions,
     actions: actions,
     min_time_between_executions: values.minTimeBetweenExecutions,
     rolling_window_size: values.rollingWindowSize,
