@@ -32,7 +32,7 @@ const Action = ({
   sendTestMessage,
   setFlyout,
 }) => {
-  const selectedDestination = destinations.filter(item => item.value === action.destination_id);
+  const selectedDestination = destinations.filter((item) => item.value === action.destination_id);
   const type = _.get(selectedDestination, '0.type', DEFAULT_ACTION_TYPE);
   const { name } = action;
   const ActionComponent = ActionsMap[type].component;
@@ -58,7 +58,7 @@ const Action = ({
         <FormikFieldText
           name={`actions.${index}.name`}
           formRow
-          fieldProps={{ validate: validateActionName(context.ctx.trigger) }}
+          fieldProps={{ validate: validateActionName(context.ctx.monitor, context.ctx.trigger) }}
           rowProps={{
             label: 'Action name',
             helpText: 'Names can only contain letters, numbers, and special characters',
@@ -80,7 +80,7 @@ const Action = ({
             placeholder: 'Select a destination',
             options: destinations,
             selectedOptions: selectedDestination,
-            onChange: options => {
+            onChange: (options) => {
               // Just a swap correct fields.
               arrayHelpers.replace(index, {
                 ...action,

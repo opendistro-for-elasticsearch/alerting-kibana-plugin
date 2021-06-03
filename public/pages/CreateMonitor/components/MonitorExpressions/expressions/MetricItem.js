@@ -24,13 +24,14 @@ export default function MetricItem(
   const [isPopoverOpen, setIsPopoverOpen] = useState(aggregation.fieldName === '');
   const closePopover = () => setIsPopoverOpen(false);
 
+  // TODO: Commenting this out for now since the 'count_of_all_documents` metric is malformed
   //The first metric is read only
-  if (index == 0)
-    return (
-      <EuiBadge>
-        {aggregation.aggregationType} of {aggregation.fieldName}
-      </EuiBadge>
-    );
+  // if (index == 0)
+  //   return (
+  //     <EuiBadge>
+  //       {aggregation.aggregationType} of {aggregation.fieldName}
+  //     </EuiBadge>
+  //   );
 
   return (
     <EuiPopover

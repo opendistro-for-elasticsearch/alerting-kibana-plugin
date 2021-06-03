@@ -251,7 +251,10 @@ export function formikToCompositeAggregation(values) {
 
   let aggs = {};
   aggregations.map((aggItem) => {
-    const name = `${aggItem.aggregationType}_${aggItem.fieldName}`;
+    // TODO: Changing any occurrence of '.' in the fieldName to '_' since the
+    //  bucketSelector uses the '.' syntax to resolve aggregation paths.
+    //  Should revisit this as replacing with `_` could cause collisions with fields named like that.
+    const name = `${aggItem.aggregationType}_${aggItem.fieldName.replace(/\./g, '_')}`;
     const type = aggItem.aggregationType === 'count' ? 'value_count' : aggItem.aggregationType;
     aggs[name] = {
       [type]: { field: aggItem.fieldName },
