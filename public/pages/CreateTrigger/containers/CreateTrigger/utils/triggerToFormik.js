@@ -106,6 +106,7 @@ export function aggregationTriggerToFormik(trigger, monitor) {
     rolling_window_size: rollingWindowSize,
   } = trigger.aggregation_trigger;
 
+  const bucketSelector = JSON.stringify(condition, null, 4);
   const triggerConditions = getAggregationTriggerConditions(condition);
 
   const thresholdEnum = _.get(
@@ -145,6 +146,7 @@ export function aggregationTriggerToFormik(trigger, monitor) {
     name,
     severity,
     script,
+    bucketSelector,
     actions,
     triggerConditions,
     minTimeBetweenExecutions,

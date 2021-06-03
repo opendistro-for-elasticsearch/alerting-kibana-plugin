@@ -20,6 +20,16 @@ export const TRIGGER_TYPE = {
   ALERT_TRIGGER: 'alerting_trigger',
 };
 
+export const FORMIK_INITIAL_BUCKET_SELECTOR_VALUES = {
+  buckets_path: {
+    '': '',
+  },
+  parent_bucket_path: 'composite_agg',
+  script: {
+    source: 'params.',
+  },
+};
+
 export const FORMIK_INITIAL_TRIGGER_CONDITION_VALUES = {
   thresholdValue: 10000,
   thresholdEnum: 'ABOVE',
@@ -50,7 +60,7 @@ export const FORMIK_INITIAL_TRIGGER_VALUES = {
     lang: 'painless',
     source: `ctx.results[0].hits.total.value > 0`,
   },
-  bucketSelector: undefined, // TODO: To be used for Aggregation Triggers defined by query
+  bucketSelector: JSON.stringify(FORMIK_INITIAL_BUCKET_SELECTOR_VALUES, null, 4), // TODO: To be used for Aggregation Triggers defined by query
   triggerConditions: [],
   thresholdValue: 10000,
   thresholdEnum: 'ABOVE',

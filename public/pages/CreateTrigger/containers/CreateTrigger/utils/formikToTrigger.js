@@ -21,6 +21,7 @@ import {
   ANOMALY_GRADE_RESULT_PATH,
   ANOMALY_CONFIDENCE_RESULT_PATH,
   NOT_EMPTY_RESULT,
+  FORMIK_INITIAL_TRIGGER_VALUES,
 } from './constants';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
@@ -45,7 +46,6 @@ export function formikToTraditionalTrigger(values, monitorUiMetadata) {
     name: values.name,
     severity: values.severity,
     condition,
-    triggerConditions: values.triggerConditions,
     actions: actions,
     min_time_between_executions: values.minTimeBetweenExecutions,
     rolling_window_size: values.rollingWindowSize,
@@ -115,7 +115,10 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
 
 export function formikToAggregationTriggerCondition(values, monitorUiMetadata = {}) {
   const searchType = _.get(monitorUiMetadata, 'search.searchType', SEARCH_TYPE.QUERY);
-  if (searchType === SEARCH_TYPE.QUERY) return values.bucketSelector;
+  const bucketSelector = JSON.parse(
+    _.get(values, 'bucketSelector', FORMIK_INITIAL_TRIGGER_VALUES.bucketSelector)
+  );
+  if (searchType === SEARCH_TYPE.QUERY) return bucketSelector;
   if (searchType === SEARCH_TYPE.GRAPH) return getAggregationTriggerCondition(values);
 }
 
