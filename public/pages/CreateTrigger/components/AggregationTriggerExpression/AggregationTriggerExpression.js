@@ -164,11 +164,7 @@ class AggregationTriggerExpression extends Component {
                 <div>
                   {index > 0 ? (
                     <EuiExpression
-                      description={`${
-                        _.isEmpty(andOrCondition)
-                          ? AND_OR_CONDITION_OPTIONS[0].text
-                          : andOrCondition
-                      }`}
+                      description={andOrCondition}
                       value={''}
                       isActive={openedStates.THRESHOLD}
                       onClick={() => this.openExpression(Expressions.THRESHOLD)}
@@ -176,9 +172,7 @@ class AggregationTriggerExpression extends Component {
                   ) : null}
                   <EuiExpression
                     description={'WHEN '}
-                    value={`${
-                      _.isEmpty(queryMetric) ? _.get(queryMetrics[0], 'text', '-') : queryMetric
-                    }`}
+                    value={`${queryMetric.toLocaleString()}`}
                     isActive={openedStates.THRESHOLD}
                     onClick={() => this.openExpression(Expressions.THRESHOLD)}
                   />
