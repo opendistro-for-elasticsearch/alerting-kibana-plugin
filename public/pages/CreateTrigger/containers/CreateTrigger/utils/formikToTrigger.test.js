@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -74,6 +74,13 @@ describe('formikToCondition', () => {
   test('can return condition when searchType is query', () => {
     const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(formikToCondition(formikValues, { search: { searchType: 'query' } })).toEqual({
+      script: formikValues.script,
+    });
+  });
+
+  test('can return condition when searchType is localUri', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
+    expect(formikToCondition(formikValues, { search: { searchType: 'localUri' } })).toEqual({
       script: formikValues.script,
     });
   });

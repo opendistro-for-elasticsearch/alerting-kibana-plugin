@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -20,6 +20,12 @@ import { ES_AD_PLUGIN } from '../../../../utils/constants';
 const defaultSelectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
+  { value: 'localUri', text: 'Define using Local URI endpoint' },
+];
+
+const aggregationMonitorDefinitions = [
+  { value: 'graph', text: 'Define using visual graph' },
+  { value: 'query', text: 'Define using extraction query' },
 ];
 
 const onChangeDefinition = (e, form, resetResponse) => {
@@ -28,13 +34,16 @@ const onChangeDefinition = (e, form, resetResponse) => {
   form.setFieldValue('searchType', type);
 };
 
-const selectDefinitions = (plugins) => {
+const selectDefinitions = (plugins, isAggregationMonitor) => {
+  const definitionOptions = isAggregationMonitor
+    ? aggregationMonitorDefinitions
+    : defaultSelectDefinitions;
   return plugins === undefined || plugins.indexOf(ES_AD_PLUGIN) == -1
-    ? defaultSelectDefinitions
-    : [...defaultSelectDefinitions, { value: 'ad', text: 'Define using anomaly detector' }];
+    ? definitionOptions
+    : [...definitionOptions, { value: 'ad', text: 'Define using anomaly detector' }];
 };
 
-const MonitorDefinition = ({ resetResponse, plugins }) => (
+const MonitorDefinition = ({ resetResponse, plugins, isAggregationMonitor }) => (
   <FormikSelect
     name="searchType"
     formRow
@@ -43,7 +52,7 @@ const MonitorDefinition = ({ resetResponse, plugins }) => (
       style: { paddingLeft: '10px' },
     }}
     inputProps={{
-      options: selectDefinitions(plugins),
+      options: selectDefinitions(plugins, isAggregationMonitor),
       onChange: (e, field, form) => {
         onChangeDefinition(e, form, resetResponse);
       },

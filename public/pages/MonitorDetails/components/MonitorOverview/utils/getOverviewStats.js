@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -27,8 +27,24 @@ function getTime(time) {
   return DEFAULT_EMPTY_DATA;
 }
 
+function getMonitorType(searchType) {
+  switch (searchType) {
+    case SEARCH_TYPE.GRAPH:
+      return 'Visual Graph';
+    case SEARCH_TYPE.AD:
+      return 'Anomaly Detector';
+    case SEARCH_TYPE.LOCAL_URI:
+      return 'Local URI';
+    default:
+      return 'Extraction Query';
+  }
+}
+
 export default function getOverviewStats(monitor, monitorId, monitorVersion, activeCount) {
-  const searchType = _.get(monitor, 'ui_metadata.search.searchType', 'query');
+  let searchType = _.get(monitor, 'ui_metadata.search.searchType', 'query');
+  if (_.has(monitor, 'inputs[0].uri')) {
+    searchType = SEARCH_TYPE.LOCAL_URI;
+  }
   return [
     {
       header: 'State',
@@ -36,7 +52,7 @@ export default function getOverviewStats(monitor, monitorId, monitorVersion, act
     },
     {
       header: 'Monitor definition type',
-      value: searchType === SEARCH_TYPE.QUERY ? 'Extraction Query' : 'Visual graph',
+      value: getMonitorType(searchType),
     },
     {
       header: 'Total active alerts',

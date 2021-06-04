@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -105,8 +105,10 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
   const searchType = _.get(monitorUiMetadata, 'search.searchType', 'query');
   const aggregationType = _.get(monitorUiMetadata, 'search.aggregationType', 'count');
 
-  if (searchType === SEARCH_TYPE.QUERY) return { script: values.script };
+  if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.LOCAL_URI)
+    return { script: values.script };
   if (searchType === SEARCH_TYPE.AD) return getADCondition(values);
+
   const isCount = aggregationType === 'count';
   const resultsPath = getResultsPath(isCount);
   const operator = getRelationalOperator(thresholdEnum);
