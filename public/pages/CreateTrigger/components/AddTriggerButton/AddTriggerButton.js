@@ -18,10 +18,11 @@ import _ from 'lodash';
 import { EuiButton } from '@elastic/eui';
 import { FORMIK_INITIAL_TRIGGER_CONDITION_VALUES } from '../../containers/CreateTrigger/utils/constants';
 
-const AddTriggerButton = ({ arrayHelpers }) => (
+const AddTriggerButton = ({ arrayHelpers, disabled }) => (
   <EuiButton
     fill
     onClick={() => arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_TRIGGER_CONDITION_VALUES))}
+    disabled={disabled}
   >
     + Add condition
   </EuiButton>

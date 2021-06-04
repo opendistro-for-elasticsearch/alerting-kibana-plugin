@@ -37,6 +37,7 @@ const defaultRowProps = {
   isInvalid,
   error: hasError,
 };
+
 const defaultInputProps = { isInvalid };
 
 const selectFieldProps = {
@@ -74,6 +75,10 @@ const propTypes = {
   triggerValues: PropTypes.object.isRequired,
   isDarkMode: PropTypes.bool.isRequired,
 };
+
+const MAX_TRIGGER_CONDITIONS = 5;
+
+const MAX_WHERE_FILTERS = 1;
 
 const renderWhereExpression = (
   openedStates,
@@ -232,7 +237,10 @@ const DefineAggregationTrigger = ({
       {aggregationTriggerContent}
       {isGraph ? (
         <div style={{ paddingLeft: '10px' }}>
-          <AddTriggerButton arrayHelpers={arrayHelpers} />
+          <AddTriggerButton
+            arrayHelpers={arrayHelpers}
+            disabled={triggerValues.triggerConditions.length >= MAX_TRIGGER_CONDITIONS}
+          />
           {/*<EuiSpacer />*/}
           {/*// TODO: Implement WHERE filter logic*/}
           {/*{renderWhereExpression(*/}

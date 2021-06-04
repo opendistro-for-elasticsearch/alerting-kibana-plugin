@@ -109,15 +109,25 @@ export default class CreateTrigger extends Component {
 
   onEdit = (trigger, triggerMetadata, { setSubmitting, setErrors }) => {
     const { monitor, updateMonitor, onCloseTrigger, triggerToEdit } = this.props;
-    const { ui_metadata: uiMetadata = {}, triggers } = monitor;
-    const { name } = triggerToEdit;
+    const { ui_metadata: uiMetadata = {}, triggers, monitor_type } = monitor;
+    const { name } =
+      monitor_type === 'traditional_monitor'
+        ? triggerToEdit.traditional_trigger
+        : triggerToEdit.aggregation_trigger;
     const updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
     delete updatedTriggersMetadata[name];
     const updatedUiMetadata = {
       ...uiMetadata,
       triggers: { ...updatedTriggersMetadata, ...triggerMetadata },
     };
-    const indexToUpdate = _.findIndex(triggers, { name });
+
+    const findTriggerName = (element) => {
+      return monitor_type === 'traditional_monitor'
+        ? name === element.traditional_trigger.name
+        : name === element.aggregation_trigger.name;
+    };
+
+    const indexToUpdate = _.findIndex(triggers, findTriggerName);
     const updatedTriggers = triggers.slice();
     updatedTriggers.splice(indexToUpdate, 1, trigger);
     const actionKeywords = ['update', 'trigger'];
