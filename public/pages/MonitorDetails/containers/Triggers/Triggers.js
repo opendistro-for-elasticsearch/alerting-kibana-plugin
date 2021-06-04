@@ -60,8 +60,11 @@ export default class Triggers extends Component {
       }),
       {}
     );
-    const shouldKeepTrigger = (trigger) => !triggersToDelete[trigger.name];
-    const updatedTriggers = this.getUnwrappedTriggers(monitor).filter(shouldKeepTrigger);
+    const shouldKeepTrigger = (trigger) =>
+      !triggersToDelete[
+        isAggregationMonitor ? trigger.aggregation_trigger.name : trigger.traditional_trigger.name
+      ];
+    const updatedTriggers = monitor.triggers.filter(shouldKeepTrigger);
     updateMonitor({ triggers: updatedTriggers });
   }
 

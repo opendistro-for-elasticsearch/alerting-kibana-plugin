@@ -25,16 +25,15 @@ export const hasError = (name, form) => _.get(form.errors, name);
 
 export const validateActionName = (monitor, trigger) => (value) => {
   if (!value) return 'Required';
-  // TODO: Ensure that GetMonitor is being used to retrieve Monitor contents
-  //  since that will ensure that trigger_type is wrapping the inner contents.
-  //  Can also clean this up later since a similar check is done in several places.
-  // let actions;
-  // if (monitor.monitor_type === 'traditional_monitor') {
-  //   actions = _.get(trigger, 'traditional_trigger.actions');
-  // } else if (monitor.monitor_type === 'aggregation_monitor') {
-  //   actions = _.get(trigger, 'aggregation_trigger.actions');
-  // }
-  const actions = _.get(trigger, 'actions');
+  // GetMonitor is being used to retrieve the Trigger which means it will always
+  // be wrapped in Trigger type (even for old Monitors)
+  //  TODO: Should clean this up later since a similar check is done in several places.
+  let actions;
+  if (monitor.monitor_type === 'traditional_monitor') {
+    actions = _.get(trigger, 'traditional_trigger.actions');
+  } else if (monitor.monitor_type === 'aggregation_monitor') {
+    actions = _.get(trigger, 'aggregation_trigger.actions');
+  }
   const matches = actions.filter((action) => action.name === value);
   if (matches.length > 1) return 'Action name is already used';
 };
