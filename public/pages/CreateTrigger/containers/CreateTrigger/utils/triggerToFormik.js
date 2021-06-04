@@ -220,8 +220,7 @@ export function convertToTriggerCondition(conditionArray, condition) {
 }
 
 export function segmentArray(scriptSource, segmentSize) {
-  const spaceRegex = /\s/;
-  const conditions = scriptSource.split(spaceRegex);
+  const conditions = scriptSource.split(/\s/);
   const output = [];
   // TODO: Limiting the first segment since it should not include the and/or
   //  condition but this should be moved elsewhere if segmentArray is to be kept generic
