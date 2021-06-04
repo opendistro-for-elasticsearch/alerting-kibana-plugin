@@ -152,7 +152,8 @@ export default class CreateTrigger extends Component {
     _.set(monitorToExecute, 'triggers', triggers);
 
     switch (searchType) {
-      case SEARCH_TYPE.QUERY || SEARCH_TYPE.GRAPH:
+      case SEARCH_TYPE.QUERY:
+      case SEARCH_TYPE.GRAPH:
         const searchRequest = buildSearchRequest(formikValues);
         _.set(monitorToExecute, 'inputs[0].search', searchRequest);
         break;
