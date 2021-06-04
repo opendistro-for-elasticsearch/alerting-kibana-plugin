@@ -18,7 +18,7 @@ import FormikSelect from '../../../../components/FormControls/FormikSelect/Formi
 
 const defaultSelectDefinitions = [
   { value: 'traditional_monitor', text: 'Define a traditional monitor' },
-  { value: 'aggregation_monitor', text: 'Define a aggregation monitor' },
+  { value: 'aggregation_monitor', text: 'Define an aggregation monitor' },
 ];
 
 const onChangeDefinition = (e, form, resetResponse) => {

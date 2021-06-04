@@ -52,11 +52,10 @@ const TriggerQuery = ({
   triggerValues,
   setFlyout,
   isDarkMode,
-  index,
 }) => {
   const trigger = { ...formikToTrigger(triggerValues), actions: [] };
   const formattedResponse = JSON.stringify(response, null, 4);
-  const fieldName = index === null ? 'script.source' : `triggerConditions[${index}].script.source`;
+  const fieldName = 'script.source';
   return (
     <div style={{ padding: '0px 10px', marginTop: '0px' }}>
       <EuiFlexGroup direction="column">

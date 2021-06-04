@@ -33,31 +33,8 @@ export default function monitorToFormik(monitor) {
   // In that case we don't want to guess on the UI what selections a user made, so we will default to just showing the extraction query
   let { searchType = 'query', fieldName } = search;
   if (_.isEmpty(search) && 'uri' in inputs[0]) searchType = SEARCH_TYPE.LOCAL_URI;
-
-  function inputsToFormik() {
-    if (searchType === SEARCH_TYPE.LOCAL_URI) {
-      return {
-        uri: inputs[0].uri,
-      };
-    } else {
-      const {
-        search: { indices, query },
-      } = inputs[0];
-      if (searchType === SEARCH_TYPE.AD) {
-        return {
-          detectorId: _.get(inputs, INPUTS_DETECTOR_ID),
-          index: indices.map((index) => ({ label: index })),
-          query: JSON.stringify(query, null, 4),
-        };
-      } else {
-        // when searchType is Query or Graph
-        return {
-          index: indices.map((index) => ({ label: index })),
-          query: JSON.stringify(query, null, 4),
-        };
-      }
-    }
-  }
+  const isAD = searchType === SEARCH_TYPE.AD;
+  const isLocalUri = searchType === SEARCH_TYPE.LOCAL_URI;
 
   return {
     /* INITIALIZE WITH DEFAULTS */
@@ -79,8 +56,8 @@ export default function monitorToFormik(monitor) {
     timezone: timezone ? [{ label: timezone }] : [],
 
     detectorId: isAD ? _.get(inputs, INPUTS_DETECTOR_ID) : undefined,
-    index: inputs[0].search.indices.map((index) => ({ label: index })),
-    query: JSON.stringify(inputs[0].search.query, null, 4),
-    ...inputsToFormik(),
+    index: !isLocalUri ? inputs[0].search.indices.map((index) => ({ label: index })) : undefined,
+    query: !isLocalUri ? JSON.stringify(inputs[0].search.query, null, 4) : undefined,
+    uri: isLocalUri ? inputs[0].uri : undefined,
   };
 }

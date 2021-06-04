@@ -141,13 +141,17 @@ export default class CreateTrigger extends Component {
     const monitorToExecute = _.cloneDeep(monitor);
     _.set(monitorToExecute, 'triggers', triggers);
 
-    if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH) {
-      const searchRequest = buildSearchRequest(formikValues);
-      _.set(monitorToExecute, 'inputs[0].search', searchRequest);
-    }
-    if (searchType === SEARCH_TYPE.LOCAL_URI) {
-      const localUriRequest = buildLocalUriRequest(formikValues);
-      _.set(monitorToExecute, 'inputs[0].uri', localUriRequest);
+    switch (searchType) {
+      case SEARCH_TYPE.QUERY || SEARCH_TYPE.GRAPH:
+        const searchRequest = buildSearchRequest(formikValues);
+        _.set(monitorToExecute, 'inputs[0].search', searchRequest);
+        break;
+      case SEARCH_TYPE.LOCAL_URI:
+        const localUriRequest = buildLocalUriRequest(formikValues);
+        _.set(monitorToExecute, 'inputs[0].uri', localUriRequest);
+        break;
+      default:
+        console.log(`Unsupported searchType found: ${JSON.stringify(searchType)}`, searchType);
     }
 
     httpClient
@@ -226,6 +230,7 @@ export default class CreateTrigger extends Component {
       this.setState({ initialValues: initialValues });
     }
   };
+
   openExpression = (expression) => {
     this.setState({
       openedStates: {

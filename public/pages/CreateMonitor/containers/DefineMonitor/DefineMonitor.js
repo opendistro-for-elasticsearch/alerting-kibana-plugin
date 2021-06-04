@@ -202,11 +202,18 @@ class DefineMonitor extends Component {
         const monitor = formikToMonitor(values);
         _.set(monitor, 'name', 'TEMP_MONITOR');
         _.set(monitor, 'triggers', []);
-        if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.GRAPH) {
-          _.set(monitor, 'inputs[0].search', request);
-        } else if (searchType === SEARCH_TYPE.LOCAL_URI) {
-          _.set(monitor, 'inputs[0].uri', request);
+
+        switch (searchType) {
+          case SEARCH_TYPE.QUERY || SEARCH_TYPE.GRAPH:
+            _.set(monitor, 'inputs[0].search', request);
+            break;
+          case SEARCH_TYPE.LOCAL_URI:
+            _.set(monitor, 'inputs[0].uri', request);
+            break;
+          default:
+            console.log(`Unsupported searchType found: ${JSON.stringify(searchType)}`, searchType);
         }
+
         return httpClient.post('../api/alerting/monitors/_execute', {
           body: JSON.stringify(monitor),
         });
@@ -385,6 +392,7 @@ class DefineMonitor extends Component {
   }
 
   render() {
+    const isAggregationMonitor = _.get(this.props, 'values.monitor_type') === 'aggregation_monitor';
     const monitorContent = this.getMonitorContent();
     return (
       <ContentPanel
@@ -406,7 +414,11 @@ class DefineMonitor extends Component {
           : null}
         <MonitorType resetResponse={this.resetResponse} />
         <EuiSpacer size="m" />
-        <MonitorDefinition resetResponse={this.resetResponse} plugins={this.state.plugins} />
+        <MonitorDefinition
+          resetResponse={this.resetResponse}
+          plugins={this.state.plugins}
+          isAggregationMonitor={isAggregationMonitor}
+        />
         {monitorContent.content}
       </ContentPanel>
     );
