@@ -43,6 +43,7 @@ import { SEARCH_TYPE } from '../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
+import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
 import DefineAggregationTrigger from '../DefineAggregationTrigger';
 import { getPathsPerDataType } from '../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
 
