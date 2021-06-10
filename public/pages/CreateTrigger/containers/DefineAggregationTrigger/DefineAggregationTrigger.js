@@ -23,8 +23,8 @@ import { isInvalid, hasError } from '../../../../utils/validate';
 import ContentPanel from '../../../../components/ContentPanel/index';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
-import AddTriggerButton from '../../components/AddTriggerButton';
-import TriggerEmptyPrompt from '../../components/TriggerEmptyPrompt';
+import AddTriggerConditionButton from '../../components/AddTriggerConditionButton';
+import TriggerConditionEmptyPrompt from '../../components/TriggerConditionEmptyPrompt';
 import AggregationTriggerGraph from '../../components/AggregationTriggerGraph';
 import AggregationTriggerQuery from '../../components/AggregationTriggerQuery';
 import { validateTriggerName } from '../DefineTrigger/utils/validation';
@@ -253,7 +253,7 @@ const DefineAggregationTrigger = ({
       </EuiAccordion>
     ))
   ) : (
-    <TriggerEmptyPrompt arrayHelpers={arrayHelpers} />
+    <TriggerConditionEmptyPrompt arrayHelpers={arrayHelpers} />
   );
 
   return (
@@ -275,7 +275,7 @@ const DefineAggregationTrigger = ({
       {aggregationTriggerContent}
       {isGraph ? (
         <div style={{ paddingLeft: '10px' }}>
-          <AddTriggerButton
+          <AddTriggerConditionButton
             arrayHelpers={arrayHelpers}
             disabled={triggerValues.triggerConditions.length >= MAX_TRIGGER_CONDITIONS}
           />

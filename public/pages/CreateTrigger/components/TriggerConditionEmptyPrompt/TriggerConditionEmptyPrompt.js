@@ -15,11 +15,13 @@
 
 import React from 'react';
 import { EuiEmptyPrompt, EuiText } from '@elastic/eui';
-import AddTriggerButton from '../AddTriggerButton';
+import AddTriggerConditionButton from '../AddTriggerConditionButton';
 
-const addTriggerButton = (arrayHelpers) => <AddTriggerButton arrayHelpers={arrayHelpers} />;
+const addTriggerConditionButton = (arrayHelpers) => (
+  <AddTriggerConditionButton arrayHelpers={arrayHelpers} />
+);
 
-const TriggerEmptyPrompt = ({ arrayHelpers }) => (
+const TriggerConditionEmptyPrompt = ({ arrayHelpers }) => (
   <EuiEmptyPrompt
     style={{ maxWidth: '45em' }}
     body={
@@ -27,8 +29,8 @@ const TriggerEmptyPrompt = ({ arrayHelpers }) => (
         <p>Create a trigger condition to start alerting.</p>
       </EuiText>
     }
-    actions={addTriggerButton(arrayHelpers)}
+    actions={addTriggerConditionButton(arrayHelpers)}
   />
 );
 
-export default TriggerEmptyPrompt;
+export default TriggerConditionEmptyPrompt;

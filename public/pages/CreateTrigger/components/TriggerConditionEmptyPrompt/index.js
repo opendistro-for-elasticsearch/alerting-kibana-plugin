@@ -13,6 +13,6 @@
  * permissions and limitations under the License.
  */
 
-import TriggerEmptyPrompt from './TriggerEmptyPrompt';
+import TriggerConditionEmptyPrompt from './TriggerConditionEmptyPrompt';
 
-export default TriggerEmptyPrompt;
+export default TriggerConditionEmptyPrompt;

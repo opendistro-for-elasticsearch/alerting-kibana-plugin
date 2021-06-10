@@ -13,6 +13,19 @@
  * permissions and limitations under the License.
  */
 
-import AddTriggerButton from './AddTriggerButton';
+import React from 'react';
+import _ from 'lodash';
+import { EuiButton } from '@elastic/eui';
+import { FORMIK_INITIAL_TRIGGER_CONDITION_VALUES } from '../../containers/CreateTrigger/utils/constants';
 
-export default AddTriggerButton;
+const AddTriggerConditionButton = ({ arrayHelpers, disabled }) => (
+  <EuiButton
+    fill
+    onClick={() => arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_TRIGGER_CONDITION_VALUES))}
+    disabled={disabled}
+  >
+    + Add condition
+  </EuiButton>
+);
+
+export default AddTriggerConditionButton;
