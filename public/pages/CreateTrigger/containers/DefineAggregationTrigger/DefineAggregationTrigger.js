@@ -81,13 +81,38 @@ const DEFAULT_AND_OR_CONDITION = 'AND';
 const MAX_TRIGGER_CONDITIONS = 5;
 const MAX_WHERE_FILTERS = 1;
 
+export const TRIGGER_OPERATORS_MAP = {
+  INCLUDE: 'include',
+  EXCLUDE: 'exclude',
+};
+
+export const TRIGGER_COMPARISON_OPERATORS = [
+  {
+    text: 'includes',
+    value: TRIGGER_OPERATORS_MAP.INCLUDE,
+    dataTypes: ['number', 'text', 'keyword', 'boolean'],
+  },
+  {
+    text: 'excludes',
+    value: TRIGGER_OPERATORS_MAP.EXCLUDE,
+    dataTypes: ['number', 'text', 'keyword', 'boolean'],
+  },
+];
+
 const renderWhereExpression = (
   openedStates,
   closeExpression,
   openExpression,
   onMadeChanges,
-  dataTypes
+  dataTypes,
+  monitor
 ) => {
+  const compositeAggregations = _.get(
+    monitor,
+    'inputs[0].search.query.aggregations.composite_agg.composite.sources',
+    []
+  ).flatMap((entry) => _.keys(entry));
+
   return (
     <WhereExpression
       openedStates={openedStates}
@@ -95,6 +120,8 @@ const renderWhereExpression = (
       openExpression={openExpression}
       onMadeChanges={onMadeChanges}
       dataTypes={dataTypes}
+      indexFieldFilters={compositeAggregations}
+      useTriggerFieldOperators={true}
     />
   );
 };
@@ -123,13 +150,6 @@ const renderAggregationTriggerGraph = (index, monitor, monitorValues, response, 
 
   const thresholdEnum = _.get(triggerValues, `triggerConditions[${index}].thresholdEnum`);
   const thresholdValue = _.get(triggerValues, `triggerConditions[${index}].thresholdValue`);
-
-  // TODO: Something like this needs to be passed into the WHERE of the Aggregation Trigger definition
-  // const compositeAggregations = _.get(
-  //   monitor,
-  //   'inputs[0].search.query.aggregations.composite_agg.composite.sources',
-  //   []
-  // ).flatMap((entry) => _.keys(entry));
 
   return (
     <AggregationTriggerGraph
@@ -193,6 +213,9 @@ const DefineAggregationTrigger = ({
   const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
 
   const hasTriggerConditions = !_.isEmpty(triggerValues.triggerConditions);
+  const displayWhereExpressionsButton = triggerValues.triggerConditions.length > 0;
+  // Only displays the WHERE filter options if there is at least 1 trigger condition defined.
+  //  TODO: Refactor to check against MAX_WHERE_FILTERS when support for multiple WHERE filters is added.
 
   let aggregationTriggerContent = hasTriggerConditions ? (
     triggerValues.triggerConditions.map((trigCondition, index) => (
@@ -256,15 +279,17 @@ const DefineAggregationTrigger = ({
             arrayHelpers={arrayHelpers}
             disabled={triggerValues.triggerConditions.length >= MAX_TRIGGER_CONDITIONS}
           />
-          {/*<EuiSpacer />*/}
-          {/*// TODO: Implement WHERE filter logic*/}
-          {/*{renderWhereExpression(*/}
-          {/*    openedStates,*/}
-          {/*    closeExpression,*/}
-          {/*    openExpression,*/}
-          {/*    onMadeChanges,*/}
-          {/*    dataTypes*/}
-          {/*)}*/}
+          <EuiSpacer />
+          {displayWhereExpressionsButton
+            ? renderWhereExpression(
+                openedStates,
+                closeExpression,
+                openExpression,
+                onMadeChanges,
+                dataTypes,
+                monitor
+              )
+            : null}
         </div>
       ) : null}
     </ContentPanel>

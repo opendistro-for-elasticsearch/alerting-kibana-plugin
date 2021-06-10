@@ -73,7 +73,7 @@ export const FORMIK_INITIAL_TRIGGER_VALUES = {
   },
   where: {
     fieldName: [],
-    operator: OPERATORS_MAP.IS,
+    operator: 'includes',
     fieldValue: '',
     fieldRangeStart: 0,
     fieldRangeEnd: 0,
