@@ -169,6 +169,6 @@ class DataSource extends Component {
   }
 }
 
-DefineMonitor.propTypes = propTypes;
+DataSource.propTypes = propTypes;
 
 export default DataSource;

@@ -21,6 +21,7 @@ import { hasError, isInvalid, required, validateMonitorName } from '../../../../
 import Schedule from '../../components/Schedule';
 import { FormikFormRow, FormikInputWrapper } from '../../../../components/FormControls';
 import MonitorDefinitionCard from '../../components/MonitorDefinitionCards';
+import MonitorType from '../../components/MonitorType';
 
 const onChangeDefinition = (e, form, resetResponse) => {
   const type = e.target.value;
@@ -41,7 +42,9 @@ const MonitorDetails = ({
   plugins,
 }) => (
   <ContentPanel title="Monitor details" titleSize="s" bodyStyles={{ padding: 'initial' }}>
-    <MonitorDefinitionCard />
+    <MonitorType values={values} resetResponse={resetResponse} />
+    <EuiSpacer size="s" />
+    <MonitorDefinitionCard values={values} plugins={plugins} resetResponse={resetResponse} />
     <EuiSpacer size="s" />
     <FormikFieldText
       name="name"

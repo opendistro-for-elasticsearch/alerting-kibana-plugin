@@ -16,6 +16,7 @@
 import React from 'react';
 import FormikSelect from '../../../../components/FormControls/FormikSelect/FormikSelect';
 import { ES_AD_PLUGIN } from '../../../../utils/constants';
+import MonitorDefinitionCard from '../MonitorDefinitionCards';
 
 const defaultSelectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
@@ -44,20 +45,22 @@ const selectDefinitions = (plugins, isAggregationMonitor) => {
 };
 
 const MonitorDefinition = ({ resetResponse, plugins, isAggregationMonitor }) => (
-  <FormikSelect
-    name="searchType"
-    formRow
-    rowProps={{
-      label: 'Method of definition',
-      style: { paddingLeft: '10px' },
-    }}
-    inputProps={{
-      options: selectDefinitions(plugins, isAggregationMonitor),
-      onChange: (e, field, form) => {
-        onChangeDefinition(e, form, resetResponse);
-      },
-    }}
-  />
+  <div>
+    <FormikSelect
+      name="searchType"
+      formRow
+      rowProps={{
+        label: 'Method of definition',
+        style: { paddingLeft: '10px' },
+      }}
+      inputProps={{
+        options: selectDefinitions(plugins, isAggregationMonitor),
+        onChange: (e, field, form) => {
+          onChangeDefinition(e, form, resetResponse);
+        },
+      }}
+    />
+  </div>
 );
 
 export default MonitorDefinition;
