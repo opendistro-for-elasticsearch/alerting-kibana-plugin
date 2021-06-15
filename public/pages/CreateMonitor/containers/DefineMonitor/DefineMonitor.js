@@ -206,7 +206,8 @@ class DefineMonitor extends Component {
         _.set(monitor, 'triggers', []);
 
         switch (searchType) {
-          case SEARCH_TYPE.QUERY || SEARCH_TYPE.GRAPH:
+          case SEARCH_TYPE.QUERY:
+          case SEARCH_TYPE.GRAPH:
             _.set(monitor, 'inputs[0].search', request);
             break;
           case SEARCH_TYPE.LOCAL_URI:
@@ -424,7 +425,6 @@ class DefineMonitor extends Component {
                 <EuiSpacer size="s" />,
               ]
             : null}
-          <EuiSpacer size="s" />
           {monitorContent.content}
         </ContentPanel>
       </div>
