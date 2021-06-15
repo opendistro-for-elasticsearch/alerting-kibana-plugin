@@ -81,7 +81,7 @@ const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
               }}
               inputProps={{
                 id: 'localUriRadioCard',
-                label: 'Local URI Endpoint',
+                label: 'Local URI endpoint',
                 checked: values.searchType === SEARCH_TYPE.LOCAL_URI,
                 value: SEARCH_TYPE.LOCAL_URI,
                 onChange: (e, field, form) => {
