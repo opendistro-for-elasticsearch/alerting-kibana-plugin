@@ -14,34 +14,59 @@
  */
 
 import React from 'react';
-import FormikSelect from '../../../../components/FormControls/FormikSelect/FormikSelect';
-
-const defaultSelectDefinitions = [
-  { value: 'traditional_monitor', text: 'Define a traditional monitor' },
-  { value: 'aggregation_monitor', text: 'Define an aggregation monitor' },
-];
+import { EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
+import FormikCheckableCard from '../../../../components/FormControls/FormikCheckableCard';
 
 const onChangeDefinition = (e, form, resetResponse) => {
   const type = e.target.value;
-  resetResponse();
+  // resetResponse();
   form.setFieldValue('monitor_type', type);
 };
 
-const MonitorType = ({ resetResponse }) => (
-  <FormikSelect
-    name="monitor_type"
-    formRow
-    rowProps={{
-      label: 'Monitor type',
-      style: { paddingLeft: '10px' },
-    }}
-    inputProps={{
-      options: defaultSelectDefinitions,
-      onChange: (e, field, form) => {
-        onChangeDefinition(e, form, resetResponse);
-      },
-    }}
-  />
+const MonitorType = ({ values, resetResponse }) => (
+  <div>
+    <EuiFlexGroup>
+      <EuiFlexItem>
+        <FormikCheckableCard
+          name="monitorTypeTraditional"
+          formRow
+          rowProps={{
+            label: 'Choose a monitor type',
+            style: { paddingLeft: '10px' },
+          }}
+          inputProps={{
+            id: 'traditionalMonitorRadioCard',
+            label: 'Traditional monitor',
+            checked: values.monitor_type === 'traditional_monitor',
+            value: 'traditional_monitor',
+            onChange: (e, field, form) => {
+              onChangeDefinition(e, form, resetResponse);
+            },
+          }}
+        />
+      </EuiFlexItem>
+      <EuiFlexItem>
+        <EuiSpacer />
+        <FormikCheckableCard
+          name="monitorTypeAggregation"
+          formRow
+          rowProps={{
+            label: '',
+            style: { paddingLeft: '10px' },
+          }}
+          inputProps={{
+            id: 'aggregationMonitorRadioCard',
+            label: 'Aggregation monitor',
+            checked: values.monitor_type === 'aggregation_monitor',
+            value: 'aggregation_monitor',
+            onChange: (e, field, form) => {
+              onChangeDefinition(e, form, resetResponse);
+            },
+          }}
+        />
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  </div>
 );
 
 export default MonitorType;

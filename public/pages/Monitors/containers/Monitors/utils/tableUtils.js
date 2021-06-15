@@ -49,7 +49,7 @@ export const columns = [
        (`monitor.user.name`, `monitor.user.roles` are empty )
     3. Monitors are created when security plugin is enabled, these will have an User object. */
     render: (_, item) =>
-      item.monitor.user && item.monitor.user.name ? item.monitor.user.name : 'N/A',
+      item.monitor.user && item.monitor.user.name ? item.monitor.user.name : '-',
   },
   {
     field: 'latestAlert',

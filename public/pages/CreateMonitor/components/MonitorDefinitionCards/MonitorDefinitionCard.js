@@ -16,74 +16,102 @@
 import React from 'react';
 import { EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 import FormikCheckableCard from '../../../../components/FormControls/FormikCheckableCard/FormikCheckableCard';
+import { ES_AD_PLUGIN, SEARCH_TYPE } from '../../../../utils/constants';
 
 const onChangeDefinition = (e, form, resetResponse) => {
   const type = e.target.value;
-  resetResponse();
-  form.setFieldValue('searchType', type);
-  // Debug use
-  console.log('Entering onChange: ' + JSON.stringify(form));
+  // resetResponse();
+  form.setFieldValue('searchType', type, false);
 };
 
-const MonitorDefinitionCard = ({ resetResponse, plugins }) => (
-  <div>
-    <EuiFlexGroup>
-      <EuiFlexItem>
-        <FormikCheckableCard
-          name="searchType"
-          formRow
-          rowProps={{
-            label: 'Choose a monitor defining method',
-            style: { paddingLeft: '10px' },
-          }}
-          inputProps={{
-            id: 'visualEditorRadioCard',
-            label: 'Visual editor',
-            value: 'graph',
-            onChange: (e, field, form) => {
-              onChangeDefinition(e, form, resetResponse);
-            },
-          }}
-        />
-      </EuiFlexItem>
-      <EuiFlexItem>
-        <EuiSpacer />
-        <FormikCheckableCard
-          name="searchType"
-          formRow
-          rowProps={{
-            label: '',
-            style: { paddingLeft: '10px' },
-          }}
-          inputProps={{
-            id: 'extractionQueryEditorRadioCard',
-            label: 'Extraction query editor',
-            value: 'query',
-            onChange: (e, field, form) => {
-              onChangeDefinition(e, form, resetResponse);
-            },
-          }}
-        />
-      </EuiFlexItem>
-      {/* TODO: only show the anomaly detector option when anomaly detection plugin is present */}
-      {/*{isAd && (*/}
-      <EuiFlexItem>
-        <EuiSpacer />
-        <FormikCheckableCard
-          name="searchType"
-          inputProps={{
-            id: 'anomalyDetectorRadioCard',
-            label: 'Anomaly detector',
-            value: 'ad',
-            onChange: (e, field, form) => {
-              onChangeDefinition(e, form, resetResponse);
-            },
-          }}
-        />
-      </EuiFlexItem>
-      {/*)}*/}
-    </EuiFlexGroup>
-  </div>
-);
+const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
+  const hasADPlugin = plugins.indexOf(ES_AD_PLUGIN) !== -1;
+  const isAggregationMonitor = values.monitor_type === 'aggregation_monitor';
+  return (
+    <div>
+      <EuiFlexGroup>
+        <EuiFlexItem>
+          <FormikCheckableCard
+            name="searchTypeGraph"
+            formRow
+            rowProps={{
+              label: 'Choose a monitor defining method',
+              style: { paddingLeft: '10px' },
+            }}
+            inputProps={{
+              id: 'visualEditorRadioCard',
+              label: 'Visual editor',
+              checked: values.searchType === SEARCH_TYPE.GRAPH,
+              value: SEARCH_TYPE.GRAPH,
+              onChange: (e, field, form) => {
+                onChangeDefinition(e, form, resetResponse);
+              },
+            }}
+          />
+        </EuiFlexItem>
+        <EuiFlexItem>
+          <EuiSpacer />
+          <FormikCheckableCard
+            name="searchTypeQuery"
+            formRow
+            rowProps={{
+              label: '',
+              style: { paddingLeft: '10px' },
+            }}
+            inputProps={{
+              id: 'extractionQueryEditorRadioCard',
+              label: 'Extraction query editor',
+              checked: values.searchType === SEARCH_TYPE.QUERY,
+              value: SEARCH_TYPE.QUERY,
+              onChange: (e, field, form) => {
+                onChangeDefinition(e, form, resetResponse);
+              },
+            }}
+          />
+        </EuiFlexItem>
+        {!isAggregationMonitor && (
+          <EuiFlexItem>
+            <EuiSpacer />
+            <FormikCheckableCard
+              name="searchTypeLocalUri"
+              formRow
+              rowProps={{
+                label: '',
+                style: { paddingLeft: '10px' },
+              }}
+              inputProps={{
+                id: 'localUriRadioCard',
+                label: 'Local URI Endpoint',
+                checked: values.searchType === SEARCH_TYPE.LOCAL_URI,
+                value: SEARCH_TYPE.LOCAL_URI,
+                onChange: (e, field, form) => {
+                  onChangeDefinition(e, form, resetResponse);
+                },
+              }}
+            />
+          </EuiFlexItem>
+        )}
+        {/* TODO: only show the anomaly detector option when anomaly detection plugin is present */}
+        {hasADPlugin && (
+          <EuiFlexItem>
+            <EuiSpacer />
+            <FormikCheckableCard
+              name="searchTypeAD"
+              inputProps={{
+                id: 'anomalyDetectorRadioCard',
+                label: 'Anomaly detector',
+                checked: values.searchType === SEARCH_TYPE.AD,
+                value: SEARCH_TYPE.AD,
+                onChange: (e, field, form) => {
+                  onChangeDefinition(e, form, resetResponse);
+                },
+              }}
+            />
+          </EuiFlexItem>
+        )}
+      </EuiFlexGroup>
+    </div>
+  );
+};
 
 export default MonitorDefinitionCard;
