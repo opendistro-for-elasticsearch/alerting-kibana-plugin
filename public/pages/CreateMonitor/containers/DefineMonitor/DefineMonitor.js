@@ -16,7 +16,6 @@
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { EuiSpacer, EuiButton, EuiText, EuiCallOut } from '@elastic/eui';
 import { EuiSpacer, EuiButton, EuiCallOut } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import VisualGraph from '../../components/VisualGraph';
