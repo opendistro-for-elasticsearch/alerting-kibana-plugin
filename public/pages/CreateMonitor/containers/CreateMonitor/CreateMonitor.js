@@ -63,12 +63,40 @@ export default class CreateMonitor extends Component {
       initialValues = monitorToFormik(this.props.monitorToEdit);
     }
 
-    this.state = { initialValues };
+    this.state = {
+      initialValues,
+      plugins: [],
+      response: null,
+      performanceResponse: null,
+    };
 
     this.onCancel = this.onCancel.bind(this);
     this.onCreate = this.onCreate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
+    this.getPlugins = this.getPlugins.bind(this);
+  }
+
+  componentDidMount() {
+    this.getPlugins();
+  }
+
+  async getPlugins() {
+    const { httpClient } = this.props;
+    try {
+      const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
+      if (pluginsResponse.ok) {
+        this.setState({ plugins: pluginsResponse.resp.map((plugin) => plugin.component) });
+      } else {
+        console.error('There was a problem getting plugins list');
+      }
+    } catch (e) {
+      console.error('There was a problem getting plugins list', e);
+    }
+  }
+
+  resetResponse() {
+    this.setState({ response: null, performanceResponse: null });
   }
 
   onCancel() {
@@ -132,7 +160,7 @@ export default class CreateMonitor extends Component {
   }
 
   render() {
-    const { initialValues } = this.state;
+    const { initialValues, plugins } = this.state;
     const { edit, httpClient, monitorToEdit, notifications, isDarkMode } = this.props;
     return (
       <div style={{ padding: '25px 50px' }}>
@@ -148,26 +176,9 @@ export default class CreateMonitor extends Component {
                 errors={errors}
                 httpClient={httpClient}
                 monitorToEdit={monitorToEdit}
+                plugins={plugins}
                 isAd={values.searchType === SEARCH_TYPE.AD}
               />
-              <EuiSpacer />
-              {/*<ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />*/}
-              {/*<EuiSpacer />*/}
-              {/*<DataSource*/}
-              {/*  values={values}*/}
-              {/*  errors={errors}*/}
-              {/*  httpClient={httpClient}*/}
-              {/*  detectorId={this.props.detectorId}*/}
-              {/*  notifications={notifications}*/}
-              {/*  isDarkMode={isDarkMode}*/}
-              {/*/>*/}
-              {/*<EuiSpacer />*/}
-              {/*<Query*/}
-              {/*  values={values}*/}
-              {/*  errors={errors}*/}
-              {/*  httpClient={httpClient}*/}
-              {/*  monitorToEdit={monitorToEdit}*/}
-              {/*/>*/}
               <EuiSpacer />
               <DefineMonitor
                 values={values}
@@ -178,10 +189,6 @@ export default class CreateMonitor extends Component {
                 notifications={notifications}
                 isDarkMode={isDarkMode}
               />
-              <Fragment>
-                <EuiSpacer />
-                <DefineSchedule isAd={values.searchType === SEARCH_TYPE.AD} />
-              </Fragment>
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>

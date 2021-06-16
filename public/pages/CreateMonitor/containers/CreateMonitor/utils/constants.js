@@ -32,6 +32,7 @@ export const FORMIK_INITIAL_VALUES = {
   cronExpression: '0 */1 * * *',
 
   /* DEFINE MONITOR */
+  monitor_type: 'traditional_monitor',
   searchType: 'graph',
   uri: {
     scheme: 'http',

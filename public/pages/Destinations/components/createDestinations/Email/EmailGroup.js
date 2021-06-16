@@ -95,6 +95,7 @@ const EmailGroup = ({ emailGroup, emailOptions, arrayHelpers, context, index, on
             form.setFieldTouched(`emailGroups.${index}.emails`, true);
           },
           onCreateOption: (value, field, form) => {
+            onEmailGroupChange(index, emailGroup, arrayHelpers);
             onCreateOption(`emailGroups.${index}.emails`, value, field.value, form.setFieldValue);
           },
           isClearable: true,

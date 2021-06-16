@@ -34,6 +34,7 @@ import { backendErrorNotification } from '../../../../utils/helpers';
 import MonitorType from '../../components/MonitorType';
 import LocalUriInput from '../../components/LocalUriInput';
 import { buildLocalUriRequest } from './utils/localUriRequests';
+import DataSource from '../DataSource';
 
 function renderEmptyMessage(message) {
   return (
@@ -52,6 +53,7 @@ const propTypes = {
   httpClient: PropTypes.object.isRequired,
   errors: PropTypes.object,
   touched: PropTypes.object,
+  detectorId: PropTypes.object,
   notifications: PropTypes.object.isRequired,
 };
 const defaultProps = {
@@ -287,8 +289,8 @@ class DefineMonitor extends Component {
       actions: [],
       content: (
         <React.Fragment>
-          <MonitorIndex httpClient={httpClient} />
-          <MonitorTimeField dataTypes={dataTypes} />
+          {/*<MonitorIndex httpClient={httpClient} />*/}
+          {/*<MonitorTimeField dataTypes={dataTypes} />*/}
           <div style={{ padding: '0px 10px' }}>{content}</div>
           <EuiSpacer size="m" />
           <QueryPerformance response={performanceResponse} />
@@ -323,7 +325,6 @@ class DefineMonitor extends Component {
       ],
       content: (
         <React.Fragment>
-          <MonitorIndex httpClient={httpClient} />
           <div style={{ padding: '0px 10px' }}>{content}</div>
           <EuiSpacer size="m" />
           <QueryPerformance response={performanceResponse} />
@@ -393,35 +394,40 @@ class DefineMonitor extends Component {
   }
 
   render() {
+    const { values, errors, httpClient, detectorId, notifications, isDarkMode } = this.props;
     const isAggregationMonitor = _.get(this.props, 'values.monitor_type') === 'aggregation_monitor';
     const monitorContent = this.getMonitorContent();
     return (
-      <ContentPanel
-        title="Define monitor"
-        titleSize="s"
-        bodyStyles={{ padding: 'initial' }}
-        actions={monitorContent.actions}
-      >
-        {this.showPluginWarning()
-          ? [
-              <EuiCallOut
-                color="warning"
-                title="Anomaly detector plugin is not installed on Elasticsearch, This monitor will not functional properly."
-                iconType="help"
-                size="s"
-              />,
-              <EuiSpacer size="s" />,
-            ]
-          : null}
-        <MonitorType resetResponse={this.resetResponse} />
-        <EuiSpacer size="m" />
-        <MonitorDefinition
-          resetResponse={this.resetResponse}
-          plugins={this.state.plugins}
-          isAggregationMonitor={isAggregationMonitor}
+      <div>
+        <DataSource
+          values={values}
+          errors={errors}
+          httpClient={httpClient}
+          detectorId={detectorId}
+          notifications={notifications}
+          isDarkMode={isDarkMode}
         />
-        {monitorContent.content}
-      </ContentPanel>
+        <EuiSpacer />
+        <ContentPanel
+          title="Query"
+          titleSize="s"
+          bodyStyles={{ padding: 'initial' }}
+          actions={monitorContent.actions}
+        >
+          {this.showPluginWarning()
+            ? [
+                <EuiCallOut
+                  color="warning"
+                  title="Anomaly detector plugin is not installed on Elasticsearch, This monitor will not functional properly."
+                  iconType="help"
+                  size="s"
+                />,
+                <EuiSpacer size="s" />,
+              ]
+            : null}
+          {monitorContent.content}
+        </ContentPanel>
+      </div>
     );
   }
 }
