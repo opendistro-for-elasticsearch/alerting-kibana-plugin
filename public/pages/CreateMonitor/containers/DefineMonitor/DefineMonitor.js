@@ -147,9 +147,6 @@ class DefineMonitor extends Component {
     const { errors, touched } = this.props;
     return (
       <Fragment>
-        {/*<EuiText size="xs">*/}
-        {/*  <strong>Create a monitor for</strong>*/}
-        {/*</EuiText>*/}
         <EuiSpacer size="s" />
         <MonitorExpressions
           errors={errors}
