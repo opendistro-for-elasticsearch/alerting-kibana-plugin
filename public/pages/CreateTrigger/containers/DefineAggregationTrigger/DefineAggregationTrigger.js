@@ -76,17 +76,43 @@ const propTypes = {
   isDarkMode: PropTypes.bool.isRequired,
 };
 
+const DEFAULT_METRIC_AGGREGATION = { value: '_count', text: 'Count of documents' };
+const DEFAULT_AND_OR_CONDITION = 'AND';
 const MAX_TRIGGER_CONDITIONS = 5;
-
 const MAX_WHERE_FILTERS = 1;
+
+export const TRIGGER_OPERATORS_MAP = {
+  INCLUDE: 'include',
+  EXCLUDE: 'exclude',
+};
+
+export const TRIGGER_COMPARISON_OPERATORS = [
+  {
+    text: 'includes',
+    value: TRIGGER_OPERATORS_MAP.INCLUDE,
+    dataTypes: ['number', 'text', 'keyword', 'boolean'],
+  },
+  {
+    text: 'excludes',
+    value: TRIGGER_OPERATORS_MAP.EXCLUDE,
+    dataTypes: ['number', 'text', 'keyword', 'boolean'],
+  },
+];
 
 const renderWhereExpression = (
   openedStates,
   closeExpression,
   openExpression,
   onMadeChanges,
-  dataTypes
+  dataTypes,
+  monitor
 ) => {
+  const compositeAggregations = _.get(
+    monitor,
+    'inputs[0].search.query.aggregations.composite_agg.composite.sources',
+    []
+  ).flatMap((entry) => _.keys(entry));
+
   return (
     <WhereExpression
       openedStates={openedStates}
@@ -94,27 +120,36 @@ const renderWhereExpression = (
       openExpression={openExpression}
       onMadeChanges={onMadeChanges}
       dataTypes={dataTypes}
+      indexFieldFilters={compositeAggregations}
+      useTriggerFieldOperators={true}
     />
   );
 };
 
 const renderAggregationTriggerGraph = (index, monitor, monitorValues, response, triggerValues) => {
-  const andOrCondition = triggerValues.triggerConditions[index].andOrCondition;
-  const queryMetric = triggerValues.triggerConditions[index].queryMetric;
-  const thresholdEnum = triggerValues.triggerConditions[index].thresholdEnum;
-  const thresholdValue = triggerValues.triggerConditions[index].thresholdValue;
-
   const metricAggregations = _.keys(
     _.get(monitor, 'inputs[0].search.query.aggregations.composite_agg.aggregations', [])
   ).map((metric) => {
     return { value: metric, text: metric };
   });
-  // TODO: Something like this needs to be passed into the WHERE of the Aggregation Trigger definition
-  // const compositeAggregations = _.get(
-  //   monitor,
-  //   'inputs[0].search.query.aggregations.composite_agg.composite.sources',
-  //   []
-  // ).flatMap((entry) => _.keys(entry));
+  if (!metricAggregations.includes(DEFAULT_METRIC_AGGREGATION))
+    metricAggregations.push(DEFAULT_METRIC_AGGREGATION);
+
+  let andOrCondition = _.get(triggerValues, `triggerConditions[${index}].andOrCondition`);
+  if (index > 0 && _.isEmpty(andOrCondition)) {
+    andOrCondition = DEFAULT_AND_OR_CONDITION;
+    _.set(triggerValues, `triggerConditions[${index}].andOrCondition`, andOrCondition);
+  }
+
+  const queryMetric = _.get(
+    triggerValues,
+    `triggerConditions[${index}].queryMetric`,
+    DEFAULT_METRIC_AGGREGATION.value
+  );
+  _.set(triggerValues, `triggerConditions[${index}].queryMetric`, queryMetric);
+
+  const thresholdEnum = _.get(triggerValues, `triggerConditions[${index}].thresholdEnum`);
+  const thresholdValue = _.get(triggerValues, `triggerConditions[${index}].thresholdValue`);
 
   return (
     <AggregationTriggerGraph
@@ -178,6 +213,9 @@ const DefineAggregationTrigger = ({
   const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
 
   const hasTriggerConditions = !_.isEmpty(triggerValues.triggerConditions);
+  const displayWhereExpressionsButton = triggerValues.triggerConditions.length > 0;
+  // Only displays the WHERE filter options if there is at least 1 trigger condition defined.
+  //  TODO: Refactor to check against MAX_WHERE_FILTERS when support for multiple WHERE filters is added.
 
   let aggregationTriggerContent = hasTriggerConditions ? (
     triggerValues.triggerConditions.map((trigCondition, index) => (
@@ -241,15 +279,17 @@ const DefineAggregationTrigger = ({
             arrayHelpers={arrayHelpers}
             disabled={triggerValues.triggerConditions.length >= MAX_TRIGGER_CONDITIONS}
           />
-          {/*<EuiSpacer />*/}
-          {/*// TODO: Implement WHERE filter logic*/}
-          {/*{renderWhereExpression(*/}
-          {/*    openedStates,*/}
-          {/*    closeExpression,*/}
-          {/*    openExpression,*/}
-          {/*    onMadeChanges,*/}
-          {/*    dataTypes*/}
-          {/*)}*/}
+          <EuiSpacer />
+          {displayWhereExpressionsButton
+            ? renderWhereExpression(
+                openedStates,
+                closeExpression,
+                openExpression,
+                onMadeChanges,
+                dataTypes,
+                monitor
+              )
+            : null}
         </div>
       ) : null}
     </ContentPanel>

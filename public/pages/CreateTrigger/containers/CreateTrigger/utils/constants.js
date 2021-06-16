@@ -47,8 +47,8 @@ export const FORMIK_INITIAL_TRIGGER_CONDITION_VALUES = {
   buckets_path: {},
   parent_bucket_path: 'composite_agg',
   gap_policy: '',
-  queryMetric: '',
-  andOrCondition: '',
+  queryMetric: undefined,
+  andOrCondition: undefined,
 };
 
 export const FORMIK_INITIAL_TRIGGER_VALUES = {
@@ -73,7 +73,7 @@ export const FORMIK_INITIAL_TRIGGER_VALUES = {
   },
   where: {
     fieldName: [],
-    operator: OPERATORS_MAP.IS,
+    operator: 'includes',
     fieldValue: '',
     fieldRangeStart: 0,
     fieldRangeEnd: 0,

@@ -46,9 +46,13 @@ import {
   FormikFieldNumber,
   FormikFieldText,
 } from '../../../../../components/FormControls';
-import { getIndexFields } from './utils/dataTypes';
+import { getFilteredIndexFields, getIndexFields } from './utils/dataTypes';
 import { FORMIK_INITIAL_VALUES } from '../../../containers/CreateMonitor/utils/constants';
 import { DATA_TYPES } from '../../../../../utils/constants';
+import {
+  TRIGGER_COMPARISON_OPERATORS,
+  TRIGGER_OPERATORS_MAP,
+} from '../../../../CreateTrigger/containers/DefineAggregationTrigger/DefineAggregationTrigger';
 
 const propTypes = {
   formik: PropTypes.object.isRequired,
@@ -57,6 +61,8 @@ const propTypes = {
   openedStates: PropTypes.object.isRequired,
   openExpression: PropTypes.func.isRequired,
 };
+
+const ALLOWED_TYPES = ['number', 'text', 'keyword', 'boolean'];
 
 class WhereExpression extends Component {
   constructor(props) {
@@ -175,10 +181,24 @@ class WhereExpression extends Component {
       openedStates,
       openExpression,
       dataTypes,
+      indexFieldFilters,
+      useTriggerFieldOperators,
     } = this.props;
-    const indexFields = getIndexFields(dataTypes, ['number', 'text', 'keyword', 'boolean']);
+    const indexFields =
+      indexFieldFilters !== undefined
+        ? getFilteredIndexFields(dataTypes, ALLOWED_TYPES, indexFieldFilters)
+        : getIndexFields(dataTypes, ALLOWED_TYPES);
     const fieldType = _.get(values, 'where.fieldName[0].type', 'number');
-    const fieldOperator = _.get(values, 'where.operator', 'is');
+
+    let fieldOperator = _.get(values, 'where.operator', 'is');
+    if (useTriggerFieldOperators && !_.includes(_.values(TRIGGER_OPERATORS_MAP), fieldOperator)) {
+      fieldOperator = TRIGGER_OPERATORS_MAP.INCLUDE;
+      _.set(values, 'where.operator', fieldOperator);
+    }
+
+    const fieldOperators = useTriggerFieldOperators
+      ? TRIGGER_COMPARISON_OPERATORS
+      : getOperators(fieldType);
 
     return (
       <div>
@@ -235,7 +255,7 @@ class WhereExpression extends Component {
                   name="where.operator"
                   inputProps={{
                     onChange: this.handleOperatorChange,
-                    options: getOperators(fieldType),
+                    options: fieldOperators,
                   }}
                 />
               </EuiFlexItem>

@@ -156,14 +156,15 @@ export function getAggregationTriggerCondition(values) {
   const conditions = values.triggerConditions;
   const bucketsPath = getBucketSelectorBucketsPath(conditions);
   const scriptSource = getBucketSelectorScriptSource(conditions);
+  const composite_agg_filter = getCompositeAggFilter(values);
+
   return {
     parent_bucket_path: 'composite_agg',
     buckets_path: bucketsPath,
     script: {
       source: scriptSource,
     },
-    // TODO: Update this to use values.where
-    // composite_agg_filter: values.filter,
+    composite_agg_filter: composite_agg_filter,
   };
 }
 
@@ -195,6 +196,17 @@ export function getBucketSelectorScriptSource(conditions) {
 
 export function getResultsPath(isCount) {
   return isCount ? HITS_TOTAL_RESULTS_PATH : AGGREGATION_RESULTS_PATH;
+}
+
+export function getCompositeAggFilter({ where }) {
+  const fieldName = _.get(where, 'fieldName', FORMIK_INITIAL_TRIGGER_VALUES.where.fieldName);
+  const composite_agg_filter = {};
+  if (fieldName.length > 0) {
+    composite_agg_filter[where.fieldName[0].label] = {
+      [where.operator]: where.fieldValue,
+    };
+  }
+  return composite_agg_filter;
 }
 
 export function getRelationalOperator(thresholdEnum) {
