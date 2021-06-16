@@ -23,28 +23,12 @@ import { FormikFormRow, FormikInputWrapper } from '../../../../components/FormCo
 import MonitorDefinitionCard from '../../components/MonitorDefinitionCards';
 import MonitorType from '../../components/MonitorType';
 
-const onChangeDefinition = (e, form, resetResponse) => {
-  const type = e.target.value;
-  resetResponse();
-  form.setFieldValue('searchType', type);
-  // Debug use
-  console.log('Entering onChange: ' + form);
-};
-
 // TODO: Make sure that resetResponse is defined in Query and passed to MonitorDetails
-const MonitorDetails = ({
-  values,
-  errors,
-  httpClient,
-  monitorToEdit,
-  isAd,
-  resetResponse,
-  plugins,
-}) => (
+const MonitorDetails = ({ values, errors, httpClient, monitorToEdit, isAd, plugins }) => (
   <ContentPanel title="Monitor details" titleSize="s" bodyStyles={{ padding: 'initial' }}>
-    <MonitorType values={values} resetResponse={resetResponse} />
+    <MonitorType values={values} />
     <EuiSpacer size="s" />
-    <MonitorDefinitionCard values={values} plugins={plugins} resetResponse={resetResponse} />
+    <MonitorDefinitionCard values={values} plugins={plugins} />
     <EuiSpacer size="s" />
     <FormikFieldText
       name="name"

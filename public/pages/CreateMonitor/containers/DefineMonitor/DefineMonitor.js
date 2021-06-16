@@ -103,8 +103,9 @@ class DefineMonitor extends Component {
       searchType: prevSearchType,
       index: prevIndex,
       timeField: prevTimeField,
+      monitor_type: prevMonitorType,
     } = prevProps.values;
-    const { searchType, index, timeField } = this.props.values;
+    const { searchType, index, timeField, monitor_type } = this.props.values;
     const isGraph = searchType === SEARCH_TYPE.GRAPH;
     const hasIndices = !!index.length;
     // If customer is defining query through extraction query, then they are manually running their own queries
@@ -128,6 +129,8 @@ class DefineMonitor extends Component {
         if (wasQuery || diffIndices || diffTimeFields) this.onRunQuery();
       }
     }
+    // Reset response when monitor type or definition method is changed
+    if (prevSearchType !== searchType) this.resetResponse();
   }
 
   async getPlugins() {
