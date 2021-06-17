@@ -205,8 +205,8 @@ export function getCompositeAggFilter({ where }) {
     composite_agg_filter[where.fieldName[0].label] = {
       [where.operator]: where.fieldValue,
     };
+    return composite_agg_filter;
   }
-  return composite_agg_filter;
 }
 
 export function getRelationalOperator(thresholdEnum) {
