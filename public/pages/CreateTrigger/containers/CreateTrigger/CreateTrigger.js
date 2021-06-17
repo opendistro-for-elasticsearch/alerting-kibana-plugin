@@ -255,7 +255,11 @@ export default class CreateTrigger extends Component {
     const { madeChanges, openedStates } = this.state;
     if (madeChanges && openedStates[expression]) {
       // if made changes and close expression that was currently open => run query
-      this.props.onRunQuery();
+
+      // TODO: Re-enable once we have implementation to support
+      //  rendering visual graphs for aggregation triggers.
+      // this.props.onRunQuery();
+
       this.setState({ madeChanges: false });
     }
     this.setState({ openedStates: { ...openedStates, [expression]: false } });
