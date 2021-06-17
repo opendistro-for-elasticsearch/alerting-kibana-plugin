@@ -220,6 +220,8 @@ export function convertToTriggerCondition(conditionArray, condition) {
 }
 
 export function getWhereExpression(composite_agg_filter) {
+  if (composite_agg_filter === undefined) return;
+
   const fields = _.keys(composite_agg_filter);
   const field = fields[0];
 
