@@ -24,7 +24,7 @@ export function triggerToFormik(trigger, monitor) {
   // TODO: Should compare to this to some defined constant
   const isAggregationMonitor = _.get(monitor, 'monitor_type') === 'aggregation_monitor';
   return isAggregationMonitor
-    ? aggregationTriggerToFormik(trigger, monitor)
+    ? aggregationTriggersToFormik(monitor)
     : traditionalTriggerToFormik(trigger, monitor);
 }
 
@@ -91,6 +91,15 @@ export function traditionalTriggerToFormik(trigger, monitor) {
       anomalyConfidenceThresholdValue,
       anomalyConfidenceThresholdEnum,
     },
+  };
+}
+
+export function aggregationTriggersToFormik(monitor) {
+  const aggregationTriggers = _.get(monitor, 'triggers', []).map((trigger) =>
+    aggregationTriggerToFormik(trigger, monitor)
+  );
+  return {
+    aggregationTriggers: _.orderBy(aggregationTriggers, (trigger) => trigger.name),
   };
 }
 

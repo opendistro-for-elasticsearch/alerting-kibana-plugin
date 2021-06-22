@@ -20,7 +20,7 @@ import { EuiButton, EuiInMemoryTable } from '@elastic/eui';
 
 import ContentPanel from '../../../../components/ContentPanel';
 
-const MAX_TRIGGERS = 10;
+export const MAX_TRIGGERS = 10;
 
 export default class Triggers extends Component {
   constructor(props) {
@@ -66,17 +66,8 @@ export default class Triggers extends Component {
   }
 
   onEdit() {
-    // TODO: Rewrapping the Trigger onEdit to avoid complicating triggerToFormik for now
     const { monitor } = this.props;
-    const selectedTrigger = this.state.selectedItems[0];
-    const triggerType =
-      monitor.monitor_type === 'aggregation_monitor'
-        ? 'aggregation_trigger'
-        : 'traditional_trigger';
-    const wrappedTrigger = {
-      [triggerType]: selectedTrigger,
-    };
-    this.props.onEditTrigger(wrappedTrigger);
+    this.props.onEditTrigger(monitor.triggers);
   }
 
   onSelectionChange(selectedItems) {

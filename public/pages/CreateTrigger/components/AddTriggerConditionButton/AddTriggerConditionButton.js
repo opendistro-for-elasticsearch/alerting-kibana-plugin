@@ -15,24 +15,18 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { EuiButton } from '@elastic/eui';
-import { FORMIK_INITIAL_TRIGGER_VALUES } from '../../containers/CreateTrigger/utils/constants';
+import { EuiButtonEmpty } from '@elastic/eui';
+import { FORMIK_INITIAL_TRIGGER_CONDITION_VALUES } from '../../containers/CreateTrigger/utils/constants';
 
-const AddTriggerButton = ({ arrayHelpers, disabled }) => {
-  const buttonText =
-    _.get(arrayHelpers, 'form.values.aggregationTriggers', []).length === 0
-      ? 'Add trigger'
-      : 'Add another trigger';
-
+const AddTriggerConditionButton = ({ arrayHelpers, disabled }) => {
   return (
-    <EuiButton
-      fill={false}
-      onClick={() => arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES))}
+    <EuiButtonEmpty
+      onClick={() => arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_TRIGGER_CONDITION_VALUES))}
       disabled={disabled}
     >
-      {buttonText}
-    </EuiButton>
+      + Add condition
+    </EuiButtonEmpty>
   );
 };
 
-export default AddTriggerButton;
+export default AddTriggerConditionButton;

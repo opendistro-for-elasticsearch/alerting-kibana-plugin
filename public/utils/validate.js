@@ -27,12 +27,14 @@ export const validateActionName = (monitor, trigger) => (value) => {
   if (!value) return 'Required';
   // GetMonitor is being used to retrieve the Trigger which means it will always
   // be wrapped in Trigger type (even for old Monitors)
-  //  TODO: Should clean this up later since a similar check is done in several places.
+  // TODO: Should clean this up later since a similar check is done in several places.
+  // TODO: Expand on this validation by passing in triggerValues and comparing the current
+  //  action's name with names of other actions in the trigger creation form.
   let actions;
   if (monitor.monitor_type === 'traditional_monitor') {
-    actions = _.get(trigger, 'traditional_trigger.actions');
+    actions = _.get(trigger, 'traditional_trigger.actions', []);
   } else if (monitor.monitor_type === 'aggregation_monitor') {
-    actions = _.get(trigger, 'aggregation_trigger.actions');
+    actions = _.get(trigger, 'aggregation_trigger.actions', []);
   }
   const matches = actions.filter((action) => action.name === value);
   if (matches.length > 1) return 'Action name is already used';

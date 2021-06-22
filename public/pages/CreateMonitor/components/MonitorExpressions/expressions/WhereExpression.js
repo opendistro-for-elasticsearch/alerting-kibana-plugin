@@ -67,6 +67,9 @@ const ALLOWED_TYPES = ['number', 'text', 'keyword', 'boolean'];
 class WhereExpression extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      fieldPath: !_.isEmpty(`${props.fieldPath}`) ? `${props.fieldPath}.` : '',
+    };
   }
 
   handleFieldChange = (option, field, form) => {
@@ -96,7 +99,8 @@ class WhereExpression extends Component {
       closeExpression,
     } = this.props;
     // Explicitly invoking validation, this component unmount after it closes.
-    if (values.where.fieldName.length > 0) {
+    const fieldName = _.get(values, `${this.state.fieldPath}where.fieldName`, '');
+    if (fieldName > 0) {
       await this.props.formik.validateForm();
     }
     closeExpression(Expressions.WHERE);
@@ -118,9 +122,10 @@ class WhereExpression extends Component {
       <EuiFlexGroup alignItems="center">
         <EuiFlexItem>
           <FormikFieldNumber
-            name="where.fieldRangeStart"
+            name={`${this.state.fieldPath}where.fieldRangeStart`}
             fieldProps={{
-              validate: (value) => validateRange(value, values.where),
+              validate: (value) =>
+                validateRange(value, _.get(values, `${this.state.fieldPath}where`)),
             }}
             inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
           />
@@ -130,9 +135,10 @@ class WhereExpression extends Component {
         </EuiFlexItem>
         <EuiFlexItem>
           <FormikFieldNumber
-            name="where.fieldRangeEnd"
+            name={`${this.state.fieldPath}where.fieldRangeEnd`}
             fieldProps={{
-              validate: (value) => validateRange(value, values.where),
+              validate: (value) =>
+                validateRange(value, _.get(values, `${this.state.fieldPath}where`)),
             }}
             inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
           />
@@ -147,7 +153,7 @@ class WhereExpression extends Component {
         this.renderBetweenAnd()
       ) : (
         <FormikFieldNumber
-          name="where.fieldValue"
+          name={`${this.state.fieldPath}where.fieldValue`}
           fieldProps={{ validate: required }}
           inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
         />
@@ -155,7 +161,7 @@ class WhereExpression extends Component {
     } else if (fieldType == DATA_TYPES.BOOLEAN) {
       return (
         <FormikSelect
-          name="where.fieldValue"
+          name={`${this.state.fieldPath}where.fieldValue`}
           fieldProps={{ validate: required }}
           inputProps={{
             onChange: this.handleChangeWrapper,
@@ -167,7 +173,7 @@ class WhereExpression extends Component {
     } else {
       return (
         <FormikFieldText
-          name="where.fieldValue"
+          name={`${this.state.fieldPath}where.fieldValue`}
           fieldProps={{ validate: required }}
           inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
         />
@@ -184,16 +190,16 @@ class WhereExpression extends Component {
       indexFieldFilters,
       useTriggerFieldOperators,
     } = this.props;
+    const { fieldPath } = this.state;
     const indexFields =
       indexFieldFilters !== undefined
         ? getFilteredIndexFields(dataTypes, ALLOWED_TYPES, indexFieldFilters)
         : getIndexFields(dataTypes, ALLOWED_TYPES);
-    const fieldType = _.get(values, 'where.fieldName[0].type', 'number');
-
-    let fieldOperator = _.get(values, 'where.operator', 'is');
+    const fieldType = _.get(values, `${fieldPath}where.fieldName[0].type`, 'number');
+    let fieldOperator = _.get(values, `${fieldPath}where.operator`, 'is');
     if (useTriggerFieldOperators && !_.includes(_.values(TRIGGER_OPERATORS_MAP), fieldOperator)) {
       fieldOperator = TRIGGER_OPERATORS_MAP.INCLUDE;
-      _.set(values, 'where.operator', fieldOperator);
+      _.set(values, `${fieldPath}where.operator`, fieldOperator);
     }
 
     const fieldOperators = useTriggerFieldOperators
@@ -216,7 +222,7 @@ class WhereExpression extends Component {
           }}
           onClickAriaLabel="Edit where filter"
         >
-          {displayText(values.where)}
+          {displayText(_.get(values, `${fieldPath}where`))}
         </EuiBadge>
         <EuiPopover
           id="where-popover"
@@ -240,7 +246,7 @@ class WhereExpression extends Component {
             <EuiFlexGroup style={{ ...EXPRESSION_STYLE }}>
               <EuiFlexItem grow={false} style={{ width: 200 }}>
                 <FormikComboBox
-                  name="where.fieldName"
+                  name={`${fieldPath}where.fieldName`}
                   inputProps={{
                     placeholder: 'Select a field',
                     options: indexFields,
@@ -252,7 +258,7 @@ class WhereExpression extends Component {
               </EuiFlexItem>
               <EuiFlexItem grow={false}>
                 <FormikSelect
-                  name="where.operator"
+                  name={`${fieldPath}where.operator`}
                   inputProps={{
                     onChange: this.handleOperatorChange,
                     options: fieldOperators,
