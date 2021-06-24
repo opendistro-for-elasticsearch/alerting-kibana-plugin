@@ -77,6 +77,7 @@ export default class MonitorExpressions extends Component {
     const { dataTypes, errors, touched } = this.props;
     return (
       <div>
+        {/*TODO: run query when metrics or group by expression is changed*/}
         <FieldArray name="aggregations" validateOnChange={false}>
           {(arrayHelpers) => (
             <MetricExpression

@@ -33,6 +33,8 @@ class MetricExpression extends Component {
     const {
       formik: { values },
       onMadeChanges,
+      openExpression,
+      closeExpression,
     } = this.props;
     return values.aggregations.map((aggregation, index) => {
       return (
@@ -44,6 +46,8 @@ class MetricExpression extends Component {
           expressionWidth={expressionWidth}
           aggregation={aggregation}
           index={index}
+          openExpression={openExpression}
+          closeExpression={closeExpression}
         />
       );
     });
