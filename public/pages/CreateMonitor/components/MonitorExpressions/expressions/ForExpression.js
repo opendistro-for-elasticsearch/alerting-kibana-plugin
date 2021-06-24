@@ -25,34 +25,10 @@ class ForExpression extends Component {
   onChangeWrapper = (e, field) => {
     this.props.onMadeChanges();
     field.onChange(e);
+    this.props.onRunQuery();
   };
 
-  renderPopover = () => (
-    <div style={POPOVER_STYLE}>
-      <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
-        <EuiFlexItem grow={false} style={{ width: 100 }}>
-          <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
-        </EuiFlexItem>
-        <EuiFlexItem grow={false} style={{ width: 150 }}>
-          <FormikSelect
-            name="bucketUnitOfTime"
-            inputProps={{
-              onChange: this.onChangeWrapper,
-              options: UNITS_OF_TIME,
-            }}
-          />
-        </EuiFlexItem>
-      </EuiFlexGroup>
-    </div>
-  );
-
   render() {
-    const {
-      formik: { values },
-      openedStates,
-      closeExpression,
-      openExpression,
-    } = this.props;
     return (
       <div>
         <EuiText size="xs">
@@ -79,9 +55,8 @@ class ForExpression extends Component {
 
 ForExpression.propTypes = {
   formik: PropTypes.object.isRequired,
-  openedStates: PropTypes.object.isRequired,
-  openExpression: PropTypes.func.isRequired,
-  closeExpression: PropTypes.func.isRequired,
+  onMadeChanges: PropTypes.func.isRequired,
+  onRunQuery: PropTypes.func.isRequired,
 };
 
 export default connect(ForExpression);

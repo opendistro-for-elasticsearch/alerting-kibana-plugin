@@ -16,14 +16,14 @@
 import React from 'react';
 import { EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 import FormikCheckableCard from '../../../../components/FormControls/FormikCheckableCard';
+import { MONITOR_TYPE } from '../../../../utils/constants';
 
-const onChangeDefinition = (e, form, resetResponse) => {
+const onChangeDefinition = (e, form) => {
   const type = e.target.value;
-  // resetResponse();
   form.setFieldValue('monitor_type', type);
 };
 
-const MonitorType = ({ values, resetResponse }) => (
+const MonitorType = ({ values }) => (
   <div>
     <EuiFlexGroup>
       <EuiFlexItem>
@@ -37,10 +37,10 @@ const MonitorType = ({ values, resetResponse }) => (
           inputProps={{
             id: 'traditionalMonitorRadioCard',
             label: 'Traditional monitor',
-            checked: values.monitor_type === 'traditional_monitor',
-            value: 'traditional_monitor',
+            checked: values.monitor_type === MONITOR_TYPE.TRADITIONAL,
+            value: MONITOR_TYPE.TRADITIONAL,
             onChange: (e, field, form) => {
-              onChangeDefinition(e, form, resetResponse);
+              onChangeDefinition(e, form);
             },
           }}
         />
@@ -57,10 +57,11 @@ const MonitorType = ({ values, resetResponse }) => (
           inputProps={{
             id: 'aggregationMonitorRadioCard',
             label: 'Aggregation monitor',
-            checked: values.monitor_type === 'aggregation_monitor',
-            value: 'aggregation_monitor',
+            checked: values.monitor_type === MONITOR_TYPE.AGGREGATION,
+            value: MONITOR_TYPE.AGGREGATION,
             onChange: (e, field, form) => {
-              onChangeDefinition(e, form, resetResponse);
+              onChangeDefinition(e, form);
+
             },
           }}
         />
