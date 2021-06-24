@@ -13,27 +13,37 @@
  * permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { EuiAccordion, EuiButton, EuiSpacer } from '@elastic/eui';
+import {
+  EuiAccordion,
+  EuiButton,
+  EuiHorizontalRule,
+  EuiSpacer,
+  EuiText,
+  EuiTitle,
+} from '@elastic/eui';
 import 'brace/mode/plain_text';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
 import { isInvalid, hasError } from '../../../../utils/validate';
-import ContentPanel from '../../../../components/ContentPanel/index';
 import { SEARCH_TYPE } from '../../../../utils/constants';
-import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
-import AddTriggerButton from '../../components/AddTriggerButton';
-import TriggerEmptyPrompt from '../../components/TriggerEmptyPrompt';
+import {
+  FORMIK_INITIAL_TRIGGER_CONDITION_VALUES,
+  TRIGGER_TYPE,
+} from '../CreateTrigger/utils/constants';
+import AddTriggerConditionButton from '../../components/AddTriggerConditionButton';
 import AggregationTriggerGraph from '../../components/AggregationTriggerGraph';
 import AggregationTriggerQuery from '../../components/AggregationTriggerQuery';
 import { validateTriggerName } from '../DefineTrigger/utils/validation';
 import WhereExpression from '../../../CreateMonitor/components/MonitorExpressions/expressions/WhereExpression';
+import { FieldArray } from 'formik';
+import ConfigureActions from '../ConfigureActions';
 
 const defaultRowProps = {
   label: 'Trigger name',
-  helpText: `Trigger names must be unique. Names can only contain letters, numbers, and special characters.`,
-  style: { paddingLeft: '10px' },
+  // helpText: `Trigger names must be unique. Names can only contain letters, numbers, and special characters.`,
+  style: { paddingLeft: '20px', paddingTop: '10px' },
   isInvalid,
   error: hasError,
 };
@@ -46,8 +56,8 @@ const selectFieldProps = {
 
 const selectRowProps = {
   label: 'Severity level',
-  helpText: `Severity levels help you organize your triggers and actions. A trigger with a high severity level might page a specific individual, whereas a trigger with a low severity level might email a list.`,
-  style: { paddingLeft: '10px', marginTop: '0px' },
+  // helpText: `Severity levels help you organize your triggers and actions. A trigger with a high severity level might page a specific individual, whereas a trigger with a low severity level might email a list.`,
+  style: { paddingLeft: '20px' },
   isInvalid,
   error: hasError,
 };
@@ -76,185 +86,281 @@ const propTypes = {
   isDarkMode: PropTypes.bool.isRequired,
 };
 
+const DEFAULT_TRIGGER_NAME = 'Define trigger';
 const MAX_TRIGGER_CONDITIONS = 5;
-
 const MAX_WHERE_FILTERS = 1;
 
-const renderWhereExpression = (
-  openedStates,
-  closeExpression,
-  openExpression,
-  onMadeChanges,
-  dataTypes
-) => {
-  return (
-    <WhereExpression
-      openedStates={openedStates}
-      closeExpression={closeExpression}
-      openExpression={openExpression}
-      onMadeChanges={onMadeChanges}
-      dataTypes={dataTypes}
-    />
-  );
+export const DEFAULT_METRIC_AGGREGATION = { value: '_count', text: 'Count of documents' };
+export const DEFAULT_AND_OR_CONDITION = 'AND';
+
+export const TRIGGER_OPERATORS_MAP = {
+  INCLUDE: 'include',
+  EXCLUDE: 'exclude',
 };
 
-const renderAggregationTriggerGraph = (index, monitor, monitorValues, response, triggerValues) => {
-  const andOrCondition = triggerValues.triggerConditions[index].andOrCondition;
-  const queryMetric = triggerValues.triggerConditions[index].queryMetric;
-  const thresholdEnum = triggerValues.triggerConditions[index].thresholdEnum;
-  const thresholdValue = triggerValues.triggerConditions[index].thresholdValue;
+export const TRIGGER_COMPARISON_OPERATORS = [
+  {
+    text: 'includes',
+    value: TRIGGER_OPERATORS_MAP.INCLUDE,
+    dataTypes: ['number', 'text', 'keyword', 'boolean'],
+  },
+  {
+    text: 'excludes',
+    value: TRIGGER_OPERATORS_MAP.EXCLUDE,
+    dataTypes: ['number', 'text', 'keyword', 'boolean'],
+  },
+];
 
-  const metricAggregations = _.keys(
-    _.get(monitor, 'inputs[0].search.query.aggregations.composite_agg.aggregations', [])
-  ).map((metric) => {
-    return { value: metric, text: metric };
-  });
-  // TODO: Something like this needs to be passed into the WHERE of the Aggregation Trigger definition
-  // const compositeAggregations = _.get(
-  //   monitor,
-  //   'inputs[0].search.query.aggregations.composite_agg.composite.sources',
-  //   []
-  // ).flatMap((entry) => _.keys(entry));
-
-  return (
-    <AggregationTriggerGraph
-      index={index}
-      andOrCondition={andOrCondition}
-      monitorValues={monitorValues}
-      response={response}
-      queryMetric={queryMetric}
-      queryMetrics={metricAggregations}
-      thresholdEnum={thresholdEnum}
-      thresholdValue={thresholdValue}
-    />
-  );
+export const DEFAULT_CLOSED_STATES = {
+  WHEN: false,
+  OF_FIELD: false,
+  THRESHOLD: false,
+  OVER: false,
+  FOR_THE_LAST: false,
+  WHERE: false,
 };
 
-const renderAggregationTriggerQuery = (
-  index,
-  context,
-  error,
-  executeResponse,
-  onRun,
-  response,
-  setFlyout,
-  triggerValues,
-  isDarkMode
-) => {
-  return (
-    <AggregationTriggerQuery
-      index={index}
-      context={context}
-      error={error}
-      executeResponse={executeResponse}
-      onRun={onRun}
-      response={response}
-      setFlyout={setFlyout}
-      triggerValues={triggerValues}
-      isDarkMode={isDarkMode}
-    />
-  );
-};
+class DefineAggregationTrigger extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openedStates: DEFAULT_CLOSED_STATES,
+      madeChanges: false,
+    };
+  }
 
-const DefineAggregationTrigger = ({
-  arrayHelpers,
-  context,
-  executeResponse,
-  monitor,
-  monitorValues,
-  onRun,
-  setFlyout,
-  triggers,
-  triggerValues,
-  isDarkMode,
-  openedStates,
-  closeExpression,
-  openExpression,
-  onMadeChanges,
-  dataTypes,
-}) => {
-  const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
-  const response = _.get(executeResponse, 'input_results.results[0]');
-  const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
+  openExpression = (expression) => {
+    this.setState({
+      openedStates: {
+        ...DEFAULT_CLOSED_STATES,
+        [expression]: true,
+      },
+    });
+  };
 
-  const hasTriggerConditions = !_.isEmpty(triggerValues.triggerConditions);
+  closeExpression = (expression) => {
+    const { madeChanges, openedStates } = this.state;
+    if (madeChanges && openedStates[expression]) {
+      // if made changes and close expression that was currently open => run query
 
-  let aggregationTriggerContent = hasTriggerConditions ? (
-    triggerValues.triggerConditions.map((trigCondition, index) => (
+      // TODO: Re-enabled when support for rendering visual graph previews is implemented.
+      // this.props.onRunQuery();
+      this.setState({ madeChanges: false });
+    }
+    this.setState({ openedStates: { ...openedStates, [expression]: false } });
+  };
+
+  onMadeChanges = () => {
+    this.setState({ madeChanges: true });
+  };
+
+  renderWhereExpression = (dataTypes, monitor, fieldPath) => {
+    const compositeAggregations = _.get(
+      monitor,
+      'inputs[0].search.query.aggregations.composite_agg.composite.sources',
+      []
+    ).flatMap((entry) => _.keys(entry));
+    return (
+      <div>
+        <WhereExpression
+          openedStates={this.state.openedStates}
+          closeExpression={this.closeExpression}
+          openExpression={this.openExpression}
+          onMadeChanges={this.onMadeChanges}
+          dataTypes={dataTypes}
+          indexFieldFilters={compositeAggregations}
+          useTriggerFieldOperators={true}
+          fieldPath={fieldPath}
+        />
+      </div>
+    );
+  };
+
+  renderAggregationTriggerGraph = (
+    arrayHelpers,
+    monitor,
+    monitorValues,
+    response,
+    triggerValues,
+    triggerIndex
+  ) => {
+    const metricAggregations = _.keys(
+      _.get(monitor, 'inputs[0].search.query.aggregations.composite_agg.aggregations', [])
+    ).map((metric) => {
+      return { value: metric, text: metric };
+    });
+    if (!metricAggregations.includes(DEFAULT_METRIC_AGGREGATION))
+      metricAggregations.push(DEFAULT_METRIC_AGGREGATION);
+
+    if (_.isEmpty(triggerValues.aggregationTriggers[triggerIndex].triggerConditions)) {
+      arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_TRIGGER_CONDITION_VALUES));
+    }
+
+    return triggerValues.aggregationTriggers[
+      triggerIndex
+    ].triggerConditions.map((triggerCondition, index) => (
+      <AggregationTriggerGraph
+        key={index}
+        arrayHelpers={arrayHelpers}
+        index={index}
+        triggerIndex={triggerIndex}
+        monitorValues={monitorValues}
+        triggerValues={triggerValues}
+        response={response}
+        queryMetrics={metricAggregations}
+      />
+    ));
+  };
+
+  renderAggregationTriggerQuery = (
+    context,
+    error,
+    executeResponse,
+    onRun,
+    response,
+    setFlyout,
+    triggerValues,
+    isDarkMode
+  ) => {
+    return (
+      <AggregationTriggerQuery
+        context={context}
+        error={error}
+        executeResponse={executeResponse}
+        onRun={onRun}
+        response={response}
+        setFlyout={setFlyout}
+        triggerValues={triggerValues}
+        isDarkMode={isDarkMode}
+      />
+    );
+  };
+
+  render() {
+    const {
+      triggerArrayHelpers,
+      context,
+      executeResponse,
+      monitor,
+      monitorValues,
+      onRun,
+      setFlyout,
+      triggers,
+      triggerValues,
+      isDarkMode,
+      dataTypes,
+      triggerIndex,
+      httpClient,
+      notifications,
+    } = this.props;
+    const fieldPath = `aggregationTriggers[${triggerIndex}]`;
+    const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
+    const response = _.get(executeResponse, 'input_results.results[0]');
+    const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
+    const triggerName = _.get(triggerValues, `${fieldPath}.name`, DEFAULT_TRIGGER_NAME);
+    const disableAddTriggerConditionButton =
+      _.get(triggerValues, `${fieldPath}.triggerConditions`).length >= MAX_TRIGGER_CONDITIONS;
+
+    const aggregationTriggerContent = isGraph ? (
+      <div>
+        <FieldArray name={`${fieldPath}.triggerConditions`} validateOnChange={true}>
+          {(conditionsArrayHelpers) => (
+            <div>
+              {this.renderAggregationTriggerGraph(
+                conditionsArrayHelpers,
+                monitor,
+                monitorValues,
+                response,
+                triggerValues,
+                triggerIndex
+              )}
+              <div style={{ paddingLeft: '15px' }}>
+                <AddTriggerConditionButton
+                  arrayHelpers={conditionsArrayHelpers}
+                  disabled={disableAddTriggerConditionButton}
+                />
+              </div>
+            </div>
+          )}
+        </FieldArray>
+        <EuiSpacer size={'m'} />
+        <div style={{ paddingLeft: '20px' }}>
+          {this.renderWhereExpression(dataTypes, monitor, fieldPath)}
+        </div>
+      </div>
+    ) : (
+      this.renderAggregationTriggerQuery(
+        context,
+        error,
+        executeResponse,
+        onRun,
+        response,
+        setFlyout,
+        triggerValues,
+        isDarkMode
+      )
+    );
+
+    return (
       <EuiAccordion
-        key={`${index}`}
-        id={`${index}`}
-        initialIsOpen={hasTriggerConditions}
-        className={'trigger-condition-accordion'}
-        buttonContent={`Trigger condition ${index + 1}`}
+        id={triggerName}
+        buttonContent={
+          <EuiTitle size={'s'}>
+            <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
+          </EuiTitle>
+        }
         extraAction={
-          <div style={{ paddingRight: '10px' }}>
-            <EuiButton
-              onClick={() => {
-                arrayHelpers.remove(index);
-              }}
-            >
-              Delete
-            </EuiButton>
-          </div>
+          <EuiButton
+            color={'danger'}
+            onClick={() => {
+              triggerArrayHelpers.remove(triggerIndex);
+            }}
+          >
+            Delete
+          </EuiButton>
         }
       >
-        {isGraph
-          ? renderAggregationTriggerGraph(index, monitor, monitorValues, response, triggerValues)
-          : renderAggregationTriggerQuery(
-              index,
-              context,
-              error,
-              executeResponse,
-              onRun,
-              response,
-              setFlyout,
-              triggerValues,
-              isDarkMode
-            )}
+        <EuiHorizontalRule margin="s" />
+        <FormikFieldText
+          name={`${fieldPath}.name`}
+          fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
+          formRow
+          rowProps={defaultRowProps}
+          inputProps={defaultInputProps}
+        />
+        <EuiSpacer size={'m'} />
+        <FormikSelect
+          name={`${fieldPath}.severity`}
+          formRow
+          fieldProps={selectFieldProps}
+          rowProps={selectRowProps}
+          inputProps={selectInputProps}
+        />
+        <EuiSpacer size={'m'} />
+        <EuiText style={{ paddingLeft: '20px' }}>
+          <h3>Trigger Conditions</h3>
+        </EuiText>
+        {aggregationTriggerContent}
+        <EuiSpacer size={'l'} />
+        <FieldArray name={`${fieldPath}.actions`} validateOnChange={true}>
+          {(arrayHelpers) => (
+            <ConfigureActions
+              arrayHelpers={arrayHelpers}
+              context={context}
+              httpClient={httpClient}
+              setFlyout={setFlyout}
+              values={triggerValues}
+              notifications={notifications}
+              fieldPath={fieldPath}
+              triggerIndex={triggerIndex}
+            />
+          )}
+        </FieldArray>
+        <EuiSpacer />
       </EuiAccordion>
-    ))
-  ) : (
-    <TriggerEmptyPrompt arrayHelpers={arrayHelpers} />
-  );
-
-  return (
-    <ContentPanel title="Define trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
-      <FormikFieldText
-        name="name"
-        fieldProps={{ validate: validateTriggerName(triggers, triggerValues) }}
-        formRow
-        rowProps={defaultRowProps}
-        inputProps={defaultInputProps}
-      />
-      <FormikSelect
-        name="severity"
-        formRow
-        fieldProps={selectFieldProps}
-        rowProps={selectRowProps}
-        inputProps={selectInputProps}
-      />
-      {aggregationTriggerContent}
-      {isGraph ? (
-        <div style={{ paddingLeft: '10px' }}>
-          <AddTriggerButton
-            arrayHelpers={arrayHelpers}
-            disabled={triggerValues.triggerConditions.length >= MAX_TRIGGER_CONDITIONS}
-          />
-          {/*<EuiSpacer />*/}
-          {/*// TODO: Implement WHERE filter logic*/}
-          {/*{renderWhereExpression(*/}
-          {/*    openedStates,*/}
-          {/*    closeExpression,*/}
-          {/*    openExpression,*/}
-          {/*    onMadeChanges,*/}
-          {/*    dataTypes*/}
-          {/*)}*/}
-        </div>
-      ) : null}
-    </ContentPanel>
-  );
-};
+    );
+  }
+}
 
 DefineAggregationTrigger.propTypes = propTypes;
 

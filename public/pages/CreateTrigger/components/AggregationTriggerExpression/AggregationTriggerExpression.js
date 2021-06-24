@@ -14,21 +14,18 @@
  */
 
 import React, { Component } from 'react';
-import _ from 'lodash';
 import { Field } from 'formik';
 import {
-  EuiExpression,
+  EuiButton,
   EuiFieldNumber,
   EuiFlexGroup,
   EuiFlexItem,
   EuiFormRow,
-  EuiPopover,
   EuiSelect,
 } from '@elastic/eui';
 
 const DEFAULT_CLOSED_STATES = { THRESHOLD: false };
 export const Expressions = { THRESHOLD: 'THRESHOLD' };
-const POPOVER_STYLE = { zIndex: '200' };
 
 const THRESHOLD_ENUM_OPTIONS = [
   { value: 'ABOVE', text: 'IS ABOVE' },
@@ -62,8 +59,9 @@ class AggregationTriggerExpression extends Component {
     this.setState({ openedStates: { ...openedStates, [expression]: false } });
   }
 
-  renderPopover() {
+  render() {
     const {
+      arrayHelpers,
       queryMetrics,
       index,
       andOrConditionFieldName,
@@ -71,136 +69,88 @@ class AggregationTriggerExpression extends Component {
       enumFieldName,
       valueFieldName,
     } = this.props;
+    const isFirstCondition = index === 0;
     return (
-      <div style={POPOVER_STYLE}>
-        <EuiFlexGroup
-          style={{
-            maxWidth: 600,
-            padding: '20px',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {index > 0 ? (
-            <EuiFlexItem grow={false} style={{ width: 100 }}>
-              <Field name={andOrConditionFieldName}>
-                {({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
-                  <EuiFormRow
-                    style={{ paddingLeft: '10px' }}
-                    isInvalid={touched.andOrCondition && !!errors.andOrCondition}
-                    error={errors.andOrCondition}
-                  >
-                    <EuiSelect options={AND_OR_CONDITION_OPTIONS} {...rest} />
-                  </EuiFormRow>
-                )}
-              </Field>
-            </EuiFlexItem>
-          ) : null}
-
-          <EuiFlexItem grow={false} style={{ width: 150 }}>
-            <Field name={queryMetricFieldName}>
+      <EuiFlexGroup
+        style={{
+          maxWidth: 1000,
+          paddingLeft: '10px',
+          paddingTop: '10px',
+          whiteSpace: 'nowrap',
+        }}
+        gutterSize={'m'}
+        alignItems={'flexStart'}
+      >
+        {!isFirstCondition ? (
+          <EuiFlexItem grow={false} style={{ width: 90 }}>
+            <Field name={andOrConditionFieldName}>
               {({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
                 <EuiFormRow
-                  style={{ paddingLeft: '10px' }}
-                  isInvalid={touched.queryMetric && !!errors.queryMetric}
-                  error={errors.queryMetric}
+                  isInvalid={touched.andOrCondition && !!errors.andOrCondition}
+                  error={errors.andOrCondition}
                 >
-                  <EuiSelect options={queryMetrics} {...rest} />
+                  <EuiSelect options={AND_OR_CONDITION_OPTIONS} {...rest} />
                 </EuiFormRow>
               )}
             </Field>
           </EuiFlexItem>
+        ) : null}
 
-          <EuiFlexItem grow={false} style={{ width: 150 }}>
-            <Field name={enumFieldName}>
-              {({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
-                <EuiFormRow
-                  style={{ paddingLeft: '10px' }}
-                  isInvalid={touched.thresholdEnum && !!errors.thresholdEnum}
-                  error={errors.thresholdEnum}
-                >
-                  <EuiSelect options={THRESHOLD_ENUM_OPTIONS} {...rest} />
-                </EuiFormRow>
-              )}
-            </Field>
-          </EuiFlexItem>
-
-          <EuiFlexItem grow={false} style={{ width: 100 }}>
-            <Field name={valueFieldName}>
-              {({ field, form: { touched, errors } }) => (
-                <EuiFormRow
-                  style={{ paddingLeft: '10px' }}
-                  isInvalid={touched.thresholdValue && !!errors.thresholdValue}
-                  error={errors.thresholdValue}
-                >
-                  <EuiFieldNumber {...field} />
-                </EuiFormRow>
-              )}
-            </Field>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </div>
-    );
-  }
-
-  render() {
-    const { openedStates } = this.state;
-    const {
-      index,
-      andOrCondition,
-      queryMetric,
-      queryMetrics,
-      thresholdEnum,
-      thresholdValue,
-      label,
-    } = this.props;
-
-    return (
-      <EuiFlexGroup alignItems={'center'}>
-        <EuiFlexItem grow={false}>
-          <EuiPopover
-            id="aggregation-trigger-popover"
-            button={
-              <EuiFormRow label={label}>
-                <div>
-                  {index > 0 ? (
-                    <EuiExpression
-                      description={`${
-                        _.isEmpty(andOrCondition)
-                          ? AND_OR_CONDITION_OPTIONS[0].text
-                          : andOrCondition
-                      }`}
-                      value={''}
-                      isActive={openedStates.THRESHOLD}
-                      onClick={() => this.openExpression(Expressions.THRESHOLD)}
-                    />
-                  ) : null}
-                  <EuiExpression
-                    description={'WHEN '}
-                    value={`${
-                      _.isEmpty(queryMetric) ? _.get(queryMetrics[0], 'text', '-') : queryMetric
-                    }`}
-                    isActive={openedStates.THRESHOLD}
-                    onClick={() => this.openExpression(Expressions.THRESHOLD)}
-                  />
-                  <EuiExpression
-                    description={`IS ${thresholdEnum}`}
-                    value={`${thresholdValue.toLocaleString()}`}
-                    isActive={openedStates.THRESHOLD}
-                    onClick={() => this.openExpression(Expressions.THRESHOLD)}
-                  />
-                </div>
+        <EuiFlexItem grow={true} style={{ minWidth: 300, maxWidth: 495 }}>
+          <Field name={queryMetricFieldName} fullWidth={true}>
+            {({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
+              <EuiFormRow
+                fullWidth={true}
+                label={isFirstCondition ? 'Metric' : null}
+                isInvalid={touched.queryMetric && !!errors.queryMetric}
+                error={errors.queryMetric}
+              >
+                <EuiSelect fullWidth={true} options={queryMetrics} {...rest} />
               </EuiFormRow>
-            }
-            isOpen={openedStates.THRESHOLD}
-            closePopover={() => this.closeExpression(Expressions.THRESHOLD)}
-            panelPaddingSize="none"
-            ownFocus
-            withTitle
-            anchorPosition="downLeft"
-          >
-            {this.renderPopover()}
-          </EuiPopover>
+            )}
+          </Field>
         </EuiFlexItem>
+
+        <EuiFlexItem grow={false} style={{ maxWidth: 200 }}>
+          <Field name={enumFieldName}>
+            {({ field: { onBlur, ...rest }, form: { touched, errors } }) => (
+              <EuiFormRow
+                label={isFirstCondition ? 'Threshold' : null}
+                isInvalid={touched.thresholdEnum && !!errors.thresholdEnum}
+                error={errors.thresholdEnum}
+              >
+                <EuiSelect options={THRESHOLD_ENUM_OPTIONS} {...rest} />
+              </EuiFormRow>
+            )}
+          </Field>
+        </EuiFlexItem>
+
+        <EuiFlexItem grow={false} style={{ maxWidth: 200 }}>
+          <Field name={valueFieldName}>
+            {({ field, form: { touched, errors } }) => (
+              <EuiFormRow
+                label={isFirstCondition ? 'Value' : null}
+                isInvalid={touched.thresholdValue && !!errors.thresholdValue}
+                error={errors.thresholdValue}
+              >
+                <EuiFieldNumber {...field} />
+              </EuiFormRow>
+            )}
+          </Field>
+        </EuiFlexItem>
+
+        {!isFirstCondition ? (
+          <EuiFlexItem grow={false}>
+            <EuiButton
+              color={'danger'}
+              onClick={() => {
+                arrayHelpers.remove(index);
+              }}
+            >
+              Delete
+            </EuiButton>
+          </EuiFlexItem>
+        ) : null}
       </EuiFlexGroup>
     );
   }

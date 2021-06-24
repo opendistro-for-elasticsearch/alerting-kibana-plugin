@@ -15,6 +15,7 @@
 
 import React from 'react';
 import _ from 'lodash';
+import { EuiSpacer } from '@elastic/eui';
 import Action from '../../components/Action';
 import ActionEmptyPrompt from '../../components/ActionEmptyPrompt';
 import AddActionButton from '../../components/AddActionButton';
@@ -40,6 +41,7 @@ class ConfigureActions extends React.Component {
       allowList: [],
       loadingDestinations: true,
       actionDeleted: false,
+      fieldPath: !_.isEmpty(`${props.fieldPath}`) ? `${props.fieldPath}.` : '',
     };
   }
 
@@ -54,7 +56,7 @@ class ConfigureActions extends React.Component {
 
   loadDestinations = async (searchText = '') => {
     const { httpClient, values, arrayHelpers, notifications } = this.props;
-    const { allowList, actionDeleted } = this.state;
+    const { allowList, actionDeleted, fieldPath } = this.state;
     this.setState({ loadingDestinations: true });
     const getDestinationLabel = (destination) => {
       const foundDestination = DESTINATION_OPTIONS.find(({ value }) => value === destination.type);
@@ -75,7 +77,7 @@ class ConfigureActions extends React.Component {
           .filter(({ type }) => allowList.includes(type));
         this.setState({ destinations, loadingDestinations: false });
         // If actions is not defined  If user choose to delete actions, it will not override customer's preferences.
-        if (destinations.length > 0 && !values.actions && !actionDeleted) {
+        if (destinations.length > 0 && !_.get(values, `${fieldPath}actions`) && !actionDeleted) {
           arrayHelpers.insert(0, FORMIK_INITIAL_ACTION_VALUES);
         }
       } else {
@@ -92,10 +94,27 @@ class ConfigureActions extends React.Component {
       context: { monitor, trigger },
       httpClient,
       notifications,
+      triggerIndex,
     } = this.props;
-    const action = trigger.actions[index];
-    const condition = { script: { lang: 'painless', source: 'return true' } };
-    const testMonitor = { ...monitor, triggers: [{ ...trigger, actions: [action], condition }] };
+    // TODO: sendTestMessage isn't working for aggregation monitors.
+    const triggerType =
+      monitor.monitor_type === 'traditional_monitor'
+        ? 'traditional_trigger'
+        : 'aggregation_trigger';
+
+    const action = _.get(trigger[triggerIndex], `${triggerType}.actions[${index}]`);
+
+    const condition = {
+      ..._.get(trigger[triggerIndex], `${triggerType}.condition`),
+      script: { lang: 'painless', source: 'return true' },
+    };
+
+    const testTrigger = _.cloneDeep(trigger[triggerIndex]);
+    _.set(testTrigger, `${triggerType}.actions`, [action]);
+    _.set(testTrigger, `${triggerType}.condition`, condition);
+
+    const testMonitor = { ...monitor, triggers: [{ ...testTrigger }] };
+
     try {
       const response = await httpClient.post('../api/alerting/monitors/_execute', {
         query: { dryrun: false },
@@ -112,12 +131,13 @@ class ConfigureActions extends React.Component {
 
   renderActions = (arrayHelpers) => {
     const { context, setFlyout, values } = this.props;
-    const { destinations } = this.state;
+    const { destinations, fieldPath } = this.state;
     const hasDestinations = !_.isEmpty(destinations);
-    const hasActions = !_.isEmpty(values.actions);
+    const hasActions = !_.isEmpty(_.get(values, `${fieldPath}actions`));
     const shouldRenderActions = hasActions || (hasDestinations && hasActions);
+
     return shouldRenderActions ? (
-      values.actions.map((action, index) => (
+      _.get(values, `${fieldPath}actions`).map((action, index) => (
         <Action
           key={index}
           action={action}
@@ -131,6 +151,7 @@ class ConfigureActions extends React.Component {
           }}
           sendTestMessage={this.sendTestMessage}
           setFlyout={setFlyout}
+          fieldPath={fieldPath}
         />
       ))
     ) : (
@@ -138,23 +159,31 @@ class ConfigureActions extends React.Component {
     );
   };
   render() {
-    const { loadingDestinations } = this.state;
-    const { arrayHelpers } = this.props;
+    const { loadingDestinations, fieldPath } = this.state;
+    const { arrayHelpers, values } = this.props;
+    const numOfActions = _.get(values, `${fieldPath}actions`, []).length;
+    const displayAddActionButton = numOfActions > 0;
     //TODO:: Handle loading Destinations inside the Action which will be more intuitive for customers.
     return (
       <ContentPanel
-        title="Configure actions"
+        title={`Actions (${numOfActions})`}
         titleSize="s"
-        panelStyles={{ paddingBottom: '0px' }}
-        bodyStyles={{ padding: '10px' }}
+        panelStyles={{ paddingBottom: '0px', paddingLeft: '20px' }}
+        bodyStyles={{ paddingLeft: '0px', padding: '20px' }}
         horizontalRuleClassName="accordion-horizontal-rule"
-        actions={<AddActionButton arrayHelpers={arrayHelpers} />}
       >
         {loadingDestinations ? (
           <div style={{ display: 'flex', justifyContent: 'center' }}>Loading Destinations...</div>
         ) : (
           this.renderActions(arrayHelpers)
         )}
+
+        {displayAddActionButton ? (
+          <div>
+            <EuiSpacer size={'s'} />
+            <AddActionButton arrayHelpers={arrayHelpers} numOfActions={numOfActions} />
+          </div>
+        ) : null}
       </ContentPanel>
     );
   }

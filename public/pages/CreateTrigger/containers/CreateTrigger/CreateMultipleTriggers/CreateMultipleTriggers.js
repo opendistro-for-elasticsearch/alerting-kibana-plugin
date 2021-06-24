@@ -1,16 +1,16 @@
 /*
- *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import React, { Component, Fragment } from 'react';
@@ -25,26 +25,25 @@ import {
   EuiFlexItem,
   EuiLink,
   EuiSpacer,
-  EuiTitle,
 } from '@elastic/eui';
 import 'brace/theme/github';
 import 'brace/mode/json';
 import 'brace/mode/plain_text';
 import 'brace/snippets/javascript';
 import 'brace/ext/language_tools';
-import ConfigureActions from '../ConfigureActions';
-import DefineTrigger from '../DefineTrigger';
-import monitorToFormik from '../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
-import { buildSearchRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
-import { formikToTrigger, formikToTriggerUiMetadata } from './utils/formikToTrigger';
-import { triggerToFormik } from './utils/triggerToFormik';
-import { FORMIK_INITIAL_TRIGGER_VALUES } from './utils/constants';
-import { SEARCH_TYPE } from '../../../../utils/constants';
-import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
-import { backendErrorNotification } from '../../../../utils/helpers';
-import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
-import DefineAggregationTrigger from '../DefineAggregationTrigger';
-import { getPathsPerDataType } from '../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
+import ConfigureActions from '../../ConfigureActions';
+import DefineTrigger from '../../DefineTrigger';
+import monitorToFormik from '../../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
+import { buildSearchRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
+import { formikToTrigger, formikToTriggerUiMetadata } from '../utils/formikToTrigger';
+import { triggerToFormik } from '../utils/triggerToFormik';
+import { FORMIK_INITIAL_TRIGGER_VALUES } from '../utils/constants';
+import { SEARCH_TYPE } from '../../../../../utils/constants';
+import { SubmitErrorHandler } from '../../../../../utils/SubmitErrorHandler';
+import { backendErrorNotification } from '../../../../../utils/helpers';
+import { buildLocalUriRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
+import { getPathsPerDataType } from '../../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
+import ConfigureTriggers from '../../ConfigureTriggers';
 
 export const DEFAULT_CLOSED_STATES = {
   WHEN: false,
@@ -55,7 +54,7 @@ export const DEFAULT_CLOSED_STATES = {
   WHERE: false,
 };
 
-export default class CreateTrigger extends Component {
+export default class CreateMultipleTriggers extends Component {
   constructor(props) {
     super(props);
 
@@ -76,7 +75,6 @@ export default class CreateTrigger extends Component {
 
   componentDidMount() {
     this.onRunExecute();
-    this.onQueryMappings();
   }
 
   componentWillUnmount() {
@@ -86,7 +84,9 @@ export default class CreateTrigger extends Component {
   onCreate = (trigger, triggerMetadata, { setSubmitting, setErrors }) => {
     const { monitor, updateMonitor, onCloseTrigger } = this.props;
     const { ui_metadata: uiMetadata, triggers } = monitor;
-    const updatedTriggers = [trigger].concat(triggers);
+    const updatedTriggers = _.isArray(trigger)
+      ? trigger.concat(triggers)
+      : [trigger].concat(triggers);
     const updatedUiMetadata = {
       ...uiMetadata,
       triggers: { ...uiMetadata.triggers, ...triggerMetadata },
@@ -109,26 +109,36 @@ export default class CreateTrigger extends Component {
   onEdit = (trigger, triggerMetadata, { setSubmitting, setErrors }) => {
     const { monitor, updateMonitor, onCloseTrigger, triggerToEdit } = this.props;
     const { ui_metadata: uiMetadata = {}, triggers, monitor_type } = monitor;
-    const { name } =
-      monitor_type === 'traditional_monitor'
-        ? triggerToEdit.traditional_trigger
-        : triggerToEdit.aggregation_trigger;
-    const updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
-    delete updatedTriggersMetadata[name];
+    let updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
+    let updatedTriggers;
+
+    switch (monitor_type) {
+      case 'traditional_monitor':
+        // TODO: Refactor this case when ConfigureTriggers supports multiple traditional triggers
+        const { name } = triggerToEdit.traditional_trigger;
+        delete updatedTriggersMetadata[name];
+
+        const findTriggerName = (element) => {
+          return name === element.traditional_trigger.name;
+        };
+
+        const indexToUpdate = _.findIndex(triggers, findTriggerName);
+        updatedTriggers = triggers.slice();
+        updatedTriggers.splice(indexToUpdate, 1, trigger);
+        break;
+
+      case 'aggregation_monitor':
+        const names = triggerToEdit.map((entry) => entry.aggregation_trigger.name);
+        names.forEach((name) => delete updatedTriggersMetadata[name]);
+        updatedTriggers = _.cloneDeep(trigger);
+        break;
+    }
+
     const updatedUiMetadata = {
       ...uiMetadata,
       triggers: { ...updatedTriggersMetadata, ...triggerMetadata },
     };
 
-    const findTriggerName = (element) => {
-      return monitor_type === 'traditional_monitor'
-        ? name === element.traditional_trigger.name
-        : name === element.aggregation_trigger.name;
-    };
-
-    const indexToUpdate = _.findIndex(triggers, findTriggerName);
-    const updatedTriggers = triggers.slice();
-    updatedTriggers.splice(indexToUpdate, 1, trigger);
     const actionKeywords = ['update', 'trigger'];
     updateMonitor({ triggers: updatedTriggers, ui_metadata: updatedUiMetadata }, actionKeywords)
       .then((res) => {
@@ -152,7 +162,8 @@ export default class CreateTrigger extends Component {
     _.set(monitorToExecute, 'triggers', triggers);
 
     switch (searchType) {
-      case SEARCH_TYPE.QUERY || SEARCH_TYPE.GRAPH:
+      case SEARCH_TYPE.QUERY:
+      case SEARCH_TYPE.GRAPH:
         const searchRequest = buildSearchRequest(formikValues);
         _.set(monitorToExecute, 'inputs[0].search', searchRequest);
         break;
@@ -241,36 +252,6 @@ export default class CreateTrigger extends Component {
     }
   };
 
-  openExpression = (expression) => {
-    this.setState({
-      openedStates: {
-        ...DEFAULT_CLOSED_STATES,
-        [expression]: true,
-      },
-    });
-  };
-
-  closeExpression = (expression) => {
-    const { madeChanges, openedStates } = this.state;
-    if (madeChanges && openedStates[expression]) {
-      // if made changes and close expression that was currently open => run query
-      this.props.onRunQuery();
-      this.setState({ madeChanges: false });
-    }
-    this.setState({ openedStates: { ...openedStates, [expression]: false } });
-  };
-
-  onMadeChanges = () => {
-    this.setState({ madeChanges: true });
-  };
-
-  getExpressionProps = () => ({
-    openedStates: this.state.openedStates,
-    closeExpression: this.closeExpression,
-    openExpression: this.openExpression,
-    onMadeChanges: this.onMadeChanges,
-  });
-
   async queryMappings(index) {
     if (!index.length) {
       return {};
@@ -311,26 +292,39 @@ export default class CreateTrigger extends Component {
         <Formik initialValues={initialValues} onSubmit={this.onSubmit} validateOnChange={false}>
           {({ values, handleSubmit, isSubmitting, errors, isValid }) => (
             <Fragment>
-              <EuiTitle size="l">
-                <h1>{edit ? 'Edit' : 'Create'} trigger</h1>
-              </EuiTitle>
               <EuiSpacer />
+              {/*// TODO: Add traditional monitor logic to ConfigureTriggers.js to support the single page experience.*/}
               {isTraditionalMonitor ? (
-                <DefineTrigger
-                  context={this.getTriggerContext(executeResponse, monitor, values)}
-                  executeResponse={executeResponse}
-                  monitorValues={monitorToFormik(monitor)}
-                  onRun={this.onRunExecute}
-                  setFlyout={setFlyout}
-                  triggers={monitor.triggers}
-                  triggerValues={values}
-                  isDarkMode={this.props.isDarkMode}
-                />
+                <div>
+                  <DefineTrigger
+                    context={this.getTriggerContext(executeResponse, monitor, values)}
+                    executeResponse={executeResponse}
+                    monitorValues={monitorToFormik(monitor)}
+                    onRun={this.onRunExecute}
+                    setFlyout={setFlyout}
+                    triggers={monitor.triggers}
+                    triggerValues={values}
+                    isDarkMode={this.props.isDarkMode}
+                  />
+                  <EuiSpacer />
+                  <FieldArray name="actions" validateOnChange={true}>
+                    {(arrayHelpers) => (
+                      <ConfigureActions
+                        arrayHelpers={arrayHelpers}
+                        context={this.getTriggerContext(executeResponse, monitor, values)}
+                        httpClient={httpClient}
+                        setFlyout={setFlyout}
+                        values={values}
+                        notifications={notifications}
+                      />
+                    )}
+                  </FieldArray>
+                </div>
               ) : (
-                <FieldArray name={'triggerConditions'} validateOnChange={true}>
-                  {(arrayHelpers) => (
-                    <DefineAggregationTrigger
-                      arrayHelpers={arrayHelpers}
+                <FieldArray name={'aggregationTriggers'} validateOnChange={true}>
+                  {(triggerArrayHelpers) => (
+                    <ConfigureTriggers
+                      triggerArrayHelpers={triggerArrayHelpers}
                       context={this.getTriggerContext(executeResponse, monitor, values)}
                       executeResponse={executeResponse}
                       monitor={monitor}
@@ -340,28 +334,13 @@ export default class CreateTrigger extends Component {
                       triggers={monitor.triggers}
                       triggerValues={values}
                       isDarkMode={this.props.isDarkMode}
-                      openedStates={this.state.openedStates}
-                      closeExpression={this.closeExpression}
-                      openExpression={this.openExpression}
-                      onMadeChanges={this.onMadeChanges}
                       dataTypes={dataTypes}
+                      httpClient={httpClient}
+                      notifications={notifications}
                     />
                   )}
                 </FieldArray>
               )}
-              <EuiSpacer />
-              <FieldArray name="actions" validateOnChange={true}>
-                {(arrayHelpers) => (
-                  <ConfigureActions
-                    arrayHelpers={arrayHelpers}
-                    context={this.getTriggerContext(executeResponse, monitor, values)}
-                    httpClient={httpClient}
-                    setFlyout={setFlyout}
-                    values={values}
-                    notifications={notifications}
-                  />
-                )}
-              </FieldArray>
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>

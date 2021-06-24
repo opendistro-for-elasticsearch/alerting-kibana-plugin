@@ -61,6 +61,7 @@ const MonitorType = ({ values }) => (
             value: MONITOR_TYPE.AGGREGATION,
             onChange: (e, field, form) => {
               onChangeDefinition(e, form);
+
             },
           }}
         />

@@ -44,7 +44,6 @@ export const getExecuteMessage = (response) => {
 };
 
 const AggregationTriggerQuery = ({
-  index,
   context,
   error,
   executeResponse,

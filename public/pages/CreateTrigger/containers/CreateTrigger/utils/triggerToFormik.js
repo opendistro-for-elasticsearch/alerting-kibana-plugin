@@ -24,7 +24,7 @@ export function triggerToFormik(trigger, monitor) {
   // TODO: Should compare to this to some defined constant
   const isAggregationMonitor = _.get(monitor, 'monitor_type') === 'aggregation_monitor';
   return isAggregationMonitor
-    ? aggregationTriggerToFormik(trigger, monitor)
+    ? aggregationTriggersToFormik(monitor)
     : traditionalTriggerToFormik(trigger, monitor);
 }
 
@@ -94,13 +94,22 @@ export function traditionalTriggerToFormik(trigger, monitor) {
   };
 }
 
+export function aggregationTriggersToFormik(monitor) {
+  const aggregationTriggers = _.get(monitor, 'triggers', []).map((trigger) =>
+    aggregationTriggerToFormik(trigger, monitor)
+  );
+  return {
+    aggregationTriggers: _.orderBy(aggregationTriggers, (trigger) => trigger.name),
+  };
+}
+
 export function aggregationTriggerToFormik(trigger, monitor) {
   const {
     id,
     name,
     severity,
     condition,
-    condition: { script },
+    condition: { script, composite_agg_filter },
     actions,
     min_time_between_executions: minTimeBetweenExecutions,
     rolling_window_size: rollingWindowSize,
@@ -108,6 +117,7 @@ export function aggregationTriggerToFormik(trigger, monitor) {
 
   const bucketSelector = JSON.stringify(condition, null, 4);
   const triggerConditions = getAggregationTriggerConditions(condition);
+  const where = getWhereExpression(composite_agg_filter);
 
   const thresholdEnum = _.get(
     monitor,
@@ -153,6 +163,7 @@ export function aggregationTriggerToFormik(trigger, monitor) {
     rollingWindowSize,
     thresholdEnum,
     thresholdValue,
+    where,
     anomalyDetector: {
       /*If trigger type doesn't exist fallback to query trigger with following reasons
         1. User has changed monitory type from normal monitor to AD monitor.
@@ -168,11 +179,9 @@ export function aggregationTriggerToFormik(trigger, monitor) {
 }
 
 export function getAggregationTriggerConditions(condition) {
-  const triggerConditions = segmentArray(condition.script.source, 4).map((conditionArray) =>
+  return segmentArray(condition.script.source, 4).map((conditionArray) =>
     convertToTriggerCondition(conditionArray, condition)
   );
-
-  return triggerConditions;
 }
 
 export function convertToTriggerCondition(conditionArray, condition) {
@@ -216,6 +225,23 @@ export function convertToTriggerCondition(conditionArray, condition) {
     thresholdEnum,
     thresholdValue,
     andOrCondition,
+  };
+}
+
+export function getWhereExpression(composite_agg_filter) {
+  if (composite_agg_filter === undefined) return;
+
+  const fields = _.keys(composite_agg_filter);
+  const field = fields[0];
+
+  const fieldName = fields.map((field) => ({ label: field, type: `keyword` }));
+  const operator = _.keys(composite_agg_filter[field])[0];
+  const fieldValue = composite_agg_filter[field][operator];
+
+  return {
+    fieldName: fieldName,
+    operator: operator,
+    fieldValue: fieldValue,
   };
 }
 

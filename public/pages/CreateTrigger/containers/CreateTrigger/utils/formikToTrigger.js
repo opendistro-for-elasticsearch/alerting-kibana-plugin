@@ -16,12 +16,12 @@
 import _ from 'lodash';
 import {
   AGGREGATION_RESULTS_PATH,
-  HITS_TOTAL_RESULTS_PATH,
-  TRIGGER_TYPE,
-  ANOMALY_GRADE_RESULT_PATH,
   ANOMALY_CONFIDENCE_RESULT_PATH,
-  NOT_EMPTY_RESULT,
+  ANOMALY_GRADE_RESULT_PATH,
   FORMIK_INITIAL_TRIGGER_VALUES,
+  HITS_TOTAL_RESULTS_PATH,
+  NOT_EMPTY_RESULT,
+  TRIGGER_TYPE,
 } from './constants';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
@@ -32,7 +32,7 @@ export function formikToTrigger(values, monitorUiMetadata = {}) {
   if (isTraditionalMonitor) {
     return formikToTraditionalTrigger(values, monitorUiMetadata);
   } else {
-    return formikToAggregationTrigger(values, monitorUiMetadata);
+    return formikToAggregationTriggers(values, monitorUiMetadata);
   }
 }
 
@@ -50,6 +50,12 @@ export function formikToTraditionalTrigger(values, monitorUiMetadata) {
     min_time_between_executions: values.minTimeBetweenExecutions,
     rolling_window_size: values.rollingWindowSize,
   };
+}
+
+export function formikToAggregationTriggers(values, monitorUiMetadata) {
+  return _.get(values, 'aggregationTriggers', []).map((trigger) =>
+    formikToAggregationTrigger(trigger, monitorUiMetadata)
+  );
 }
 
 export function formikToAggregationTrigger(values, monitorUiMetadata) {
@@ -80,24 +86,41 @@ export function formikToAction(values) {
 }
 
 export function formikToTriggerUiMetadata(values, monitorUiMetadata) {
-  const { anomalyDetector, thresholdEnum, thresholdValue } = values;
-  const searchType = _.get(monitorUiMetadata, 'search.searchType', 'query');
-  let triggerMetadata = { value: thresholdValue, enum: thresholdEnum };
-  //Store AD values only if AD trigger.
-  if (searchType === SEARCH_TYPE.AD && anomalyDetector.triggerType === TRIGGER_TYPE.AD) {
-    triggerMetadata.adTriggerMetadata = {
-      triggerType: anomalyDetector.triggerType,
-      anomalyGrade: {
-        value: anomalyDetector.anomalyGradeThresholdValue,
-        enum: anomalyDetector.anomalyGradeThresholdEnum,
-      },
-      anomalyConfidence: {
-        value: anomalyDetector.anomalyConfidenceThresholdValue,
-        enum: anomalyDetector.anomalyConfidenceThresholdEnum,
-      },
-    };
+  switch (monitorUiMetadata.monitor_type) {
+    case 'traditional_monitor':
+      // TODO: Refactor this case when ConfigureTriggers supports multiple traditional triggers
+      const searchType = _.get(monitorUiMetadata, 'search.searchType', 'query');
+      const { anomalyDetector, thresholdEnum, thresholdValue } = values;
+      const triggerMetadata = { value: thresholdValue, enum: thresholdEnum };
+
+      //Store AD values only if AD trigger.
+      if (searchType === SEARCH_TYPE.AD && anomalyDetector.triggerType === TRIGGER_TYPE.AD) {
+        triggerMetadata.adTriggerMetadata = {
+          triggerType: anomalyDetector.triggerType,
+          anomalyGrade: {
+            value: anomalyDetector.anomalyGradeThresholdValue,
+            enum: anomalyDetector.anomalyGradeThresholdEnum,
+          },
+          anomalyConfidence: {
+            value: anomalyDetector.anomalyConfidenceThresholdValue,
+            enum: anomalyDetector.anomalyConfidenceThresholdEnum,
+          },
+        };
+      }
+      return { [values.name]: triggerMetadata };
+
+    case 'aggregation_monitor':
+      let output = {};
+      const triggers = _.get(values, 'aggregationTriggers', []);
+      triggers.forEach((trigger) => {
+        const triggerMetadata = trigger.triggerConditions.map((condition) => ({
+          value: condition.thresholdValue,
+          enum: condition.thresholdEnum,
+        }));
+        _.set(output, `${trigger.name}`, triggerMetadata);
+      });
+      return output;
   }
-  return { [values.name]: triggerMetadata };
 }
 
 export function formikToCondition(values, monitorUiMetadata = {}) {
@@ -156,14 +179,15 @@ export function getAggregationTriggerCondition(values) {
   const conditions = values.triggerConditions;
   const bucketsPath = getBucketSelectorBucketsPath(conditions);
   const scriptSource = getBucketSelectorScriptSource(conditions);
+  const composite_agg_filter = getCompositeAggFilter(values);
+
   return {
     parent_bucket_path: 'composite_agg',
     buckets_path: bucketsPath,
     script: {
       source: scriptSource,
     },
-    // TODO: Update this to use values.where
-    // composite_agg_filter: values.filter,
+    composite_agg_filter: composite_agg_filter,
   };
 }
 
@@ -195,6 +219,17 @@ export function getBucketSelectorScriptSource(conditions) {
 
 export function getResultsPath(isCount) {
   return isCount ? HITS_TOTAL_RESULTS_PATH : AGGREGATION_RESULTS_PATH;
+}
+
+export function getCompositeAggFilter({ where }) {
+  const fieldName = _.get(where, 'fieldName', FORMIK_INITIAL_TRIGGER_VALUES.where.fieldName);
+  const composite_agg_filter = {};
+  if (fieldName.length > 0) {
+    composite_agg_filter[where.fieldName[0].label] = {
+      [where.operator]: where.fieldValue,
+    };
+    return composite_agg_filter;
+  }
 }
 
 export function getRelationalOperator(thresholdEnum) {
