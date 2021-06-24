@@ -285,10 +285,11 @@ class DefineMonitor extends Component {
       throw err;
     }
   }
+
   renderVisualMonitor() {
-    const { httpClient, values } = this.props;
+    const { values } = this.props;
     const { index, timeField } = values;
-    const { dataTypes, performanceResponse } = this.state;
+    const { performanceResponse } = this.state;
     let content = null;
     if (index.length) {
       content = timeField
@@ -308,8 +309,9 @@ class DefineMonitor extends Component {
       ),
     };
   }
+
   renderExtractionQuery() {
-    const { httpClient, values, isDarkMode } = this.props;
+    const { values, isDarkMode } = this.props;
     const { response, performanceResponse } = this.state;
     let invalidJSON = false;
     try {
@@ -342,6 +344,7 @@ class DefineMonitor extends Component {
       ),
     };
   }
+
   renderAnomalyDetector() {
     const { httpClient, values, detectorId } = this.props;
     return {
@@ -397,6 +400,7 @@ class DefineMonitor extends Component {
         return this.renderExtractionQuery();
     }
   }
+
   showPluginWarning() {
     const { values } = this.props;
     const { plugins } = this.state;
@@ -405,18 +409,27 @@ class DefineMonitor extends Component {
 
   render() {
     const { values, errors, httpClient, detectorId, notifications, isDarkMode } = this.props;
+    const { dataTypes } = this.state;
     const monitorContent = this.getMonitorContent();
+    const { searchType } = this.props.values;
+    const isGraphOrQuery = searchType === SEARCH_TYPE.GRAPH || searchType === SEARCH_TYPE.QUERY;
     return (
       <div>
-        <DataSource
-          values={values}
-          errors={errors}
-          httpClient={httpClient}
-          detectorId={detectorId}
-          notifications={notifications}
-          isDarkMode={isDarkMode}
-        />
-        <EuiSpacer />
+        {isGraphOrQuery && (
+          <div>
+            <DataSource
+              values={values}
+              dataTypes={dataTypes}
+              errors={errors}
+              httpClient={httpClient}
+              detectorId={detectorId}
+              notifications={notifications}
+              isDarkMode={isDarkMode}
+            />
+            <EuiSpacer />
+          </div>
+        )}
+
         <ContentPanel
           title="Query"
           titleSize="s"
