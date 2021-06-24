@@ -27,25 +27,6 @@ class ForExpression extends Component {
     field.onChange(e);
   };
 
-  renderPopover = () => (
-    <div style={POPOVER_STYLE}>
-      <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
-        <EuiFlexItem grow={false} style={{ width: 100 }}>
-          <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
-        </EuiFlexItem>
-        <EuiFlexItem grow={false} style={{ width: 150 }}>
-          <FormikSelect
-            name="bucketUnitOfTime"
-            inputProps={{
-              onChange: this.onChangeWrapper,
-              options: UNITS_OF_TIME,
-            }}
-          />
-        </EuiFlexItem>
-      </EuiFlexGroup>
-    </div>
-  );
-
   render() {
     const {
       formik: { values },
