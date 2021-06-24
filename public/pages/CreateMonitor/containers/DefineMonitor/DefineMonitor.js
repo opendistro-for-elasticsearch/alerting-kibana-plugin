@@ -25,7 +25,7 @@ import QueryPerformance from '../../components/QueryPerformance';
 import { formikToMonitor } from '../CreateMonitor/utils/formikToMonitor';
 import { getPathsPerDataType } from './utils/mappings';
 import { buildSearchRequest } from './utils/searchRequests';
-import { SEARCH_TYPE, ES_AD_PLUGIN } from '../../../../utils/constants';
+import { SEARCH_TYPE, ES_AD_PLUGIN, MONITOR_TYPE } from '../../../../utils/constants';
 import AnomalyDetectors from '../AnomalyDetectors/AnomalyDetectors';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import LocalUriInput from '../../components/LocalUriInput';
@@ -144,7 +144,16 @@ class DefineMonitor extends Component {
   }
 
   renderGraph() {
-    const { errors, touched } = this.props;
+    const { errors, touched, values } = this.props;
+    const isTraditionalMonitor = _.get(values, 'monitor_type') === MONITOR_TYPE.TRADITIONAL;
+    const aggregations = _.get(values, 'aggregations');
+    _.map(aggregations, (value) => {
+      //Debug use
+      console.log(' value: ' + JSON.stringify(value));
+    });
+
+    // TODO: Implement different graph view for traditional and aggregation monitor
+    // if (isTraditionalMonitor)
     return (
       <Fragment>
         <EuiSpacer size="s" />
@@ -158,10 +167,21 @@ class DefineMonitor extends Component {
         <EuiSpacer size="s" />
         {errors.where ? (
           renderEmptyMessage('Invalid input in WHERE filter. Remove WHERE filter or adjust filter ')
+        ) : aggregations.length ? (
+          _.map(aggregations, (field) => {
+            const fieldName = field.aggregationType + ' of ' + field.fieldName;
+            return (
+              <VisualGraph
+                values={this.state.formikSnapshot}
+                fieldName={fieldName}
+                response={this.state.response}
+              />
+            );
+          })
         ) : (
           <VisualGraph
             values={this.state.formikSnapshot}
-            fieldName={_.get(this.props.values, 'fieldName[0].label', 'Select a field')}
+            fieldName="Select a field"
             response={this.state.response}
           />
         )}
@@ -285,8 +305,6 @@ class DefineMonitor extends Component {
       actions: [],
       content: (
         <React.Fragment>
-          {/*<MonitorIndex httpClient={httpClient} />*/}
-          {/*<MonitorTimeField dataTypes={dataTypes} />*/}
           <div style={{ padding: '0px 10px' }}>{content}</div>
           <EuiSpacer size="m" />
           <QueryPerformance response={performanceResponse} />
@@ -391,7 +409,6 @@ class DefineMonitor extends Component {
 
   render() {
     const { values, errors, httpClient, detectorId, notifications, isDarkMode } = this.props;
-    const isAggregationMonitor = _.get(this.props, 'values.monitor_type') === 'aggregation_monitor';
     const monitorContent = this.getMonitorContent();
     return (
       <div>
