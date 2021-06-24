@@ -25,15 +25,10 @@ class ForExpression extends Component {
   onChangeWrapper = (e, field) => {
     this.props.onMadeChanges();
     field.onChange(e);
+    this.props.onRunQuery();
   };
 
   render() {
-    const {
-      formik: { values },
-      openedStates,
-      closeExpression,
-      openExpression,
-    } = this.props;
     return (
       <div>
         <EuiText size="xs">
@@ -60,9 +55,8 @@ class ForExpression extends Component {
 
 ForExpression.propTypes = {
   formik: PropTypes.object.isRequired,
-  openedStates: PropTypes.object.isRequired,
-  openExpression: PropTypes.func.isRequired,
-  closeExpression: PropTypes.func.isRequired,
+  onMadeChanges: PropTypes.func.isRequired,
+  onRunQuery: PropTypes.func.isRequired,
 };
 
 export default connect(ForExpression);

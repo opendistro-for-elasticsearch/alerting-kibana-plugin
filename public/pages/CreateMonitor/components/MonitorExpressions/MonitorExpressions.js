@@ -71,6 +71,7 @@ export default class MonitorExpressions extends Component {
     closeExpression: this.closeExpression,
     openExpression: this.openExpression,
     onMadeChanges: this.onMadeChanges,
+    onRunQuery: this.props.onRunQuery,
   });
 
   render() {

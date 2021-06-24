@@ -147,10 +147,6 @@ class DefineMonitor extends Component {
     const { errors, touched, values } = this.props;
     const isTraditionalMonitor = _.get(values, 'monitor_type') === MONITOR_TYPE.TRADITIONAL;
     const aggregations = _.get(values, 'aggregations');
-    _.map(aggregations, (value) => {
-      //Debug use
-      console.log(' value: ' + JSON.stringify(value));
-    });
 
     // TODO: Implement different graph view for traditional and aggregation monitor
     // if (isTraditionalMonitor)
