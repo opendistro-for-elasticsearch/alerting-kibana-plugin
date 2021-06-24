@@ -35,6 +35,11 @@ export const SEARCH_TYPE = {
   LOCAL_URI: 'localUri',
 };
 
+export const MONITOR_TYPE = {
+  TRADITIONAL: 'traditional_monitor',
+  AGGREGATION: 'aggregation_monitor',
+};
+
 export const DESTINATION_ACTIONS = {
   UPDATE_DESTINATION: 'update-destination',
 };

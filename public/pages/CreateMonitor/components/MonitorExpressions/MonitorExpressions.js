@@ -71,12 +71,14 @@ export default class MonitorExpressions extends Component {
     closeExpression: this.closeExpression,
     openExpression: this.openExpression,
     onMadeChanges: this.onMadeChanges,
+    onRunQuery: this.props.onRunQuery,
   });
 
   render() {
     const { dataTypes, errors, touched } = this.props;
     return (
       <div>
+        {/*TODO: run query when metrics or group by expression is changed*/}
         <FieldArray name="aggregations" validateOnChange={false}>
           {(arrayHelpers) => (
             <MetricExpression

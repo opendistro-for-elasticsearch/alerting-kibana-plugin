@@ -49,6 +49,7 @@ class DataSource extends Component {
     const { index, timeField } = this.props.values;
     const hasIndices = !!index.length;
     const hasTimeField = !!timeField;
+    if (hasIndices) this.onQueryMappings();
   }
 
   componentDidUpdate(prevProps) {

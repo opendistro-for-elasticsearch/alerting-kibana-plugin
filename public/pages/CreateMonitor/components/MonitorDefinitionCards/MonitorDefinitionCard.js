@@ -18,9 +18,8 @@ import { EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 import FormikCheckableCard from '../../../../components/FormControls/FormikCheckableCard/FormikCheckableCard';
 import { ES_AD_PLUGIN, SEARCH_TYPE } from '../../../../utils/constants';
 
-const onChangeDefinition = (e, form, resetResponse) => {
+const onChangeDefinition = (e, form) => {
   const type = e.target.value;
-  // resetResponse();
   form.setFieldValue('searchType', type, false);
 };
 
@@ -44,7 +43,7 @@ const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
               checked: values.searchType === SEARCH_TYPE.GRAPH,
               value: SEARCH_TYPE.GRAPH,
               onChange: (e, field, form) => {
-                onChangeDefinition(e, form, resetResponse);
+                onChangeDefinition(e, form);
               },
             }}
           />
@@ -64,7 +63,7 @@ const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
               checked: values.searchType === SEARCH_TYPE.QUERY,
               value: SEARCH_TYPE.QUERY,
               onChange: (e, field, form) => {
-                onChangeDefinition(e, form, resetResponse);
+                onChangeDefinition(e, form);
               },
             }}
           />
@@ -85,7 +84,7 @@ const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
                 checked: values.searchType === SEARCH_TYPE.LOCAL_URI,
                 value: SEARCH_TYPE.LOCAL_URI,
                 onChange: (e, field, form) => {
-                  onChangeDefinition(e, form, resetResponse);
+                  onChangeDefinition(e, form);
                 },
               }}
             />
@@ -103,7 +102,7 @@ const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
                 checked: values.searchType === SEARCH_TYPE.AD,
                 value: SEARCH_TYPE.AD,
                 onChange: (e, field, form) => {
-                  onChangeDefinition(e, form, resetResponse);
+                  onChangeDefinition(e, form);
                 },
               }}
             />
