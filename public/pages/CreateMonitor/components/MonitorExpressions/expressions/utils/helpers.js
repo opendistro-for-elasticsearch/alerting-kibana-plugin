@@ -14,11 +14,24 @@
  */
 
 export function selectOptionValueToText(optionValue, options) {
-  return options.find(opt => opt.value === optionValue).text;
+  return options.find((opt) => opt.value === optionValue).text;
 }
 
 export function getOfExpressionAllowedTypes(values) {
   const types = ['number'];
   if (['min', 'max'].includes(values.aggregationType)) types.push('date');
+  return types;
+}
+
+export function getMetricExpressionAllowedTypes(values) {
+  const types = ['number'];
+  if (['min', 'max', 'count'].includes(values.aggregationType)) types.push('date');
+  if (['count'].includes(values.aggregationType)) types.push('keyword');
+
+  return types;
+}
+
+export function getGroupByExpressionAllowedTypes() {
+  const types = ['keyword'];
   return types;
 }

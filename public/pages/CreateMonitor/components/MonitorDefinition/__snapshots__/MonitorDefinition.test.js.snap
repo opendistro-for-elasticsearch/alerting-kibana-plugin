@@ -40,6 +40,11 @@ exports[`MonitorDefinition renders 1`] = `
           >
             Define using extraction query
           </option>
+          <option
+            value="localUri"
+          >
+            Define using Local URI endpoint
+          </option>
         </select>
         <div
           class="euiFormControlLayoutIcons euiFormControlLayoutIcons--right"

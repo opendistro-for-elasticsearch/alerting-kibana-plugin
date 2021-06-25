@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -13,22 +13,29 @@
  *   permissions and limitations under the License.
  */
 
-import React from 'react';
-import { EuiSpacer } from '@elastic/eui';
-
+import { React } from '@kbn/ui-shared-deps/entry';
+import { EuiSpacer, EuiFlexGroup, EuiFlexItem, EuiCheckableCard, EuiFormRow } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
-import MonitorState from '../../components/MonitorState';
-import { hasError, isInvalid, required, validateMonitorName } from '../../../../utils/validate';
 import FormikFieldText from '../../../../components/FormControls/FormikFieldText';
+import { hasError, isInvalid, required, validateMonitorName } from '../../../../utils/validate';
+import Schedule from '../../components/Schedule';
+import { FormikFormRow, FormikInputWrapper } from '../../../../components/FormControls';
+import MonitorDefinitionCard from '../../components/MonitorDefinitionCards';
+import MonitorType from '../../components/MonitorType';
 
-const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
-  <ContentPanel title="Configure monitor" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+// TODO: Make sure that resetResponse is defined in Query and passed to MonitorDetails
+const MonitorDetails = ({ values, errors, httpClient, monitorToEdit, isAd, plugins }) => (
+  <ContentPanel title="Monitor details" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+    <MonitorType values={values} />
+    <EuiSpacer size="s" />
+    <MonitorDefinitionCard values={values} plugins={plugins} />
+    <EuiSpacer size="s" />
     <FormikFieldText
       name="name"
       formRow
       fieldProps={{ validate: validateMonitorName(httpClient, monitorToEdit) }}
       rowProps={{
-        label: 'Monitor name',
+        label: 'Name',
         style: { paddingLeft: '10px' },
         isInvalid,
         error: hasError,
@@ -45,8 +52,8 @@ const ConfigureMonitor = ({ httpClient, monitorToEdit }) => (
       }}
     />
     <EuiSpacer size="s" />
-    <MonitorState />
+    <Schedule isAd={isAd} />
   </ContentPanel>
 );
 
-export default ConfigureMonitor;
+export default MonitorDetails;

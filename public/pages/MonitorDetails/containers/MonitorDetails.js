@@ -30,7 +30,7 @@ import {
 } from '@elastic/eui';
 
 import CreateMonitor from '../../CreateMonitor';
-import CreateTrigger from '../../CreateTrigger';
+import CreateMultipleTriggers from '../../CreateTrigger';
 import MonitorOverview from '../components/MonitorOverview';
 import MonitorHistory from './MonitorHistory';
 import Dashboard from '../../Dashboard/containers/Dashboard';
@@ -267,7 +267,7 @@ export default class MonitorDetails extends Component {
 
     if (creatingTrigger || updatingTrigger) {
       return (
-        <CreateTrigger
+        <CreateMultipleTriggers
           edit={updatingTrigger}
           triggerToEdit={triggerToEdit}
           monitor={monitor}

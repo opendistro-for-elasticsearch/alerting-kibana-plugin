@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 import _ from 'lodash';
 import { formikToTrigger, formikToTriggerUiMetadata, formikToCondition } from './formikToTrigger';
 
-import { FORMIK_INITIAL_VALUES } from './constants';
+import { FORMIK_INITIAL_TRIGGER_VALUES } from './constants';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 
 describe('formikToTrigger', () => {
   test('can create trigger', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(formikToTrigger(formikValues)).toEqual({
       name: formikValues.name,
       severity: formikValues.severity,
@@ -35,7 +35,7 @@ describe('formikToTrigger', () => {
 
 describe('formikToTriggerUiMetadata', () => {
   test('can create trigger metadata for AD monitors', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(
       formikToTriggerUiMetadata(formikValues, { search: { searchType: SEARCH_TYPE.AD } })
     ).toEqual({
@@ -58,7 +58,7 @@ describe('formikToTriggerUiMetadata', () => {
   });
 
   test('can create metadata', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(
       formikToTriggerUiMetadata(formikValues, { search: { searchType: SEARCH_TYPE.QUERY } })
     ).toEqual({
@@ -72,14 +72,21 @@ describe('formikToTriggerUiMetadata', () => {
 
 describe('formikToCondition', () => {
   test('can return condition when searchType is query', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(formikToCondition(formikValues, { search: { searchType: 'query' } })).toEqual({
       script: formikValues.script,
     });
   });
 
+  test('can return condition when searchType is localUri', () => {
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
+    expect(formikToCondition(formikValues, { search: { searchType: 'localUri' } })).toEqual({
+      script: formikValues.script,
+    });
+  });
+
   test('can return condition when searchType is ad', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(formikToCondition(formikValues, { search: { searchType: 'ad' } })).toEqual({
       script: {
         lang: 'painless',
@@ -90,19 +97,19 @@ describe('formikToCondition', () => {
   });
 
   test('can return condition when there is no monitorUiMetadata', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(formikToCondition(formikValues)).toEqual({ script: formikValues.script });
   });
 
   test('can return condition for count aggregation', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(
       formikToCondition(formikValues, { search: { searchType: 'graph', aggregationType: 'count' } })
     ).toEqual({ script: { lang: 'painless', source: `ctx.results[0].hits.total.value > 10000` } });
   });
 
   test('can return condition for other aggregations', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_VALUES);
+    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(
       formikToCondition(formikValues, { search: { searchType: 'graph', aggregationType: 'max' } })
     ).toEqual({

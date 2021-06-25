@@ -27,6 +27,16 @@ const renderTime = (time) => {
   return DEFAULT_EMPTY_DATA;
 };
 
+const renderAggAlertContent = (keys) => {
+  return keys.length
+    ? keys
+        .map((item) => {
+          return item;
+        })
+        .join(', ')
+    : '-';
+};
+
 export const columns = [
   {
     field: 'start_time',
@@ -85,5 +95,12 @@ export const columns = [
     truncateText: false,
     render: renderTime,
     dataType: 'date',
+  },
+  {
+    field: 'agg_alert_content',
+    name: 'Aggregation alert content',
+    sortable: true,
+    truncateText: false,
+    render: (content) => (content ? renderAggAlertContent(content.bucket_keys) : '-'),
   },
 ];

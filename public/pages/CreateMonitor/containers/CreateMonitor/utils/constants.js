@@ -1,7 +1,7 @@
 import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
 
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -32,12 +32,23 @@ export const FORMIK_INITIAL_VALUES = {
   cronExpression: '0 */1 * * *',
 
   /* DEFINE MONITOR */
+  monitor_type: 'traditional_monitor',
   searchType: 'graph',
+  uri: {
+    scheme: 'http',
+    host: 'localhost',
+    port: '9200',
+    path: '',
+    url: '',
+  },
   index: [],
   timeField: '',
   query: MATCH_ALL_QUERY,
   aggregationType: 'count',
   fieldName: [],
+  aggregations: [],
+  groupBy: [],
+  groupByField: [{ label: '' }],
   overDocuments: 'all documents',
   groupedOverTop: 5,
   groupedOverFieldName: 'bytes',
@@ -51,4 +62,9 @@ export const FORMIK_INITIAL_VALUES = {
     fieldRangeEnd: 0,
   },
   detectorId: '',
+};
+
+export const FORMIK_INITIAL_AGG_VALUES = {
+  aggregationType: 'count',
+  fieldName: '',
 };

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -32,6 +32,12 @@ export const SEARCH_TYPE = {
   GRAPH: 'graph',
   QUERY: 'query',
   AD: 'ad',
+  LOCAL_URI: 'localUri',
+};
+
+export const MONITOR_TYPE = {
+  TRADITIONAL: 'traditional_monitor',
+  AGGREGATION: 'aggregation_monitor',
 };
 
 export const DESTINATION_ACTIONS = {

@@ -18,7 +18,7 @@ import { shallow } from 'enzyme';
 import { EuiButton } from '@elastic/eui';
 
 import TriggerQuery, { getExecuteMessage } from './TriggerQuery';
-import { FORMIK_INITIAL_VALUES } from '../../containers/CreateTrigger/utils/constants';
+import { FORMIK_INITIAL_TRIGGER_VALUES } from '../../containers/CreateTrigger/utils/constants';
 import { formikToTrigger } from '../../containers/CreateTrigger/utils/formikToTrigger';
 
 const props = {
@@ -26,7 +26,7 @@ const props = {
   executeResponse: null,
   onRun: jest.fn(),
   response: null,
-  triggerValues: FORMIK_INITIAL_VALUES,
+  triggerValues: FORMIK_INITIAL_TRIGGER_VALUES,
   setFlyout: jest.fn(),
 };
 

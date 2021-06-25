@@ -782,6 +782,15 @@ exports[`DestinationsList renders 1`] = `
                   "width": "100px",
                 },
                 Object {
+                  "field": "user",
+                  "name": "Last updated by",
+                  "render": [Function],
+                  "sortable": true,
+                  "textOnly": true,
+                  "truncateText": true,
+                  "width": "100px",
+                },
+                Object {
                   "actions": Array [
                     Object {
                       "description": "Edit this destination.",
@@ -878,6 +887,13 @@ exports[`DestinationsList renders 1`] = `
                                     "isSorted": false,
                                     "key": "_data_s_type_1",
                                     "name": "Destination type",
+                                    "onSort": [Function],
+                                  },
+                                  Object {
+                                    "isSortAscending": undefined,
+                                    "isSorted": false,
+                                    "key": "_data_s_user_2",
+                                    "name": "Last updated by",
                                     "onSort": [Function],
                                   },
                                 ]
@@ -1159,8 +1175,73 @@ exports[`DestinationsList renders 1`] = `
                             </th>
                           </EuiTableHeaderCell>
                           <EuiTableHeaderCell
+                            align="left"
+                            data-test-subj="tableHeaderCell_user_2"
+                            isSorted={false}
+                            key="_data_h_user_2"
+                            onSort={[Function]}
+                            width="100px"
+                          >
+                            <th
+                              aria-live="polite"
+                              aria-sort="none"
+                              className="euiTableHeaderCell"
+                              data-test-subj="tableHeaderCell_user_2"
+                              role="columnheader"
+                              scope="col"
+                              style={
+                                Object {
+                                  "width": "100px",
+                                }
+                              }
+                            >
+                              <button
+                                className="euiTableHeaderButton"
+                                data-test-subj="tableHeaderSortButton"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <span
+                                  className="euiTableCellContent"
+                                >
+                                  <EuiInnerText>
+                                    <EuiI18n
+                                      default="{innerText}; Sorted in {ariaSortValue} order"
+                                      token="euiTableHeaderCell.titleTextWithSort"
+                                      values={
+                                        Object {
+                                          "ariaSortValue": "none",
+                                          "innerText": "Last updated by",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="euiTableCellContent__text"
+                                        title="Last updated by"
+                                      >
+                                        Last updated by
+                                      </span>
+                                    </EuiI18n>
+                                  </EuiInnerText>
+                                  <EuiScreenReaderOnly>
+                                    <span
+                                      className="euiScreenReaderOnly"
+                                    >
+                                      <EuiI18n
+                                        default="Click to sort in ascending order"
+                                        token="euiTableHeaderCell.clickForAscending"
+                                      >
+                                        Click to sort in ascending order
+                                      </EuiI18n>
+                                    </span>
+                                  </EuiScreenReaderOnly>
+                                </span>
+                              </button>
+                            </th>
+                          </EuiTableHeaderCell>
+                          <EuiTableHeaderCell
                             align="right"
-                            key="_actions_h_2"
+                            key="_actions_h_3"
                             width="35px"
                           >
                             <th
@@ -1198,12 +1279,12 @@ exports[`DestinationsList renders 1`] = `
                           >
                             <EuiTableRowCell
                               align="center"
-                              colSpan={3}
+                              colSpan={4}
                               isMobileFullWidth={true}
                             >
                               <td
                                 className="euiTableRowCell euiTableRowCell--isMobileFullWidth"
-                                colSpan={3}
+                                colSpan={4}
                                 style={
                                   Object {
                                     "width": undefined,
@@ -2022,6 +2103,15 @@ exports[`DestinationsList renders when email is disallowed 1`] = `
                   "width": "100px",
                 },
                 Object {
+                  "field": "user",
+                  "name": "Last updated by",
+                  "render": [Function],
+                  "sortable": true,
+                  "textOnly": true,
+                  "truncateText": true,
+                  "width": "100px",
+                },
+                Object {
                   "actions": Array [
                     Object {
                       "description": "Edit this destination.",
@@ -2118,6 +2208,13 @@ exports[`DestinationsList renders when email is disallowed 1`] = `
                                     "isSorted": false,
                                     "key": "_data_s_type_1",
                                     "name": "Destination type",
+                                    "onSort": [Function],
+                                  },
+                                  Object {
+                                    "isSortAscending": undefined,
+                                    "isSorted": false,
+                                    "key": "_data_s_user_2",
+                                    "name": "Last updated by",
                                     "onSort": [Function],
                                   },
                                 ]
@@ -2399,8 +2496,73 @@ exports[`DestinationsList renders when email is disallowed 1`] = `
                             </th>
                           </EuiTableHeaderCell>
                           <EuiTableHeaderCell
+                            align="left"
+                            data-test-subj="tableHeaderCell_user_2"
+                            isSorted={false}
+                            key="_data_h_user_2"
+                            onSort={[Function]}
+                            width="100px"
+                          >
+                            <th
+                              aria-live="polite"
+                              aria-sort="none"
+                              className="euiTableHeaderCell"
+                              data-test-subj="tableHeaderCell_user_2"
+                              role="columnheader"
+                              scope="col"
+                              style={
+                                Object {
+                                  "width": "100px",
+                                }
+                              }
+                            >
+                              <button
+                                className="euiTableHeaderButton"
+                                data-test-subj="tableHeaderSortButton"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <span
+                                  className="euiTableCellContent"
+                                >
+                                  <EuiInnerText>
+                                    <EuiI18n
+                                      default="{innerText}; Sorted in {ariaSortValue} order"
+                                      token="euiTableHeaderCell.titleTextWithSort"
+                                      values={
+                                        Object {
+                                          "ariaSortValue": "none",
+                                          "innerText": "Last updated by",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="euiTableCellContent__text"
+                                        title="Last updated by"
+                                      >
+                                        Last updated by
+                                      </span>
+                                    </EuiI18n>
+                                  </EuiInnerText>
+                                  <EuiScreenReaderOnly>
+                                    <span
+                                      className="euiScreenReaderOnly"
+                                    >
+                                      <EuiI18n
+                                        default="Click to sort in ascending order"
+                                        token="euiTableHeaderCell.clickForAscending"
+                                      >
+                                        Click to sort in ascending order
+                                      </EuiI18n>
+                                    </span>
+                                  </EuiScreenReaderOnly>
+                                </span>
+                              </button>
+                            </th>
+                          </EuiTableHeaderCell>
+                          <EuiTableHeaderCell
                             align="right"
-                            key="_actions_h_2"
+                            key="_actions_h_3"
                             width="35px"
                           >
                             <th
@@ -2438,12 +2600,12 @@ exports[`DestinationsList renders when email is disallowed 1`] = `
                           >
                             <EuiTableRowCell
                               align="center"
-                              colSpan={3}
+                              colSpan={4}
                               isMobileFullWidth={true}
                             >
                               <td
                                 className="euiTableRowCell euiTableRowCell--isMobileFullWidth"
-                                colSpan={3}
+                                colSpan={4}
                                 style={
                                   Object {
                                     "width": undefined,

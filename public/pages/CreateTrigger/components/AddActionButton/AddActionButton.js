@@ -19,10 +19,17 @@ import { EuiButton } from '@elastic/eui';
 
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
 
-const AddActionButton = ({ arrayHelpers, type = 'slack' }) => (
-  <EuiButton fill onClick={() => arrayHelpers.unshift(_.cloneDeep(FORMIK_INITIAL_ACTION_VALUES))}>
-    Add action
-  </EuiButton>
-);
+const AddActionButton = ({ arrayHelpers, type = 'slack' }, numOfActions) => {
+  const buttonText =
+    numOfActions === undefined || numOfActions === 0 ? 'Add action' : 'Add another action';
+  return (
+    <EuiButton
+      fill={false}
+      onClick={() => arrayHelpers.unshift(_.cloneDeep(FORMIK_INITIAL_ACTION_VALUES))}
+    >
+      {buttonText}
+    </EuiButton>
+  );
+};
 
 export default AddActionButton;

@@ -18,13 +18,17 @@ import { EuiSpacer } from '@elastic/eui';
 import VisualGraph from '../../CreateMonitor/components/VisualGraph';
 import TriggerExpressions from './TriggerExpressions';
 
-const TriggerGraph = ({ monitorValues, response, thresholdValue, thresholdEnum }) => (
+const TriggerGraph = ({ index, monitorValues, response, thresholdValue, thresholdEnum }) => (
   <div style={{ padding: '0px 10px' }}>
     <TriggerExpressions
       thresholdValue={thresholdValue}
       thresholdEnum={thresholdEnum}
-      keyFieldName="thresholdEnum"
-      valueFieldName="thresholdValue"
+      keyFieldName={
+        index === undefined ? 'thresholdEnum' : `triggerConditions[${index}].thresholdEnum`
+      }
+      valueFieldName={
+        index === undefined ? 'thresholdValue' : `triggerConditions[${index}].thresholdValue`
+      }
       label="Trigger condition"
     />
     <EuiSpacer size="s" />

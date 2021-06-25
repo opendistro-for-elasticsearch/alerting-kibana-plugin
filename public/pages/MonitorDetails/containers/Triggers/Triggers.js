@@ -20,7 +20,7 @@ import { EuiButton, EuiInMemoryTable } from '@elastic/eui';
 
 import ContentPanel from '../../../../components/ContentPanel';
 
-const MAX_TRIGGERS = 10;
+export const MAX_TRIGGERS = 10;
 
 export default class Triggers extends Component {
   constructor(props) {
@@ -52,17 +52,22 @@ export default class Triggers extends Component {
   onDelete() {
     const { selectedItems } = this.state;
     const { updateMonitor, monitor } = this.props;
+    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
     const triggersToDelete = selectedItems.reduce(
-      (map, item) => ({ ...map, [item.name]: true }),
+      (map, item) => ({
+        ...map,
+        [item.name]: true,
+      }),
       {}
     );
-    const shouldKeepTrigger = trigger => !triggersToDelete[trigger.name];
-    const updatedTriggers = monitor.triggers.filter(shouldKeepTrigger);
+    const shouldKeepTrigger = (trigger) => !triggersToDelete[trigger.name];
+    const updatedTriggers = this.getUnwrappedTriggers(monitor).filter(shouldKeepTrigger);
     updateMonitor({ triggers: updatedTriggers });
   }
 
   onEdit() {
-    this.props.onEditTrigger(this.state.selectedItems[0]);
+    const { monitor } = this.props;
+    this.props.onEditTrigger(monitor.triggers);
   }
 
   onSelectionChange(selectedItems) {
@@ -71,6 +76,19 @@ export default class Triggers extends Component {
 
   onTableChange({ sort: { field, direction } = {} }) {
     this.setState({ field, direction });
+  }
+
+  // TODO: For now, unwrapping all the Triggers since it's conflicting with the table
+  //   retrieving the 'id' and causing it to behave strangely
+  getUnwrappedTriggers(monitor) {
+    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
+    return isAggregationMonitor
+      ? monitor.triggers.map((trigger) => {
+          return trigger.aggregation_trigger;
+        })
+      : monitor.triggers.map((trigger) => {
+          return trigger.traditional_trigger;
+        });
   }
 
   render() {
@@ -89,7 +107,7 @@ export default class Triggers extends Component {
         name: 'Number of actions',
         sortable: true,
         truncateText: false,
-        render: actions => actions.length,
+        render: (actions) => actions.length,
       },
       {
         field: 'severity',
@@ -125,7 +143,7 @@ export default class Triggers extends Component {
         ]}
       >
         <EuiInMemoryTable
-          items={monitor.triggers}
+          items={this.getUnwrappedTriggers(monitor)}
           itemId="id"
           key={tableKey}
           columns={columns}

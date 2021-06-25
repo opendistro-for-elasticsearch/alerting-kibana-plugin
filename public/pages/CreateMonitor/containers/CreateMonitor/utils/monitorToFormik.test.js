@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License").
  *   You may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ describe('monitorToFormik', () => {
         JSON.stringify(exampleMonitor.inputs[0].search.query, null, 4)
       );
       expect(formikValues.index).toEqual(
-        exampleMonitor.inputs[0].search.indices.map(index => ({ label: index }))
+        exampleMonitor.inputs[0].search.indices.map((index) => ({ label: index }))
       );
     });
 
@@ -160,5 +160,19 @@ describe('monitorToFormik', () => {
       expect(formikValues.detectorId).toBe('zIqG0nABwoJjo1UZKHnL');
       expect(formikValues.query).toContain('zIqG0nABwoJjo1UZKHnL');
     });
+  });
+
+  test('can build LocalUriInput monitor', () => {
+    const localUriMonitor = _.cloneDeep(exampleMonitor);
+    localUriMonitor.ui_metadata.search.searchType = 'localUri';
+    localUriMonitor.inputs = [
+      {
+        uri: {
+          path: '/_cluster/health',
+        },
+      },
+    ];
+    const formikValues = monitorToFormik(localUriMonitor);
+    expect(formikValues.uri.path).toBe('/_cluster/health');
   });
 });

@@ -13,6 +13,6 @@
  *   permissions and limitations under the License.
  */
 
-import CreateTrigger from './containers/CreateTrigger';
+import CreateMultipleTriggers from './containers/CreateTrigger/CreateMultipleTriggers';
 
-export default CreateTrigger;
+export default CreateMultipleTriggers;

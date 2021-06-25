@@ -26,16 +26,15 @@ import {
   EuiButtonEmpty,
 } from '@elastic/eui';
 
-import ConfigureMonitor from '../ConfigureMonitor';
 import DefineMonitor from '../DefineMonitor';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import monitorToFormik from './utils/monitorToFormik';
 import { formikToMonitor } from './utils/formikToMonitor';
-import { DefineSchedule } from '../DefineSchedule';
 import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
 import { initializeFromQueryParams } from './utils/monitorQueryParams';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
+import MonitorDetails from '../MonitorDetails';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -60,12 +59,40 @@ export default class CreateMonitor extends Component {
       initialValues = monitorToFormik(this.props.monitorToEdit);
     }
 
-    this.state = { initialValues };
+    this.state = {
+      initialValues,
+      plugins: [],
+      response: null,
+      performanceResponse: null,
+    };
 
     this.onCancel = this.onCancel.bind(this);
     this.onCreate = this.onCreate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
+    this.getPlugins = this.getPlugins.bind(this);
+  }
+
+  componentDidMount() {
+    this.getPlugins();
+  }
+
+  async getPlugins() {
+    const { httpClient } = this.props;
+    try {
+      const pluginsResponse = await httpClient.get('../api/alerting/_plugins');
+      if (pluginsResponse.ok) {
+        this.setState({ plugins: pluginsResponse.resp.map((plugin) => plugin.component) });
+      } else {
+        console.error('There was a problem getting plugins list');
+      }
+    } catch (e) {
+      console.error('There was a problem getting plugins list', e);
+    }
+  }
+
+  resetResponse() {
+    this.setState({ response: null, performanceResponse: null });
   }
 
   onCancel() {
@@ -129,32 +156,35 @@ export default class CreateMonitor extends Component {
   }
 
   render() {
-    const { initialValues } = this.state;
+    const { initialValues, plugins } = this.state;
     const { edit, httpClient, monitorToEdit, notifications, isDarkMode } = this.props;
     return (
       <div style={{ padding: '25px 50px' }}>
         <Formik initialValues={initialValues} onSubmit={this.onSubmit} validateOnChange={false}>
-          {({ values, errors, handleSubmit, isSubmitting, isValid }) => (
+          {({ values, errors, handleSubmit, isSubmitting, isValid, touched }) => (
             <Fragment>
               <EuiTitle size="l">
                 <h1>{edit ? 'Edit' : 'Create'} monitor</h1>
               </EuiTitle>
               <EuiSpacer />
-              <ConfigureMonitor httpClient={httpClient} monitorToEdit={monitorToEdit} />
+              <MonitorDetails
+                values={values}
+                errors={errors}
+                httpClient={httpClient}
+                monitorToEdit={monitorToEdit}
+                plugins={plugins}
+                isAd={values.searchType === SEARCH_TYPE.AD}
+              />
               <EuiSpacer />
               <DefineMonitor
                 values={values}
                 errors={errors}
+                touched={touched}
                 httpClient={httpClient}
                 detectorId={this.props.detectorId}
                 notifications={notifications}
                 isDarkMode={isDarkMode}
               />
-              <Fragment>
-                <EuiSpacer />
-                <DefineSchedule isAd={values.searchType === SEARCH_TYPE.AD} />
-              </Fragment>
-              <EuiSpacer />
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>

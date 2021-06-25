@@ -14,7 +14,7 @@
  */
 
 import React, { Component } from 'react';
-import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
+import { EuiFlexGroup, EuiFlexItem, EuiSpacer, EuiText, EuiButtonEmpty } from '@elastic/eui';
 
 import {
   ForExpression,
@@ -23,8 +23,12 @@ import {
   WhenExpression,
   WhereExpression,
 } from './expressions';
+import MetricExpression from './expressions/MetricExpression';
+import { FieldArray } from 'formik';
+import GroupByExpression from './expressions/GroupByExpression';
 
 export const DEFAULT_CLOSED_STATES = {
+  METRICS: false,
   WHEN: false,
   OF_FIELD: false,
   THRESHOLD: false,
@@ -39,7 +43,7 @@ export default class MonitorExpressions extends Component {
     madeChanges: false,
   };
 
-  openExpression = expression => {
+  openExpression = (expression) => {
     this.setState({
       openedStates: {
         ...DEFAULT_CLOSED_STATES,
@@ -48,7 +52,7 @@ export default class MonitorExpressions extends Component {
     });
   };
 
-  closeExpression = expression => {
+  closeExpression = (expression) => {
     const { madeChanges, openedStates } = this.state;
     if (madeChanges && openedStates[expression]) {
       // if made changes and close expression that was currently open => run query
@@ -67,34 +71,41 @@ export default class MonitorExpressions extends Component {
     closeExpression: this.closeExpression,
     openExpression: this.openExpression,
     onMadeChanges: this.onMadeChanges,
+    onRunQuery: this.props.onRunQuery,
   });
 
   render() {
-    const { dataTypes, ofEnabled } = this.props;
+    const { dataTypes, errors, touched } = this.props;
     return (
-      <EuiFlexGroup alignItems="center">
-        <EuiFlexItem grow={false}>
-          <WhenExpression {...this.getExpressionProps()} />
-        </EuiFlexItem>
-
-        {ofEnabled && (
-          <EuiFlexItem grow={false}>
-            <OfExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-          </EuiFlexItem>
-        )}
-
-        <EuiFlexItem grow={false}>
-          <OverExpression {...this.getExpressionProps()} />
-        </EuiFlexItem>
-
-        <EuiFlexItem grow={false}>
-          <ForExpression {...this.getExpressionProps()} />
-        </EuiFlexItem>
-
-        <EuiFlexItem grow={false}>
-          <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
-        </EuiFlexItem>
-      </EuiFlexGroup>
+      <div>
+        {/*TODO: run query when metrics or group by expression is changed*/}
+        <FieldArray name="aggregations" validateOnChange={false}>
+          {(arrayHelpers) => (
+            <MetricExpression
+              {...this.getExpressionProps()}
+              arrayHelpers={arrayHelpers}
+              dataTypes={dataTypes}
+            />
+          )}
+        </FieldArray>
+        <EuiSpacer size="xs" />
+        <ForExpression {...this.getExpressionProps()} />
+        <EuiSpacer size="xs" />
+        <WhereExpression {...this.getExpressionProps()} dataTypes={dataTypes} />
+        <EuiSpacer size="s" />
+        <FieldArray name="groupBy" validateOnChange={false}>
+          {(arrayHelpers) => (
+            <GroupByExpression
+              {...this.getExpressionProps()}
+              errors={errors}
+              touched={touched}
+              arrayHelpers={arrayHelpers}
+              dataTypes={dataTypes}
+            />
+          )}
+        </FieldArray>
+        <EuiSpacer size="xs" />
+      </div>
     );
   }
 }

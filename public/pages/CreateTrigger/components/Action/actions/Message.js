@@ -1,16 +1,16 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import React from 'react';
@@ -70,6 +70,7 @@ const Message = ({
   isSubjectDisabled = false,
   sendTestMessage,
   setFlyout,
+  fieldPath,
 }) => {
   let preview = '';
   try {
@@ -82,7 +83,7 @@ const Message = ({
     <div>
       {!isSubjectDisabled ? (
         <FormikFieldText
-          name={`actions.${index}.subject_template.source`}
+          name={`${fieldPath}actions.${index}.subject_template.source`}
           formRow
           fieldProps={{ validate: required }}
           rowProps={{
@@ -94,7 +95,7 @@ const Message = ({
         />
       ) : null}
       <FormikTextArea
-        name={`actions.${index}.message_template.source`}
+        name={`${fieldPath}actions.${index}.message_template.source`}
         formRow
         fieldProps={{ validate: required }}
         rowProps={{
@@ -157,7 +158,7 @@ const Message = ({
             style={{ marginBottom: _.get(action, `throttle_enabled`) ? '0px' : '12px' }}
           >
             <FormikCheckbox
-              name={`actions.${index}.throttle_enabled`}
+              name={`${fieldPath}actions.${index}.throttle_enabled`}
               inputProps={{ label: 'Enable action throttling' }}
             />
           </EuiFlexItem>
@@ -168,7 +169,7 @@ const Message = ({
             <EuiFlexItem grow={false} style={{ marginRight: '0px' }}>
               <EuiFormRow label="Throttle actions to only trigger every">
                 <FormikFieldNumber
-                  name={`actions.${index}.throttle.value`}
+                  name={`${fieldPath}actions.${index}.throttle.value`}
                   fieldProps={{ validate: validateActionThrottle(action) }}
                   formRow={true}
                   rowProps={{

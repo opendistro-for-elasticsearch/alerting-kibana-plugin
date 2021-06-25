@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LocalUriInput renders 1`] = `
+<div
+  class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsFlexStart euiFlexGroup--directionRow euiFlexGroup--responsive"
+>
+  <div
+    class="euiFlexItem"
+  >
+    <div
+      class="euiSpacer euiSpacer--m"
+    />
+    <div
+      class="euiFormRow"
+      id="localUri.path-form-row-row"
+      style="padding-left:10px"
+    >
+      <div
+        class="euiFormRow__labelWrapper"
+      >
+        <label
+          aria-invalid="false"
+          class="euiFormLabel euiFormRow__label"
+          for="localUri.path-form-row"
+        >
+          Path
+        </label>
+      </div>
+      <div
+        class="euiFormRow__fieldWrapper"
+      >
+        <div
+          class="euiFormControlLayout"
+        >
+          <div
+            class="euiFormControlLayout__childrenWrapper"
+          >
+            <input
+              class="euiFieldText"
+              name="localUri.path"
+              type="text"
+            />
+          </div>
+        </div>
+        <div
+          class="euiFormHelpText euiFormRow__text"
+          id="localUri.path-form-row-help"
+        >
+          The path associated with the REST API the monitor should call (e.g., "/_cluster/health").
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="euiFlexItem"
+  >
+    <div
+      class="euiFormRow euiFormRow--fullWidth"
+      id="generated-id-row"
+    >
+      <div
+        class="euiFormRow__labelWrapper"
+      >
+        <label
+          class="euiFormLabel euiFormRow__label"
+          for="generated-id"
+        >
+          Response
+        </label>
+      </div>
+      <div
+        class="euiFormRow__fieldWrapper"
+      >
+        <div
+          class="euiCodeEditorWrapper"
+          data-test-subj="codeEditorContainer"
+          style="width:100%;height:500px"
+        >
+          <div
+            class="euiCodeEditorKeyboardHint"
+            data-test-subj="codeEditorHint"
+            id="generated-id"
+            role="button"
+            tabindex="0"
+          >
+            <p
+              class="euiText"
+            >
+              Press Enter to start editing.
+            </p>
+            <p
+              class="euiText"
+            >
+              When you're done, press Escape to stop editing.
+            </p>
+          </div>
+          <div
+            id="generated-id"
+            style="width:100%;height:500px"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

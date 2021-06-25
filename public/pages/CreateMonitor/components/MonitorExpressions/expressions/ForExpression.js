@@ -16,7 +16,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
-import { EuiFlexGroup, EuiFlexItem, EuiPopover, EuiExpression } from '@elastic/eui';
+import { EuiText, EuiFlexGroup, EuiFlexItem, EuiPopover, EuiExpression } from '@elastic/eui';
 import { Expressions, POPOVER_STYLE, UNITS_OF_TIME, EXPRESSION_STYLE } from './utils/constants';
 import { selectOptionValueToText } from './utils/helpers';
 import { FormikFieldNumber, FormikSelect } from '../../../../../components/FormControls';
@@ -25,66 +25,38 @@ class ForExpression extends Component {
   onChangeWrapper = (e, field) => {
     this.props.onMadeChanges();
     field.onChange(e);
+    this.props.onRunQuery();
   };
 
-  renderPopover = () => (
-    <div style={POPOVER_STYLE}>
-      <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
-        <EuiFlexItem grow={false} style={{ width: 100 }}>
-          <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
-        </EuiFlexItem>
-        <EuiFlexItem grow={false} style={{ width: 150 }}>
-          <FormikSelect
-            name="bucketUnitOfTime"
-            inputProps={{
-              onChange: this.onChangeWrapper,
-              options: UNITS_OF_TIME,
-            }}
-          />
-        </EuiFlexItem>
-      </EuiFlexGroup>
-    </div>
-  );
-
   render() {
-    const {
-      formik: { values },
-      openedStates,
-      closeExpression,
-      openExpression,
-    } = this.props;
     return (
-      <EuiPopover
-        id="for-popover"
-        button={
-          <EuiExpression
-            description="for the last"
-            value={`${values.bucketValue.toLocaleString()} ${selectOptionValueToText(
-              values.bucketUnitOfTime,
-              UNITS_OF_TIME
-            )}`}
-            isActive={openedStates.FOR_THE_LAST}
-            onClick={() => openExpression(Expressions.FOR_THE_LAST)}
-          />
-        }
-        isOpen={openedStates.FOR_THE_LAST}
-        closePopover={() => closeExpression(Expressions.FOR_THE_LAST)}
-        panelPaddingSize="none"
-        ownFocus
-        withTitle
-        anchorPosition="downLeft"
-      >
-        {this.renderPopover()}
-      </EuiPopover>
+      <div>
+        <EuiText size="xs">
+          <h4>For the last</h4>
+        </EuiText>
+        <EuiFlexGroup style={{ maxWidth: 600, ...EXPRESSION_STYLE }}>
+          <EuiFlexItem grow={false} style={{ width: 100 }}>
+            <FormikFieldNumber name="bucketValue" inputProps={{ onChange: this.onChangeWrapper }} />
+          </EuiFlexItem>
+          <EuiFlexItem grow={false} style={{ width: 150 }}>
+            <FormikSelect
+              name="bucketUnitOfTime"
+              inputProps={{
+                onChange: this.onChangeWrapper,
+                options: UNITS_OF_TIME,
+              }}
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </div>
     );
   }
 }
 
 ForExpression.propTypes = {
   formik: PropTypes.object.isRequired,
-  openedStates: PropTypes.object.isRequired,
-  openExpression: PropTypes.func.isRequired,
-  closeExpression: PropTypes.func.isRequired,
+  onMadeChanges: PropTypes.func.isRequired,
+  onRunQuery: PropTypes.func.isRequired,
 };
 
 export default connect(ForExpression);
