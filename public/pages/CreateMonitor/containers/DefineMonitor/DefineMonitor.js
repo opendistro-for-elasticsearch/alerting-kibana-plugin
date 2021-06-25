@@ -285,7 +285,6 @@ class DefineMonitor extends Component {
       throw err;
     }
   }
-
   renderVisualMonitor() {
     const { values } = this.props;
     const { index, timeField } = values;
@@ -309,7 +308,6 @@ class DefineMonitor extends Component {
       ),
     };
   }
-
   renderExtractionQuery() {
     const { values, isDarkMode } = this.props;
     const { response, performanceResponse } = this.state;
@@ -344,7 +342,6 @@ class DefineMonitor extends Component {
       ),
     };
   }
-
   renderAnomalyDetector() {
     const { httpClient, values, detectorId } = this.props;
     return {
@@ -400,7 +397,6 @@ class DefineMonitor extends Component {
         return this.renderExtractionQuery();
     }
   }
-
   showPluginWarning() {
     const { values } = this.props;
     const { plugins } = this.state;
