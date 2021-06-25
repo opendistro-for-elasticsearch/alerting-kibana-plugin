@@ -25,29 +25,27 @@ import _ from 'lodash';
 const AggregationTriggerGraph = ({
   arrayHelpers,
   index,
-  triggerIndex,
+  fieldPath,
   monitorValues,
   triggerValues,
   response,
   queryMetrics,
 }) => {
-  const fieldPath = `aggregationTriggers[${triggerIndex}].triggerConditions[${index}]`;
-
-  let andOrCondition = _.get(triggerValues, `${fieldPath}.andOrCondition`);
+  let andOrCondition = _.get(triggerValues, `${fieldPath}andOrCondition`);
   if (index > 0 && _.isEmpty(andOrCondition)) {
     andOrCondition = DEFAULT_AND_OR_CONDITION;
-    _.set(triggerValues, `${fieldPath}.andOrCondition`, andOrCondition);
+    _.set(triggerValues, `${fieldPath}andOrCondition`, andOrCondition);
   }
 
   const queryMetric = _.get(
     triggerValues,
-    `${fieldPath}.queryMetric`,
+    `${fieldPath}queryMetric`,
     DEFAULT_METRIC_AGGREGATION.value
   );
-  _.set(triggerValues, `${fieldPath}.queryMetric`, queryMetric);
+  _.set(triggerValues, `${fieldPath}queryMetric`, queryMetric);
 
-  const thresholdEnum = _.get(triggerValues, `${fieldPath}.thresholdEnum`);
-  const thresholdValue = _.get(triggerValues, `${fieldPath}.thresholdValue`);
+  const thresholdEnum = _.get(triggerValues, `${fieldPath}thresholdEnum`);
+  const thresholdValue = _.get(triggerValues, `${fieldPath}thresholdValue`);
 
   return (
     <div style={{ padding: '0px 10px' }}>
@@ -59,12 +57,10 @@ const AggregationTriggerGraph = ({
         queryMetrics={queryMetrics}
         thresholdEnum={thresholdEnum}
         thresholdValue={thresholdValue}
-        andOrConditionFieldName={
-          index === undefined ? 'andOrCondition' : `${fieldPath}.andOrCondition`
-        }
-        queryMetricFieldName={index === undefined ? 'queryMetric' : `${fieldPath}.queryMetric`}
-        enumFieldName={index === undefined ? 'thresholdEnum' : `${fieldPath}.thresholdEnum`}
-        valueFieldName={index === undefined ? 'thresholdValue' : `${fieldPath}.thresholdValue`}
+        andOrConditionFieldName={`${fieldPath}andOrCondition`}
+        queryMetricFieldName={`${fieldPath}queryMetric`}
+        enumFieldName={`${fieldPath}thresholdEnum`}
+        valueFieldName={`${fieldPath}thresholdValue`}
         label="Trigger conditions"
       />
       <EuiSpacer size={'s'} />

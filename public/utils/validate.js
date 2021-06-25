@@ -1,20 +1,22 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import _ from 'lodash';
 import { INDEX, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../utils/constants';
+import { MONITOR_TYPE } from './constants';
+import { TRIGGER_TYPE } from '../pages/CreateTrigger/containers/CreateTrigger/utils/constants';
 
 // TODO: Use a validation framework to clean all of this up or create own.
 
@@ -31,10 +33,10 @@ export const validateActionName = (monitor, trigger) => (value) => {
   // TODO: Expand on this validation by passing in triggerValues and comparing the current
   //  action's name with names of other actions in the trigger creation form.
   let actions;
-  if (monitor.monitor_type === 'traditional_monitor') {
-    actions = _.get(trigger, 'traditional_trigger.actions', []);
-  } else if (monitor.monitor_type === 'aggregation_monitor') {
-    actions = _.get(trigger, 'aggregation_trigger.actions', []);
+  if (monitor.monitor_type === MONITOR_TYPE.TRADITIONAL) {
+    actions = _.get(trigger, `${TRIGGER_TYPE.TRADITIONAL}.actions`, []);
+  } else if (monitor.monitor_type === MONITOR_TYPE.AGGREGATION) {
+    actions = _.get(trigger, `${TRIGGER_TYPE.AGGREGATION}.actions`, []);
   }
   const matches = actions.filter((action) => action.name === value);
   if (matches.length > 1) return 'Action name is already used';

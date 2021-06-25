@@ -20,7 +20,7 @@ import { FORMIK_INITIAL_TRIGGER_VALUES } from '../../containers/CreateTrigger/ut
 
 const AddTriggerButton = ({ arrayHelpers, disabled }) => {
   const buttonText =
-    _.get(arrayHelpers, 'form.values.aggregationTriggers', []).length === 0
+    _.get(arrayHelpers, 'form.values.triggerDefinitions', []).length === 0
       ? 'Add trigger'
       : 'Add another trigger';
 

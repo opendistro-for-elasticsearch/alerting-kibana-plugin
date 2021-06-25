@@ -31,14 +31,12 @@ import 'brace/mode/json';
 import 'brace/mode/plain_text';
 import 'brace/snippets/javascript';
 import 'brace/ext/language_tools';
-import ConfigureActions from '../../ConfigureActions';
-import DefineTrigger from '../../DefineTrigger';
 import monitorToFormik from '../../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
 import { buildSearchRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
 import { formikToTrigger, formikToTriggerUiMetadata } from '../utils/formikToTrigger';
 import { triggerToFormik } from '../utils/triggerToFormik';
-import { FORMIK_INITIAL_TRIGGER_VALUES } from '../utils/constants';
-import { SEARCH_TYPE } from '../../../../../utils/constants';
+import { FORMIK_INITIAL_TRIGGER_VALUES, TRIGGER_TYPE } from '../utils/constants';
+import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../../utils/helpers';
 import { buildLocalUriRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
@@ -110,28 +108,33 @@ export default class CreateMultipleTriggers extends Component {
     const { monitor, updateMonitor, onCloseTrigger, triggerToEdit } = this.props;
     const { ui_metadata: uiMetadata = {}, triggers, monitor_type } = monitor;
     let updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
-    let updatedTriggers;
 
+    let triggerType;
     switch (monitor_type) {
-      case 'traditional_monitor':
-        // TODO: Refactor this case when ConfigureTriggers supports multiple traditional triggers
-        const { name } = triggerToEdit.traditional_trigger;
-        delete updatedTriggersMetadata[name];
-
-        const findTriggerName = (element) => {
-          return name === element.traditional_trigger.name;
-        };
-
-        const indexToUpdate = _.findIndex(triggers, findTriggerName);
-        updatedTriggers = triggers.slice();
-        updatedTriggers.splice(indexToUpdate, 1, trigger);
+      case MONITOR_TYPE.TRADITIONAL:
+        triggerType = TRIGGER_TYPE.TRADITIONAL;
         break;
-
-      case 'aggregation_monitor':
-        const names = triggerToEdit.map((entry) => entry.aggregation_trigger.name);
-        names.forEach((name) => delete updatedTriggersMetadata[name]);
-        updatedTriggers = _.cloneDeep(trigger);
+      case MONITOR_TYPE.AGGREGATION:
+        triggerType = TRIGGER_TYPE.AGGREGATION;
         break;
+    }
+
+    let updatedTriggers;
+    if (_.isArray(triggerToEdit)) {
+      const names = triggerToEdit.map((entry) => _.get(entry, `${triggerType}.name`));
+      names.forEach((name) => delete updatedTriggersMetadata[name]);
+      updatedTriggers = _.cloneDeep(trigger);
+    } else {
+      const { name } = _.get(triggerToEdit, `${triggerType}`);
+      delete updatedTriggersMetadata[name];
+
+      const findTriggerName = (element) => {
+        return name === _.get(element, `${triggerType}.name`);
+      };
+
+      const indexToUpdate = _.findIndex(triggers, findTriggerName);
+      updatedTriggers = triggers.slice();
+      updatedTriggers.splice(indexToUpdate, 1, trigger);
     }
 
     const updatedUiMetadata = {
@@ -284,8 +287,6 @@ export default class CreateMultipleTriggers extends Component {
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient, notifications } = this.props;
     const { dataTypes, initialValues, executeResponse } = this.state;
-    const isTraditionalMonitor = _.get(monitor, 'monitor_type') === 'traditional_monitor';
-
     return (
       <div style={{ padding: '25px 50px' }}>
         {this.renderSuccessCallOut()}
@@ -293,54 +294,25 @@ export default class CreateMultipleTriggers extends Component {
           {({ values, handleSubmit, isSubmitting, errors, isValid }) => (
             <Fragment>
               <EuiSpacer />
-              {/*// TODO: Add traditional monitor logic to ConfigureTriggers.js to support the single page experience.*/}
-              {isTraditionalMonitor ? (
-                <div>
-                  <DefineTrigger
+              <FieldArray name={'triggerDefinitions'} validateOnChange={true}>
+                {(triggerArrayHelpers) => (
+                  <ConfigureTriggers
+                    triggerArrayHelpers={triggerArrayHelpers}
                     context={this.getTriggerContext(executeResponse, monitor, values)}
                     executeResponse={executeResponse}
+                    monitor={monitor}
                     monitorValues={monitorToFormik(monitor)}
                     onRun={this.onRunExecute}
                     setFlyout={setFlyout}
                     triggers={monitor.triggers}
                     triggerValues={values}
                     isDarkMode={this.props.isDarkMode}
+                    dataTypes={dataTypes}
+                    httpClient={httpClient}
+                    notifications={notifications}
                   />
-                  <EuiSpacer />
-                  <FieldArray name="actions" validateOnChange={true}>
-                    {(arrayHelpers) => (
-                      <ConfigureActions
-                        arrayHelpers={arrayHelpers}
-                        context={this.getTriggerContext(executeResponse, monitor, values)}
-                        httpClient={httpClient}
-                        setFlyout={setFlyout}
-                        values={values}
-                        notifications={notifications}
-                      />
-                    )}
-                  </FieldArray>
-                </div>
-              ) : (
-                <FieldArray name={'aggregationTriggers'} validateOnChange={true}>
-                  {(triggerArrayHelpers) => (
-                    <ConfigureTriggers
-                      triggerArrayHelpers={triggerArrayHelpers}
-                      context={this.getTriggerContext(executeResponse, monitor, values)}
-                      executeResponse={executeResponse}
-                      monitor={monitor}
-                      monitorValues={monitorToFormik(monitor)}
-                      onRun={this.onRunExecute}
-                      setFlyout={setFlyout}
-                      triggers={monitor.triggers}
-                      triggerValues={values}
-                      isDarkMode={this.props.isDarkMode}
-                      dataTypes={dataTypes}
-                      httpClient={httpClient}
-                      notifications={notifications}
-                    />
-                  )}
-                </FieldArray>
-              )}
+                )}
+              </FieldArray>
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>

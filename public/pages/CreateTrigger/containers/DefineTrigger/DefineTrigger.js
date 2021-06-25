@@ -1,31 +1,33 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { EuiAccordion, EuiButton, EuiHorizontalRule, EuiSpacer, EuiTitle } from '@elastic/eui';
 import 'brace/mode/plain_text';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
 import { isInvalid, hasError } from '../../../../utils/validate';
-import ContentPanel from '../../../../components/ContentPanel/index';
 import TriggerQuery from '../../components/TriggerQuery';
 import TriggerGraph from '../../components/TriggerGraph';
 import { validateTriggerName } from './utils/validation';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { AnomalyDetectorTrigger } from './AnomalyDetectorTrigger';
 import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
+import { FieldArray } from 'formik';
+import ConfigureActions from '../ConfigureActions';
 
 const defaultRowProps = {
   label: 'Trigger name',
@@ -75,7 +77,10 @@ const propTypes = {
   isDarkMode: PropTypes.bool.isRequired,
 };
 
+const DEFAULT_TRIGGER_NAME = 'Define trigger';
+
 const DefineTrigger = ({
+  triggerArrayHelpers,
   context,
   executeResponse,
   monitorValues,
@@ -84,15 +89,21 @@ const DefineTrigger = ({
   triggers,
   triggerValues,
   isDarkMode,
+  triggerIndex,
+  httpClient,
+  notifications,
 }) => {
+  const fieldPath = triggerIndex !== undefined ? `triggerDefinitions[${triggerIndex}].` : '';
   const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
   const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
   const detectorId = _.get(monitorValues, 'detectorId');
   const response = _.get(executeResponse, 'input_results.results[0]');
   const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
-  const thresholdEnum = triggerValues.thresholdEnum;
-  const thresholdValue = triggerValues.thresholdValue;
-  const adTriggerType = triggerValues.anomalyDetector.triggerType;
+  const thresholdEnum = _.get(triggerValues, `${fieldPath}thresholdEnum`);
+  const thresholdValue = _.get(triggerValues, `${fieldPath}thresholdValue`);
+  const adTriggerType = _.get(triggerValues, `${fieldPath}anomalyDetector.triggerType`);
+  const triggerName = _.get(triggerValues, `${fieldPath}name`, DEFAULT_TRIGGER_NAME);
+
   let triggerContent = (
     <TriggerQuery
       context={context}
@@ -103,11 +114,13 @@ const DefineTrigger = ({
       setFlyout={setFlyout}
       triggerValues={triggerValues}
       isDarkMode={isDarkMode}
+      fieldPath={fieldPath}
     />
   );
   if (isAd && adTriggerType === TRIGGER_TYPE.AD) {
+    const adValues = _.get(triggerValues, `${fieldPath}anomalyDetector`);
     triggerContent = (
-      <AnomalyDetectorTrigger detectorId={detectorId} adValues={triggerValues.anomalyDetector} />
+      <AnomalyDetectorTrigger detectorId={detectorId} adValues={adValues} fieldPath={fieldPath} />
     );
   }
   if (isGraph) {
@@ -117,40 +130,80 @@ const DefineTrigger = ({
         response={response}
         thresholdEnum={thresholdEnum}
         thresholdValue={thresholdValue}
+        fieldPath={fieldPath}
       />
     );
   }
 
   return (
-    <ContentPanel title="Define trigger" titleSize="s" bodyStyles={{ padding: 'initial' }}>
+    <EuiAccordion
+      id={triggerName}
+      buttonContent={
+        <EuiTitle size={'s'}>
+          <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
+        </EuiTitle>
+      }
+      extraAction={
+        <EuiButton
+          color={'danger'}
+          onClick={() => {
+            triggerArrayHelpers.remove(triggerIndex);
+          }}
+        >
+          Delete
+        </EuiButton>
+      }
+    >
+      <EuiHorizontalRule margin="s" />
       <FormikFieldText
-        name="name"
-        fieldProps={{ validate: validateTriggerName(triggers, triggerValues) }}
+        name={`${fieldPath}name`}
+        fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
         formRow
         rowProps={defaultRowProps}
         inputProps={defaultInputProps}
       />
+      <EuiSpacer size={'m'} />
       <FormikSelect
-        name="severity"
+        name={`${fieldPath}severity`}
         formRow
         fieldProps={selectFieldProps}
         rowProps={selectRowProps}
         inputProps={selectInputProps}
       />
+      <EuiSpacer size={'m'} />
       {isAd ? (
-        <FormikSelect
-          name="anomalyDetector.triggerType"
-          formRow
-          rowProps={{
-            label: 'Trigger type',
-            helpText: 'Define type of trigger',
-            style: { paddingLeft: '10px', marginTop: '0px' },
-          }}
-          inputProps={{ options: triggerOptions }}
-        />
+        <div>
+          <FormikSelect
+            name={`${fieldPath}anomalyDetector.triggerType`}
+            formRow
+            rowProps={{
+              label: 'Trigger type',
+              helpText: 'Define type of trigger',
+              style: { paddingLeft: '10px', marginTop: '0px' },
+            }}
+            inputProps={{ options: triggerOptions }}
+          />
+          <EuiSpacer size={'m'} />
+        </div>
       ) : null}
       {triggerContent}
-    </ContentPanel>
+      <EuiSpacer size={'l'} />
+      <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
+        {(arrayHelpers) => (
+          <ConfigureActions
+            arrayHelpers={arrayHelpers}
+            context={context}
+            httpClient={httpClient}
+            setFlyout={setFlyout}
+            values={triggerValues}
+            notifications={notifications}
+            fieldPath={fieldPath}
+            triggerIndex={triggerIndex}
+          />
+        )}
+      </FieldArray>
+      <EuiSpacer />
+    </EuiAccordion>
   );
 };
 

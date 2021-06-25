@@ -1,16 +1,16 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import React from 'react';
@@ -23,8 +23,9 @@ import ContentPanel from '../../../../components/ContentPanel';
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
 import { DESTINATION_OPTIONS } from '../../../Destinations/utils/constants';
 import { getAllowList } from '../../../Destinations/utils/helpers';
-import { MAX_QUERY_RESULT_SIZE } from '../../../../utils/constants';
+import { MAX_QUERY_RESULT_SIZE, MONITOR_TYPE } from '../../../../utils/constants';
 import { backendErrorNotification } from '../../../../utils/helpers';
+import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
 
 const createActionContext = (context, action) => ({
   ctx: {
@@ -41,7 +42,6 @@ class ConfigureActions extends React.Component {
       allowList: [],
       loadingDestinations: true,
       actionDeleted: false,
-      fieldPath: !_.isEmpty(`${props.fieldPath}`) ? `${props.fieldPath}.` : '',
     };
   }
 
@@ -55,8 +55,8 @@ class ConfigureActions extends React.Component {
   }
 
   loadDestinations = async (searchText = '') => {
-    const { httpClient, values, arrayHelpers, notifications } = this.props;
-    const { allowList, actionDeleted, fieldPath } = this.state;
+    const { httpClient, values, arrayHelpers, notifications, fieldPath } = this.props;
+    const { allowList, actionDeleted } = this.state;
     this.setState({ loadingDestinations: true });
     const getDestinationLabel = (destination) => {
       const foundDestination = DESTINATION_OPTIONS.find(({ value }) => value === destination.type);
@@ -96,11 +96,11 @@ class ConfigureActions extends React.Component {
       notifications,
       triggerIndex,
     } = this.props;
-    // TODO: sendTestMessage isn't working for aggregation monitors.
+    // TODO: sendTestMessage isn't working for either monitor type at the moment.
     const triggerType =
-      monitor.monitor_type === 'traditional_monitor'
-        ? 'traditional_trigger'
-        : 'aggregation_trigger';
+      monitor.monitor_type === MONITOR_TYPE.TRADITIONAL
+        ? TRIGGER_TYPE.TRADITIONAL
+        : TRIGGER_TYPE.AGGREGATION;
 
     const action = _.get(trigger[triggerIndex], `${triggerType}.actions[${index}]`);
 
@@ -130,8 +130,8 @@ class ConfigureActions extends React.Component {
   };
 
   renderActions = (arrayHelpers) => {
-    const { context, setFlyout, values } = this.props;
-    const { destinations, fieldPath } = this.state;
+    const { context, setFlyout, values, fieldPath } = this.props;
+    const { destinations } = this.state;
     const hasDestinations = !_.isEmpty(destinations);
     const hasActions = !_.isEmpty(_.get(values, `${fieldPath}actions`));
     const shouldRenderActions = hasActions || (hasDestinations && hasActions);
@@ -159,8 +159,8 @@ class ConfigureActions extends React.Component {
     );
   };
   render() {
-    const { loadingDestinations, fieldPath } = this.state;
-    const { arrayHelpers, values } = this.props;
+    const { loadingDestinations } = this.state;
+    const { arrayHelpers, values, fieldPath } = this.props;
     const numOfActions = _.get(values, `${fieldPath}actions`, []).length;
     const displayAddActionButton = numOfActions > 0;
     //TODO:: Handle loading Destinations inside the Action which will be more intuitive for customers.
