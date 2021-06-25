@@ -26,19 +26,15 @@ import {
   EuiButtonEmpty,
 } from '@elastic/eui';
 
-import ConfigureMonitor from '../ConfigureMonitor';
 import DefineMonitor from '../DefineMonitor';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import monitorToFormik from './utils/monitorToFormik';
 import { formikToMonitor } from './utils/formikToMonitor';
-import { DefineSchedule } from '../DefineSchedule';
 import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
 import { initializeFromQueryParams } from './utils/monitorQueryParams';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import MonitorDetails from '../MonitorDetails';
-import DataSource from '../DataSource';
-import Query from '../Query';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
