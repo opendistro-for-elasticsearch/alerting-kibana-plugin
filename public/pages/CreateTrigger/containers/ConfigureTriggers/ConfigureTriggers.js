@@ -57,6 +57,7 @@ class ConfigureTriggers extends React.Component {
               triggerArrayHelpers={triggerArrayHelpers}
               context={context}
               executeResponse={executeResponse}
+              monitor={monitor}
               monitorValues={monitorValues}
               onRun={onRun}
               setFlyout={setFlyout}

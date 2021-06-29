@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { EuiAccordion, EuiButton, EuiHorizontalRule, EuiSpacer, EuiTitle } from '@elastic/eui';
@@ -28,6 +28,10 @@ import { AnomalyDetectorTrigger } from './AnomalyDetectorTrigger';
 import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
 import { FieldArray } from 'formik';
 import ConfigureActions from '../ConfigureActions';
+import monitorToFormik from '../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
+import { buildSearchRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
+import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
+import { backendErrorNotification } from '../../../../utils/helpers';
 
 const defaultRowProps = {
   label: 'Trigger name',
@@ -79,133 +83,192 @@ const propTypes = {
 
 const DEFAULT_TRIGGER_NAME = 'Define trigger';
 
-const DefineTrigger = ({
-  triggerArrayHelpers,
-  context,
-  executeResponse,
-  monitorValues,
-  onRun,
-  setFlyout,
-  triggers,
-  triggerValues,
-  isDarkMode,
-  triggerIndex,
-  httpClient,
-  notifications,
-}) => {
-  const fieldPath = triggerIndex !== undefined ? `triggerDefinitions[${triggerIndex}].` : '';
-  const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
-  const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
-  const detectorId = _.get(monitorValues, 'detectorId');
-  const response = _.get(executeResponse, 'input_results.results[0]');
-  const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
-  const thresholdEnum = _.get(triggerValues, `${fieldPath}thresholdEnum`);
-  const thresholdValue = _.get(triggerValues, `${fieldPath}thresholdValue`);
-  const adTriggerType = _.get(triggerValues, `${fieldPath}anomalyDetector.triggerType`);
-  const triggerName = _.get(triggerValues, `${fieldPath}name`, DEFAULT_TRIGGER_NAME);
-
-  let triggerContent = (
-    <TriggerQuery
-      context={context}
-      error={error}
-      executeResponse={executeResponse}
-      onRun={onRun}
-      response={response}
-      setFlyout={setFlyout}
-      triggerValues={triggerValues}
-      isDarkMode={isDarkMode}
-      fieldPath={fieldPath}
-    />
-  );
-  if (isAd && adTriggerType === TRIGGER_TYPE.AD) {
-    const adValues = _.get(triggerValues, `${fieldPath}anomalyDetector`);
-    triggerContent = (
-      <AnomalyDetectorTrigger detectorId={detectorId} adValues={adValues} fieldPath={fieldPath} />
-    );
+class DefineTrigger extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
-  if (isGraph) {
-    triggerContent = (
-      <TriggerGraph
-        monitorValues={monitorValues}
+
+  onRunExecute = (triggers = []) => {
+    const { httpClient, monitor, notifications } = this.props;
+    const formikValues = monitorToFormik(monitor);
+    const searchType = formikValues.searchType;
+    const monitorToExecute = _.cloneDeep(monitor);
+    _.set(monitorToExecute, 'triggers', triggers);
+
+    switch (searchType) {
+      case SEARCH_TYPE.QUERY:
+      case SEARCH_TYPE.GRAPH:
+        const searchRequest = buildSearchRequest(formikValues);
+        _.set(monitorToExecute, 'inputs[0].search', searchRequest);
+        break;
+      case SEARCH_TYPE.LOCAL_URI:
+        const localUriRequest = buildLocalUriRequest(formikValues);
+        _.set(monitorToExecute, 'inputs[0].uri', localUriRequest);
+        break;
+      default:
+        console.log(`Unsupported searchType found: ${JSON.stringify(searchType)}`, searchType);
+    }
+
+    httpClient
+      .post('../api/alerting/monitors/_execute', { body: JSON.stringify(monitorToExecute) })
+      .then((resp) => {
+        if (resp.ok) {
+          this.setState({ executeResponse: resp.resp }, this.overrideInitialValues);
+        } else {
+          // TODO: need a notification system to show errors or banners at top
+          console.error('err:', resp);
+          backendErrorNotification(notifications, 'run', 'trigger', resp.resp);
+        }
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
+  };
+
+  overrideInitialValues = () => {
+    const { monitor, edit, triggerToEdit } = this.props;
+    const { initialValues, executeResponse } = this.state;
+    const useTriggerToFormik = edit && triggerToEdit;
+
+    // When searchType of the monitor is 'localUri', override the default trigger
+    // condition with the first name of the name-value pairs in the response
+    if (!useTriggerToFormik && 'uri' in monitor.inputs[0]) {
+      const response = _.get(executeResponse, 'input_results.results[0]');
+      _.set(initialValues, 'script.source', 'ctx.results[0].' + _.keys(response)[0] + ' != null');
+      this.setState({ initialValues: initialValues });
+    }
+  };
+
+  render() {
+    const {
+      triggerArrayHelpers,
+      context,
+      monitorValues,
+      onRun,
+      setFlyout,
+      triggers,
+      triggerValues,
+      isDarkMode,
+      triggerIndex,
+      httpClient,
+      notifications,
+    } = this.props;
+    const executeResponse = _.get(this.state, 'executeResponse', this.props.executeResponse);
+    const fieldPath = triggerIndex !== undefined ? `triggerDefinitions[${triggerIndex}].` : '';
+    const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
+    const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
+    const detectorId = _.get(monitorValues, 'detectorId');
+    const response = _.get(executeResponse, 'input_results.results[0]');
+    const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
+    const thresholdEnum = _.get(triggerValues, `${fieldPath}thresholdEnum`);
+    const thresholdValue = _.get(triggerValues, `${fieldPath}thresholdValue`);
+    const adTriggerType = _.get(triggerValues, `${fieldPath}anomalyDetector.triggerType`);
+    const triggerName = _.get(triggerValues, `${fieldPath}name`, DEFAULT_TRIGGER_NAME);
+
+    let triggerContent = (
+      <TriggerQuery
+        context={context}
+        error={error}
+        executeResponse={executeResponse}
+        onRun={_.isEmpty(fieldPath) ? onRun : this.onRunExecute}
         response={response}
-        thresholdEnum={thresholdEnum}
-        thresholdValue={thresholdValue}
+        setFlyout={setFlyout}
+        triggerValues={triggerValues}
+        isDarkMode={isDarkMode}
         fieldPath={fieldPath}
       />
     );
-  }
+    if (isAd && adTriggerType === TRIGGER_TYPE.AD) {
+      const adValues = _.get(triggerValues, `${fieldPath}anomalyDetector`);
+      triggerContent = (
+        <AnomalyDetectorTrigger detectorId={detectorId} adValues={adValues} fieldPath={fieldPath} />
+      );
+    }
+    if (isGraph) {
+      triggerContent = (
+        <TriggerGraph
+          monitorValues={monitorValues}
+          response={response}
+          thresholdEnum={thresholdEnum}
+          thresholdValue={thresholdValue}
+          fieldPath={fieldPath}
+        />
+      );
+    }
 
-  return (
-    <EuiAccordion
-      id={triggerName}
-      buttonContent={
-        <EuiTitle size={'s'}>
-          <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
-        </EuiTitle>
-      }
-      extraAction={
-        <EuiButton
-          color={'danger'}
-          onClick={() => {
-            triggerArrayHelpers.remove(triggerIndex);
-          }}
-        >
-          Delete
-        </EuiButton>
-      }
-    >
-      <EuiHorizontalRule margin="s" />
-      <FormikFieldText
-        name={`${fieldPath}name`}
-        fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
-        formRow
-        rowProps={defaultRowProps}
-        inputProps={defaultInputProps}
-      />
-      <EuiSpacer size={'m'} />
-      <FormikSelect
-        name={`${fieldPath}severity`}
-        formRow
-        fieldProps={selectFieldProps}
-        rowProps={selectRowProps}
-        inputProps={selectInputProps}
-      />
-      <EuiSpacer size={'m'} />
-      {isAd ? (
-        <div>
-          <FormikSelect
-            name={`${fieldPath}anomalyDetector.triggerType`}
-            formRow
-            rowProps={{
-              label: 'Trigger type',
-              helpText: 'Define type of trigger',
-              style: { paddingLeft: '10px', marginTop: '0px' },
+    return (
+      <EuiAccordion
+        id={triggerName}
+        buttonContent={
+          <EuiTitle size={'s'}>
+            <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
+          </EuiTitle>
+        }
+        extraAction={
+          <EuiButton
+            color={'danger'}
+            onClick={() => {
+              triggerArrayHelpers.remove(triggerIndex);
             }}
-            inputProps={{ options: triggerOptions }}
-          />
-          <EuiSpacer size={'m'} />
-        </div>
-      ) : null}
-      {triggerContent}
-      <EuiSpacer size={'l'} />
-      <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
-        {(arrayHelpers) => (
-          <ConfigureActions
-            arrayHelpers={arrayHelpers}
-            context={context}
-            httpClient={httpClient}
-            setFlyout={setFlyout}
-            values={triggerValues}
-            notifications={notifications}
-            fieldPath={fieldPath}
-            triggerIndex={triggerIndex}
-          />
-        )}
-      </FieldArray>
-      <EuiSpacer />
-    </EuiAccordion>
-  );
-};
+          >
+            Delete
+          </EuiButton>
+        }
+      >
+        <EuiHorizontalRule margin="s" />
+        <FormikFieldText
+          name={`${fieldPath}name`}
+          fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
+          formRow
+          rowProps={defaultRowProps}
+          inputProps={defaultInputProps}
+        />
+        <EuiSpacer size={'m'} />
+        <FormikSelect
+          name={`${fieldPath}severity`}
+          formRow
+          fieldProps={selectFieldProps}
+          rowProps={selectRowProps}
+          inputProps={selectInputProps}
+        />
+        <EuiSpacer size={'m'} />
+        {isAd ? (
+          <div>
+            <FormikSelect
+              name={`${fieldPath}anomalyDetector.triggerType`}
+              formRow
+              rowProps={{
+                label: 'Trigger type',
+                helpText: 'Define type of trigger',
+                style: { paddingLeft: '10px', marginTop: '0px' },
+              }}
+              inputProps={{ options: triggerOptions }}
+            />
+            <EuiSpacer size={'m'} />
+          </div>
+        ) : null}
+        {triggerContent}
+        <EuiSpacer size={'l'} />
+        <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
+          {(arrayHelpers) => (
+            <ConfigureActions
+              arrayHelpers={arrayHelpers}
+              context={context}
+              httpClient={httpClient}
+              setFlyout={setFlyout}
+              values={triggerValues}
+              notifications={notifications}
+              fieldPath={fieldPath}
+              triggerIndex={triggerIndex}
+            />
+          )}
+        </FieldArray>
+        <EuiSpacer />
+      </EuiAccordion>
+    );
+  }
+}
 
 DefineTrigger.propTypes = propTypes;
 
