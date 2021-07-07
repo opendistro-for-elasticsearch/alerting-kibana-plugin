@@ -73,6 +73,7 @@ export default class CreateMultipleTriggers extends Component {
 
   componentDidMount() {
     this.onRunExecute();
+    this.onQueryMappings();
   }
 
   componentWillUnmount() {

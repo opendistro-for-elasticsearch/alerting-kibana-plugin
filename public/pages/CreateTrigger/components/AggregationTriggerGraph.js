@@ -31,21 +31,22 @@ const AggregationTriggerGraph = ({
   response,
   queryMetrics,
 }) => {
-  let andOrCondition = _.get(triggerValues, `${fieldPath}andOrCondition`);
+  const fieldNamePath = `${fieldPath}triggerConditions[${index}].`;
+  let andOrCondition = _.get(triggerValues, `${fieldNamePath}andOrCondition`);
   if (index > 0 && _.isEmpty(andOrCondition)) {
     andOrCondition = DEFAULT_AND_OR_CONDITION;
-    _.set(triggerValues, `${fieldPath}andOrCondition`, andOrCondition);
+    _.set(triggerValues, `${fieldNamePath}andOrCondition`, andOrCondition);
   }
 
   const queryMetric = _.get(
     triggerValues,
-    `${fieldPath}queryMetric`,
+    `${fieldNamePath}queryMetric`,
     DEFAULT_METRIC_AGGREGATION.value
   );
-  _.set(triggerValues, `${fieldPath}queryMetric`, queryMetric);
+  _.set(triggerValues, `${fieldNamePath}queryMetric`, queryMetric);
 
-  const thresholdEnum = _.get(triggerValues, `${fieldPath}thresholdEnum`);
-  const thresholdValue = _.get(triggerValues, `${fieldPath}thresholdValue`);
+  const thresholdEnum = _.get(triggerValues, `${fieldNamePath}thresholdEnum`);
+  const thresholdValue = _.get(triggerValues, `${fieldNamePath}thresholdValue`);
 
   return (
     <div style={{ padding: '0px 10px' }}>
@@ -57,10 +58,10 @@ const AggregationTriggerGraph = ({
         queryMetrics={queryMetrics}
         thresholdEnum={thresholdEnum}
         thresholdValue={thresholdValue}
-        andOrConditionFieldName={`${fieldPath}andOrCondition`}
-        queryMetricFieldName={`${fieldPath}queryMetric`}
-        enumFieldName={`${fieldPath}thresholdEnum`}
-        valueFieldName={`${fieldPath}thresholdValue`}
+        andOrConditionFieldName={`${fieldNamePath}andOrCondition`}
+        queryMetricFieldName={`${fieldNamePath}queryMetric`}
+        enumFieldName={`${fieldNamePath}thresholdEnum`}
+        valueFieldName={`${fieldNamePath}thresholdValue`}
         label="Trigger conditions"
       />
       <EuiSpacer size={'s'} />
