@@ -13,11 +13,11 @@
  * permissions and limitations under the License.
  */
 
-import { OPERATORS_MAP } from '../../../../CreateMonitor/components/MonitorExpressions/expressions/utils/constants';
-
 export const TRIGGER_TYPE = {
   AD: 'anomaly_detector_trigger',
+  AGGREGATION: 'aggregation_trigger',
   ALERT_TRIGGER: 'alerting_trigger',
+  TRADITIONAL: 'traditional_trigger',
 };
 
 export const FORMIK_INITIAL_BUCKET_SELECTOR_VALUES = {

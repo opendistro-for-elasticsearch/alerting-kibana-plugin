@@ -1,16 +1,16 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import React, { Component } from 'react';
@@ -67,9 +67,6 @@ const ALLOWED_TYPES = ['number', 'text', 'keyword', 'boolean'];
 class WhereExpression extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      fieldPath: !_.isEmpty(`${props.fieldPath}`) ? `${props.fieldPath}.` : '',
-    };
   }
 
   handleFieldChange = (option, field, form) => {
@@ -97,9 +94,10 @@ class WhereExpression extends Component {
     const {
       formik: { values },
       closeExpression,
+      fieldPath,
     } = this.props;
     // Explicitly invoking validation, this component unmount after it closes.
-    const fieldName = _.get(values, `${this.state.fieldPath}where.fieldName`, '');
+    const fieldName = _.get(values, `${fieldPath}where.fieldName`, '');
     if (fieldName > 0) {
       await this.props.formik.validateForm();
     }
@@ -117,15 +115,15 @@ class WhereExpression extends Component {
   renderBetweenAnd = () => {
     const {
       formik: { values },
+      fieldPath,
     } = this.props;
     return (
       <EuiFlexGroup alignItems="center">
         <EuiFlexItem>
           <FormikFieldNumber
-            name={`${this.state.fieldPath}where.fieldRangeStart`}
+            name={`${fieldPath}where.fieldRangeStart`}
             fieldProps={{
-              validate: (value) =>
-                validateRange(value, _.get(values, `${this.state.fieldPath}where`)),
+              validate: (value) => validateRange(value, _.get(values, `${fieldPath}where`)),
             }}
             inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
           />
@@ -135,10 +133,9 @@ class WhereExpression extends Component {
         </EuiFlexItem>
         <EuiFlexItem>
           <FormikFieldNumber
-            name={`${this.state.fieldPath}where.fieldRangeEnd`}
+            name={`${fieldPath}where.fieldRangeEnd`}
             fieldProps={{
-              validate: (value) =>
-                validateRange(value, _.get(values, `${this.state.fieldPath}where`)),
+              validate: (value) => validateRange(value, _.get(values, `${fieldPath}where`)),
             }}
             inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
           />
@@ -148,12 +145,13 @@ class WhereExpression extends Component {
   };
 
   renderValueField = (fieldType, fieldOperator) => {
+    const { fieldPath } = this.props;
     if (fieldType == DATA_TYPES.NUMBER) {
       return isRangeOperator(fieldOperator) ? (
         this.renderBetweenAnd()
       ) : (
         <FormikFieldNumber
-          name={`${this.state.fieldPath}where.fieldValue`}
+          name={`${fieldPath}where.fieldValue`}
           fieldProps={{ validate: required }}
           inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
         />
@@ -161,7 +159,7 @@ class WhereExpression extends Component {
     } else if (fieldType == DATA_TYPES.BOOLEAN) {
       return (
         <FormikSelect
-          name={`${this.state.fieldPath}where.fieldValue`}
+          name={`${fieldPath}where.fieldValue`}
           fieldProps={{ validate: required }}
           inputProps={{
             onChange: this.handleChangeWrapper,
@@ -173,7 +171,7 @@ class WhereExpression extends Component {
     } else {
       return (
         <FormikFieldText
-          name={`${this.state.fieldPath}where.fieldValue`}
+          name={`${fieldPath}where.fieldValue`}
           fieldProps={{ validate: required }}
           inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
         />
@@ -189,8 +187,8 @@ class WhereExpression extends Component {
       dataTypes,
       indexFieldFilters,
       useTriggerFieldOperators,
+      fieldPath,
     } = this.props;
-    const { fieldPath } = this.state;
     const indexFields =
       indexFieldFilters !== undefined
         ? getFilteredIndexFields(dataTypes, ALLOWED_TYPES, indexFieldFilters)

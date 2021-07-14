@@ -178,32 +178,32 @@ class DefineAggregationTrigger extends Component {
 
   renderAggregationTriggerGraph = (
     arrayHelpers,
+    fieldPath,
     monitor,
     monitorValues,
     response,
-    triggerValues,
-    triggerIndex
+    triggerValues
   ) => {
     const metricAggregations = _.keys(
       _.get(monitor, 'inputs[0].search.query.aggregations.composite_agg.aggregations', [])
     ).map((metric) => {
       return { value: metric, text: metric };
     });
-    if (!metricAggregations.includes(DEFAULT_METRIC_AGGREGATION))
+    if (!metricAggregations.includes(DEFAULT_METRIC_AGGREGATION)) {
       metricAggregations.push(DEFAULT_METRIC_AGGREGATION);
+    }
 
-    if (_.isEmpty(triggerValues.aggregationTriggers[triggerIndex].triggerConditions)) {
+    const triggerConditions = _.get(triggerValues, `${fieldPath}triggerConditions`, []);
+    if (_.isEmpty(triggerConditions)) {
       arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_TRIGGER_CONDITION_VALUES));
     }
 
-    return triggerValues.aggregationTriggers[
-      triggerIndex
-    ].triggerConditions.map((triggerCondition, index) => (
+    return triggerConditions.map((triggerCondition, index) => (
       <AggregationTriggerGraph
         key={index}
         arrayHelpers={arrayHelpers}
         index={index}
-        triggerIndex={triggerIndex}
+        fieldPath={fieldPath}
         monitorValues={monitorValues}
         triggerValues={triggerValues}
         response={response}
@@ -220,7 +220,8 @@ class DefineAggregationTrigger extends Component {
     response,
     setFlyout,
     triggerValues,
-    isDarkMode
+    isDarkMode,
+    fieldPath
   ) => {
     return (
       <AggregationTriggerQuery
@@ -232,6 +233,7 @@ class DefineAggregationTrigger extends Component {
         setFlyout={setFlyout}
         triggerValues={triggerValues}
         isDarkMode={isDarkMode}
+        fieldPath={fieldPath}
       />
     );
   };
@@ -253,26 +255,26 @@ class DefineAggregationTrigger extends Component {
       httpClient,
       notifications,
     } = this.props;
-    const fieldPath = `aggregationTriggers[${triggerIndex}]`;
+    const fieldPath = triggerIndex !== undefined ? `triggerDefinitions[${triggerIndex}].` : '';
     const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
     const response = _.get(executeResponse, 'input_results.results[0]');
     const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
-    const triggerName = _.get(triggerValues, `${fieldPath}.name`, DEFAULT_TRIGGER_NAME);
+    const triggerName = _.get(triggerValues, `${fieldPath}name`, DEFAULT_TRIGGER_NAME);
     const disableAddTriggerConditionButton =
-      _.get(triggerValues, `${fieldPath}.triggerConditions`).length >= MAX_TRIGGER_CONDITIONS;
+      _.get(triggerValues, `${fieldPath}triggerConditions`).length >= MAX_TRIGGER_CONDITIONS;
 
     const aggregationTriggerContent = isGraph ? (
       <div>
-        <FieldArray name={`${fieldPath}.triggerConditions`} validateOnChange={true}>
+        <FieldArray name={`${fieldPath}triggerConditions`} validateOnChange={true}>
           {(conditionsArrayHelpers) => (
             <div>
               {this.renderAggregationTriggerGraph(
                 conditionsArrayHelpers,
+                fieldPath,
                 monitor,
                 monitorValues,
                 response,
-                triggerValues,
-                triggerIndex
+                triggerValues
               )}
               <div style={{ paddingLeft: '15px' }}>
                 <AddTriggerConditionButton
@@ -297,7 +299,8 @@ class DefineAggregationTrigger extends Component {
         response,
         setFlyout,
         triggerValues,
-        isDarkMode
+        isDarkMode,
+        fieldPath
       )
     );
 
@@ -322,7 +325,7 @@ class DefineAggregationTrigger extends Component {
       >
         <EuiHorizontalRule margin="s" />
         <FormikFieldText
-          name={`${fieldPath}.name`}
+          name={`${fieldPath}name`}
           fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
           formRow
           rowProps={defaultRowProps}
@@ -330,7 +333,7 @@ class DefineAggregationTrigger extends Component {
         />
         <EuiSpacer size={'m'} />
         <FormikSelect
-          name={`${fieldPath}.severity`}
+          name={`${fieldPath}severity`}
           formRow
           fieldProps={selectFieldProps}
           rowProps={selectRowProps}
@@ -342,7 +345,7 @@ class DefineAggregationTrigger extends Component {
         </EuiText>
         {aggregationTriggerContent}
         <EuiSpacer size={'l'} />
-        <FieldArray name={`${fieldPath}.actions`} validateOnChange={true}>
+        <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
           {(arrayHelpers) => (
             <ConfigureActions
               arrayHelpers={arrayHelpers}

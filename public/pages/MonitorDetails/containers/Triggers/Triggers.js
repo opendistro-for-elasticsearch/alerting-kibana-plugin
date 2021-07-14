@@ -1,16 +1,16 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import React, { Component } from 'react';
@@ -19,6 +19,7 @@ import uuidv4 from 'uuid/v4';
 import { EuiButton, EuiInMemoryTable } from '@elastic/eui';
 
 import ContentPanel from '../../../../components/ContentPanel';
+import { MONITOR_TYPE } from '../../../../utils/constants';
 
 export const MAX_TRIGGERS = 10;
 
@@ -52,7 +53,6 @@ export default class Triggers extends Component {
   onDelete() {
     const { selectedItems } = this.state;
     const { updateMonitor, monitor } = this.props;
-    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
     const triggersToDelete = selectedItems.reduce(
       (map, item) => ({
         ...map,
@@ -81,7 +81,7 @@ export default class Triggers extends Component {
   // TODO: For now, unwrapping all the Triggers since it's conflicting with the table
   //   retrieving the 'id' and causing it to behave strangely
   getUnwrappedTriggers(monitor) {
-    const isAggregationMonitor = monitor.monitor_type === 'aggregation_monitor';
+    const isAggregationMonitor = monitor.monitor_type === MONITOR_TYPE.AGGREGATION;
     return isAggregationMonitor
       ? monitor.triggers.map((trigger) => {
           return trigger.aggregation_trigger;
