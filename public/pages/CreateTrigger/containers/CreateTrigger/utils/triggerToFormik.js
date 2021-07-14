@@ -20,6 +20,10 @@ import {
   TRIGGER_TYPE,
 } from './constants';
 import { MONITOR_TYPE } from '../../../../../utils/constants';
+import {
+  ACTIONABLE_ALERTS_OPTIONS,
+  NOTIFY_OPTIONS,
+} from '../../../components/Action/actions/Message';
 
 export function triggerToFormik(trigger, monitor) {
   return _.isArray(trigger)
@@ -162,7 +166,7 @@ export function aggregationTriggerToFormik(trigger, monitor) {
     severity,
     script,
     bucketSelector,
-    actions,
+    actions: getAggregationTriggerActions(actions),
     triggerConditions,
     minTimeBetweenExecutions,
     rollingWindowSize,
@@ -181,6 +185,30 @@ export function aggregationTriggerToFormik(trigger, monitor) {
       anomalyConfidenceThresholdEnum,
     },
   };
+}
+
+export function getAggregationTriggerActions(actions) {
+  const executionPolicyPath = 'action_execution_policy.action_execution_frequency';
+  return _.cloneDeep(actions).map((action) => {
+    const actionExecutionPolicy = _.get(action, `${executionPolicyPath}`);
+    switch (_.keys(actionExecutionPolicy)[0]) {
+      case NOTIFY_OPTIONS.PER_ALERT:
+        const actionableAlerts = _.get(
+          action,
+          `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+          []
+        );
+        return _.set(
+          action,
+          `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+          actionableAlerts.map((entry) => {
+            return { value: entry, label: ACTIONABLE_ALERTS_OPTIONS[entry] };
+          })
+        );
+      case NOTIFY_OPTIONS.PER_EXECUTION:
+        return _.set(action, `${executionPolicyPath}`, NOTIFY_OPTIONS.PER_EXECUTION);
+    }
+  });
 }
 
 export function getAggregationTriggerConditions(condition) {

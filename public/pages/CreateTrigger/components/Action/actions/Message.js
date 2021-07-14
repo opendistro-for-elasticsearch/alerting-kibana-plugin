@@ -13,16 +13,19 @@
  * permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, { Fragment, useState } from 'react';
+import { Field } from 'formik';
 import _ from 'lodash';
 import Mustache from 'mustache';
 import {
   EuiFlexGroup,
   EuiFlexItem,
   EuiFormRow,
+  EuiLink,
+  EuiRadioGroup,
   EuiSpacer,
+  EuiSwitch,
   EuiText,
-  EuiButtonEmpty,
   EuiTextArea,
 } from '@elastic/eui';
 
@@ -31,6 +34,7 @@ import {
   FormikFieldText,
   FormikCheckbox,
   FormikFieldNumber,
+  FormikComboBox,
 } from '../../../../../components/FormControls';
 import {
   isInvalid,
@@ -40,38 +44,108 @@ import {
   required,
 } from '../../../../../utils/validate';
 import { URL, MAX_THROTTLE_VALUE, WRONG_THROTTLE_WARNING } from '../../../../../../utils/constants';
+import { MONITOR_TYPE } from '../../../../../utils/constants';
 
-const messageHelpText = (index, sendTestMessage) => (
+export const NO_ACTIONABLE_ALERT_SELECTIONS = 'Must select at least 1 option';
+
+export const NOTIFY_OPTIONS = {
+  PER_ALERT: 'per_alert',
+  PER_EXECUTION: 'per_execution',
+};
+
+export const notifyOptions = [
+  { id: NOTIFY_OPTIONS.PER_ALERT, label: 'Per alert' },
+  { id: NOTIFY_OPTIONS.PER_EXECUTION, label: 'Per execution' },
+];
+
+export const ACTIONABLE_ALERTS_OPTIONS = {
+  COMPLETED: 'Completed',
+  DEDUPED: 'Deduped',
+  NEW: 'New',
+};
+
+export const actionableAlertsOptions = [
+  { value: 'COMPLETED', label: ACTIONABLE_ALERTS_OPTIONS.COMPLETED },
+  { value: 'DEDUPED', label: ACTIONABLE_ALERTS_OPTIONS.DEDUPED },
+  { value: 'NEW', label: ACTIONABLE_ALERTS_OPTIONS.NEW },
+];
+
+const messageHelpText = () => (
   <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
     <EuiFlexItem>
-      <EuiText size="xs">
-        Embed variables in your message using Mustache templates.{' '}
-        <a href={URL.MUSTACHE}>Learn more about Mustache</a>
-      </EuiText>
-    </EuiFlexItem>
-    <EuiFlexItem grow={false}>
-      <EuiText size="xs">
-        <EuiButtonEmpty
-          onClick={() => {
-            sendTestMessage(index);
-          }}
-        >
-          Send test message
-        </EuiButtonEmpty>
-      </EuiText>
+      <Fragment>
+        <EuiText size="xs">
+          Embed variables in your message using Mustache templates.{' '}
+          <a href={URL.MUSTACHE}>Learn more</a>
+        </EuiText>
+      </Fragment>
     </EuiFlexItem>
   </EuiFlexGroup>
 );
 
-const Message = ({
-  action,
-  context,
+const renderSendTestMessageButton = (
   index,
-  isSubjectDisabled = false,
   sendTestMessage,
-  setFlyout,
-  fieldPath,
-}) => {
+  isAggregationMonitor,
+  displayPreview,
+  setDisplayPreview
+) => (
+  <EuiFlexGroup justifyContent="spaceBetween" alignItems="flexStart">
+    <EuiFlexItem>
+      <EuiSwitch
+        label={'Preview message'}
+        checked={displayPreview}
+        onChange={(e) => setDisplayPreview(e)}
+      />
+    </EuiFlexItem>
+    <EuiFlexItem grow={false}>
+      <EuiFlexGroup alignItems="flexEnd" direction="column" gutterSize="xs">
+        <EuiFlexItem grow={false}>
+          <EuiLink
+            onClick={() => {
+              sendTestMessage(index);
+            }}
+          >
+            <EuiText>Send test message</EuiText>
+          </EuiLink>
+        </EuiFlexItem>
+        {isAggregationMonitor ? (
+          <EuiFlexItem>
+            <EuiText size="xs">
+              For aggregation triggers, at least one bucket of data is required from the monitor
+              input query.
+            </EuiText>
+          </EuiFlexItem>
+        ) : null}
+      </EuiFlexGroup>
+    </EuiFlexItem>
+  </EuiFlexGroup>
+);
+
+const validateActionableAlertsSelections = (options) => {
+  if (!_.isArray(options) || _.isEmpty(options)) return NO_ACTIONABLE_ALERT_SELECTIONS;
+};
+
+export default function Message(
+  { action, context, index, isSubjectDisabled = false, sendTestMessage, fieldPath } = this.props
+) {
+  const [displayPreview, setDisplayPreview] = useState(false);
+  const onDisplayPreviewChange = (e) => setDisplayPreview(e.target.checked);
+  const isAggregationMonitor =
+    _.get(context, 'ctx.monitor.monitor_type', MONITOR_TYPE.TRADITIONAL) ===
+    MONITOR_TYPE.AGGREGATION;
+  const actionExecutionPolicyPath = isAggregationMonitor
+    ? `${fieldPath}actions.${index}.action_execution_policy`
+    : `${fieldPath}actions.${index}`;
+
+  let actionExecutionFrequencyId = _.get(
+    action,
+    'action_execution_policy.action_execution_frequency',
+    NOTIFY_OPTIONS.PER_ALERT
+  );
+  if (!_.isString(actionExecutionFrequencyId))
+    actionExecutionFrequencyId = _.keys(actionExecutionFrequencyId)[0];
+
   let preview = '';
   try {
     preview = Mustache.render(action.message_template.source, context);
@@ -102,17 +176,9 @@ const Message = ({
           label: (
             <div>
               <span>Message</span>
-              <EuiButtonEmpty
-                size="s"
-                onClick={() => {
-                  setFlyout({ type: 'message' });
-                }}
-              >
-                Info
-              </EuiButtonEmpty>
+              {messageHelpText}
             </div>
           ),
-          helpText: messageHelpText(index, sendTestMessage),
           style: { maxWidth: '100%' },
           isInvalid,
           error: hasError,
@@ -124,32 +190,32 @@ const Message = ({
         }}
       />
 
-      <EuiFormRow label="Message preview" style={{ maxWidth: '100%' }}>
-        <EuiTextArea
-          placeholder="Preview of mustache template"
-          fullWidth
-          value={preview}
-          readOnly
-          className="read-only-text-area"
-        />
+      <EuiFormRow style={{ maxWidth: '100%' }}>
+        {renderSendTestMessageButton(
+          index,
+          sendTestMessage,
+          isAggregationMonitor,
+          displayPreview,
+          onDisplayPreviewChange
+        )}
       </EuiFormRow>
 
-      <EuiSpacer size="s" />
+      {displayPreview ? (
+        <EuiFormRow label="Message preview" style={{ maxWidth: '100%' }}>
+          <EuiTextArea
+            placeholder="Preview of mustache template"
+            fullWidth
+            value={preview}
+            readOnly
+            className="read-only-text-area"
+          />
+        </EuiFormRow>
+      ) : null}
+
+      <EuiSpacer size="m" />
 
       <EuiFormRow
-        label={
-          <div>
-            <span style={{ color: '#343741' }}>Action throttling</span>
-            <EuiButtonEmpty
-              size="s"
-              onClick={() => {
-                setFlyout({ type: 'messageFrequency' });
-              }}
-            >
-              Info
-            </EuiButtonEmpty>
-          </div>
-        }
+        label={<span style={{ color: '#343741' }}>Action throttling</span>}
         style={{ maxWidth: '100%' }}
       >
         <EuiFlexGroup direction="column">
@@ -169,7 +235,7 @@ const Message = ({
             <EuiFlexItem grow={false} style={{ marginRight: '0px' }}>
               <EuiFormRow label="Throttle actions to only trigger every">
                 <FormikFieldNumber
-                  name={`${fieldPath}actions.${index}.throttle.value`}
+                  name={`${actionExecutionPolicyPath}.throttle.value`}
                   fieldProps={{ validate: validateActionThrottle(action) }}
                   formRow={true}
                   rowProps={{
@@ -203,8 +269,75 @@ const Message = ({
           </EuiFlexGroup>
         </EuiFlexGroup>
       </EuiFormRow>
+
+      {isAggregationMonitor ? (
+        <div>
+          <EuiFormRow
+            label={<span style={{ color: '#343741' }}>Notify</span>}
+            style={{ maxWidth: '100%' }}
+          >
+            <Field name={`${actionExecutionPolicyPath}.action_execution_frequency`}>
+              {({
+                field: { value, onChange, onBlur, ...rest },
+                form: { touched, errors, setFieldValue },
+              }) => (
+                <EuiRadioGroup
+                  options={notifyOptions}
+                  idSelected={actionExecutionFrequencyId}
+                  onChange={(optionId) => {
+                    setFieldValue(
+                      `${actionExecutionPolicyPath}.action_execution_frequency`,
+                      optionId
+                    );
+                  }}
+                  name={`${actionExecutionPolicyPath}.action_execution_frequency`}
+                />
+              )}
+            </Field>
+          </EuiFormRow>
+
+          {actionExecutionFrequencyId === NOTIFY_OPTIONS.PER_ALERT ? (
+            <EuiFormRow style={{ maxWidth: '100%' }}>
+              <EuiFlexGroup
+                alignItems="center"
+                style={{
+                  margin: '0px',
+                  maxWidth: '100%',
+                }}
+              >
+                <FormikComboBox
+                  name={`${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`}
+                  formRow
+                  fieldProps={{ validate: validateActionableAlertsSelections }}
+                  rowProps={{
+                    label: 'Actionable alerts',
+                    style: { width: '400px' },
+                    isInvalid,
+                    error: hasError,
+                  }}
+                  inputProps={{
+                    placeholder: 'Select alert options',
+                    options: actionableAlertsOptions,
+                    onBlur: (e, field, form) => {
+                      form.setFieldTouched(
+                        `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+                        true
+                      );
+                    },
+                    onChange: (options, field, form) => {
+                      form.setFieldValue(
+                        `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+                        options
+                      );
+                    },
+                    isClearable: true,
+                  }}
+                />
+              </EuiFlexGroup>
+            </EuiFormRow>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
-};
-
-export default Message;
+}

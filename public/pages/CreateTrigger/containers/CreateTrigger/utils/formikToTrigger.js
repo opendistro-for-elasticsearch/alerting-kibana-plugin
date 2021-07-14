@@ -24,6 +24,8 @@ import {
   TRIGGER_TYPE,
 } from './constants';
 import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../../utils/constants';
+import { NOTIFY_OPTIONS } from '../../../components/Action/actions/Message';
+import { FORMIK_INITIAL_ACTION_VALUES } from '../../../utils/constants';
 
 export function formikToTrigger(values, monitorUiMetadata = {}) {
   const triggerDefinitions = _.get(values, 'triggerDefinitions');
@@ -62,7 +64,7 @@ export function formikToTraditionalTrigger(values, monitorUiMetadata) {
 
 export function formikToAggregationTrigger(values, monitorUiMetadata) {
   const condition = formikToAggregationTriggerCondition(values, monitorUiMetadata);
-  const actions = formikToAction(values);
+  const actions = formikToAggregationTriggerAction(values);
   return {
     aggregation_trigger: {
       id: values.id,
@@ -82,6 +84,54 @@ export function formikToAction(values) {
     return actions.map((action) => {
       if (!action.throttle_enabled) return _.omit(action, ['throttle']);
       return action;
+    });
+  }
+  return actions;
+}
+
+export function formikToAggregationTriggerAction(values) {
+  const actions = values.actions;
+  const executionPolicyPath = 'action_execution_policy.action_execution_frequency';
+  if (actions && actions.length > 0) {
+    return actions.map((action) => {
+      let formattedAction = _.cloneDeep(action);
+
+      switch (formattedAction.throttle_enabled) {
+        case true:
+          _.set(
+            formattedAction,
+            'action_execution_policy.throttle.unit',
+            FORMIK_INITIAL_ACTION_VALUES.throttle.unit
+          );
+          break;
+        case false:
+          formattedAction = _.omit(formattedAction, [
+            'throttle',
+            `${executionPolicyPath}.throttle`,
+          ]);
+          break;
+      }
+
+      const notifyOption = _.get(formattedAction, `${executionPolicyPath}`);
+      const notifyOptionId = _.isString(notifyOption) ? notifyOption : _.keys(notifyOption)[0];
+      switch (notifyOptionId) {
+        case NOTIFY_OPTIONS.PER_ALERT:
+          const actionableAlerts = _.get(
+            formattedAction,
+            `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+            []
+          );
+          _.set(
+            formattedAction,
+            `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+            actionableAlerts.map((entry) => entry.value)
+          );
+          break;
+        case NOTIFY_OPTIONS.PER_EXECUTION:
+          _.set(formattedAction, `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_EXECUTION}`, {});
+          break;
+      }
+      return formattedAction;
     });
   }
   return actions;
