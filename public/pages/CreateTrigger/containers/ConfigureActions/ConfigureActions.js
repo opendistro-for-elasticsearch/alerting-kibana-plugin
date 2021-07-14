@@ -96,22 +96,29 @@ class ConfigureActions extends React.Component {
       notifications,
       triggerIndex,
     } = this.props;
-    // TODO: sendTestMessage isn't working for either monitor type at the moment.
+    // TODO: For aggregation triggers, sendTestMessage will only send a test message if there is
+    //  at least one bucket of data from the monitor input query.
     const triggerType =
-      monitor.monitor_type === MONITOR_TYPE.TRADITIONAL
-        ? TRIGGER_TYPE.TRADITIONAL
-        : TRIGGER_TYPE.AGGREGATION;
+      monitor.monitor_type === MONITOR_TYPE.TRADITIONAL ? '' : `${TRIGGER_TYPE.AGGREGATION}.`;
 
-    const action = _.get(trigger[triggerIndex], `${triggerType}.actions[${index}]`);
+    const action = _.get(trigger[triggerIndex], `${triggerType}actions[${index}]`);
 
-    const condition = {
-      ..._.get(trigger[triggerIndex], `${triggerType}.condition`),
-      script: { lang: 'painless', source: 'return true' },
-    };
+    const condition = _.isEmpty(triggerType)
+      ? {
+          ..._.get(trigger[triggerIndex], `${triggerType}condition`),
+          script: { lang: 'painless', source: 'return true' },
+        }
+      : {
+          ..._.get(trigger[triggerIndex], `${triggerType}condition`),
+          buckets_path: { _count: '_count' },
+          script: {
+            source: 'params._count >= 0',
+          },
+        };
 
     const testTrigger = _.cloneDeep(trigger[triggerIndex]);
-    _.set(testTrigger, `${triggerType}.actions`, [action]);
-    _.set(testTrigger, `${triggerType}.condition`, condition);
+    _.set(testTrigger, `${triggerType}actions`, [action]);
+    _.set(testTrigger, `${triggerType}condition`, condition);
 
     const testMonitor = { ...monitor, triggers: [{ ...testTrigger }] };
 
