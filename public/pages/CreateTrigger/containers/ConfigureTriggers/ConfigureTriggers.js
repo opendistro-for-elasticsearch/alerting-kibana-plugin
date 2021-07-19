@@ -21,6 +21,8 @@ import DefineAggregationTrigger from '../DefineAggregationTrigger';
 import AddTriggerButton from '../../components/AddTriggerButton';
 import TriggerEmptyPrompt from '../../components/TriggerEmptyPrompt';
 import { MAX_TRIGGERS } from '../../../MonitorDetails/containers/Triggers/Triggers';
+import DefineTrigger from '../DefineTrigger';
+import { MONITOR_TYPE } from '../../../../utils/constants';
 
 class ConfigureTriggers extends React.Component {
   constructor(props) {
@@ -45,29 +47,51 @@ class ConfigureTriggers extends React.Component {
       httpClient,
       notifications,
     } = this.props;
-    const hasTriggers = !_.isEmpty(triggerValues.aggregationTriggers);
+    const hasTriggers = !_.isEmpty(triggerValues.triggerDefinitions);
+    const isTraditionalMonitor = _.get(monitor, 'monitor_type') === MONITOR_TYPE.TRADITIONAL;
     return hasTriggers ? (
-      triggerValues.aggregationTriggers.map((trigger, index) => (
-        <div>
-          <DefineAggregationTrigger
-            triggerArrayHelpers={triggerArrayHelpers}
-            context={context}
-            executeResponse={executeResponse}
-            monitor={monitor}
-            monitorValues={monitorValues}
-            onRun={onRun}
-            setFlyout={setFlyout}
-            triggers={triggers}
-            triggerValues={triggerValues}
-            isDarkMode={isDarkMode}
-            dataTypes={dataTypes}
-            triggerIndex={index}
-            httpClient={httpClient}
-            notifications={notifications}
-          />
-          <EuiSpacer size={'s'} />
-        </div>
-      ))
+      triggerValues.triggerDefinitions.map((trigger, index) =>
+        isTraditionalMonitor ? (
+          <div key={index}>
+            <DefineTrigger
+              triggerArrayHelpers={triggerArrayHelpers}
+              context={context}
+              executeResponse={executeResponse}
+              monitor={monitor}
+              monitorValues={monitorValues}
+              onRun={onRun}
+              setFlyout={setFlyout}
+              triggers={triggers}
+              triggerValues={triggerValues}
+              isDarkMode={isDarkMode}
+              triggerIndex={index}
+              httpClient={httpClient}
+              notifications={notifications}
+            />
+            <EuiSpacer size={'s'} />
+          </div>
+        ) : (
+          <div key={index}>
+            <DefineAggregationTrigger
+              triggerArrayHelpers={triggerArrayHelpers}
+              context={context}
+              executeResponse={executeResponse}
+              monitor={monitor}
+              monitorValues={monitorValues}
+              onRun={onRun}
+              setFlyout={setFlyout}
+              triggers={triggers}
+              triggerValues={triggerValues}
+              isDarkMode={isDarkMode}
+              dataTypes={dataTypes}
+              triggerIndex={index}
+              httpClient={httpClient}
+              notifications={notifications}
+            />
+            <EuiSpacer size={'s'} />
+          </div>
+        )
+      )
     ) : (
       <TriggerEmptyPrompt arrayHelpers={triggerArrayHelpers} />
     );
@@ -76,8 +100,8 @@ class ConfigureTriggers extends React.Component {
   render() {
     const { triggerArrayHelpers, triggerValues } = this.props;
     const disableAddTriggerButton =
-      _.get(triggerValues, 'aggregationTriggers', []).length >= MAX_TRIGGERS;
-    const numOfTriggers = _.get(triggerValues, 'aggregationTriggers', []).length;
+      _.get(triggerValues, 'triggerDefinitions', []).length >= MAX_TRIGGERS;
+    const numOfTriggers = _.get(triggerValues, 'triggerDefinitions', []).length;
     const displayAddTriggerButton = numOfTriggers > 0;
     return (
       <ContentPanel

@@ -16,7 +16,7 @@
 import React from 'react';
 import { EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 import FormikCheckableCard from '../../../../components/FormControls/FormikCheckableCard/FormikCheckableCard';
-import { ES_AD_PLUGIN, SEARCH_TYPE } from '../../../../utils/constants';
+import { ES_AD_PLUGIN, MONITOR_TYPE, SEARCH_TYPE } from '../../../../utils/constants';
 
 const onChangeDefinition = (e, form) => {
   const type = e.target.value;
@@ -25,7 +25,7 @@ const onChangeDefinition = (e, form) => {
 
 const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
   const hasADPlugin = plugins.indexOf(ES_AD_PLUGIN) !== -1;
-  const isAggregationMonitor = values.monitor_type === 'aggregation_monitor';
+  const isAggregationMonitor = values.monitor_type === MONITOR_TYPE.AGGREGATION;
   return (
     <div>
       <EuiFlexGroup>

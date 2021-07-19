@@ -32,19 +32,20 @@ import 'brace/mode/json';
 import 'brace/mode/plain_text';
 import 'brace/snippets/javascript';
 import 'brace/ext/language_tools';
-import ConfigureActions from '../ConfigureActions';
-import DefineTrigger from '../DefineTrigger';
-import monitorToFormik from '../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
-import { buildSearchRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
-import { formikToTrigger, formikToTriggerUiMetadata } from './utils/formikToTrigger';
-import { triggerToFormik } from './utils/triggerToFormik';
-import { FORMIK_INITIAL_TRIGGER_VALUES } from './utils/constants';
-import { SEARCH_TYPE } from '../../../../utils/constants';
-import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
-import { backendErrorNotification } from '../../../../utils/helpers';
-import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
-import DefineAggregationTrigger from '../DefineAggregationTrigger';
-import { getPathsPerDataType } from '../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
+import ConfigureActions from '../../ConfigureActions';
+import DefineTrigger from '../../DefineTrigger';
+import monitorToFormik from '../../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
+import { buildSearchRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
+import { formikToTrigger, formikToTriggerUiMetadata } from '../utils/formikToTrigger';
+import { triggerToFormik } from '../utils/triggerToFormik';
+import { FORMIK_INITIAL_TRIGGER_VALUES } from '../utils/constants';
+import { SEARCH_TYPE } from '../../../../../utils/constants';
+import { SubmitErrorHandler } from '../../../../../utils/SubmitErrorHandler';
+import { backendErrorNotification } from '../../../../../utils/helpers';
+import { buildLocalUriRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
+import DefineAggregationTrigger from '../../DefineAggregationTrigger';
+import { getPathsPerDataType } from '../../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
+import { MONITOR_TYPE } from '../../../../../utils/constants';
 
 export const DEFAULT_CLOSED_STATES = {
   WHEN: false,
@@ -110,7 +111,7 @@ export default class CreateTrigger extends Component {
     const { monitor, updateMonitor, onCloseTrigger, triggerToEdit } = this.props;
     const { ui_metadata: uiMetadata = {}, triggers, monitor_type } = monitor;
     const { name } =
-      monitor_type === 'traditional_monitor'
+      monitor_type === MONITOR_TYPE.TRADITIONAL
         ? triggerToEdit.traditional_trigger
         : triggerToEdit.aggregation_trigger;
     const updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
@@ -121,7 +122,7 @@ export default class CreateTrigger extends Component {
     };
 
     const findTriggerName = (element) => {
-      return monitor_type === 'traditional_monitor'
+      return monitor_type === MONITOR_TYPE.TRADITIONAL
         ? name === element.traditional_trigger.name
         : name === element.aggregation_trigger.name;
     };
@@ -308,7 +309,7 @@ export default class CreateTrigger extends Component {
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient, notifications } = this.props;
     const { dataTypes, initialValues, executeResponse } = this.state;
-    const isTraditionalMonitor = _.get(monitor, 'monitor_type') === 'traditional_monitor';
+    const isTraditionalMonitor = _.get(monitor, 'monitor_type') === MONITOR_TYPE.TRADITIONAL;
 
     return (
       <div style={{ padding: '25px 50px' }}>

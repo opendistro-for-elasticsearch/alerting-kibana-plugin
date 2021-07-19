@@ -21,6 +21,7 @@ import { getIndexFields } from './utils/dataTypes';
 import { getGroupByExpressionAllowedTypes } from './utils/helpers';
 import GroupByItem from './GroupByItem';
 import { GROUP_BY_ERROR } from './utils/constants';
+import { MONITOR_TYPE } from '../../../../../utils/constants';
 
 class GroupByExpression extends Component {
   state = {
@@ -67,7 +68,7 @@ class GroupByExpression extends Component {
     if (
       (this.state.addButtonTouched || touched.groupBy) &&
       !values.groupBy.length &&
-      values.monitor_type === 'aggregation_monitor'
+      values.monitor_type === MONITOR_TYPE.AGGREGATION
     )
       errors.groupBy = GROUP_BY_ERROR;
     return (

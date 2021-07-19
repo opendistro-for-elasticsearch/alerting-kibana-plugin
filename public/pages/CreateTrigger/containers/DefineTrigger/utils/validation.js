@@ -13,22 +13,22 @@
  * permissions and limitations under the License.
  */
 
-import { FORMIK_INITIAL_TRIGGER_VALUES } from '../../CreateTrigger/utils/constants';
+import { FORMIK_INITIAL_TRIGGER_VALUES, TRIGGER_TYPE } from '../../CreateTrigger/utils/constants';
 
 export const validateTriggerName = (triggers, triggerToEdit, fieldPath) => (value) => {
   if (!value) return 'Required';
   const nameExists = triggers.filter((trigger) => {
     const triggerId = _.get(
       trigger,
-      `aggregation_trigger.id`,
-      _.get(trigger, 'traditional_trigger.id')
+      `${TRIGGER_TYPE.AGGREGATION}.id`,
+      _.get(trigger, `${TRIGGER_TYPE.TRADITIONAL}.id`)
     );
     const triggerName = _.get(
       trigger,
-      'aggregation_trigger.name',
-      _.get(trigger, `traditional_trigger.name`, FORMIK_INITIAL_TRIGGER_VALUES.name)
+      `${TRIGGER_TYPE.AGGREGATION}.name`,
+      _.get(trigger, `${TRIGGER_TYPE.TRADITIONAL}.name`, FORMIK_INITIAL_TRIGGER_VALUES.name)
     );
-    const triggerToEditId = _.get(triggerToEdit, `${fieldPath}.id`, triggerToEdit.id);
+    const triggerToEditId = _.get(triggerToEdit, `${fieldPath}id`, triggerToEdit.id);
     return triggerToEditId !== triggerId && triggerName.toLowerCase() === value.toLowerCase();
   });
   if (nameExists.length > 0) {

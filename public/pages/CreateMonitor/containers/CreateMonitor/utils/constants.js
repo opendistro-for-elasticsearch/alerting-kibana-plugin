@@ -1,19 +1,20 @@
-import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
-
 /*
- *   Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
+
+import { OPERATORS_MAP } from '../../../components/MonitorExpressions/expressions/utils/constants';
+import { MONITOR_TYPE } from '../../../../../utils/constants';
 
 export const BUCKET_COUNT = 5;
 
@@ -32,7 +33,7 @@ export const FORMIK_INITIAL_VALUES = {
   cronExpression: '0 */1 * * *',
 
   /* DEFINE MONITOR */
-  monitor_type: 'traditional_monitor',
+  monitor_type: MONITOR_TYPE.TRADITIONAL,
   searchType: 'graph',
   uri: {
     scheme: 'http',

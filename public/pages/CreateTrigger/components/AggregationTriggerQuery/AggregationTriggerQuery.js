@@ -30,6 +30,8 @@ import 'brace/mode/plain_text';
 import 'brace/snippets/javascript';
 import 'brace/ext/language_tools';
 import { formikToTrigger } from '../../containers/CreateTrigger/utils/formikToTrigger';
+import { hasError, isInvalid, validateExtractionQuery } from '../../../../utils/validate';
+import { FormikCodeEditor } from '../../../../components/FormControls';
 
 export const getExecuteMessage = (response) => {
   if (!response) return 'No response';
@@ -52,10 +54,12 @@ const AggregationTriggerQuery = ({
   setFlyout,
   triggerValues,
   isDarkMode,
+  fieldPath,
 }) => {
   const trigger = { ...formikToTrigger(triggerValues), actions: [] };
   const formattedResponse = JSON.stringify(response, null, 4);
-  const fieldName = 'bucketSelector';
+  const fieldName = `${fieldPath}bucketSelector`;
+
   return (
     <div style={{ padding: '0px 10px', marginTop: '0px' }}>
       <EuiFlexGroup direction="column">
@@ -71,7 +75,7 @@ const AggregationTriggerQuery = ({
           </EuiFormRow>
         </EuiFlexItem>
         <EuiFlexItem>
-          <Field name={fieldName}>
+          <Field name={fieldName} validate={validateExtractionQuery}>
             {({ field: { value }, form: { errors, touched, setFieldValue, setFieldTouched } }) => (
               <EuiFormRow
                 label={
@@ -92,7 +96,7 @@ const AggregationTriggerQuery = ({
                 error={_.get(errors, fieldName)}
               >
                 <EuiCodeEditor
-                  mode="plain_text"
+                  mode="json"
                   theme={isDarkMode ? 'sense-dark' : 'github'}
                   height="200px"
                   width="100%"

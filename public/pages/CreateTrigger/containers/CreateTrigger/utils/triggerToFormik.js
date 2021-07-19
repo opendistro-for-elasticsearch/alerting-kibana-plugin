@@ -1,16 +1,16 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import _ from 'lodash';
@@ -19,13 +19,31 @@ import {
   FORMIK_INITIAL_TRIGGER_VALUES,
   TRIGGER_TYPE,
 } from './constants';
+import { MONITOR_TYPE } from '../../../../../utils/constants';
+import {
+  ACTIONABLE_ALERTS_OPTIONS,
+  NOTIFY_OPTIONS,
+} from '../../../components/Action/actions/Message';
 
 export function triggerToFormik(trigger, monitor) {
-  // TODO: Should compare to this to some defined constant
-  const isAggregationMonitor = _.get(monitor, 'monitor_type') === 'aggregation_monitor';
-  return isAggregationMonitor
-    ? aggregationTriggersToFormik(monitor)
-    : traditionalTriggerToFormik(trigger, monitor);
+  return _.isArray(trigger)
+    ? triggerDefinitionsToFormik(trigger, monitor)
+    : triggerDefinitionToFormik(trigger, monitor);
+}
+
+export function triggerDefinitionsToFormik(triggers, monitor) {
+  const triggerDefinitions = triggers.map((trigger) => triggerDefinitionToFormik(trigger, monitor));
+  return {
+    triggerDefinitions: _.orderBy(triggerDefinitions, (trigger) => trigger.name),
+  };
+}
+
+export function triggerDefinitionToFormik(trigger, monitor) {
+  const isTraditionalMonitor =
+    _.get(monitor, 'monitor_type', MONITOR_TYPE.TRADITIONAL) === MONITOR_TYPE.TRADITIONAL;
+  return isTraditionalMonitor
+    ? traditionalTriggerToFormik(trigger, monitor)
+    : aggregationTriggerToFormik(trigger, monitor);
 }
 
 export function traditionalTriggerToFormik(trigger, monitor) {
@@ -94,15 +112,6 @@ export function traditionalTriggerToFormik(trigger, monitor) {
   };
 }
 
-export function aggregationTriggersToFormik(monitor) {
-  const aggregationTriggers = _.get(monitor, 'triggers', []).map((trigger) =>
-    aggregationTriggerToFormik(trigger, monitor)
-  );
-  return {
-    aggregationTriggers: _.orderBy(aggregationTriggers, (trigger) => trigger.name),
-  };
-}
-
 export function aggregationTriggerToFormik(trigger, monitor) {
   const {
     id,
@@ -157,7 +166,7 @@ export function aggregationTriggerToFormik(trigger, monitor) {
     severity,
     script,
     bucketSelector,
-    actions,
+    actions: getAggregationTriggerActions(actions),
     triggerConditions,
     minTimeBetweenExecutions,
     rollingWindowSize,
@@ -176,6 +185,30 @@ export function aggregationTriggerToFormik(trigger, monitor) {
       anomalyConfidenceThresholdEnum,
     },
   };
+}
+
+export function getAggregationTriggerActions(actions) {
+  const executionPolicyPath = 'action_execution_policy.action_execution_frequency';
+  return _.cloneDeep(actions).map((action) => {
+    const actionExecutionPolicy = _.get(action, `${executionPolicyPath}`);
+    switch (_.keys(actionExecutionPolicy)[0]) {
+      case NOTIFY_OPTIONS.PER_ALERT:
+        const actionableAlerts = _.get(
+          action,
+          `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+          []
+        );
+        return _.set(
+          action,
+          `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+          actionableAlerts.map((entry) => {
+            return { value: entry, label: ACTIONABLE_ALERTS_OPTIONS[entry] };
+          })
+        );
+      case NOTIFY_OPTIONS.PER_EXECUTION:
+        return _.set(action, `${executionPolicyPath}`, NOTIFY_OPTIONS.PER_EXECUTION);
+    }
+  });
 }
 
 export function getAggregationTriggerConditions(condition) {
