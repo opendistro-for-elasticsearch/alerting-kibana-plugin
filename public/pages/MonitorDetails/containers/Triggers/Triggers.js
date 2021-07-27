@@ -92,8 +92,8 @@ export default class Triggers extends Component {
   }
 
   render() {
-    const { direction, field, selectedItems, tableKey } = this.state;
-    const { monitor, onCreateTrigger } = this.props;
+    const { direction, field, tableKey } = this.state;
+    const { monitor } = this.props;
 
     const columns = [
       {
@@ -119,37 +119,14 @@ export default class Triggers extends Component {
 
     const sorting = { sort: { field, direction } };
 
-    const selection = { onSelectionChange: this.onSelectionChange };
-
     return (
-      <ContentPanel
-        title="Triggers"
-        titleSize="s"
-        bodyStyles={{ padding: 'initial' }}
-        actions={[
-          <EuiButton onClick={this.onEdit} disabled={selectedItems.length !== 1}>
-            Edit
-          </EuiButton>,
-          <EuiButton onClick={this.onDelete} disabled={!selectedItems.length}>
-            Delete
-          </EuiButton>,
-          <EuiButton
-            onClick={onCreateTrigger}
-            disabled={monitor.triggers.length >= MAX_TRIGGERS}
-            fill
-          >
-            Create
-          </EuiButton>,
-        ]}
-      >
+      <ContentPanel title="Triggers" titleSize="s" bodyStyles={{ padding: 'initial' }}>
         <EuiInMemoryTable
           items={this.getUnwrappedTriggers(monitor)}
           itemId="id"
           key={tableKey}
           columns={columns}
           sorting={sorting}
-          isSelectable={true}
-          selection={selection}
           onTableChange={this.onTableChange}
         />
       </ContentPanel>
