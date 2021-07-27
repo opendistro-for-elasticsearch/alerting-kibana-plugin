@@ -94,7 +94,7 @@ class WhereExpression extends Component {
     const {
       formik: { values },
       closeExpression,
-      fieldPath,
+      fieldPath = '',
     } = this.props;
     // Explicitly invoking validation, this component unmount after it closes.
     const fieldName = _.get(values, `${fieldPath}where.fieldName`, '');
@@ -115,7 +115,7 @@ class WhereExpression extends Component {
   renderBetweenAnd = () => {
     const {
       formik: { values },
-      fieldPath,
+      fieldPath = '',
     } = this.props;
     return (
       <EuiFlexGroup alignItems="center">
@@ -145,7 +145,7 @@ class WhereExpression extends Component {
   };
 
   renderValueField = (fieldType, fieldOperator) => {
-    const { fieldPath } = this.props;
+    const { fieldPath = '' } = this.props;
     if (fieldType == DATA_TYPES.NUMBER) {
       return isRangeOperator(fieldOperator) ? (
         this.renderBetweenAnd()
@@ -180,14 +180,14 @@ class WhereExpression extends Component {
   };
 
   render() {
-    const {
+    let {
       formik: { values },
       openedStates,
       openExpression,
       dataTypes,
       indexFieldFilters,
       useTriggerFieldOperators,
-      fieldPath,
+      fieldPath = '',
     } = this.props;
     const indexFields =
       indexFieldFilters !== undefined

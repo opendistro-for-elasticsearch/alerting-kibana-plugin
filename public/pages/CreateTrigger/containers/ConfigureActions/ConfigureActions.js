@@ -20,12 +20,13 @@ import Action from '../../components/Action';
 import ActionEmptyPrompt from '../../components/ActionEmptyPrompt';
 import AddActionButton from '../../components/AddActionButton';
 import ContentPanel from '../../../../components/ContentPanel';
-import { FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
+import { DEFAULT_MESSAGE_SOURCE, FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
 import { DESTINATION_OPTIONS } from '../../../Destinations/utils/constants';
 import { getAllowList } from '../../../Destinations/utils/helpers';
 import { MAX_QUERY_RESULT_SIZE, MONITOR_TYPE } from '../../../../utils/constants';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import { TRIGGER_TYPE } from '../CreateTrigger/utils/constants';
+import { formikToTrigger } from '../CreateTrigger/utils/formikToTrigger';
 
 const createActionContext = (context, action) => ({
   ctx: {
@@ -76,9 +77,33 @@ class ConfigureActions extends React.Component {
           }))
           .filter(({ type }) => allowList.includes(type));
         this.setState({ destinations, loadingDestinations: false });
+
+        const monitorType = _.get(
+          arrayHelpers,
+          'form.values.monitor_type',
+          MONITOR_TYPE.TRADITIONAL
+        );
+        const initialActionValues = _.cloneDeep(FORMIK_INITIAL_ACTION_VALUES);
+        switch (monitorType) {
+          case MONITOR_TYPE.AGGREGATION:
+            _.set(
+              initialActionValues,
+              'message_template.source',
+              DEFAULT_MESSAGE_SOURCE.AGGREGATION_MONITOR
+            );
+            break;
+          case MONITOR_TYPE.TRADITIONAL:
+            _.set(
+              initialActionValues,
+              'message_template.source',
+              DEFAULT_MESSAGE_SOURCE.TRADITIONAL_MONITOR
+            );
+            break;
+        }
+
         // If actions is not defined  If user choose to delete actions, it will not override customer's preferences.
         if (destinations.length > 0 && !_.get(values, `${fieldPath}actions`) && !actionDeleted) {
-          arrayHelpers.insert(0, FORMIK_INITIAL_ACTION_VALUES);
+          arrayHelpers.insert(0, initialActionValues);
         }
       } else {
         backendErrorNotification(notifications, 'load', 'destinations', response.err);
@@ -91,34 +116,41 @@ class ConfigureActions extends React.Component {
 
   sendTestMessage = async (index) => {
     const {
-      context: { monitor, trigger },
+      context: { monitor },
       httpClient,
       notifications,
       triggerIndex,
+      values,
     } = this.props;
     // TODO: For aggregation triggers, sendTestMessage will only send a test message if there is
     //  at least one bucket of data from the monitor input query.
-    const triggerType =
-      monitor.monitor_type === MONITOR_TYPE.TRADITIONAL ? '' : `${TRIGGER_TYPE.AGGREGATION}.`;
+    let testTrigger = _.cloneDeep(formikToTrigger(values, monitor.ui_metadata)[triggerIndex]);
+    let action;
+    let condition;
 
-    const action = _.get(trigger[triggerIndex], `${triggerType}actions[${index}]`);
-
-    const condition = _.isEmpty(triggerType)
-      ? {
-          ..._.get(trigger[triggerIndex], `${triggerType}condition`),
-          script: { lang: 'painless', source: 'return true' },
-        }
-      : {
-          ..._.get(trigger[triggerIndex], `${triggerType}condition`),
+    switch (monitor.monitor_type) {
+      case MONITOR_TYPE.AGGREGATION:
+        action = _.get(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.actions[${index}]`);
+        condition = {
+          ..._.get(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.condition`),
           buckets_path: { _count: '_count' },
           script: {
             source: 'params._count >= 0',
           },
         };
-
-    const testTrigger = _.cloneDeep(trigger[triggerIndex]);
-    _.set(testTrigger, `${triggerType}actions`, [action]);
-    _.set(testTrigger, `${triggerType}condition`, condition);
+        _.set(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.actions`, [action]);
+        _.set(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.condition`, condition);
+        break;
+      case MONITOR_TYPE.TRADITIONAL:
+        action = _.get(testTrigger, `actions[${index}]`);
+        condition = {
+          ..._.get(testTrigger, 'condition'),
+          script: { lang: 'painless', source: 'return true' },
+        };
+        _.set(testTrigger, 'actions', [action]);
+        _.set(testTrigger, 'condition', condition);
+        break;
+    }
 
     const testMonitor = { ...monitor, triggers: [{ ...testTrigger }] };
 
@@ -165,6 +197,7 @@ class ConfigureActions extends React.Component {
       <ActionEmptyPrompt arrayHelpers={arrayHelpers} hasDestinations={hasDestinations} />
     );
   };
+
   render() {
     const { loadingDestinations } = this.state;
     const { arrayHelpers, values, fieldPath } = this.props;

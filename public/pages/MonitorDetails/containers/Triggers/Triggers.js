@@ -16,12 +16,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import uuidv4 from 'uuid/v4';
-import { EuiButton, EuiInMemoryTable } from '@elastic/eui';
+import { EuiInMemoryTable } from '@elastic/eui';
 
 import ContentPanel from '../../../../components/ContentPanel';
 import { MONITOR_TYPE } from '../../../../utils/constants';
 
 export const MAX_TRIGGERS = 10;
+
+// TODO: For now, unwrapping all the Triggers since it's conflicting with the table
+//   retrieving the 'id' and causing it to behave strangely
+export function getUnwrappedTriggers(monitor) {
+  const isAggregationMonitor = monitor.monitor_type === MONITOR_TYPE.AGGREGATION;
+  return isAggregationMonitor
+    ? monitor.triggers.map((trigger) => {
+        return trigger.aggregation_trigger;
+      })
+    : monitor.triggers.map((trigger) => {
+        return trigger.traditional_trigger;
+      });
+}
 
 export default class Triggers extends Component {
   constructor(props) {
@@ -61,7 +74,7 @@ export default class Triggers extends Component {
       {}
     );
     const shouldKeepTrigger = (trigger) => !triggersToDelete[trigger.name];
-    const updatedTriggers = this.getUnwrappedTriggers(monitor).filter(shouldKeepTrigger);
+    const updatedTriggers = getUnwrappedTriggers(monitor).filter(shouldKeepTrigger);
     updateMonitor({ triggers: updatedTriggers });
   }
 
@@ -76,19 +89,6 @@ export default class Triggers extends Component {
 
   onTableChange({ sort: { field, direction } = {} }) {
     this.setState({ field, direction });
-  }
-
-  // TODO: For now, unwrapping all the Triggers since it's conflicting with the table
-  //   retrieving the 'id' and causing it to behave strangely
-  getUnwrappedTriggers(monitor) {
-    const isAggregationMonitor = monitor.monitor_type === MONITOR_TYPE.AGGREGATION;
-    return isAggregationMonitor
-      ? monitor.triggers.map((trigger) => {
-          return trigger.aggregation_trigger;
-        })
-      : monitor.triggers.map((trigger) => {
-          return trigger.traditional_trigger;
-        });
   }
 
   render() {
@@ -122,7 +122,7 @@ export default class Triggers extends Component {
     return (
       <ContentPanel title="Triggers" titleSize="s" bodyStyles={{ padding: 'initial' }}>
         <EuiInMemoryTable
-          items={this.getUnwrappedTriggers(monitor)}
+          items={getUnwrappedTriggers(monitor)}
           itemId="id"
           key={tableKey}
           columns={columns}

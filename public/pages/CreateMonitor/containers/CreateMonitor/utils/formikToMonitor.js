@@ -15,7 +15,7 @@
 
 import _ from 'lodash';
 import moment from 'moment-timezone';
-import { BUCKET_COUNT } from './constants';
+import { BUCKET_COUNT, FORMIK_INITIAL_VALUES } from './constants';
 import { SEARCH_TYPE } from '../../../../../utils/constants';
 import { OPERATORS_QUERY_MAP } from './whereFilters';
 
@@ -160,7 +160,15 @@ export function formikToQuery(values) {
 }
 
 export function formikToExtractionQuery(values) {
-  return JSON.parse(values.query);
+  let query = _.get(values, 'query', FORMIK_INITIAL_VALUES.query);
+  try {
+    // JSON.parse() throws an exception when the argument is a malformed JSON string.
+    // This caused exceptions when tinkering with the JSON in the code editor.
+    // This try/catch block will only parse the JSON string if it is not malformed.
+    // It will otherwise store the JSON as a string for continued editing.
+    query = JSON.parse(query);
+  } catch (err) {}
+  return query;
 }
 
 export function formikToGraphQuery(values) {

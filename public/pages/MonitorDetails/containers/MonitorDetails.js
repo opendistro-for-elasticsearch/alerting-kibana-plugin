@@ -43,6 +43,7 @@ import {
 } from '../../../utils/constants';
 import { migrateTriggerMetadata } from './utils/helpers';
 import { backendErrorNotification } from '../../../utils/helpers';
+import { getUnwrappedTriggers } from './Triggers/Triggers';
 
 export default class MonitorDetails extends Component {
   constructor(props) {
@@ -354,7 +355,7 @@ export default class MonitorDetails extends Component {
             httpClient={httpClient}
             monitorId={monitorId}
             onShowTrigger={this.onCreateTrigger}
-            triggers={monitor.triggers}
+            triggers={getUnwrappedTriggers(monitor)}
             isDarkMode={isDarkMode}
             notifications={notifications}
           />

@@ -22,48 +22,200 @@ import AddTriggerButton from '../../components/AddTriggerButton';
 import TriggerEmptyPrompt from '../../components/TriggerEmptyPrompt';
 import { MAX_TRIGGERS } from '../../../MonitorDetails/containers/Triggers/Triggers';
 import DefineTrigger from '../DefineTrigger';
-import { MONITOR_TYPE } from '../../../../utils/constants';
+import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../utils/constants';
+import { getPathsPerDataType } from '../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
+import monitorToFormik from '../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
+import { buildSearchRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
+import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
+import { backendErrorNotification } from '../../../../utils/helpers';
+import moment from 'moment';
+import { formikToTrigger } from '../CreateTrigger/utils/formikToTrigger';
 
 class ConfigureTriggers extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
+      dataTypes: {},
+      executeResponse: null,
+      isAggregationMonitor:
+        _.get(props, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL) === MONITOR_TYPE.AGGREGATION,
       triggerDeleted: false,
     };
+
+    this.onQueryMappings = this.onQueryMappings.bind(this);
+    this.onRunExecute = this.onRunExecute.bind(this);
   }
+
+  componentDidMount() {
+    if (this.shouldRunExecute()) this.onRunExecute();
+    if (this.state.isAggregationMonitor) this.onQueryMappings();
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevMonitorType = _.get(prevProps, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL);
+    const currMonitorType = _.get(this.props, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL);
+    if (prevMonitorType !== currMonitorType)
+      _.set(this.state, 'isAggregationMonitor', currMonitorType);
+
+    const prevInputs = prevProps.monitor.inputs[0];
+    const currInputs = this.props.monitor.inputs[0];
+    if (!_.isEqual(prevInputs, currInputs)) {
+      if (this.shouldRunExecute()) this.onRunExecute();
+      if (this.state.isAggregationMonitor) this.onQueryMappings();
+    }
+  }
+
+  shouldRunExecute = () => {
+    const monitorType = _.get(this.props, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL);
+    const indices = _.get(this.props, 'monitor.inputs[0].search.indices');
+    const range = _.keys(
+      _.get(this.props, 'monitor.inputs[0].search.query.query.bool.filter[0].range')
+    )[0];
+    const searchType = _.get(this.props, 'monitorValues.searchType', SEARCH_TYPE.QUERY);
+    let validQueryJson = false;
+    if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.LOCAL_URI) {
+      try {
+        JSON.parse(_.get(this.props, 'monitorValues.query'));
+        validQueryJson = true;
+      } catch (err) {}
+    }
+
+    switch (monitorType) {
+      case MONITOR_TYPE.AGGREGATION:
+        const whereFieldName = _.keys(_.get(this.props, 'monitorValues. where.fieldName'))[0];
+        const whereFieldValue = _.get(this.props, 'monitorValues. where.fieldValue');
+        return (
+          !_.isEmpty(indices) &&
+          (validQueryJson ||
+            (!_.isEmpty(range) && !_.isEmpty(whereFieldName) && !_.isEmpty(whereFieldValue)))
+        );
+      case MONITOR_TYPE.TRADITIONAL:
+        return !_.isEmpty(indices) && (validQueryJson || !_.isEmpty(range));
+    }
+  };
+
+  onRunExecute = (triggers = []) => {
+    const { httpClient, monitor, notifications } = this.props;
+    const formikValues = monitorToFormik(monitor);
+    const searchType = formikValues.searchType;
+    const monitorToExecute = _.cloneDeep(monitor);
+    _.set(monitorToExecute, 'triggers', triggers);
+
+    switch (searchType) {
+      case SEARCH_TYPE.QUERY:
+      case SEARCH_TYPE.GRAPH:
+        const searchRequest = buildSearchRequest(formikValues);
+        _.set(monitorToExecute, 'inputs[0].search', searchRequest);
+        break;
+      case SEARCH_TYPE.LOCAL_URI:
+        const localUriRequest = buildLocalUriRequest(formikValues);
+        _.set(monitorToExecute, 'inputs[0].uri', localUriRequest);
+        break;
+      default:
+        console.log(`Unsupported searchType found: ${JSON.stringify(searchType)}`, searchType);
+    }
+
+    httpClient
+      .post('../api/alerting/monitors/_execute', { body: JSON.stringify(monitorToExecute) })
+      .then((resp) => {
+        if (resp.ok) {
+          this.setState({ executeResponse: resp.resp }, this.overrideInitialValues);
+        } else {
+          // TODO: need a notification system to show errors or banners at top
+          console.error('err:', resp);
+          backendErrorNotification(notifications, 'run', 'trigger', resp.resp);
+        }
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
+  };
+
+  async queryMappings(index) {
+    if (!index.length) {
+      return {};
+    }
+
+    try {
+      const response = await this.props.httpClient.post('../api/alerting/_mappings', {
+        body: JSON.stringify({ index }),
+      });
+      if (response.ok) {
+        return response.resp;
+      }
+      return {};
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async onQueryMappings() {
+    const indices = this.props.monitor.inputs[0].search.indices;
+    try {
+      const mappings = await this.queryMappings(indices);
+      const dataTypes = getPathsPerDataType(mappings);
+      this.setState({ dataTypes });
+    } catch (err) {
+      console.error('There was an error getting mappings for query', err);
+    }
+  }
+
+  getTriggerContext = (executeResponse, monitor, values) => {
+    return {
+      periodStart: moment.utc(_.get(executeResponse, 'period_start', Date.now())).format(),
+      periodEnd: moment.utc(_.get(executeResponse, 'period_end', Date.now())).format(),
+      results: [_.get(executeResponse, 'input_results.results[0]')].filter((result) => !!result),
+      trigger: formikToTrigger(values, _.get(this.props.monitor, 'ui_metadata', {})),
+      alert: null,
+      error: null,
+      monitor: monitor,
+    };
+  };
+
+  overrideInitialValues = () => {
+    const { monitor, edit, triggerToEdit } = this.props;
+    const { initialValues, executeResponse } = this.state;
+    const useTriggerToFormik = edit && triggerToEdit;
+
+    // When searchType of the monitor is 'localUri', override the default trigger
+    // condition with the first name of the name-value pairs in the response
+    if (!useTriggerToFormik && 'uri' in monitor.inputs[0]) {
+      const response = _.get(executeResponse, 'input_results.results[0]');
+      _.set(initialValues, 'script.source', 'ctx.results[0].' + _.keys(response)[0] + ' != null');
+      this.setState({ initialValues: initialValues });
+    }
+  };
 
   renderTriggers = (triggerArrayHelpers) => {
     const {
-      context,
-      executeResponse,
       monitor,
       monitorValues,
-      onRun,
       setFlyout,
       triggers,
       triggerValues,
       isDarkMode,
-      dataTypes,
       httpClient,
       notifications,
     } = this.props;
-    const hasTriggers = !_.isEmpty(triggerValues.triggerDefinitions);
-    const isTraditionalMonitor = _.get(monitor, 'monitor_type') === MONITOR_TYPE.TRADITIONAL;
+    const { dataTypes, executeResponse, isAggregationMonitor } = this.state;
+    const hasTriggers = !_.isEmpty(_.get(triggerValues, 'triggerDefinitions'));
     return hasTriggers ? (
       triggerValues.triggerDefinitions.map((trigger, index) =>
-        isTraditionalMonitor ? (
+        isAggregationMonitor ? (
           <div key={index}>
-            <DefineTrigger
+            <DefineAggregationTrigger
               triggerArrayHelpers={triggerArrayHelpers}
-              context={context}
+              context={this.getTriggerContext(executeResponse, monitor, triggerValues)}
               executeResponse={executeResponse}
               monitor={monitor}
               monitorValues={monitorValues}
-              onRun={onRun}
+              onRun={this.onRunExecute}
               setFlyout={setFlyout}
               triggers={triggers}
               triggerValues={triggerValues}
               isDarkMode={isDarkMode}
+              dataTypes={dataTypes}
               triggerIndex={index}
               httpClient={httpClient}
               notifications={notifications}
@@ -72,18 +224,17 @@ class ConfigureTriggers extends React.Component {
           </div>
         ) : (
           <div key={index}>
-            <DefineAggregationTrigger
+            <DefineTrigger
               triggerArrayHelpers={triggerArrayHelpers}
-              context={context}
+              context={this.getTriggerContext(executeResponse, monitor, triggerValues)}
               executeResponse={executeResponse}
               monitor={monitor}
               monitorValues={monitorValues}
-              onRun={onRun}
+              onRun={this.onRunExecute}
               setFlyout={setFlyout}
               triggers={triggers}
               triggerValues={triggerValues}
               isDarkMode={isDarkMode}
-              dataTypes={dataTypes}
               triggerIndex={index}
               httpClient={httpClient}
               notifications={notifications}

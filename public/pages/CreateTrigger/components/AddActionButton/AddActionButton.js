@@ -42,7 +42,7 @@ const AddActionButton = ({ arrayHelpers, type = 'slack', numOfActions }) => {
       break;
   }
   return (
-    <EuiButton fill={false} onClick={() => arrayHelpers.unshift(initialActionValues)}>
+    <EuiButton fill={false} onClick={() => arrayHelpers.push(initialActionValues)}>
       {buttonText}
     </EuiButton>
   );

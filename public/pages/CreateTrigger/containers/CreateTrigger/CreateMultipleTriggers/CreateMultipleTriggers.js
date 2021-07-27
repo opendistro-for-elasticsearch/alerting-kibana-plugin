@@ -40,17 +40,7 @@ import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../../utils/helpers';
 import { buildLocalUriRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
-import { getPathsPerDataType } from '../../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
 import ConfigureTriggers from '../../ConfigureTriggers';
-
-export const DEFAULT_CLOSED_STATES = {
-  WHEN: false,
-  OF_FIELD: false,
-  THRESHOLD: false,
-  OVER: false,
-  FOR_THE_LAST: false,
-  WHERE: false,
-};
 
 export default class CreateMultipleTriggers extends Component {
   constructor(props) {
@@ -62,18 +52,13 @@ export default class CreateMultipleTriggers extends Component {
       : _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
 
     this.state = {
-      triggerResponse: null,
       executeResponse: null,
       initialValues,
-      dataTypes: {},
-      openedStates: DEFAULT_CLOSED_STATES,
-      madeChanges: false,
     };
   }
 
   componentDidMount() {
     this.onRunExecute();
-    this.onQueryMappings();
   }
 
   componentWillUnmount() {
@@ -256,38 +241,9 @@ export default class CreateMultipleTriggers extends Component {
     }
   };
 
-  async queryMappings(index) {
-    if (!index.length) {
-      return {};
-    }
-
-    try {
-      const response = await this.props.httpClient.post('../api/alerting/_mappings', {
-        body: JSON.stringify({ index }),
-      });
-      if (response.ok) {
-        return response.resp;
-      }
-      return {};
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async onQueryMappings() {
-    const indices = this.props.monitor.inputs[0].search.indices;
-    try {
-      const mappings = await this.queryMappings(indices);
-      const dataTypes = getPathsPerDataType(mappings);
-      this.setState({ dataTypes });
-    } catch (err) {
-      console.error('There was an error getting mappings for query', err);
-    }
-  }
-
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient, notifications } = this.props;
-    const { dataTypes, initialValues, executeResponse } = this.state;
+    const { initialValues, executeResponse } = this.state;
     return (
       <div style={{ padding: '25px 50px' }}>
         {this.renderSuccessCallOut()}
@@ -303,12 +259,10 @@ export default class CreateMultipleTriggers extends Component {
                     executeResponse={executeResponse}
                     monitor={monitor}
                     monitorValues={monitorToFormik(monitor)}
-                    onRun={this.onRunExecute}
                     setFlyout={setFlyout}
-                    triggers={monitor.triggers}
+                    triggers={_.get(monitor, 'triggers', [])}
                     triggerValues={values}
                     isDarkMode={this.props.isDarkMode}
-                    dataTypes={dataTypes}
                     httpClient={httpClient}
                     notifications={notifications}
                   />
