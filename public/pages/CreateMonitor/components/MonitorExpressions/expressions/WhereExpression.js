@@ -180,7 +180,7 @@ class WhereExpression extends Component {
   };
 
   render() {
-    let {
+    const {
       formik: { values },
       openedStates,
       openExpression,
