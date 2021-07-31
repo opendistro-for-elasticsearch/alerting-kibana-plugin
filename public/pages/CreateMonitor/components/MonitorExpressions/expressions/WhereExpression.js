@@ -186,7 +186,7 @@ class WhereExpression extends Component {
       openExpression,
       dataTypes,
       indexFieldFilters,
-      useTriggerFieldOperators,
+      useTriggerFieldOperators = false,
       fieldPath = '',
     } = this.props;
     const indexFields =
@@ -204,10 +204,12 @@ class WhereExpression extends Component {
       ? TRIGGER_COMPARISON_OPERATORS
       : getOperators(fieldType);
 
+    const whereFilterHeader = useTriggerFieldOperators ? 'Keyword filter' : 'Data filter';
+
     return (
       <div>
         <EuiText size="xs">
-          <h4>Where</h4>
+          <h4>{whereFilterHeader}</h4>
         </EuiText>
         <EuiSpacer size="s" />
         <EuiBadge
