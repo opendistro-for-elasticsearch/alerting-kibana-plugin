@@ -32,6 +32,7 @@ const Action = ({
   sendTestMessage,
   setFlyout,
   fieldPath,
+  values,
 }) => {
   const selectedDestination = destinations.filter((item) => item.value === action.destination_id);
   const type = _.get(selectedDestination, '0.type', DEFAULT_ACTION_TYPE);
@@ -107,6 +108,7 @@ const Action = ({
           sendTestMessage={sendTestMessage}
           setFlyout={setFlyout}
           fieldPath={fieldPath}
+          values={values}
         />
       </div>
       <EuiSpacer />
