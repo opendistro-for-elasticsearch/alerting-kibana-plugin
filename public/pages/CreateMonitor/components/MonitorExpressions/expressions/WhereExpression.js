@@ -53,6 +53,7 @@ import {
   TRIGGER_COMPARISON_OPERATORS,
   TRIGGER_OPERATORS_MAP,
 } from '../../../../CreateTrigger/containers/DefineAggregationTrigger/DefineAggregationTrigger';
+import { FORMIK_INITIAL_TRIGGER_VALUES } from '../../../../CreateTrigger/containers/CreateTrigger/utils/constants';
 
 const propTypes = {
   formik: PropTypes.object.isRequired,
@@ -105,11 +106,16 @@ class WhereExpression extends Component {
   };
 
   resetValues = () => {
-    const { formik } = this.props;
-    formik.setValues({
-      ...formik.values,
-      where: { ...FORMIK_INITIAL_VALUES.where },
-    });
+    const { fieldPath, formik, useTriggerFieldOperators = false } = this.props;
+    if (useTriggerFieldOperators) {
+      _.set(formik, `values.${fieldPath}where`, FORMIK_INITIAL_TRIGGER_VALUES.where);
+      formik.setValues({ ...formik.values });
+    } else {
+      formik.setValues({
+        ...formik.values,
+        where: { ...FORMIK_INITIAL_VALUES.where },
+      });
+    }
   };
 
   renderBetweenAnd = () => {
