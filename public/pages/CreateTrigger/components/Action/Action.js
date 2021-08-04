@@ -55,7 +55,7 @@ const Action = ({
       }
       extraAction={
         <div style={{ paddingRight: '10px' }}>
-          <EuiButton onClick={onDelete}>Delete</EuiButton>
+          <EuiButton onClick={onDelete}>Remove action</EuiButton>
         </div>
       }
     >

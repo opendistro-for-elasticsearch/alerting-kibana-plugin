@@ -16,7 +16,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { EuiAccordion, EuiButton, EuiHorizontalRule, EuiSpacer, EuiTitle } from '@elastic/eui';
+import { EuiAccordion, EuiButton, EuiSpacer, EuiTitle } from '@elastic/eui';
 import 'brace/mode/plain_text';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
 import { isInvalid, hasError } from '../../../../utils/validate';
@@ -35,7 +35,7 @@ import { backendErrorNotification } from '../../../../utils/helpers';
 
 const defaultRowProps = {
   label: 'Trigger name',
-  helpText: `Trigger names must be unique. Names can only contain letters, numbers, and special characters.`,
+  // helpText: `Trigger names must be unique. Names can only contain letters, numbers, and special characters.`,
   style: { paddingLeft: '10px' },
   isInvalid,
   error: hasError,
@@ -48,7 +48,7 @@ const selectFieldProps = {
 
 const selectRowProps = {
   label: 'Severity level',
-  helpText: `Severity levels help you organize your triggers and actions. A trigger with a high severity level might page a specific individual, whereas a trigger with a low severity level might email a list.`,
+  // helpText: `Severity levels help you organize your triggers and actions. A trigger with a high severity level might page a specific individual, whereas a trigger with a low severity level might email a list.`,
   style: { paddingLeft: '10px', marginTop: '0px' },
   isInvalid,
   error: hasError,
@@ -81,7 +81,7 @@ const propTypes = {
   isDarkMode: PropTypes.bool.isRequired,
 };
 
-const DEFAULT_TRIGGER_NAME = 'Define trigger';
+const DEFAULT_TRIGGER_NAME = 'New trigger';
 
 class DefineTrigger extends Component {
   constructor(props) {
@@ -142,6 +142,7 @@ class DefineTrigger extends Component {
 
   render() {
     const {
+      edit,
       triggerArrayHelpers,
       context,
       monitorValues,
@@ -160,7 +161,6 @@ class DefineTrigger extends Component {
     const isAd = _.get(monitorValues, 'searchType') === SEARCH_TYPE.AD;
     const detectorId = _.get(monitorValues, 'detectorId');
     const response = _.get(executeResponse, 'input_results.results[0]');
-    const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
     const thresholdEnum = _.get(triggerValues, `${fieldPath}thresholdEnum`);
     const thresholdValue = _.get(triggerValues, `${fieldPath}thresholdValue`);
     const adTriggerType = _.get(triggerValues, `${fieldPath}anomalyDetector.triggerType`);
@@ -169,10 +169,8 @@ class DefineTrigger extends Component {
     let triggerContent = (
       <TriggerQuery
         context={context}
-        error={error}
         executeResponse={executeResponse}
         onRun={_.isEmpty(fieldPath) ? onRun : this.onRunExecute}
-        response={response}
         setFlyout={setFlyout}
         triggerValues={triggerValues}
         isDarkMode={isDarkMode}
@@ -205,7 +203,7 @@ class DefineTrigger extends Component {
             <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
           </EuiTitle>
         }
-        initialIsOpen={triggerIndex === 0}
+        initialIsOpen={edit ? false : triggerIndex === 0}
         extraAction={
           <EuiButton
             color={'danger'}
@@ -213,59 +211,60 @@ class DefineTrigger extends Component {
               triggerArrayHelpers.remove(triggerIndex);
             }}
           >
-            Delete
+            Remove trigger
           </EuiButton>
         }
       >
-        <EuiHorizontalRule margin="s" />
-        <FormikFieldText
-          name={`${fieldPath}name`}
-          fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
-          formRow
-          rowProps={defaultRowProps}
-          inputProps={defaultInputProps}
-        />
-        <EuiSpacer size={'m'} />
-        <FormikSelect
-          name={`${fieldPath}severity`}
-          formRow
-          fieldProps={selectFieldProps}
-          rowProps={selectRowProps}
-          inputProps={selectInputProps}
-        />
-        <EuiSpacer size={'m'} />
-        {isAd ? (
-          <div>
-            <FormikSelect
-              name={`${fieldPath}anomalyDetector.triggerType`}
-              formRow
-              rowProps={{
-                label: 'Trigger type',
-                helpText: 'Define type of trigger',
-                style: { paddingLeft: '10px', marginTop: '0px' },
-              }}
-              inputProps={{ options: triggerOptions }}
-            />
-            <EuiSpacer size={'m'} />
-          </div>
-        ) : null}
-        {triggerContent}
-        <EuiSpacer size={'l'} />
-        <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
-          {(arrayHelpers) => (
-            <ConfigureActions
-              arrayHelpers={arrayHelpers}
-              context={context}
-              httpClient={httpClient}
-              setFlyout={setFlyout}
-              values={triggerValues}
-              notifications={notifications}
-              fieldPath={fieldPath}
-              triggerIndex={triggerIndex}
-            />
-          )}
-        </FieldArray>
-        <EuiSpacer />
+        <div style={{ padding: '0px 20px' }}>
+          <FormikFieldText
+            name={`${fieldPath}name`}
+            fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
+            formRow
+            rowProps={defaultRowProps}
+            inputProps={defaultInputProps}
+          />
+          <EuiSpacer size={'m'} />
+          <FormikSelect
+            name={`${fieldPath}severity`}
+            formRow
+            fieldProps={selectFieldProps}
+            rowProps={selectRowProps}
+            inputProps={selectInputProps}
+          />
+          <EuiSpacer size={'m'} />
+          {isAd ? (
+            <div>
+              <FormikSelect
+                name={`${fieldPath}anomalyDetector.triggerType`}
+                formRow
+                rowProps={{
+                  label: 'Trigger type',
+                  helpText: 'Define type of trigger',
+                  style: { paddingLeft: '10px', marginTop: '0px' },
+                }}
+                inputProps={{ options: triggerOptions }}
+              />
+              <EuiSpacer size={'m'} />
+            </div>
+          ) : null}
+          {triggerContent}
+          <EuiSpacer size={'l'} />
+          <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
+            {(arrayHelpers) => (
+              <ConfigureActions
+                arrayHelpers={arrayHelpers}
+                context={context}
+                httpClient={httpClient}
+                setFlyout={setFlyout}
+                values={triggerValues}
+                notifications={notifications}
+                fieldPath={fieldPath}
+                triggerIndex={triggerIndex}
+              />
+            )}
+          </FieldArray>
+          <EuiSpacer />
+        </div>
       </EuiAccordion>
     );
   }

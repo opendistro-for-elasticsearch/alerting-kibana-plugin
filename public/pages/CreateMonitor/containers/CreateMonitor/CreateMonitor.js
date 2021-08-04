@@ -274,6 +274,7 @@ export default class CreateMonitor extends Component {
               <FieldArray name={'triggerDefinitions'} validateOnChange={true}>
                 {(triggerArrayHelpers) => (
                   <ConfigureTriggers
+                    edit={edit}
                     triggerArrayHelpers={triggerArrayHelpers}
                     monitor={formikToMonitor(values)}
                     monitorValues={values}

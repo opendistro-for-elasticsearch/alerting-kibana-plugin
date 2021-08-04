@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { EuiSpacer } from '@elastic/eui';
+import { EuiHorizontalRule, EuiSpacer } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import _ from 'lodash';
 import DefineAggregationTrigger from '../DefineAggregationTrigger';
@@ -48,7 +48,6 @@ class ConfigureTriggers extends React.Component {
   }
 
   componentDidMount() {
-    if (this.shouldRunExecute()) this.onRunExecute();
     if (this.state.isAggregationMonitor) this.onQueryMappings();
   }
 
@@ -61,39 +60,9 @@ class ConfigureTriggers extends React.Component {
     const prevInputs = prevProps.monitor.inputs[0];
     const currInputs = this.props.monitor.inputs[0];
     if (!_.isEqual(prevInputs, currInputs)) {
-      if (this.shouldRunExecute()) this.onRunExecute();
       if (this.state.isAggregationMonitor) this.onQueryMappings();
     }
   }
-
-  shouldRunExecute = () => {
-    const monitorType = _.get(this.props, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL);
-    const indices = _.get(this.props, 'monitor.inputs[0].search.indices');
-    const range = _.keys(
-      _.get(this.props, 'monitor.inputs[0].search.query.query.bool.filter[0].range')
-    )[0];
-    const searchType = _.get(this.props, 'monitorValues.searchType', SEARCH_TYPE.QUERY);
-    let validQueryJson = false;
-    if (searchType === SEARCH_TYPE.QUERY || searchType === SEARCH_TYPE.LOCAL_URI) {
-      try {
-        JSON.parse(_.get(this.props, 'monitorValues.query'));
-        validQueryJson = true;
-      } catch (err) {}
-    }
-
-    switch (monitorType) {
-      case MONITOR_TYPE.AGGREGATION:
-        const whereFieldName = _.keys(_.get(this.props, 'monitorValues. where.fieldName'))[0];
-        const whereFieldValue = _.get(this.props, 'monitorValues. where.fieldValue');
-        return (
-          !_.isEmpty(indices) &&
-          (validQueryJson ||
-            (!_.isEmpty(range) && !_.isEmpty(whereFieldName) && !_.isEmpty(whereFieldValue)))
-        );
-      case MONITOR_TYPE.TRADITIONAL:
-        return !_.isEmpty(indices) && (validQueryJson || !_.isEmpty(range));
-    }
-  };
 
   onRunExecute = (triggers = []) => {
     const { httpClient, monitor, notifications } = this.props;
@@ -189,6 +158,7 @@ class ConfigureTriggers extends React.Component {
 
   renderTriggers = (triggerArrayHelpers) => {
     const {
+      edit,
       monitor,
       monitorValues,
       setFlyout,
@@ -201,48 +171,49 @@ class ConfigureTriggers extends React.Component {
     const { dataTypes, executeResponse, isAggregationMonitor } = this.state;
     const hasTriggers = !_.isEmpty(_.get(triggerValues, 'triggerDefinitions'));
     return hasTriggers ? (
-      triggerValues.triggerDefinitions.map((trigger, index) =>
-        isAggregationMonitor ? (
+      triggerValues.triggerDefinitions.map((trigger, index) => {
+        return (
           <div key={index}>
-            <DefineAggregationTrigger
-              triggerArrayHelpers={triggerArrayHelpers}
-              context={this.getTriggerContext(executeResponse, monitor, triggerValues)}
-              executeResponse={executeResponse}
-              monitor={monitor}
-              monitorValues={monitorValues}
-              onRun={this.onRunExecute}
-              setFlyout={setFlyout}
-              triggers={triggers}
-              triggerValues={triggerValues}
-              isDarkMode={isDarkMode}
-              dataTypes={dataTypes}
-              triggerIndex={index}
-              httpClient={httpClient}
-              notifications={notifications}
-            />
-            <EuiSpacer size={'s'} />
+            {isAggregationMonitor ? (
+              <DefineAggregationTrigger
+                edit={edit}
+                triggerArrayHelpers={triggerArrayHelpers}
+                context={this.getTriggerContext(executeResponse, monitor, triggerValues)}
+                executeResponse={executeResponse}
+                monitor={monitor}
+                monitorValues={monitorValues}
+                onRun={this.onRunExecute}
+                setFlyout={setFlyout}
+                triggers={triggers}
+                triggerValues={triggerValues}
+                isDarkMode={isDarkMode}
+                dataTypes={dataTypes}
+                triggerIndex={index}
+                httpClient={httpClient}
+                notifications={notifications}
+              />
+            ) : (
+              <DefineTrigger
+                edit={edit}
+                triggerArrayHelpers={triggerArrayHelpers}
+                context={this.getTriggerContext(executeResponse, monitor, triggerValues)}
+                executeResponse={executeResponse}
+                monitor={monitor}
+                monitorValues={monitorValues}
+                onRun={this.onRunExecute}
+                setFlyout={setFlyout}
+                triggers={triggers}
+                triggerValues={triggerValues}
+                isDarkMode={isDarkMode}
+                triggerIndex={index}
+                httpClient={httpClient}
+                notifications={notifications}
+              />
+            )}
+            <EuiHorizontalRule margin="m" />
           </div>
-        ) : (
-          <div key={index}>
-            <DefineTrigger
-              triggerArrayHelpers={triggerArrayHelpers}
-              context={this.getTriggerContext(executeResponse, monitor, triggerValues)}
-              executeResponse={executeResponse}
-              monitor={monitor}
-              monitorValues={monitorValues}
-              onRun={this.onRunExecute}
-              setFlyout={setFlyout}
-              triggers={triggers}
-              triggerValues={triggerValues}
-              isDarkMode={isDarkMode}
-              triggerIndex={index}
-              httpClient={httpClient}
-              notifications={notifications}
-            />
-            <EuiSpacer size={'s'} />
-          </div>
-        )
-      )
+        );
+      })
     ) : (
       <TriggerEmptyPrompt arrayHelpers={triggerArrayHelpers} />
     );
@@ -258,8 +229,8 @@ class ConfigureTriggers extends React.Component {
       <ContentPanel
         title={`Triggers (${numOfTriggers})`}
         titleSize={'s'}
-        panelStyles={{ paddingBottom: '0px', paddingLeft: '20px' }}
-        bodyStyles={{ paddingLeft: '0px', padding: '20px' }}
+        panelStyles={{ paddingBottom: '0px', paddingLeft: '20px', paddingRight: '20px' }}
+        bodyStyles={{ paddingLeft: '0px', padding: '10px' }}
         horizontalRuleClassName={'accordion-horizontal-rule'}
       >
         {this.renderTriggers(triggerArrayHelpers)}

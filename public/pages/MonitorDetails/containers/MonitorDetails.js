@@ -30,7 +30,6 @@ import {
 } from '@elastic/eui';
 
 import CreateMonitor from '../../CreateMonitor';
-import CreateMultipleTriggers from '../../CreateTrigger';
 import MonitorOverview from '../components/MonitorOverview';
 import MonitorHistory from './MonitorHistory';
 import Dashboard from '../../Dashboard/containers/Dashboard';
@@ -221,15 +220,7 @@ export default class MonitorDetails extends Component {
   };
 
   render() {
-    const {
-      monitor,
-      detector,
-      monitorVersion,
-      activeCount,
-      updating,
-      loading,
-      triggerToEdit,
-    } = this.state;
+    const { monitor, detector, monitorVersion, activeCount, updating, loading } = this.state;
     const {
       location,
       match: {
@@ -240,10 +231,8 @@ export default class MonitorDetails extends Component {
       notifications,
       isDarkMode,
     } = this.props;
-    const { action, success: showSuccessCallOut = false } = queryString.parse(location.search);
+    const { action } = queryString.parse(location.search);
     const updatingMonitor = action === MONITOR_ACTIONS.UPDATE_MONITOR;
-    const creatingTrigger = action === TRIGGER_ACTIONS.CREATE_TRIGGER;
-    const updatingTrigger = action === TRIGGER_ACTIONS.UPDATE_TRIGGER && triggerToEdit;
     const detectorId = get(monitor, MONITOR_INPUT_DETECTOR_ID, undefined);
     if (loading) {
       return (
@@ -262,24 +251,6 @@ export default class MonitorDetails extends Component {
           detectorId={detectorId}
           notifications={notifications}
           {...this.props}
-        />
-      );
-    }
-
-    if (creatingTrigger || updatingTrigger) {
-      return (
-        <CreateMultipleTriggers
-          edit={updatingTrigger}
-          triggerToEdit={triggerToEdit}
-          monitor={monitor}
-          showSuccessCallOut={showSuccessCallOut}
-          httpClient={this.props.httpClient}
-          setFlyout={this.props.setFlyout}
-          onCloseTrigger={this.onCloseTrigger}
-          onMonitorFieldChange={() => {}}
-          updateMonitor={this.updateMonitor}
-          notifications={notifications}
-          isDarkMode={isDarkMode}
         />
       );
     }

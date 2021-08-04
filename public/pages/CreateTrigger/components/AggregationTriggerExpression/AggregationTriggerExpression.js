@@ -147,7 +147,7 @@ class AggregationTriggerExpression extends Component {
                 arrayHelpers.remove(index);
               }}
             >
-              Delete
+              Remove condition
             </EuiButton>
           </EuiFlexItem>
         ) : null}
