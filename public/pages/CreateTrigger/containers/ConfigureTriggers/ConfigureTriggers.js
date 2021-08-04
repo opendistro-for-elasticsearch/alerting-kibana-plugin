@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { EuiHorizontalRule, EuiSpacer } from '@elastic/eui';
+import { EuiHorizontalRule } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import _ from 'lodash';
 import DefineAggregationTrigger from '../DefineAggregationTrigger';
@@ -210,7 +210,7 @@ class ConfigureTriggers extends React.Component {
                 notifications={notifications}
               />
             )}
-            <EuiHorizontalRule margin="m" />
+            <EuiHorizontalRule margin={'s'} />
           </div>
         );
       })
@@ -236,8 +236,7 @@ class ConfigureTriggers extends React.Component {
         {this.renderTriggers(triggerArrayHelpers)}
 
         {displayAddTriggerButton ? (
-          <div>
-            <EuiSpacer size={'s'} />
+          <div style={{ paddingBottom: '20px', paddingTop: '15px' }}>
             <AddTriggerButton
               arrayHelpers={triggerArrayHelpers}
               disabled={disableAddTriggerButton}

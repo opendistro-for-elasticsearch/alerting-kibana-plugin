@@ -133,7 +133,9 @@ const TriggerQuery = ({
 
         {/*// Grid slot for the execute trigger condition button*/}
         <EuiFlexItem grow={false}>
-          <EuiButton onClick={() => onRun([trigger])}>Run for condition response</EuiButton>
+          <EuiButton onClick={() => onRun([trigger])} size={'s'}>
+            Run for condition response
+          </EuiButton>
         </EuiFlexItem>
       </EuiFlexGrid>
     </div>

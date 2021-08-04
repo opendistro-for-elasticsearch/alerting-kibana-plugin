@@ -298,6 +298,7 @@ class DefineAggregationTrigger extends Component {
             onClick={() => {
               triggerArrayHelpers.remove(triggerIndex);
             }}
+            size={'s'}
           >
             Remove trigger
           </EuiButton>

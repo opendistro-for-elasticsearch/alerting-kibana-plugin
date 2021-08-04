@@ -17,12 +17,12 @@ import React, { Fragment, useState } from 'react';
 import _ from 'lodash';
 import Mustache from 'mustache';
 import {
+  EuiCheckbox,
   EuiFlexGroup,
   EuiFlexItem,
   EuiFormRow,
   EuiLink,
   EuiSpacer,
-  EuiSwitch,
   EuiText,
   EuiTextArea,
 } from '@elastic/eui';
@@ -63,7 +63,7 @@ export const ACTIONABLE_ALERTS_OPTIONS_VALUES = {
 
 export const ACTIONABLE_ALERTS_OPTIONS_LABELS = {
   COMPLETED: 'Completed',
-  DEDUPED: 'De-duped',
+  DEDUPED: 'De-duplicated',
   NEW: 'New',
 };
 
@@ -76,7 +76,10 @@ export const ACTIONABLE_ALERTS_OPTIONS = [
     value: ACTIONABLE_ALERTS_OPTIONS_VALUES.DEDUPED,
     label: ACTIONABLE_ALERTS_OPTIONS_LABELS.DEDUPED,
   },
-  { value: ACTIONABLE_ALERTS_OPTIONS_VALUES.NEW, label: ACTIONABLE_ALERTS_OPTIONS_LABELS.NEW },
+  {
+    value: ACTIONABLE_ALERTS_OPTIONS_VALUES.NEW,
+    label: ACTIONABLE_ALERTS_OPTIONS_LABELS.NEW,
+  },
 ];
 
 export const DEFAULT_ACTIONABLE_ALERTS_SELECTIONS = [
@@ -84,7 +87,10 @@ export const DEFAULT_ACTIONABLE_ALERTS_SELECTIONS = [
     value: ACTIONABLE_ALERTS_OPTIONS_VALUES.DEDUPED,
     label: ACTIONABLE_ALERTS_OPTIONS_LABELS.DEDUPED,
   },
-  { value: ACTIONABLE_ALERTS_OPTIONS_VALUES.NEW, label: ACTIONABLE_ALERTS_OPTIONS_LABELS.NEW },
+  {
+    value: ACTIONABLE_ALERTS_OPTIONS_VALUES.NEW,
+    label: ACTIONABLE_ALERTS_OPTIONS_LABELS.NEW,
+  },
 ];
 
 export const NO_ACTIONABLE_ALERT_SELECTIONS = 'Must select at least 1 option';
@@ -108,13 +114,13 @@ const renderSendTestMessageButton = (
   isAggregationMonitor,
   displayPreview,
   setDisplayPreview,
-  action
+  fieldPath
 ) => {
-  const disableButton = _.isEmpty(_.get(action, 'destination_id'));
   return (
     <EuiFlexGroup justifyContent="spaceBetween" alignItems="flexStart">
       <EuiFlexItem>
-        <EuiSwitch
+        <EuiCheckbox
+          id={`${fieldPath}actions.${index}`}
           label={'Preview message'}
           checked={displayPreview}
           onChange={(e) => setDisplayPreview(e)}
@@ -127,7 +133,6 @@ const renderSendTestMessageButton = (
               onClick={() => {
                 sendTestMessage(index);
               }}
-              disabled={disableButton}
             >
               <EuiText>Send test message</EuiText>
             </EuiLink>
@@ -203,10 +208,15 @@ export default function Message(
           fieldProps={{ validate: required }}
           rowProps={{
             label: 'Message subject',
+            style: { maxWidth: '100%' },
             isInvalid,
             error: hasError,
           }}
-          inputProps={{ isInvalid }}
+          inputProps={{
+            placeholder: 'Enter a subject',
+            fullWidth: true,
+            isInvalid,
+          }}
         />
       ) : null}
       <FormikTextArea
@@ -238,7 +248,7 @@ export default function Message(
           isAggregationMonitor,
           displayPreview,
           onDisplayPreviewChange,
-          action
+          fieldPath
         )}
       </EuiFormRow>
 
@@ -256,8 +266,104 @@ export default function Message(
 
       <EuiSpacer size="m" />
 
+      <EuiText>
+        <h4>Action configuration</h4>
+      </EuiText>
+
+      <EuiSpacer size="m" />
+
+      {isAggregationMonitor ? (
+        <EuiFormRow
+          label={<span style={{ color: '#343741' }}>Perform action</span>}
+          style={{ maxWidth: '100%' }}
+        >
+          <EuiFlexGroup direction={'column'} gutterSize={'xs'}>
+            <EuiFlexItem>
+              <FormikFieldRadio
+                name={`${actionExecutionPolicyPath}.action_execution_frequency`}
+                formRow
+                inputProps={{
+                  id: `${actionExecutionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_ALERT}`,
+                  value: NOTIFY_OPTIONS_VALUES.PER_ALERT,
+                  checked: actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_ALERT,
+                  label: NOTIFY_OPTIONS_LABELS.PER_ALERT,
+                  onChange: (e, field, form) => {
+                    field.onChange(e);
+                  },
+                }}
+              />
+            </EuiFlexItem>
+
+            <EuiFlexItem>
+              {actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_ALERT ? (
+                <EuiFormRow style={{ maxWidth: '100%' }}>
+                  <EuiFlexGroup
+                    alignItems="center"
+                    style={{
+                      margin: '0px',
+                      maxWidth: '100%',
+                    }}
+                  >
+                    <FormikComboBox
+                      name={`${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`}
+                      formRow
+                      fieldProps={{ validate: validateActionableAlertsSelections }}
+                      rowProps={{
+                        label: 'Actionable alerts',
+                        style: { width: '400px' },
+                        isInvalid: _.isEmpty(
+                          _.get(
+                            action,
+                            `action_execution_policy.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`
+                          )
+                        ),
+                        error: NO_ACTIONABLE_ALERT_SELECTIONS,
+                      }}
+                      inputProps={{
+                        placeholder: 'Select alert options',
+                        options: ACTIONABLE_ALERTS_OPTIONS,
+                        onBlur: (e, field, form) => {
+                          form.setFieldTouched(
+                            `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
+                            true
+                          );
+                        },
+                        onChange: (options, field, form) => {
+                          form.setFieldValue(
+                            `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
+                            options
+                          );
+                        },
+                        isClearable: true,
+                        selectedOptions: actionableAlertsSelections,
+                      }}
+                    />
+                  </EuiFlexGroup>
+                </EuiFormRow>
+              ) : null}
+            </EuiFlexItem>
+
+            <EuiFlexItem>
+              <FormikFieldRadio
+                name={`${actionExecutionPolicyPath}.action_execution_frequency`}
+                formRow
+                inputProps={{
+                  id: `${actionExecutionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_EXECUTION}`,
+                  value: NOTIFY_OPTIONS_VALUES.PER_EXECUTION,
+                  checked: actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_EXECUTION,
+                  label: NOTIFY_OPTIONS_LABELS.PER_EXECUTION,
+                  onChange: (e, field, form) => {
+                    field.onChange(e);
+                  },
+                }}
+              />
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        </EuiFormRow>
+      ) : null}
+
       <EuiFormRow
-        label={<span style={{ color: '#343741' }}>Action throttling</span>}
+        label={<span style={{ color: '#343741' }}>Throttling</span>}
         style={{ maxWidth: '100%' }}
       >
         <EuiFlexGroup direction="column">
@@ -311,90 +417,6 @@ export default function Message(
           </EuiFlexGroup>
         </EuiFlexGroup>
       </EuiFormRow>
-
-      {isAggregationMonitor ? (
-        <EuiFormRow
-          label={<span style={{ color: '#343741' }}>Notify</span>}
-          style={{ maxWidth: '100%' }}
-        >
-          <div>
-            <FormikFieldRadio
-              name={`${actionExecutionPolicyPath}.action_execution_frequency`}
-              formRow
-              inputProps={{
-                id: `${actionExecutionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_ALERT}`,
-                value: NOTIFY_OPTIONS_VALUES.PER_ALERT,
-                checked: actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_ALERT,
-                label: NOTIFY_OPTIONS_LABELS.PER_ALERT,
-                onChange: (e, field, form) => {
-                  field.onChange(e);
-                },
-              }}
-            />
-
-            {actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_ALERT ? (
-              <EuiFormRow style={{ maxWidth: '100%' }}>
-                <EuiFlexGroup
-                  alignItems="center"
-                  style={{
-                    margin: '0px',
-                    maxWidth: '100%',
-                  }}
-                >
-                  <FormikComboBox
-                    name={`${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`}
-                    formRow
-                    fieldProps={{ validate: validateActionableAlertsSelections }}
-                    rowProps={{
-                      label: 'Actionable alerts',
-                      style: { width: '400px' },
-                      isInvalid: _.isEmpty(
-                        _.get(
-                          action,
-                          `action_execution_policy.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`
-                        )
-                      ),
-                      error: NO_ACTIONABLE_ALERT_SELECTIONS,
-                    }}
-                    inputProps={{
-                      placeholder: 'Select alert options',
-                      options: ACTIONABLE_ALERTS_OPTIONS,
-                      onBlur: (e, field, form) => {
-                        form.setFieldTouched(
-                          `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
-                          true
-                        );
-                      },
-                      onChange: (options, field, form) => {
-                        form.setFieldValue(
-                          `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
-                          options
-                        );
-                      },
-                      isClearable: true,
-                      selectedOptions: actionableAlertsSelections,
-                    }}
-                  />
-                </EuiFlexGroup>
-              </EuiFormRow>
-            ) : null}
-
-            <FormikFieldRadio
-              name={`${actionExecutionPolicyPath}.action_execution_frequency`}
-              formRow
-              inputProps={{
-                id: `${actionExecutionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_EXECUTION}`,
-                value: NOTIFY_OPTIONS_VALUES.PER_EXECUTION,
-                checked: actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_EXECUTION,
-                label: NOTIFY_OPTIONS_LABELS.PER_EXECUTION,
-                onChange: (e, field, form) => {
-                  field.onChange(e);
-                },
-              }}
-            />
-          </div>
-        </EuiFormRow>
-      ) : null}
     </div>
   );
 }

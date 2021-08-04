@@ -147,7 +147,7 @@ const AggregationTriggerQuery = ({
 
         {/*// Grid slot for the execute trigger condition button*/}
         <EuiFlexItem grow={false}>
-          <EuiButton onClick={() => onRun(_.isArray(trigger) ? trigger : [trigger])}>
+          <EuiButton onClick={() => onRun(_.isArray(trigger) ? trigger : [trigger])} size={'s'}>
             Run for condition response
           </EuiButton>
         </EuiFlexItem>
