@@ -29,9 +29,9 @@ import { FORMIK_INITIAL_ACTION_VALUES } from '../../../utils/constants';
 
 export function formikToTrigger(values, monitorUiMetadata = {}) {
   const triggerDefinitions = _.get(values, 'triggerDefinitions');
-  return triggerDefinitions === undefined
-    ? formikToTriggerDefinition(values, monitorUiMetadata)
-    : formikToTriggerDefinitions(triggerDefinitions, monitorUiMetadata);
+  return _.isArray(triggerDefinitions)
+    ? formikToTriggerDefinitions(triggerDefinitions, monitorUiMetadata)
+    : formikToTriggerDefinition(values, monitorUiMetadata);
 }
 
 export function formikToTriggerDefinitions(values, monitorUiMetadata) {

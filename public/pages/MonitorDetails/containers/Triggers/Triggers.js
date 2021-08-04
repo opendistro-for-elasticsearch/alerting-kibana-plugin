@@ -16,12 +16,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import uuidv4 from 'uuid/v4';
-import { EuiButton, EuiInMemoryTable } from '@elastic/eui';
+import { EuiInMemoryTable } from '@elastic/eui';
 
 import ContentPanel from '../../../../components/ContentPanel';
 import { MONITOR_TYPE } from '../../../../utils/constants';
 
 export const MAX_TRIGGERS = 10;
+
+// TODO: For now, unwrapping all the Triggers since it's conflicting with the table
+//   retrieving the 'id' and causing it to behave strangely
+export function getUnwrappedTriggers(monitor) {
+  const isAggregationMonitor = monitor.monitor_type === MONITOR_TYPE.AGGREGATION;
+  return isAggregationMonitor
+    ? monitor.triggers.map((trigger) => {
+        return trigger.aggregation_trigger;
+      })
+    : monitor.triggers.map((trigger) => {
+        return trigger.traditional_trigger;
+      });
+}
 
 export default class Triggers extends Component {
   constructor(props) {
@@ -61,7 +74,7 @@ export default class Triggers extends Component {
       {}
     );
     const shouldKeepTrigger = (trigger) => !triggersToDelete[trigger.name];
-    const updatedTriggers = this.getUnwrappedTriggers(monitor).filter(shouldKeepTrigger);
+    const updatedTriggers = getUnwrappedTriggers(monitor).filter(shouldKeepTrigger);
     updateMonitor({ triggers: updatedTriggers });
   }
 
@@ -78,22 +91,9 @@ export default class Triggers extends Component {
     this.setState({ field, direction });
   }
 
-  // TODO: For now, unwrapping all the Triggers since it's conflicting with the table
-  //   retrieving the 'id' and causing it to behave strangely
-  getUnwrappedTriggers(monitor) {
-    const isAggregationMonitor = monitor.monitor_type === MONITOR_TYPE.AGGREGATION;
-    return isAggregationMonitor
-      ? monitor.triggers.map((trigger) => {
-          return trigger.aggregation_trigger;
-        })
-      : monitor.triggers.map((trigger) => {
-          return trigger.traditional_trigger;
-        });
-  }
-
   render() {
-    const { direction, field, selectedItems, tableKey } = this.state;
-    const { monitor, onCreateTrigger } = this.props;
+    const { direction, field, tableKey } = this.state;
+    const { monitor } = this.props;
 
     const columns = [
       {
@@ -119,37 +119,14 @@ export default class Triggers extends Component {
 
     const sorting = { sort: { field, direction } };
 
-    const selection = { onSelectionChange: this.onSelectionChange };
-
     return (
-      <ContentPanel
-        title="Triggers"
-        titleSize="s"
-        bodyStyles={{ padding: 'initial' }}
-        actions={[
-          <EuiButton onClick={this.onEdit} disabled={selectedItems.length !== 1}>
-            Edit
-          </EuiButton>,
-          <EuiButton onClick={this.onDelete} disabled={!selectedItems.length}>
-            Delete
-          </EuiButton>,
-          <EuiButton
-            onClick={onCreateTrigger}
-            disabled={monitor.triggers.length >= MAX_TRIGGERS}
-            fill
-          >
-            Create
-          </EuiButton>,
-        ]}
-      >
+      <ContentPanel title="Triggers" titleSize="s" bodyStyles={{ padding: 'initial' }}>
         <EuiInMemoryTable
-          items={this.getUnwrappedTriggers(monitor)}
+          items={getUnwrappedTriggers(monitor)}
           itemId="id"
           key={tableKey}
           columns={columns}
           sorting={sorting}
-          isSelectable={true}
-          selection={selection}
           onTableChange={this.onTableChange}
         />
       </ContentPanel>

@@ -69,8 +69,6 @@ const severityOptions = [
   { value: '5', text: '5' },
 ];
 
-const triggerOptions = [{ value: TRIGGER_TYPE.ALERT_TRIGGER, text: 'Extraction query response' }];
-
 const selectInputProps = {
   options: severityOptions,
 };
@@ -142,9 +140,6 @@ class DefineAggregationTrigger extends Component {
     const { madeChanges, openedStates } = this.state;
     if (madeChanges && openedStates[expression]) {
       // if made changes and close expression that was currently open => run query
-
-      // TODO: Re-enabled when support for rendering visual graph previews is implemented.
-      // this.props.onRunQuery();
       this.setState({ madeChanges: false });
     }
     this.setState({ openedStates: { ...openedStates, [expression]: false } });
@@ -185,7 +180,7 @@ class DefineAggregationTrigger extends Component {
     triggerValues
   ) => {
     const metricAggregations = _.keys(
-      _.get(monitor, 'inputs[0].search.query.aggregations.composite_agg.aggregations', [])
+      _.get(monitor, 'inputs[0].search.query.aggregations.composite_agg.aggs', [])
     ).map((metric) => {
       return { value: metric, text: metric };
     });
@@ -312,6 +307,7 @@ class DefineAggregationTrigger extends Component {
             <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
           </EuiTitle>
         }
+        initialIsOpen={triggerIndex === 0}
         extraAction={
           <EuiButton
             color={'danger'}

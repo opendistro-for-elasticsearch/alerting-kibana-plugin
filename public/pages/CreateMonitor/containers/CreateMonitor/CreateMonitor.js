@@ -1,40 +1,47 @@
 /*
- *   Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
- *   Licensed under the Apache License, Version 2.0 (the "License").
- *   You may not use this file except in compliance with the License.
- *   A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   or in the "license" file accompanying this file. This file is distributed
- *   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing
- *   permissions and limitations under the License.
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
 import queryString from 'query-string';
-import { Formik } from 'formik';
+import { FieldArray, Formik } from 'formik';
 import {
-  EuiSpacer,
-  EuiTitle,
-  EuiFlexGroup,
-  EuiFlexItem,
   EuiButton,
   EuiButtonEmpty,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiSpacer,
+  EuiTitle,
 } from '@elastic/eui';
 
 import DefineMonitor from '../DefineMonitor';
 import { FORMIK_INITIAL_VALUES } from './utils/constants';
 import monitorToFormik from './utils/monitorToFormik';
 import { formikToMonitor } from './utils/formikToMonitor';
-import { TRIGGER_ACTIONS, SEARCH_TYPE } from '../../../../utils/constants';
+import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../utils/constants';
 import { initializeFromQueryParams } from './utils/monitorQueryParams';
 import { SubmitErrorHandler } from '../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import MonitorDetails from '../MonitorDetails';
+import ConfigureTriggers from '../../../CreateTrigger/containers/ConfigureTriggers';
+import {
+  formikToTrigger,
+  formikToTriggerUiMetadata,
+} from '../../../CreateTrigger/containers/CreateTrigger/utils/formikToTrigger';
+import { triggerToFormik } from '../../../CreateTrigger/containers/CreateTrigger/utils/triggerToFormik';
+import { TRIGGER_TYPE } from '../../../CreateTrigger/containers/CreateTrigger/utils/constants';
 
 export default class CreateMonitor extends Component {
   static defaultProps = {
@@ -55,16 +62,25 @@ export default class CreateMonitor extends Component {
       (initialValue, queryValue) => (_.isEmpty(queryValue) ? initialValue : queryValue)
     );
 
-    if (this.props.edit && this.props.monitorToEdit) {
-      initialValues = monitorToFormik(this.props.monitorToEdit);
-    }
-
     this.state = {
-      initialValues,
       plugins: [],
       response: null,
       performanceResponse: null,
     };
+
+    if (this.props.edit && this.props.monitorToEdit) {
+      const triggers = triggerToFormik(
+        _.get(this.props.monitorToEdit, 'triggers', []),
+        this.props.monitorToEdit
+      );
+      _.set(this.state, 'triggerToEdit', triggers);
+      initialValues = {
+        ...monitorToFormik(this.props.monitorToEdit),
+        triggerDefinitions: triggers.triggerDefinitions,
+      };
+    }
+
+    _.set(this.state, 'initialValues', initialValues);
 
     this.onCancel = this.onCancel.bind(this);
     this.onCreate = this.onCreate.bind(this);
@@ -112,9 +128,7 @@ export default class CreateMonitor extends Component {
         resp: { _id },
       } = resp;
       if (ok) {
-        this.props.history.push(
-          `/monitors/${_id}?action=${TRIGGER_ACTIONS.CREATE_TRIGGER}&success=true`
-        );
+        this.props.history.push(`/monitors/${_id}`);
       } else {
         console.log('Failed to create:', resp);
         backendErrorNotification(notifications, 'create', 'monitor', resp.resp);
@@ -126,12 +140,63 @@ export default class CreateMonitor extends Component {
     }
   }
 
+  prepareTriggers = (trigger, triggerMetadata, monitor) => {
+    const { edit } = this.props;
+    const { ui_metadata: uiMetadata = {}, triggers, monitor_type } = monitor;
+
+    let updatedTriggers;
+    let updatedUiMetadata;
+
+    if (edit) {
+      updatedTriggers = _.isArray(trigger) ? trigger.concat(triggers) : [trigger].concat(triggers);
+      updatedUiMetadata = {
+        ...uiMetadata,
+        triggers: { ...uiMetadata.triggers, ...triggerMetadata },
+      };
+    } else {
+      const { triggerToEdit = [] } = this.state;
+
+      let updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
+
+      let triggerType;
+      switch (monitor_type) {
+        case MONITOR_TYPE.TRADITIONAL:
+          triggerType = TRIGGER_TYPE.TRADITIONAL;
+          break;
+        case MONITOR_TYPE.AGGREGATION:
+          triggerType = TRIGGER_TYPE.AGGREGATION;
+          break;
+      }
+
+      if (_.isArray(triggerToEdit)) {
+        const names = triggerToEdit.map((entry) => _.get(entry, `${triggerType}.name`));
+        names.forEach((name) => delete updatedTriggersMetadata[name]);
+        updatedTriggers = _.cloneDeep(trigger);
+      } else {
+        const { name } = _.get(triggerToEdit, `${triggerType}`);
+        delete updatedTriggersMetadata[name];
+
+        const findTriggerName = (element) => {
+          return name === _.get(element, `${triggerType}.name`);
+        };
+
+        const indexToUpdate = _.findIndex(triggers, findTriggerName);
+        updatedTriggers = triggers.slice();
+        updatedTriggers.splice(indexToUpdate, 1, trigger);
+      }
+
+      updatedUiMetadata = {
+        ...uiMetadata,
+        triggers: { ...updatedTriggersMetadata, ...triggerMetadata },
+      };
+    }
+
+    return { triggers: updatedTriggers, ui_metadata: updatedUiMetadata };
+  };
+
   async onUpdate(monitor, { setSubmitting, setErrors }) {
     const { updateMonitor } = this.props;
-    // Since we are creating a monitor from formik values, we do not want to override the current existing triggers
-    // delete the triggers key so when merging original monitor with updated monitor we are keeping the original triggers
     const updatedMonitor = _.cloneDeep(monitor);
-    delete updatedMonitor.triggers;
     try {
       const resp = await updateMonitor(updatedMonitor);
       setSubmitting(false);
@@ -150,9 +215,29 @@ export default class CreateMonitor extends Component {
 
   onSubmit(values, formikBag) {
     const { edit } = this.props;
-    const monitor = formikToMonitor(values);
+    let monitor = formikToMonitor(values);
+
+    if (!_.isEmpty(_.get(values, 'triggerDefinitions'))) {
+      const monitorUiMetadata = _.get(monitor, 'ui_metadata', {});
+      const triggerMetadata = formikToTriggerUiMetadata(values, monitorUiMetadata);
+      const triggers = this.prepareTriggers(
+        formikToTrigger(values, monitorUiMetadata),
+        triggerMetadata,
+        monitor
+      );
+      monitor = { ...monitor, ...triggers };
+    }
+
     if (edit) this.onUpdate(monitor, formikBag);
     else this.onCreate(monitor, formikBag);
+  }
+
+  onCloseTrigger = () => {
+    this.props.history.push({ ...this.props.location, search: '' });
+  };
+
+  componentWillUnmount() {
+    this.props.setFlyout(null);
   }
 
   render() {
@@ -185,6 +270,22 @@ export default class CreateMonitor extends Component {
                 notifications={notifications}
                 isDarkMode={isDarkMode}
               />
+              <EuiSpacer />
+              <FieldArray name={'triggerDefinitions'} validateOnChange={true}>
+                {(triggerArrayHelpers) => (
+                  <ConfigureTriggers
+                    triggerArrayHelpers={triggerArrayHelpers}
+                    monitor={formikToMonitor(values)}
+                    monitorValues={values}
+                    setFlyout={this.props.setFlyout}
+                    triggers={_.get(formikToMonitor(values), 'triggers', [])}
+                    triggerValues={values}
+                    isDarkMode={this.props.isDarkMode}
+                    httpClient={httpClient}
+                    notifications={notifications}
+                  />
+                )}
+              </FieldArray>
               <EuiSpacer />
               <EuiFlexGroup alignItems="center" justifyContent="flexEnd">
                 <EuiFlexItem grow={false}>

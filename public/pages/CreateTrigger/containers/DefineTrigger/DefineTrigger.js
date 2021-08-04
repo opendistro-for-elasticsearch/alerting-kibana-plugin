@@ -205,6 +205,7 @@ class DefineTrigger extends Component {
             <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
           </EuiTitle>
         }
+        initialIsOpen={triggerIndex === 0}
         extraAction={
           <EuiButton
             color={'danger'}

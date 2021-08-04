@@ -96,39 +96,44 @@ const renderSendTestMessageButton = (
   sendTestMessage,
   isAggregationMonitor,
   displayPreview,
-  setDisplayPreview
-) => (
-  <EuiFlexGroup justifyContent="spaceBetween" alignItems="flexStart">
-    <EuiFlexItem>
-      <EuiSwitch
-        label={'Preview message'}
-        checked={displayPreview}
-        onChange={(e) => setDisplayPreview(e)}
-      />
-    </EuiFlexItem>
-    <EuiFlexItem grow={false}>
-      <EuiFlexGroup alignItems="flexEnd" direction="column" gutterSize="xs">
-        <EuiFlexItem grow={false}>
-          <EuiLink
-            onClick={() => {
-              sendTestMessage(index);
-            }}
-          >
-            <EuiText>Send test message</EuiText>
-          </EuiLink>
-        </EuiFlexItem>
-        {isAggregationMonitor ? (
-          <EuiFlexItem>
-            <EuiText size="xs">
-              For aggregation triggers, at least one bucket of data is required from the monitor
-              input query.
-            </EuiText>
+  setDisplayPreview,
+  action
+) => {
+  const disableButton = _.isEmpty(_.get(action, 'destination_id'));
+  return (
+    <EuiFlexGroup justifyContent="spaceBetween" alignItems="flexStart">
+      <EuiFlexItem>
+        <EuiSwitch
+          label={'Preview message'}
+          checked={displayPreview}
+          onChange={(e) => setDisplayPreview(e)}
+        />
+      </EuiFlexItem>
+      <EuiFlexItem grow={false}>
+        <EuiFlexGroup alignItems="flexEnd" direction="column" gutterSize="xs">
+          <EuiFlexItem grow={false}>
+            <EuiLink
+              onClick={() => {
+                sendTestMessage(index);
+              }}
+              disabled={disableButton}
+            >
+              <EuiText>Send test message</EuiText>
+            </EuiLink>
           </EuiFlexItem>
-        ) : null}
-      </EuiFlexGroup>
-    </EuiFlexItem>
-  </EuiFlexGroup>
-);
+          {isAggregationMonitor ? (
+            <EuiFlexItem>
+              <EuiText size="xs">
+                For aggregation triggers, at least one bucket of data is required from the monitor
+                input query.
+              </EuiText>
+            </EuiFlexItem>
+          ) : null}
+        </EuiFlexGroup>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  );
+};
 
 const validateActionableAlertsSelections = (options) => {
   if (!_.isArray(options) || _.isEmpty(options)) return NO_ACTIONABLE_ALERT_SELECTIONS;
@@ -202,7 +207,8 @@ export default function Message(
           sendTestMessage,
           isAggregationMonitor,
           displayPreview,
-          onDisplayPreviewChange
+          onDisplayPreviewChange,
+          action
         )}
       </EuiFormRow>
 
@@ -336,8 +342,13 @@ export default function Message(
               rowProps={{
                 label: 'Actionable alerts',
                 style: { width: '400px' },
-                isInvalid,
-                error: hasError,
+                isInvalid: _.isEmpty(
+                  _.get(
+                    action,
+                    `action_execution_policy.action_execution_frequency.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`
+                  )
+                ),
+                error: NO_ACTIONABLE_ALERT_SELECTIONS,
               }}
               inputProps={{
                 placeholder: 'Select alert options',
