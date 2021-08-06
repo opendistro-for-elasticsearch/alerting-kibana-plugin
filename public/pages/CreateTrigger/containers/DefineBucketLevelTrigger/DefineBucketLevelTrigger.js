@@ -23,8 +23,8 @@ import { isInvalid, hasError } from '../../../../utils/validate';
 import { SEARCH_TYPE } from '../../../../utils/constants';
 import { FORMIK_INITIAL_TRIGGER_CONDITION_VALUES } from '../CreateTrigger/utils/constants';
 import AddTriggerConditionButton from '../../components/AddTriggerConditionButton';
-import AggregationTriggerGraph from '../../components/AggregationTriggerGraph';
-import AggregationTriggerQuery from '../../components/AggregationTriggerQuery';
+import BucketLevelTriggerGraph from '../../components/BucketLevelTriggerGraph';
+import BucketLevelTriggerQuery from '../../components/BucketLevelTriggerQuery';
 import { validateTriggerName } from '../DefineTrigger/utils/validation';
 import WhereExpression from '../../../CreateMonitor/components/MonitorExpressions/expressions/WhereExpression';
 import { FieldArray } from 'formik';
@@ -108,7 +108,7 @@ export const DEFAULT_CLOSED_STATES = {
   WHERE: false,
 };
 
-class DefineAggregationTrigger extends Component {
+class DefineBucketLevelTrigger extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -184,7 +184,7 @@ class DefineAggregationTrigger extends Component {
     }
 
     return triggerConditions.map((triggerCondition, index) => (
-      <AggregationTriggerGraph
+      <BucketLevelTriggerGraph
         key={index}
         arrayHelpers={arrayHelpers}
         index={index}
@@ -207,7 +207,7 @@ class DefineAggregationTrigger extends Component {
     fieldPath
   ) => {
     return (
-      <AggregationTriggerQuery
+      <BucketLevelTriggerQuery
         context={context}
         executeResponse={executeResponse}
         onRun={onRun}
@@ -357,6 +357,6 @@ class DefineAggregationTrigger extends Component {
   }
 }
 
-DefineAggregationTrigger.propTypes = propTypes;
+DefineBucketLevelTrigger.propTypes = propTypes;
 
-export default DefineAggregationTrigger;
+export default DefineBucketLevelTrigger;

@@ -15,14 +15,14 @@
 
 import React from 'react';
 import { EuiSpacer } from '@elastic/eui';
-import AggregationTriggerExpression from './AggregationTriggerExpression';
+import BucketLevelTriggerExpression from './BucketLevelTriggerExpression';
 import {
   DEFAULT_AND_OR_CONDITION,
   DEFAULT_METRIC_AGGREGATION,
-} from '../containers/DefineAggregationTrigger/DefineAggregationTrigger';
+} from '../containers/DefineBucketLevelTrigger/DefineBucketLevelTrigger';
 import _ from 'lodash';
 
-const AggregationTriggerGraph = ({
+const BucketLevelTriggerGraph = ({
   arrayHelpers,
   index,
   fieldPath,
@@ -50,7 +50,7 @@ const AggregationTriggerGraph = ({
 
   return (
     <div style={{ padding: '0px 10px' }}>
-      <AggregationTriggerExpression
+      <BucketLevelTriggerExpression
         arrayHelpers={arrayHelpers}
         index={index}
         andOrCondition={andOrCondition}
@@ -70,4 +70,4 @@ const AggregationTriggerGraph = ({
   );
 };
 
-export default AggregationTriggerGraph;
+export default BucketLevelTriggerGraph;

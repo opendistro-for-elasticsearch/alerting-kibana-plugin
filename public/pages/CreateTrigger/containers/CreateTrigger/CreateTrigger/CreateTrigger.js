@@ -43,7 +43,7 @@ import { SEARCH_TYPE } from '../../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../../utils/helpers';
 import { buildLocalUriRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
-import DefineAggregationTrigger from '../../DefineAggregationTrigger';
+import DefineBucketLevelTrigger from '../../DefineBucketLevelTrigger';
 import { getPathsPerDataType } from '../../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
 import { MONITOR_TYPE } from '../../../../../utils/constants';
 
@@ -111,9 +111,9 @@ export default class CreateTrigger extends Component {
     const { monitor, updateMonitor, onCloseTrigger, triggerToEdit } = this.props;
     const { ui_metadata: uiMetadata = {}, triggers, monitor_type } = monitor;
     const { name } =
-      monitor_type === MONITOR_TYPE.TRADITIONAL
-        ? triggerToEdit.traditional_trigger
-        : triggerToEdit.aggregation_trigger;
+      monitor_type === MONITOR_TYPE.QUERY_LEVEL
+        ? triggerToEdit.query_level_trigger
+        : triggerToEdit.bucket_level_trigger;
     const updatedTriggersMetadata = _.cloneDeep(uiMetadata.triggers || {});
     delete updatedTriggersMetadata[name];
     const updatedUiMetadata = {
@@ -122,9 +122,9 @@ export default class CreateTrigger extends Component {
     };
 
     const findTriggerName = (element) => {
-      return monitor_type === MONITOR_TYPE.TRADITIONAL
-        ? name === element.traditional_trigger.name
-        : name === element.aggregation_trigger.name;
+      return monitor_type === MONITOR_TYPE.QUERY_LEVEL
+        ? name === element.query_level_trigger.name
+        : name === element.bucket_level_trigger.name;
     };
 
     const indexToUpdate = _.findIndex(triggers, findTriggerName);
@@ -258,7 +258,7 @@ export default class CreateTrigger extends Component {
       // if made changes and close expression that was currently open => run query
 
       // TODO: Re-enable once we have implementation to support
-      //  rendering visual graphs for aggregation triggers.
+      //  rendering visual graphs for bucket-level triggers.
       // this.props.onRunQuery();
 
       this.setState({ madeChanges: false });
@@ -309,7 +309,7 @@ export default class CreateTrigger extends Component {
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient, notifications } = this.props;
     const { dataTypes, initialValues, executeResponse } = this.state;
-    const isTraditionalMonitor = _.get(monitor, 'monitor_type') === MONITOR_TYPE.TRADITIONAL;
+    const isQueryLevelMonitor = _.get(monitor, 'monitor_type') === MONITOR_TYPE.QUERY_LEVEL;
 
     return (
       <div style={{ padding: '25px 50px' }}>
@@ -321,7 +321,7 @@ export default class CreateTrigger extends Component {
                 <h1>{edit ? 'Edit' : 'Create'} trigger</h1>
               </EuiTitle>
               <EuiSpacer />
-              {isTraditionalMonitor ? (
+              {isQueryLevelMonitor ? (
                 <DefineTrigger
                   context={this.getTriggerContext(executeResponse, monitor, values)}
                   executeResponse={executeResponse}
@@ -335,7 +335,7 @@ export default class CreateTrigger extends Component {
               ) : (
                 <FieldArray name={'triggerConditions'} validateOnChange={true}>
                   {(arrayHelpers) => (
-                    <DefineAggregationTrigger
+                    <DefineBucketLevelTrigger
                       arrayHelpers={arrayHelpers}
                       context={this.getTriggerContext(executeResponse, monitor, values)}
                       executeResponse={executeResponse}

@@ -80,22 +80,22 @@ class ConfigureActions extends React.Component {
         const monitorType = _.get(
           arrayHelpers,
           'form.values.monitor_type',
-          MONITOR_TYPE.TRADITIONAL
+          MONITOR_TYPE.QUERY_LEVEL
         );
         const initialActionValues = _.cloneDeep(FORMIK_INITIAL_ACTION_VALUES);
         switch (monitorType) {
-          case MONITOR_TYPE.AGGREGATION:
+          case MONITOR_TYPE.BUCKET_LEVEL:
             _.set(
               initialActionValues,
               'message_template.source',
-              DEFAULT_MESSAGE_SOURCE.AGGREGATION_MONITOR
+              DEFAULT_MESSAGE_SOURCE.BUCKET_LEVEL_MONITOR
             );
             break;
-          case MONITOR_TYPE.TRADITIONAL:
+          case MONITOR_TYPE.QUERY_LEVEL:
             _.set(
               initialActionValues,
               'message_template.source',
-              DEFAULT_MESSAGE_SOURCE.TRADITIONAL_MONITOR
+              DEFAULT_MESSAGE_SOURCE.QUERY_LEVEL_MONITOR
             );
             break;
         }
@@ -121,26 +121,26 @@ class ConfigureActions extends React.Component {
       triggerIndex,
       values,
     } = this.props;
-    // TODO: For aggregation triggers, sendTestMessage will only send a test message if there is
+    // TODO: For bucket-level triggers, sendTestMessage will only send a test message if there is
     //  at least one bucket of data from the monitor input query.
     let testTrigger = _.cloneDeep(formikToTrigger(values, monitor.ui_metadata)[triggerIndex]);
     let action;
     let condition;
 
     switch (monitor.monitor_type) {
-      case MONITOR_TYPE.AGGREGATION:
-        action = _.get(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.actions[${index}]`);
+      case MONITOR_TYPE.BUCKET_LEVEL:
+        action = _.get(testTrigger, `${TRIGGER_TYPE.BUCKET_LEVEL}.actions[${index}]`);
         condition = {
-          ..._.get(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.condition`),
+          ..._.get(testTrigger, `${TRIGGER_TYPE.BUCKET_LEVEL}.condition`),
           buckets_path: { _count: '_count' },
           script: {
             source: 'params._count >= 0',
           },
         };
-        _.set(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.actions`, [action]);
-        _.set(testTrigger, `${TRIGGER_TYPE.AGGREGATION}.condition`, condition);
+        _.set(testTrigger, `${TRIGGER_TYPE.BUCKET_LEVEL}.actions`, [action]);
+        _.set(testTrigger, `${TRIGGER_TYPE.BUCKET_LEVEL}.condition`, condition);
         break;
-      case MONITOR_TYPE.TRADITIONAL:
+      case MONITOR_TYPE.QUERY_LEVEL:
         action = _.get(testTrigger, `actions[${index}]`);
         condition = {
           ..._.get(testTrigger, 'condition'),

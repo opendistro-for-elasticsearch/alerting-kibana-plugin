@@ -160,11 +160,11 @@ export default class CreateMonitor extends Component {
 
       let triggerType;
       switch (monitor_type) {
-        case MONITOR_TYPE.TRADITIONAL:
-          triggerType = TRIGGER_TYPE.TRADITIONAL;
+        case MONITOR_TYPE.QUERY_LEVEL:
+          triggerType = TRIGGER_TYPE.QUERY_LEVEL;
           break;
-        case MONITOR_TYPE.AGGREGATION:
-          triggerType = TRIGGER_TYPE.AGGREGATION;
+        case MONITOR_TYPE.BUCKET_LEVEL:
+          triggerType = TRIGGER_TYPE.BUCKET_LEVEL;
           break;
       }
 

@@ -15,7 +15,7 @@
 
 import _ from 'lodash';
 import { COMPARISON_OPERATORS, OPERATORS_MAP } from './constants';
-import { TRIGGER_COMPARISON_OPERATORS } from '../../../../../CreateTrigger/containers/DefineAggregationTrigger/DefineAggregationTrigger';
+import { TRIGGER_COMPARISON_OPERATORS } from '../../../../../CreateTrigger/containers/DefineBucketLevelTrigger/DefineBucketLevelTrigger';
 
 export const getOperators = (fieldType) =>
   COMPARISON_OPERATORS.reduce(

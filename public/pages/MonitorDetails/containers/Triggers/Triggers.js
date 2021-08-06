@@ -26,13 +26,13 @@ export const MAX_TRIGGERS = 10;
 // TODO: For now, unwrapping all the Triggers since it's conflicting with the table
 //   retrieving the 'id' and causing it to behave strangely
 export function getUnwrappedTriggers(monitor) {
-  const isAggregationMonitor = monitor.monitor_type === MONITOR_TYPE.AGGREGATION;
-  return isAggregationMonitor
+  const isBucketLevelMonitor = monitor.monitor_type === MONITOR_TYPE.BUCKET_LEVEL;
+  return isBucketLevelMonitor
     ? monitor.triggers.map((trigger) => {
-        return trigger.aggregation_trigger;
+        return trigger.bucket_level_trigger;
       })
     : monitor.triggers.map((trigger) => {
-        return trigger.traditional_trigger;
+        return trigger.query_level_trigger;
       });
 }
 

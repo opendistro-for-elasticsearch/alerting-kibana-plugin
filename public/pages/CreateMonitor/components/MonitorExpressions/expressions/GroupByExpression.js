@@ -68,7 +68,7 @@ class GroupByExpression extends Component {
     if (
       (this.state.addButtonTouched || touched.groupBy) &&
       !values.groupBy.length &&
-      values.monitor_type === MONITOR_TYPE.AGGREGATION
+      values.monitor_type === MONITOR_TYPE.BUCKET_LEVEL
     )
       errors.groupBy = GROUP_BY_ERROR;
     return (

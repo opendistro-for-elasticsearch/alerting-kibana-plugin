@@ -28,17 +28,17 @@ const MonitorType = ({ values }) => (
     <EuiFlexGroup>
       <EuiFlexItem>
         <FormikCheckableCard
-          name="monitorTypeTraditional"
+          name="monitorTypeQueryLevel"
           formRow
           rowProps={{
             label: 'Choose a monitor type',
             style: { paddingLeft: '10px' },
           }}
           inputProps={{
-            id: 'traditionalMonitorRadioCard',
-            label: 'Traditional monitor',
-            checked: values.monitor_type === MONITOR_TYPE.TRADITIONAL,
-            value: MONITOR_TYPE.TRADITIONAL,
+            id: 'queryLevelMonitorRadioCard',
+            label: 'Query-Level Monitor',
+            checked: values.monitor_type === MONITOR_TYPE.QUERY_LEVEL,
+            value: MONITOR_TYPE.QUERY_LEVEL,
             onChange: (e, field, form) => {
               onChangeDefinition(e, form);
             },
@@ -48,17 +48,17 @@ const MonitorType = ({ values }) => (
       <EuiFlexItem>
         <EuiSpacer />
         <FormikCheckableCard
-          name="monitorTypeAggregation"
+          name="monitorTypeBucketLevel"
           formRow
           rowProps={{
             label: '',
             style: { paddingLeft: '10px' },
           }}
           inputProps={{
-            id: 'aggregationMonitorRadioCard',
-            label: 'Aggregation monitor',
-            checked: values.monitor_type === MONITOR_TYPE.AGGREGATION,
-            value: MONITOR_TYPE.AGGREGATION,
+            id: 'bucketLevelMonitorRadioCard',
+            label: 'Bucket-Level Monitor',
+            checked: values.monitor_type === MONITOR_TYPE.BUCKET_LEVEL,
+            value: MONITOR_TYPE.BUCKET_LEVEL,
             onChange: (e, field, form) => {
               onChangeDefinition(e, form);
 

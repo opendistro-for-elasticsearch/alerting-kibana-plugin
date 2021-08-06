@@ -39,14 +39,14 @@ export function triggerDefinitionsToFormik(triggers, monitor) {
 }
 
 export function triggerDefinitionToFormik(trigger, monitor) {
-  const isTraditionalMonitor =
-    _.get(monitor, 'monitor_type', MONITOR_TYPE.TRADITIONAL) === MONITOR_TYPE.TRADITIONAL;
-  return isTraditionalMonitor
-    ? traditionalTriggerToFormik(trigger, monitor)
-    : aggregationTriggerToFormik(trigger, monitor);
+  const isQueryLevelMonitor =
+    _.get(monitor, 'monitor_type', MONITOR_TYPE.QUERY_LEVEL) === MONITOR_TYPE.QUERY_LEVEL;
+  return isQueryLevelMonitor
+    ? queryLevelTriggerToFormik(trigger, monitor)
+    : bucketLevelTriggerToFormik(trigger, monitor);
 }
 
-export function traditionalTriggerToFormik(trigger, monitor) {
+export function queryLevelTriggerToFormik(trigger, monitor) {
   const {
     id,
     name,
@@ -55,7 +55,7 @@ export function traditionalTriggerToFormik(trigger, monitor) {
     actions,
     min_time_between_executions: minTimeBetweenExecutions,
     rolling_window_size: rollingWindowSize,
-  } = trigger.traditional_trigger;
+  } = trigger.query_level_trigger;
   const thresholdEnum = _.get(
     monitor,
     `ui_metadata.triggers[${name}].enum`,
@@ -112,7 +112,7 @@ export function traditionalTriggerToFormik(trigger, monitor) {
   };
 }
 
-export function aggregationTriggerToFormik(trigger, monitor) {
+export function bucketLevelTriggerToFormik(trigger, monitor) {
   const {
     id,
     name,
@@ -122,10 +122,10 @@ export function aggregationTriggerToFormik(trigger, monitor) {
     actions,
     min_time_between_executions: minTimeBetweenExecutions,
     rolling_window_size: rollingWindowSize,
-  } = trigger.aggregation_trigger;
+  } = trigger.bucket_level_trigger;
 
   const bucketSelector = JSON.stringify(condition, null, 4);
-  const triggerConditions = getAggregationTriggerConditions(condition);
+  const triggerConditions = getBucketLevelTriggerConditions(condition);
   const where = getWhereExpression(composite_agg_filter);
 
   const thresholdEnum = _.get(
@@ -166,7 +166,7 @@ export function aggregationTriggerToFormik(trigger, monitor) {
     severity,
     script,
     bucketSelector,
-    actions: getAggregationTriggerActions(actions),
+    actions: getBucketLevelTriggerActions(actions),
     triggerConditions,
     minTimeBetweenExecutions,
     rollingWindowSize,
@@ -187,8 +187,8 @@ export function aggregationTriggerToFormik(trigger, monitor) {
   };
 }
 
-export function getAggregationTriggerActions(actions) {
-  const executionPolicyPath = 'action_execution_policy.action_execution_frequency';
+export function getBucketLevelTriggerActions(actions) {
+  const executionPolicyPath = 'action_execution_policy.action_execution_scope';
   return _.cloneDeep(actions).map((action) => {
     const actionExecutionPolicy = _.get(action, `${executionPolicyPath}`);
     switch (_.keys(actionExecutionPolicy)[0]) {
@@ -211,7 +211,7 @@ export function getAggregationTriggerActions(actions) {
   });
 }
 
-export function getAggregationTriggerConditions(condition) {
+export function getBucketLevelTriggerConditions(condition) {
   return segmentArray(condition.script.source, 4).map((conditionArray) =>
     convertToTriggerCondition(conditionArray, condition)
   );

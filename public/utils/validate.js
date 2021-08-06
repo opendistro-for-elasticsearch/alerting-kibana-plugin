@@ -33,10 +33,10 @@ export const validateActionName = (monitor, trigger) => (value) => {
   // TODO: Expand on this validation by passing in triggerValues and comparing the current
   //  action's name with names of other actions in the trigger creation form.
   let actions;
-  if (monitor.monitor_type === MONITOR_TYPE.TRADITIONAL) {
-    actions = _.get(trigger, `${TRIGGER_TYPE.TRADITIONAL}.actions`, []);
-  } else if (monitor.monitor_type === MONITOR_TYPE.AGGREGATION) {
-    actions = _.get(trigger, `${TRIGGER_TYPE.AGGREGATION}.actions`, []);
+  if (monitor.monitor_type === MONITOR_TYPE.QUERY_LEVEL) {
+    actions = _.get(trigger, `${TRIGGER_TYPE.QUERY_LEVEL}.actions`, []);
+  } else if (monitor.monitor_type === MONITOR_TYPE.BUCKET_LEVEL) {
+    actions = _.get(trigger, `${TRIGGER_TYPE.BUCKET_LEVEL}.actions`, []);
   }
   const matches = actions.filter((action) => action.name === value);
   if (matches.length > 1) return 'Action name is already used';

@@ -145,11 +145,11 @@ class DefineMonitor extends Component {
 
   renderGraph() {
     const { errors, touched, values } = this.props;
-    const isTraditionalMonitor = _.get(values, 'monitor_type') === MONITOR_TYPE.TRADITIONAL;
+    const isQueryLevelMonitor = _.get(values, 'monitor_type') === MONITOR_TYPE.QUERY_LEVEL;
     const aggregations = _.get(values, 'aggregations');
 
-    // TODO: Implement different graph view for traditional and aggregation monitor
-    // if (isTraditionalMonitor)
+    // TODO: Implement different graph view for query-level and bucket-level monitor
+    // if (isQueryLevelMonitor)
     return (
       <Fragment>
         <EuiSpacer size="s" />

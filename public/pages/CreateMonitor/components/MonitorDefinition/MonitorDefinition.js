@@ -24,7 +24,7 @@ const defaultSelectDefinitions = [
   { value: 'localUri', text: 'Define using Local URI endpoint' },
 ];
 
-const aggregationMonitorDefinitions = [
+const bucketLevelMonitorDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
 ];
@@ -35,16 +35,16 @@ const onChangeDefinition = (e, form, resetResponse) => {
   form.setFieldValue('searchType', type);
 };
 
-const selectDefinitions = (plugins, isAggregationMonitor) => {
-  const definitionOptions = isAggregationMonitor
-    ? aggregationMonitorDefinitions
+const selectDefinitions = (plugins, isBucketLevelMonitor) => {
+  const definitionOptions = isBucketLevelMonitor
+    ? bucketLevelMonitorDefinitions
     : defaultSelectDefinitions;
   return plugins === undefined || plugins.indexOf(ES_AD_PLUGIN) == -1
     ? definitionOptions
     : [...definitionOptions, { value: 'ad', text: 'Define using anomaly detector' }];
 };
 
-const MonitorDefinition = ({ resetResponse, plugins, isAggregationMonitor }) => (
+const MonitorDefinition = ({ resetResponse, plugins, isBucketLevelMonitor }) => (
   <div>
     <FormikSelect
       name="searchType"
@@ -54,7 +54,7 @@ const MonitorDefinition = ({ resetResponse, plugins, isAggregationMonitor }) => 
         style: { paddingLeft: '10px' },
       }}
       inputProps={{
-        options: selectDefinitions(plugins, isAggregationMonitor),
+        options: selectDefinitions(plugins, isBucketLevelMonitor),
         onChange: (e, field, form) => {
           onChangeDefinition(e, form, resetResponse);
         },

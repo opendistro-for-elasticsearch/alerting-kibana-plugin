@@ -17,7 +17,7 @@ import React from 'react';
 import { EuiHorizontalRule } from '@elastic/eui';
 import ContentPanel from '../../../../components/ContentPanel';
 import _ from 'lodash';
-import DefineAggregationTrigger from '../DefineAggregationTrigger';
+import DefineBucketLevelTrigger from '../DefineBucketLevelTrigger';
 import AddTriggerButton from '../../components/AddTriggerButton';
 import TriggerEmptyPrompt from '../../components/TriggerEmptyPrompt';
 import { MAX_TRIGGERS } from '../../../MonitorDetails/containers/Triggers/Triggers';
@@ -38,8 +38,8 @@ class ConfigureTriggers extends React.Component {
     this.state = {
       dataTypes: {},
       executeResponse: null,
-      isAggregationMonitor:
-        _.get(props, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL) === MONITOR_TYPE.AGGREGATION,
+      isBucketLevelMonitor:
+        _.get(props, 'monitor.monitor_type', MONITOR_TYPE.QUERY_LEVEL) === MONITOR_TYPE.BUCKET_LEVEL,
       triggerDeleted: false,
     };
 
@@ -48,19 +48,19 @@ class ConfigureTriggers extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.isAggregationMonitor) this.onQueryMappings();
+    if (this.state.isBucketLevelMonitor) this.onQueryMappings();
   }
 
   componentDidUpdate(prevProps) {
-    const prevMonitorType = _.get(prevProps, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL);
-    const currMonitorType = _.get(this.props, 'monitor.monitor_type', MONITOR_TYPE.TRADITIONAL);
+    const prevMonitorType = _.get(prevProps, 'monitor.monitor_type', MONITOR_TYPE.QUERY_LEVEL);
+    const currMonitorType = _.get(this.props, 'monitor.monitor_type', MONITOR_TYPE.QUERY_LEVEL);
     if (prevMonitorType !== currMonitorType)
-      _.set(this.state, 'isAggregationMonitor', currMonitorType);
+      _.set(this.state, 'isBucketLevelMonitor', currMonitorType);
 
     const prevInputs = prevProps.monitor.inputs[0];
     const currInputs = this.props.monitor.inputs[0];
     if (!_.isEqual(prevInputs, currInputs)) {
-      if (this.state.isAggregationMonitor) this.onQueryMappings();
+      if (this.state.isBucketLevelMonitor) this.onQueryMappings();
     }
   }
 
@@ -168,14 +168,14 @@ class ConfigureTriggers extends React.Component {
       httpClient,
       notifications,
     } = this.props;
-    const { dataTypes, executeResponse, isAggregationMonitor } = this.state;
+    const { dataTypes, executeResponse, isBucketLevelMonitor } = this.state;
     const hasTriggers = !_.isEmpty(_.get(triggerValues, 'triggerDefinitions'));
     return hasTriggers ? (
       triggerValues.triggerDefinitions.map((trigger, index) => {
         return (
           <div key={index}>
-            {isAggregationMonitor ? (
-              <DefineAggregationTrigger
+            {isBucketLevelMonitor ? (
+              <DefineBucketLevelTrigger
                 edit={edit}
                 triggerArrayHelpers={triggerArrayHelpers}
                 context={this.getTriggerContext(executeResponse, monitor, triggerValues)}

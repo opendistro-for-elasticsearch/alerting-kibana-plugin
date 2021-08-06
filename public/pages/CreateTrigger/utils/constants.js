@@ -14,7 +14,7 @@
  */
 
 export const DEFAULT_MESSAGE_SOURCE = {
-  AGGREGATION_MONITOR: `
+  BUCKET_LEVEL_MONITOR: `
   Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the issue.
   - Trigger: {{ctx.trigger.name}}
   - Severity: {{ctx.trigger.severity}}
@@ -36,7 +36,7 @@ export const DEFAULT_MESSAGE_SOURCE = {
     * {{id}} : {{bucket_keys}}
   {{/ctx.completedAlerts}}
   `.trim(),
-  TRADITIONAL_MONITOR: `
+  QUERY_LEVEL_MONITOR: `
   Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the issue.
   - Trigger: {{ctx.trigger.name}}
   - Severity: {{ctx.trigger.severity}}
@@ -54,7 +54,7 @@ export const FORMIK_INITIAL_ACTION_VALUES = {
   },
   message_template: {
     lang: 'mustache',
-    source: DEFAULT_MESSAGE_SOURCE.TRADITIONAL_MONITOR,
+    source: DEFAULT_MESSAGE_SOURCE.QUERY_LEVEL_MONITOR,
   },
   throttle_enabled: false,
   throttle: {

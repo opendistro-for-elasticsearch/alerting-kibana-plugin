@@ -13,6 +13,6 @@
  * permissions and limitations under the License.
  */
 
-import AggregationTriggerExpression from './AggregationTriggerExpression';
+import DefineBucketLevelTrigger from './DefineBucketLevelTrigger';
 
-export default AggregationTriggerExpression;
+export default DefineBucketLevelTrigger;

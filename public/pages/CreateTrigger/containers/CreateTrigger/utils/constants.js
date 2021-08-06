@@ -15,9 +15,9 @@
 
 export const TRIGGER_TYPE = {
   AD: 'anomaly_detector_trigger',
-  AGGREGATION: 'aggregation_trigger',
+  BUCKET_LEVEL: 'bucket_level_trigger',
   ALERT_TRIGGER: 'alerting_trigger',
-  TRADITIONAL: 'traditional_trigger',
+  QUERY_LEVEL: 'query_level_trigger',
 };
 
 export const FORMIK_INITIAL_BUCKET_SELECTOR_VALUES = {
@@ -60,7 +60,7 @@ export const FORMIK_INITIAL_TRIGGER_VALUES = {
     lang: 'painless',
     source: `ctx.results[0].hits.total.value > 0`,
   },
-  bucketSelector: JSON.stringify(FORMIK_INITIAL_BUCKET_SELECTOR_VALUES, null, 4), // TODO: To be used for Aggregation Triggers defined by query
+  bucketSelector: JSON.stringify(FORMIK_INITIAL_BUCKET_SELECTOR_VALUES, null, 4), // TODO: To be used for Bucket-Level Triggers defined by query
   triggerConditions: [],
   thresholdValue: 10000,
   thresholdEnum: 'ABOVE',

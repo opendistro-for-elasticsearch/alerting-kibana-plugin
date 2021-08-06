@@ -111,7 +111,7 @@ const messageHelpText = () => (
 const renderSendTestMessageButton = (
   index,
   sendTestMessage,
-  isAggregationMonitor,
+  isBucketLevelMonitor,
   displayPreview,
   setDisplayPreview,
   fieldPath
@@ -137,10 +137,10 @@ const renderSendTestMessageButton = (
               <EuiText>Send test message</EuiText>
             </EuiLink>
           </EuiFlexItem>
-          {isAggregationMonitor ? (
+          {isBucketLevelMonitor ? (
             <EuiFlexItem>
               <EuiText size="xs">
-                For aggregation triggers, at least one bucket of data is required from the monitor
+                For bucket-level triggers, at least one bucket of data is required from the monitor
                 input query.
               </EuiText>
             </EuiFlexItem>
@@ -161,34 +161,34 @@ export default function Message(
 ) {
   const [displayPreview, setDisplayPreview] = useState(false);
   const onDisplayPreviewChange = (e) => setDisplayPreview(e.target.checked);
-  const isAggregationMonitor =
-    _.get(context, 'ctx.monitor.monitor_type', MONITOR_TYPE.TRADITIONAL) ===
-    MONITOR_TYPE.AGGREGATION;
-  const actionExecutionPolicyPath = isAggregationMonitor
+  const isBucketLevelMonitor =
+    _.get(context, 'ctx.monitor.monitor_type', MONITOR_TYPE.QUERY_LEVEL) ===
+    MONITOR_TYPE.BUCKET_LEVEL;
+  const actionExecutionPolicyPath = isBucketLevelMonitor
     ? `${fieldPath}actions.${index}.action_execution_policy`
     : `${fieldPath}actions.${index}`;
 
-  let actionExecutionFrequencyId = isAggregationMonitor
+  let actionExecutionScopeId = isBucketLevelMonitor
     ? _.get(
         action,
-        'action_execution_policy.action_execution_frequency',
+        'action_execution_policy.action_execution_scope',
         NOTIFY_OPTIONS_VALUES.PER_ALERT
       )
     : '';
-  if (!_.isString(actionExecutionFrequencyId))
-    actionExecutionFrequencyId = _.keys(actionExecutionFrequencyId)[0];
+  if (!_.isString(actionExecutionScopeId))
+    actionExecutionScopeId = _.keys(actionExecutionScopeId)[0];
 
   let actionableAlertsSelections = _.get(
     values,
-    `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`
+    `${actionExecutionPolicyPath}.action_execution_scope.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`
   );
   if (
-    actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_ALERT &&
+    actionExecutionScopeId === NOTIFY_OPTIONS_VALUES.PER_ALERT &&
     _.isEmpty(actionableAlertsSelections)
   )
     _.set(
       values,
-      `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
+      `${actionExecutionPolicyPath}.action_execution_scope.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
       DEFAULT_ACTIONABLE_ALERTS_SELECTIONS
     );
 
@@ -245,7 +245,7 @@ export default function Message(
         {renderSendTestMessageButton(
           index,
           sendTestMessage,
-          isAggregationMonitor,
+          isBucketLevelMonitor,
           displayPreview,
           onDisplayPreviewChange,
           fieldPath
@@ -272,7 +272,7 @@ export default function Message(
 
       <EuiSpacer size="m" />
 
-      {isAggregationMonitor ? (
+      {isBucketLevelMonitor ? (
         <EuiFormRow
           label={<span style={{ color: '#343741' }}>Perform action</span>}
           style={{ maxWidth: '100%' }}
@@ -280,12 +280,12 @@ export default function Message(
           <EuiFlexGroup direction={'column'} gutterSize={'xs'}>
             <EuiFlexItem>
               <FormikFieldRadio
-                name={`${actionExecutionPolicyPath}.action_execution_frequency`}
+                name={`${actionExecutionPolicyPath}.action_execution_scope`}
                 formRow
                 inputProps={{
                   id: `${actionExecutionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_ALERT}`,
                   value: NOTIFY_OPTIONS_VALUES.PER_ALERT,
-                  checked: actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_ALERT,
+                  checked: actionExecutionScopeId === NOTIFY_OPTIONS_VALUES.PER_ALERT,
                   label: NOTIFY_OPTIONS_LABELS.PER_ALERT,
                   onChange: (e, field, form) => {
                     field.onChange(e);
@@ -295,7 +295,7 @@ export default function Message(
             </EuiFlexItem>
 
             <EuiFlexItem>
-              {actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_ALERT ? (
+              {actionExecutionScopeId === NOTIFY_OPTIONS_VALUES.PER_ALERT ? (
                 <EuiFormRow style={{ maxWidth: '100%' }}>
                   <EuiFlexGroup
                     alignItems="center"
@@ -305,7 +305,7 @@ export default function Message(
                     }}
                   >
                     <FormikComboBox
-                      name={`${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`}
+                      name={`${actionExecutionPolicyPath}.action_execution_scope.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`}
                       formRow
                       fieldProps={{ validate: validateActionableAlertsSelections }}
                       rowProps={{
@@ -314,7 +314,7 @@ export default function Message(
                         isInvalid: _.isEmpty(
                           _.get(
                             action,
-                            `action_execution_policy.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`
+                            `action_execution_policy.action_execution_scope.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`
                           )
                         ),
                         error: NO_ACTIONABLE_ALERT_SELECTIONS,
@@ -324,13 +324,13 @@ export default function Message(
                         options: ACTIONABLE_ALERTS_OPTIONS,
                         onBlur: (e, field, form) => {
                           form.setFieldTouched(
-                            `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
+                            `${actionExecutionPolicyPath}.action_execution_scope.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
                             true
                           );
                         },
                         onChange: (options, field, form) => {
                           form.setFieldValue(
-                            `${actionExecutionPolicyPath}.action_execution_frequency.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
+                            `${actionExecutionPolicyPath}.action_execution_scope.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
                             options
                           );
                         },
@@ -345,12 +345,12 @@ export default function Message(
 
             <EuiFlexItem>
               <FormikFieldRadio
-                name={`${actionExecutionPolicyPath}.action_execution_frequency`}
+                name={`${actionExecutionPolicyPath}.action_execution_scope`}
                 formRow
                 inputProps={{
                   id: `${actionExecutionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_EXECUTION}`,
                   value: NOTIFY_OPTIONS_VALUES.PER_EXECUTION,
-                  checked: actionExecutionFrequencyId === NOTIFY_OPTIONS_VALUES.PER_EXECUTION,
+                  checked: actionExecutionScopeId === NOTIFY_OPTIONS_VALUES.PER_EXECUTION,
                   label: NOTIFY_OPTIONS_LABELS.PER_EXECUTION,
                   onChange: (e, field, form) => {
                     field.onChange(e);

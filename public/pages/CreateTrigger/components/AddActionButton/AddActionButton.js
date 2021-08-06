@@ -23,21 +23,21 @@ import { MONITOR_TYPE } from '../../../../utils/constants';
 const AddActionButton = ({ arrayHelpers, type = 'slack', numOfActions }) => {
   const buttonText =
     numOfActions === undefined || numOfActions === 0 ? 'Add action' : 'Add another action';
-  const monitorType = _.get(arrayHelpers, 'form.values.monitor_type', MONITOR_TYPE.TRADITIONAL);
+  const monitorType = _.get(arrayHelpers, 'form.values.monitor_type', MONITOR_TYPE.QUERY_LEVEL);
   const initialActionValues = _.cloneDeep(FORMIK_INITIAL_ACTION_VALUES);
   switch (monitorType) {
-    case MONITOR_TYPE.AGGREGATION:
+    case MONITOR_TYPE.BUCKET_LEVEL:
       _.set(
         initialActionValues,
         'message_template.source',
-        DEFAULT_MESSAGE_SOURCE.AGGREGATION_MONITOR
+        DEFAULT_MESSAGE_SOURCE.BUCKET_LEVEL_MONITOR
       );
       break;
-    case MONITOR_TYPE.TRADITIONAL:
+    case MONITOR_TYPE.QUERY_LEVEL:
       _.set(
         initialActionValues,
         'message_template.source',
-        DEFAULT_MESSAGE_SOURCE.TRADITIONAL_MONITOR
+        DEFAULT_MESSAGE_SOURCE.QUERY_LEVEL_MONITOR
       );
       break;
   }

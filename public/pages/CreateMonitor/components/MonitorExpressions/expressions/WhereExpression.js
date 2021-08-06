@@ -52,7 +52,7 @@ import { DATA_TYPES } from '../../../../../utils/constants';
 import {
   TRIGGER_COMPARISON_OPERATORS,
   TRIGGER_OPERATORS_MAP,
-} from '../../../../CreateTrigger/containers/DefineAggregationTrigger/DefineAggregationTrigger';
+} from '../../../../CreateTrigger/containers/DefineBucketLevelTrigger/DefineBucketLevelTrigger';
 import { FORMIK_INITIAL_TRIGGER_VALUES } from '../../../../CreateTrigger/containers/CreateTrigger/utils/constants';
 
 const propTypes = {
@@ -152,7 +152,7 @@ class WhereExpression extends Component {
 
   renderValueField = (fieldType, fieldOperator) => {
     const { fieldPath = '' } = this.props;
-    if (fieldType == DATA_TYPES.NUMBER) {
+    if (fieldType === DATA_TYPES.NUMBER) {
       return isRangeOperator(fieldOperator) ? (
         this.renderBetweenAnd()
       ) : (
@@ -162,7 +162,7 @@ class WhereExpression extends Component {
           inputProps={{ onChange: this.handleChangeWrapper, isInvalid }}
         />
       );
-    } else if (fieldType == DATA_TYPES.BOOLEAN) {
+    } else if (fieldType === DATA_TYPES.BOOLEAN) {
       return (
         <FormikSelect
           name={`${fieldPath}where.fieldValue`}

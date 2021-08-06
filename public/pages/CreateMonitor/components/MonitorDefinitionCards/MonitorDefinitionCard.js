@@ -25,7 +25,7 @@ const onChangeDefinition = (e, form) => {
 
 const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
   const hasADPlugin = plugins.indexOf(ES_AD_PLUGIN) !== -1;
-  const isAggregationMonitor = values.monitor_type === MONITOR_TYPE.AGGREGATION;
+  const isBucketLevelMonitor = values.monitor_type === MONITOR_TYPE.BUCKET_LEVEL;
   return (
     <div>
       <EuiFlexGroup>
@@ -68,7 +68,7 @@ const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
             }}
           />
         </EuiFlexItem>
-        {!isAggregationMonitor && (
+        {!isBucketLevelMonitor && (
           <EuiFlexItem>
             <EuiSpacer />
             <FormikCheckableCard

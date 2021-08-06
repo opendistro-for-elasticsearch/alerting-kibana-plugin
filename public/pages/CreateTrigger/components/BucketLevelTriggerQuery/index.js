@@ -13,6 +13,6 @@
  * permissions and limitations under the License.
  */
 
-import AggregationTriggerQuery from './AggregationTriggerQuery';
+import BucketLevelTriggerQuery from './BucketLevelTriggerQuery';
 
-export default AggregationTriggerQuery;
+export default BucketLevelTriggerQuery;

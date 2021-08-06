@@ -20,13 +20,13 @@ export const validateTriggerName = (triggers, triggerToEdit, fieldPath) => (valu
   const nameExists = triggers.filter((trigger) => {
     const triggerId = _.get(
       trigger,
-      `${TRIGGER_TYPE.AGGREGATION}.id`,
-      _.get(trigger, `${TRIGGER_TYPE.TRADITIONAL}.id`)
+      `${TRIGGER_TYPE.BUCKET_LEVEL}.id`,
+      _.get(trigger, `${TRIGGER_TYPE.QUERY_LEVEL}.id`)
     );
     const triggerName = _.get(
       trigger,
-      `${TRIGGER_TYPE.AGGREGATION}.name`,
-      _.get(trigger, `${TRIGGER_TYPE.TRADITIONAL}.name`, FORMIK_INITIAL_TRIGGER_VALUES.name)
+      `${TRIGGER_TYPE.BUCKET_LEVEL}.name`,
+      _.get(trigger, `${TRIGGER_TYPE.QUERY_LEVEL}.name`, FORMIK_INITIAL_TRIGGER_VALUES.name)
     );
     const triggerToEditId = _.get(triggerToEdit, `${fieldPath}id`, triggerToEdit.id);
     return triggerToEditId !== triggerId && triggerName.toLowerCase() === value.toLowerCase();

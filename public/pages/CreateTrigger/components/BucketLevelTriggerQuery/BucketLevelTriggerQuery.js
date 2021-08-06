@@ -57,7 +57,7 @@ export const getResultsBuckets = (executeResults) => {
   return JSON.stringify(displayResults, null, 4);
 };
 
-const AggregationTriggerQuery = ({
+const BucketLevelTriggerQuery = ({
   context,
   executeResponse,
   onRun,
@@ -156,4 +156,4 @@ const AggregationTriggerQuery = ({
   );
 };
 
-export default AggregationTriggerQuery;
+export default BucketLevelTriggerQuery;

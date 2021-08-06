@@ -39,17 +39,17 @@ export function formikToTriggerDefinitions(values, monitorUiMetadata) {
 }
 
 export function formikToTriggerDefinition(values, monitorUiMetadata) {
-  const isTraditionalMonitor =
-    _.get(monitorUiMetadata, 'monitor_type', MONITOR_TYPE.TRADITIONAL) === MONITOR_TYPE.TRADITIONAL;
-  return isTraditionalMonitor
-    ? formikToTraditionalTrigger(values, monitorUiMetadata)
-    : formikToAggregationTrigger(values, monitorUiMetadata);
+  const isQueryLevelMonitor =
+    _.get(monitorUiMetadata, 'monitor_type', MONITOR_TYPE.QUERY_LEVEL) === MONITOR_TYPE.QUERY_LEVEL;
+  return isQueryLevelMonitor
+    ? formikToQueryLevelTrigger(values, monitorUiMetadata)
+    : formikToBucketLevelTrigger(values, monitorUiMetadata);
 }
 
-export function formikToTraditionalTrigger(values, monitorUiMetadata) {
+export function formikToQueryLevelTrigger(values, monitorUiMetadata) {
   const condition = formikToCondition(values, monitorUiMetadata);
   const actions = formikToAction(values);
-  // TODO: We probably also want to wrap this with 'traditional_trigger' after
+  // TODO: We probably also want to wrap this with 'query_level_trigger' after
   //  confirming what will break in the frontend (when accessing the fields)
   return {
     id: values.id,
@@ -62,11 +62,11 @@ export function formikToTraditionalTrigger(values, monitorUiMetadata) {
   };
 }
 
-export function formikToAggregationTrigger(values, monitorUiMetadata) {
-  const condition = formikToAggregationTriggerCondition(values, monitorUiMetadata);
-  const actions = formikToAggregationTriggerAction(values);
+export function formikToBucketLevelTrigger(values, monitorUiMetadata) {
+  const condition = formikToBucketLevelTriggerCondition(values, monitorUiMetadata);
+  const actions = formikToBucketLevelTriggerAction(values);
   return {
-    aggregation_trigger: {
+    bucket_level_trigger: {
       id: values.id,
       name: values.name,
       severity: values.severity,
@@ -89,9 +89,9 @@ export function formikToAction(values) {
   return actions;
 }
 
-export function formikToAggregationTriggerAction(values) {
+export function formikToBucketLevelTriggerAction(values) {
   const actions = values.actions;
-  const executionPolicyPath = 'action_execution_policy.action_execution_frequency';
+  const executionPolicyPath = 'action_execution_policy.action_execution_scope';
   if (actions && actions.length > 0) {
     return actions.map((action) => {
       let formattedAction = _.cloneDeep(action);
@@ -143,9 +143,9 @@ export function formikToAggregationTriggerAction(values) {
 
 export function formikToTriggerUiMetadata(values, monitorUiMetadata) {
   switch (monitorUiMetadata.monitor_type) {
-    case MONITOR_TYPE.TRADITIONAL:
+    case MONITOR_TYPE.QUERY_LEVEL:
       const searchType = _.get(monitorUiMetadata, 'search.searchType', 'query');
-      const traditionalTriggersUiMetadata = {};
+      const queryLevelTriggersUiMetadata = {};
       _.get(values, 'triggerDefinitions', []).forEach((trigger) => {
         const { anomalyDetector, thresholdEnum, thresholdValue } = trigger;
         const triggerMetadata = { value: thresholdValue, enum: thresholdEnum };
@@ -165,20 +165,20 @@ export function formikToTriggerUiMetadata(values, monitorUiMetadata) {
           };
         }
 
-        _.set(traditionalTriggersUiMetadata, `${trigger.name}`, triggerMetadata);
+        _.set(queryLevelTriggersUiMetadata, `${trigger.name}`, triggerMetadata);
       });
-      return traditionalTriggersUiMetadata;
+      return queryLevelTriggersUiMetadata;
 
-    case MONITOR_TYPE.AGGREGATION:
-      const aggregationTriggersUiMetadata = {};
+    case MONITOR_TYPE.BUCKET_LEVEL:
+      const bucketLevelTriggersUiMetadata = {};
       _.get(values, 'triggerDefinitions', []).forEach((trigger) => {
         const triggerMetadata = trigger.triggerConditions.map((condition) => ({
           value: condition.thresholdValue,
           enum: condition.thresholdEnum,
         }));
-        _.set(aggregationTriggersUiMetadata, `${trigger.name}`, triggerMetadata);
+        _.set(bucketLevelTriggersUiMetadata, `${trigger.name}`, triggerMetadata);
       });
-      return aggregationTriggersUiMetadata;
+      return bucketLevelTriggersUiMetadata;
   }
 }
 
@@ -197,7 +197,7 @@ export function formikToCondition(values, monitorUiMetadata = {}) {
   return getCondition(resultsPath, operator, thresholdValue, isCount);
 }
 
-export function formikToAggregationTriggerCondition(values, monitorUiMetadata = {}) {
+export function formikToBucketLevelTriggerCondition(values, monitorUiMetadata = {}) {
   const searchType = _.get(monitorUiMetadata, 'search.searchType', SEARCH_TYPE.QUERY);
 
   let bucketSelector = _.get(
@@ -214,7 +214,7 @@ export function formikToAggregationTriggerCondition(values, monitorUiMetadata = 
   } catch (err) {}
 
   if (searchType === SEARCH_TYPE.QUERY) return bucketSelector;
-  if (searchType === SEARCH_TYPE.GRAPH) return getAggregationTriggerCondition(values);
+  if (searchType === SEARCH_TYPE.GRAPH) return getBucketLevelTriggerCondition(values);
 }
 
 export function getADCondition(values) {
@@ -245,7 +245,7 @@ export function getCondition(resultsPath, operator, value, isCount) {
   };
 }
 
-export function getAggregationTriggerCondition(values) {
+export function getBucketLevelTriggerCondition(values) {
   const conditions = values.triggerConditions;
   const bucketsPath = getBucketSelectorBucketsPath(conditions);
   const scriptSource = getBucketSelectorScriptSource(conditions);

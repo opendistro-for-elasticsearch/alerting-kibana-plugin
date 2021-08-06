@@ -36,8 +36,8 @@ export const SEARCH_TYPE = {
 };
 
 export const MONITOR_TYPE = {
-  TRADITIONAL: 'traditional_monitor',
-  AGGREGATION: 'aggregation_monitor',
+  QUERY_LEVEL: 'query_level_monitor',
+  BUCKET_LEVEL: 'bucket_level_monitor',
 };
 
 export const DESTINATION_ACTIONS = {
