@@ -27,6 +27,7 @@ const AddTriggerButton = ({ arrayHelpers, disabled }) => {
   return (
     <EuiButton
       fill={false}
+      size={'s'}
       onClick={() => arrayHelpers.push(_.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES))}
       disabled={disabled}
     >

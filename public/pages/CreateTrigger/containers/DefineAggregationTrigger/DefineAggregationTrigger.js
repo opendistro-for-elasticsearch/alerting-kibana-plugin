@@ -16,22 +16,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import {
-  EuiAccordion,
-  EuiButton,
-  EuiHorizontalRule,
-  EuiSpacer,
-  EuiText,
-  EuiTitle,
-} from '@elastic/eui';
+import { EuiAccordion, EuiButton, EuiSpacer, EuiText, EuiTitle } from '@elastic/eui';
 import 'brace/mode/plain_text';
 import { FormikFieldText, FormikSelect } from '../../../../components/FormControls';
 import { isInvalid, hasError } from '../../../../utils/validate';
 import { SEARCH_TYPE } from '../../../../utils/constants';
-import {
-  FORMIK_INITIAL_TRIGGER_CONDITION_VALUES,
-  TRIGGER_TYPE,
-} from '../CreateTrigger/utils/constants';
+import { FORMIK_INITIAL_TRIGGER_CONDITION_VALUES } from '../CreateTrigger/utils/constants';
 import AddTriggerConditionButton from '../../components/AddTriggerConditionButton';
 import AggregationTriggerGraph from '../../components/AggregationTriggerGraph';
 import AggregationTriggerQuery from '../../components/AggregationTriggerQuery';
@@ -84,7 +74,7 @@ const propTypes = {
   isDarkMode: PropTypes.bool.isRequired,
 };
 
-const DEFAULT_TRIGGER_NAME = 'Define trigger';
+const DEFAULT_TRIGGER_NAME = 'New trigger';
 const MAX_TRIGGER_CONDITIONS = 5;
 const MAX_WHERE_FILTERS = 1;
 
@@ -209,10 +199,8 @@ class DefineAggregationTrigger extends Component {
 
   renderAggregationTriggerQuery = (
     context,
-    error,
     executeResponse,
     onRun,
-    response,
     setFlyout,
     triggerValues,
     isDarkMode,
@@ -221,10 +209,8 @@ class DefineAggregationTrigger extends Component {
     return (
       <AggregationTriggerQuery
         context={context}
-        error={error}
         executeResponse={executeResponse}
         onRun={onRun}
-        response={response}
         setFlyout={setFlyout}
         triggerValues={triggerValues}
         isDarkMode={isDarkMode}
@@ -235,6 +221,7 @@ class DefineAggregationTrigger extends Component {
 
   render() {
     const {
+      edit,
       triggerArrayHelpers,
       context,
       executeResponse,
@@ -253,7 +240,6 @@ class DefineAggregationTrigger extends Component {
     const fieldPath = triggerIndex !== undefined ? `triggerDefinitions[${triggerIndex}].` : '';
     const isGraph = _.get(monitorValues, 'searchType') === SEARCH_TYPE.GRAPH;
     const response = _.get(executeResponse, 'input_results.results[0]');
-    const error = _.get(executeResponse, 'error') || _.get(executeResponse, 'input_results.error');
     const triggerName = _.get(triggerValues, `${fieldPath}name`, DEFAULT_TRIGGER_NAME);
     const disableAddTriggerConditionButton =
       _.get(triggerValues, `${fieldPath}triggerConditions`).length >= MAX_TRIGGER_CONDITIONS;
@@ -288,10 +274,8 @@ class DefineAggregationTrigger extends Component {
     ) : (
       this.renderAggregationTriggerQuery(
         context,
-        error,
         executeResponse,
         onRun,
-        response,
         setFlyout,
         triggerValues,
         isDarkMode,
@@ -307,55 +291,67 @@ class DefineAggregationTrigger extends Component {
             <h1>{_.isEmpty(triggerName) ? DEFAULT_TRIGGER_NAME : triggerName}</h1>
           </EuiTitle>
         }
-        initialIsOpen={triggerIndex === 0}
+        initialIsOpen={edit ? false : triggerIndex === 0}
         extraAction={
           <EuiButton
             color={'danger'}
             onClick={() => {
               triggerArrayHelpers.remove(triggerIndex);
             }}
+            size={'s'}
           >
-            Delete
+            Remove trigger
           </EuiButton>
         }
       >
-        <EuiHorizontalRule margin="s" />
-        <FormikFieldText
-          name={`${fieldPath}name`}
-          fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
-          formRow
-          rowProps={defaultRowProps}
-          inputProps={defaultInputProps}
-        />
-        <EuiSpacer size={'m'} />
-        <FormikSelect
-          name={`${fieldPath}severity`}
-          formRow
-          fieldProps={selectFieldProps}
-          rowProps={selectRowProps}
-          inputProps={selectInputProps}
-        />
-        <EuiSpacer size={'m'} />
-        <EuiText style={{ paddingLeft: '20px' }}>
-          <h3>Trigger Conditions</h3>
-        </EuiText>
-        {aggregationTriggerContent}
-        <EuiSpacer size={'l'} />
-        <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
-          {(arrayHelpers) => (
-            <ConfigureActions
-              arrayHelpers={arrayHelpers}
-              context={context}
-              httpClient={httpClient}
-              setFlyout={setFlyout}
-              values={triggerValues}
-              notifications={notifications}
-              fieldPath={fieldPath}
-              triggerIndex={triggerIndex}
-            />
-          )}
-        </FieldArray>
-        <EuiSpacer />
+        <div style={{ padding: '0px 10px' }}>
+          <FormikFieldText
+            name={`${fieldPath}name`}
+            fieldProps={{ validate: validateTriggerName(triggers, triggerValues, fieldPath) }}
+            formRow
+            rowProps={defaultRowProps}
+            inputProps={defaultInputProps}
+          />
+          <EuiSpacer size={'m'} />
+          <FormikSelect
+            name={`${fieldPath}severity`}
+            formRow
+            fieldProps={selectFieldProps}
+            rowProps={selectRowProps}
+            inputProps={selectInputProps}
+          />
+          <EuiSpacer size={'m'} />
+
+          {isGraph ? (
+            <div>
+              <EuiText style={{ paddingLeft: '0px' }}>
+                <h4>Trigger conditions</h4>
+              </EuiText>
+              <EuiText color={'69707D'} size={'xs'} style={{ paddingLeft: '20px' }}>
+                Specify thresholds for the metrics you have chosen in your query above.
+              </EuiText>
+            </div>
+          ) : null}
+
+          {aggregationTriggerContent}
+
+          <EuiSpacer size={'l'} />
+          <FieldArray name={`${fieldPath}actions`} validateOnChange={true}>
+            {(arrayHelpers) => (
+              <ConfigureActions
+                arrayHelpers={arrayHelpers}
+                context={context}
+                httpClient={httpClient}
+                setFlyout={setFlyout}
+                values={triggerValues}
+                notifications={notifications}
+                fieldPath={fieldPath}
+                triggerIndex={triggerIndex}
+              />
+            )}
+          </FieldArray>
+          <EuiSpacer />
+        </div>
       </EuiAccordion>
     );
   }

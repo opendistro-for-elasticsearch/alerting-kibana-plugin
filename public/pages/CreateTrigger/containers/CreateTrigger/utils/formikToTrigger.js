@@ -24,7 +24,7 @@ import {
   TRIGGER_TYPE,
 } from './constants';
 import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../../utils/constants';
-import { NOTIFY_OPTIONS } from '../../../components/Action/actions/Message';
+import { NOTIFY_OPTIONS_VALUES } from '../../../components/Action/actions/Message';
 import { FORMIK_INITIAL_ACTION_VALUES } from '../../../utils/constants';
 
 export function formikToTrigger(values, monitorUiMetadata = {}) {
@@ -115,20 +115,24 @@ export function formikToAggregationTriggerAction(values) {
       const notifyOption = _.get(formattedAction, `${executionPolicyPath}`);
       const notifyOptionId = _.isString(notifyOption) ? notifyOption : _.keys(notifyOption)[0];
       switch (notifyOptionId) {
-        case NOTIFY_OPTIONS.PER_ALERT:
+        case NOTIFY_OPTIONS_VALUES.PER_ALERT:
           const actionableAlerts = _.get(
             formattedAction,
-            `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+            `${executionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
             []
           );
           _.set(
             formattedAction,
-            `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_ALERT}.actionable_alerts`,
+            `${executionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_ALERT}.actionable_alerts`,
             actionableAlerts.map((entry) => entry.value)
           );
           break;
-        case NOTIFY_OPTIONS.PER_EXECUTION:
-          _.set(formattedAction, `${executionPolicyPath}.${NOTIFY_OPTIONS.PER_EXECUTION}`, {});
+        case NOTIFY_OPTIONS_VALUES.PER_EXECUTION:
+          _.set(
+            formattedAction,
+            `${executionPolicyPath}.${NOTIFY_OPTIONS_VALUES.PER_EXECUTION}`,
+            {}
+          );
           break;
       }
       return formattedAction;

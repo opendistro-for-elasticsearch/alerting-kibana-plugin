@@ -15,11 +15,10 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { EuiSpacer } from '@elastic/eui';
+import { EuiFormRow, EuiPanel, EuiText } from '@elastic/eui';
 import Action from '../../components/Action';
 import ActionEmptyPrompt from '../../components/ActionEmptyPrompt';
 import AddActionButton from '../../components/AddActionButton';
-import ContentPanel from '../../../../components/ContentPanel';
 import { DEFAULT_MESSAGE_SOURCE, FORMIK_INITIAL_ACTION_VALUES } from '../../utils/constants';
 import { DESTINATION_OPTIONS } from '../../../Destinations/utils/constants';
 import { getAllowList } from '../../../Destinations/utils/helpers';
@@ -191,6 +190,7 @@ class ConfigureActions extends React.Component {
           sendTestMessage={this.sendTestMessage}
           setFlyout={setFlyout}
           fieldPath={fieldPath}
+          values={values}
         />
       ))
     ) : (
@@ -205,26 +205,29 @@ class ConfigureActions extends React.Component {
     const displayAddActionButton = numOfActions > 0;
     //TODO:: Handle loading Destinations inside the Action which will be more intuitive for customers.
     return (
-      <ContentPanel
-        title={`Actions (${numOfActions})`}
-        titleSize="s"
-        panelStyles={{ paddingBottom: '0px', paddingLeft: '20px' }}
-        bodyStyles={{ paddingLeft: '0px', padding: '20px' }}
-        horizontalRuleClassName="accordion-horizontal-rule"
-      >
-        {loadingDestinations ? (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>Loading Destinations...</div>
-        ) : (
-          this.renderActions(arrayHelpers)
-        )}
+      <div style={{ paddingLeft: '20px', paddingRight: '15px' }}>
+        <EuiFormRow
+          helpText={'Define actions when trigger conditions are met.'}
+          style={{ paddingBottom: '5px' }}
+        >
+          <EuiText>
+            <h4>{`Actions (${numOfActions})`}</h4>
+          </EuiText>
+        </EuiFormRow>
+        <EuiPanel style={{ backgroundColor: '#F7F7F7', padding: '20px' }}>
+          {loadingDestinations ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>Loading Destinations...</div>
+          ) : (
+            this.renderActions(arrayHelpers)
+          )}
 
-        {displayAddActionButton ? (
-          <div>
-            <EuiSpacer size={'s'} />
-            <AddActionButton arrayHelpers={arrayHelpers} numOfActions={numOfActions} />
-          </div>
-        ) : null}
-      </ContentPanel>
+          {displayAddActionButton ? (
+            <div style={{ paddingBottom: '5px', paddingTop: '20px' }}>
+              <AddActionButton arrayHelpers={arrayHelpers} numOfActions={numOfActions} />
+            </div>
+          ) : null}
+        </EuiPanel>
+      </div>
     );
   }
 }
