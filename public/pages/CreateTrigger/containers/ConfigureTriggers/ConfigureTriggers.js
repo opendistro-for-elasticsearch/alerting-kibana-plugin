@@ -26,7 +26,6 @@ import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../utils/constants';
 import { getPathsPerDataType } from '../../../CreateMonitor/containers/DefineMonitor/utils/mappings';
 import monitorToFormik from '../../../CreateMonitor/containers/CreateMonitor/utils/monitorToFormik';
 import { buildSearchRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/searchRequests';
-import { buildLocalUriRequest } from '../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
 import { backendErrorNotification } from '../../../../utils/helpers';
 import moment from 'moment';
 import { formikToTrigger } from '../CreateTrigger/utils/formikToTrigger';
@@ -39,7 +38,8 @@ class ConfigureTriggers extends React.Component {
       dataTypes: {},
       executeResponse: null,
       isBucketLevelMonitor:
-        _.get(props, 'monitor.monitor_type', MONITOR_TYPE.QUERY_LEVEL) === MONITOR_TYPE.BUCKET_LEVEL,
+        _.get(props, 'monitor.monitor_type', MONITOR_TYPE.QUERY_LEVEL) ===
+        MONITOR_TYPE.BUCKET_LEVEL,
       triggerDeleted: false,
     };
 
@@ -77,10 +77,6 @@ class ConfigureTriggers extends React.Component {
         const searchRequest = buildSearchRequest(formikValues);
         _.set(monitorToExecute, 'inputs[0].search', searchRequest);
         break;
-      case SEARCH_TYPE.LOCAL_URI:
-        const localUriRequest = buildLocalUriRequest(formikValues);
-        _.set(monitorToExecute, 'inputs[0].uri', localUriRequest);
-        break;
       default:
         console.log(`Unsupported searchType found: ${JSON.stringify(searchType)}`, searchType);
     }
@@ -89,7 +85,7 @@ class ConfigureTriggers extends React.Component {
       .post('../api/alerting/monitors/_execute', { body: JSON.stringify(monitorToExecute) })
       .then((resp) => {
         if (resp.ok) {
-          this.setState({ executeResponse: resp.resp }, this.overrideInitialValues);
+          this.setState({ executeResponse: resp.resp });
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
@@ -140,20 +136,6 @@ class ConfigureTriggers extends React.Component {
       error: null,
       monitor: monitor,
     };
-  };
-
-  overrideInitialValues = () => {
-    const { monitor, edit, triggerToEdit } = this.props;
-    const { initialValues, executeResponse } = this.state;
-    const useTriggerToFormik = edit && triggerToEdit;
-
-    // When searchType of the monitor is 'localUri', override the default trigger
-    // condition with the first name of the name-value pairs in the response
-    if (!useTriggerToFormik && 'uri' in monitor.inputs[0]) {
-      const response = _.get(executeResponse, 'input_results.results[0]');
-      _.set(initialValues, 'script.source', 'ctx.results[0].' + _.keys(response)[0] + ' != null');
-      this.setState({ initialValues: initialValues });
-    }
   };
 
   renderTriggers = (triggerArrayHelpers) => {

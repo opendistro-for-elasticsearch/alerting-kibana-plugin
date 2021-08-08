@@ -39,7 +39,6 @@ import { FORMIK_INITIAL_TRIGGER_VALUES, TRIGGER_TYPE } from '../utils/constants'
 import { MONITOR_TYPE, SEARCH_TYPE } from '../../../../../utils/constants';
 import { SubmitErrorHandler } from '../../../../../utils/SubmitErrorHandler';
 import { backendErrorNotification } from '../../../../../utils/helpers';
-import { buildLocalUriRequest } from '../../../../CreateMonitor/containers/DefineMonitor/utils/localUriRequests';
 import ConfigureTriggers from '../../ConfigureTriggers';
 
 export default class CreateMultipleTriggers extends Component {
@@ -156,10 +155,6 @@ export default class CreateMultipleTriggers extends Component {
         const searchRequest = buildSearchRequest(formikValues);
         _.set(monitorToExecute, 'inputs[0].search', searchRequest);
         break;
-      case SEARCH_TYPE.LOCAL_URI:
-        const localUriRequest = buildLocalUriRequest(formikValues);
-        _.set(monitorToExecute, 'inputs[0].uri', localUriRequest);
-        break;
       default:
         console.log(`Unsupported searchType found: ${JSON.stringify(searchType)}`, searchType);
     }
@@ -168,7 +163,7 @@ export default class CreateMultipleTriggers extends Component {
       .post('../api/alerting/monitors/_execute', { body: JSON.stringify(monitorToExecute) })
       .then((resp) => {
         if (resp.ok) {
-          this.setState({ executeResponse: resp.resp }, this.overrideInitialValues);
+          this.setState({ executeResponse: resp.resp });
         } else {
           // TODO: need a notification system to show errors or banners at top
           console.error('err:', resp);
@@ -226,20 +221,6 @@ export default class CreateMultipleTriggers extends Component {
     error: null,
     monitor: monitor,
   });
-
-  overrideInitialValues = () => {
-    const { monitor, edit, triggerToEdit } = this.props;
-    const { initialValues, executeResponse } = this.state;
-    const useTriggerToFormik = edit && triggerToEdit;
-
-    // When searchType of the monitor is 'localUri', override the default trigger
-    // condition with the first name of the name-value pairs in the response
-    if (!useTriggerToFormik && 'uri' in monitor.inputs[0]) {
-      const response = _.get(executeResponse, 'input_results.results[0]');
-      _.set(initialValues, 'script.source', 'ctx.results[0].' + _.keys(response)[0] + ' != null');
-      this.setState({ initialValues: initialValues });
-    }
-  };
 
   render() {
     const { monitor, onCloseTrigger, setFlyout, edit, httpClient, notifications } = this.props;

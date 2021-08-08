@@ -32,7 +32,6 @@ export const SEARCH_TYPE = {
   GRAPH: 'graph',
   QUERY: 'query',
   AD: 'ad',
-  LOCAL_URI: 'localUri',
 };
 
 export const MONITOR_TYPE = {

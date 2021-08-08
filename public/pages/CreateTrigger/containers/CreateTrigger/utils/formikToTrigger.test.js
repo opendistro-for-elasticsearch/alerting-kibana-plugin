@@ -78,13 +78,6 @@ describe('formikToCondition', () => {
     });
   });
 
-  test('can return condition when searchType is localUri', () => {
-    const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
-    expect(formikToCondition(formikValues, { search: { searchType: 'localUri' } })).toEqual({
-      script: formikValues.script,
-    });
-  });
-
   test('can return condition when searchType is ad', () => {
     const formikValues = _.cloneDeep(FORMIK_INITIAL_TRIGGER_VALUES);
     expect(formikToCondition(formikValues, { search: { searchType: 'ad' } })).toEqual({

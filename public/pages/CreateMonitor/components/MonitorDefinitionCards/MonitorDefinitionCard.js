@@ -68,28 +68,6 @@ const MonitorDefinitionCard = ({ values, resetResponse, plugins }) => {
             }}
           />
         </EuiFlexItem>
-        {!isBucketLevelMonitor && (
-          <EuiFlexItem>
-            <EuiSpacer />
-            <FormikCheckableCard
-              name="searchTypeLocalUri"
-              formRow
-              rowProps={{
-                label: '',
-                style: { paddingLeft: '10px' },
-              }}
-              inputProps={{
-                id: 'localUriRadioCard',
-                label: 'Local URI endpoint',
-                checked: values.searchType === SEARCH_TYPE.LOCAL_URI,
-                value: SEARCH_TYPE.LOCAL_URI,
-                onChange: (e, field, form) => {
-                  onChangeDefinition(e, form);
-                },
-              }}
-            />
-          </EuiFlexItem>
-        )}
         {/* TODO: only show the anomaly detector option when anomaly detection plugin is present */}
         {hasADPlugin && (
           <EuiFlexItem>

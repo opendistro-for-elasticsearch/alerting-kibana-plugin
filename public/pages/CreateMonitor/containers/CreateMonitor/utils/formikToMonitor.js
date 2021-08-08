@@ -43,8 +43,6 @@ export function formikToInputs(values) {
   switch (values.searchType) {
     case SEARCH_TYPE.AD:
       return formikToAd(values);
-    case SEARCH_TYPE.LOCAL_URI:
-      return formikToLocalUri(values);
     default:
       return formikToSearch(values);
   }
@@ -104,17 +102,6 @@ export function formikToAd(values) {
   return {
     anomaly_detector: {
       detector_id: values.detectorId,
-    },
-  };
-}
-
-export function formikToLocalUri(values) {
-  return {
-    uri: {
-      scheme: 'http',
-      host: 'localhost',
-      port: '9200',
-      path: values.uri.path,
     },
   };
 }

@@ -161,18 +161,4 @@ describe('monitorToFormik', () => {
       expect(formikValues.query).toContain('zIqG0nABwoJjo1UZKHnL');
     });
   });
-
-  test('can build LocalUriInput monitor', () => {
-    const localUriMonitor = _.cloneDeep(exampleMonitor);
-    localUriMonitor.ui_metadata.search.searchType = 'localUri';
-    localUriMonitor.inputs = [
-      {
-        uri: {
-          path: '/_cluster/health',
-        },
-      },
-    ];
-    const formikValues = monitorToFormik(localUriMonitor);
-    expect(formikValues.uri.path).toBe('/_cluster/health');
-  });
 });

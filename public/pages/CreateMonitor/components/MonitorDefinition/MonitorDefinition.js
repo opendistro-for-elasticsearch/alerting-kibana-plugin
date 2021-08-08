@@ -21,7 +21,6 @@ import MonitorDefinitionCard from '../MonitorDefinitionCards';
 const defaultSelectDefinitions = [
   { value: 'graph', text: 'Define using visual graph' },
   { value: 'query', text: 'Define using extraction query' },
-  { value: 'localUri', text: 'Define using Local URI endpoint' },
 ];
 
 const bucketLevelMonitorDefinitions = [
