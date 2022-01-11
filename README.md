@@ -1,6 +1,6 @@
-# Open Distro for Elasticsearch Alerting Kibana
+# Open Distro Alerting Kibana
 
-The Open Distro for Elasticsearch Alerting Kibana plugin lets you manage your [Open Distro for Elasticsearch alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting) to monitor your data and send notifications when certain criteria are met---all from Kibana.
+The Open Distro Alerting Kibana plugin lets you manage your [Open Distro alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting) to monitor your data and send notifications when certain criteria are met---all from Kibana.
 
 
 ## Highlights
