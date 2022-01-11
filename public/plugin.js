@@ -27,7 +27,7 @@ export class AlertingPlugin {
       description: 'Kibana Alerting Plugin',
       category: {
         id: 'odfe',
-        label: 'Open Distro for Elasticsearch',
+        label: 'Open Distro',
         order: 2000,
       },
       order: 4000,

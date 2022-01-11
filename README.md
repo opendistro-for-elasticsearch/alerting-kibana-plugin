@@ -1,6 +1,6 @@
-# Open Distro for Elasticsearch Alerting Kibana
+# Open Distro Alerting Kibana
 
-The Open Distro for Elasticsearch Alerting Kibana plugin lets you manage your [Open Distro for Elasticsearch alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting) to monitor your data and send notifications when certain criteria are met---all from Kibana.
+The Open Distro Alerting Kibana plugin lets you manage your [Open Distro alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting) to monitor your data and send notifications when certain criteria are met---all from Kibana.
 
 
 ## Highlights
@@ -18,7 +18,7 @@ Please see our [documentation](https://opendistro.github.io/for-elasticsearch-do
 ## Setup
 
 1. Download Elasticsearch for the version that matches the [Kibana version specified in package.json](./package.json#L9).
-1. Download and install the appropriate [Open Distro for Elasticsearch Alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting).
+1. Download and install the appropriate [Open Distro Alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting).
 1. Download the Kibana source code for the [version specified in package.json](./package.json#L9) you want to set up.
 
    See the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md#setting-up-your-development-environment) for more instructions on setting up your development environment.
@@ -76,7 +76,7 @@ Example output: `./build/opendistroAlertingKibana-1.12.0.0.zip`
   1. `--no-watch`: make sure your server is not restarted.
 
 
-## Contributing to Open Distro for Elasticsearch Alerting Kibana
+## Contributing to Open Distro Alerting Kibana
 
 - Refer to [CONTRIBUTING.md](./CONTRIBUTING.md).
 - Since this is a Kibana plugin, it can be useful to review the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) alongside the documentation around [Kibana plugins](https://www.elastic.co/guide/en/kibana/master/kibana-plugins.html) and [plugin development](https://www.elastic.co/guide/en/kibana/master/external-plugin-development.html).
