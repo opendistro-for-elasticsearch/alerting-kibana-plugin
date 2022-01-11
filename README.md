@@ -18,7 +18,7 @@ Please see our [documentation](https://opendistro.github.io/for-elasticsearch-do
 ## Setup
 
 1. Download Elasticsearch for the version that matches the [Kibana version specified in package.json](./package.json#L9).
-1. Download and install the appropriate [Open Distro  Alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting).
+1. Download and install the appropriate [Open Distro Alerting plugin](https://github.com/opendistro-for-elasticsearch/alerting).
 1. Download the Kibana source code for the [version specified in package.json](./package.json#L9) you want to set up.
 
    See the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md#setting-up-your-development-environment) for more instructions on setting up your development environment.
